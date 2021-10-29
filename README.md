@@ -1,13 +1,17 @@
-# cares-reporter
+[![Code of Conduct](https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-blue.svg?style=flat)](./CODE_OF_CONDUCT.md)
+
+# ARPA Reporter
+
+ARPA Reporter is a web app designed to ease the ARPA grants reporting workflow for government agencies and grants offices. It aggregates reports from individual agencies or groups, and provides quick, up-front validation of all errors before submitting to federal portals, which can be a painful and iterative process otherwise.
 
 ## Developer documentation
-This readme.md page explains how to set up your development environment. Documentation for sysadmins is at https://github.com/usdigitalresponse/cares-reporter/wiki/Home.
+This readme.md page explains how to set up your development environment. Documentation for sysadmins is at https://github.com/usdigitalresponse/arpa-reporter/wiki/Home.
 
 ## Project setup
 You will need a Postgres database running on the same machine.
 
 Copy `.env.example` to `.env` and customize as appropriate.
-* CARES Reporter uses email in its authentication, and is set up to use AWS Simple Email Service.  Enter the AWS Access Key and Secret in `.env`.
+* ARPA Reporter uses email in its authentication, and is set up to use AWS Simple Email Service.  Enter the AWS Access Key and Secret in `.env`.
 * In particular you'll want to enter your initial admin email addresses.  Note: the same email cannot be used as both an admin account and a user account.
 
 ```
@@ -63,7 +67,7 @@ yarn lint
 See [Vue Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Set up Notifications email account
-To send system notification emails, Cares-Reporter can use either AWS-SES or Nodemailer, which uses a regular email account to send notifications. Either way the account credentials are excluded from Git commits. Email settings are specified in the environment. For testing this is done in a .env file; for deployment it is done in the Environment tab of the Render.com dashboard.
+To send system notification emails, Arpa-Reporter can use either AWS-SES or Nodemailer, which uses a regular email account to send notifications. Either way the account credentials are excluded from Git commits. Email settings are specified in the environment. For testing this is done in a .env file; for deployment it is done in the Environment tab of the Render.com dashboard.
 
 The tests are invoked from the project root directory with:
 
@@ -71,14 +75,14 @@ The tests are invoked from the project root directory with:
 
 `$ yarn test:server-aws-ses`
 
-These Yarn commands are specified in the package.json file. 
+These Yarn commands are specified in the package.json file.
 
 Setting up AWS is somewhat more complicated than setting up Nodemailer. The test environment tests both, but before running the tests you need to add .env files to the tests/server-aws-ses and tests/server-nodemailer directories on your development system. You can just rename the 'env' files in those directories and add the credentials.
 
 At runtime the system scans the environment for AWS credentials first, then if it can't find them, Nodemailer credentials.
 
 #### To use a regular email account
-The test environment uses an existing dedicated Gmail account - "caresreportertest@gmail.com." When a customer deploys Cares-Reporter in production they will need to supply their own email account. To use Nodemailer, add the following keys to the environment. 
+The test environment uses an existing dedicated Gmail account - "arpareportertest@gmail.com." When a customer deploys Arpa-Reporter in production they will need to supply their own email account. To use Nodemailer, add the following keys to the environment.
 
 `NODEMAILER_HOST e.g. "smtp.gmail.com"`
 
@@ -89,7 +93,7 @@ The test environment uses an existing dedicated Gmail account - "caresreporterte
 `NOTIFICATIONS_EMAIL_PW - this is the password for the From: address`
 
 #### To use AWS-SES
-The test environment uses USDR's AWS credentials, but when a customer deploys Cares-Reporter in production, they will need to perform the following steps to implement AWS-SES.
+The test environment uses USDR's AWS credentials, but when a customer deploys Arpa-Reporter in production, they will need to perform the following steps to implement AWS-SES.
 
 1. Set up a new email address on an existing mail server to use as the From: address for sending notifications (this will be the `NOTIFICATIONS_EMAIL` in the Render Service Environment).
 
@@ -102,3 +106,26 @@ The test environment uses USDR's AWS credentials, but when a customer deploys Ca
 1. Submit a separate ticket to request a fixed IP address for SES.
 
 1. Once those tickets are resolved, enter the credentials and email address to the execution environment.
+
+
+## Code of Conduct
+
+This repository falls under [U.S. Digital Response’s Code of Conduct](./CODE_OF_CONDUCT.md), and we will hold all participants in issues, pull requests, discussions, and other spaces related to this project to that Code of Conduct. Please see [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) for the full code.
+
+
+## Contributing
+
+This project wouldn’t exist without the hard work of many people. Thanks to the following for all their contributions! Please see [`CONTRIBUTING.md`](./CONTRIBUTING.md) to find out how you can help.
+
+**Lead Maintainer:** [Larry Hitchon (@lhitchon)](https://github.com/lhitchon)
+
+
+## License & Copyright
+
+Copyright (C) 2021 U.S. Digital Response (USDR)
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at:
+
+[`LICENSE`](./LICENSE) in this repository or http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

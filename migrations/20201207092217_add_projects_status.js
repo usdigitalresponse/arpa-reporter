@@ -4,7 +4,6 @@ exports.up = function(knex) {
     .table('projects', function(table) {
       table.text('status')
     })
-  
 };
 
 exports.down = function(knex) {
@@ -12,5 +11,4 @@ exports.down = function(knex) {
     .table('projects', function(table) {
       table.dropColumn('status');
     })
-  
 };

@@ -18,7 +18,6 @@ exports.up = function(knex) {
       table.timestamp("updated_at")
       table.text("updated_by")
     });
-  
 };
 
 exports.down = function(knex) {

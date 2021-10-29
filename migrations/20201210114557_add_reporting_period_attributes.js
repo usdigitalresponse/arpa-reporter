@@ -7,7 +7,6 @@ exports.up = function(knex) {
       table.text('reporting_template')
       table.specificType('validation_rule_tags', 'TEXT[]')
     })
-  
 };
 
 exports.down = function(knex) {
@@ -18,5 +17,4 @@ exports.down = function(knex) {
       table.dropColumn('certified_by');
       table.dropColumn('certified_at');
     })
-  
 };

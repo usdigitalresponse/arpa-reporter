@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "serve": "concurrently \"npm:dev:*\"",
     "dev:vue": "vue-cli-service serve",
     "dev:express": "NODE_ENV=development nodemon src/server",
     "serve:oh": "POSTGRES_URL=postgres://localhost/ohio UPLOAD_DIRECTORY=\"./uploads/oh\" TREASURY_DIRECTORY=\"./treasury-reports/oh\" REPORTING_TEMPLATE=\"OBM Reporting Template.xlsx\" yarn serve",
@@ -62,6 +63,7 @@
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
+    "concurrently": "7.0.0",
     "eslint": "^7.12.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",

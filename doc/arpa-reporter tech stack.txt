@@ -1,4 +1,4 @@
-Tech stack summary for Cares Reporter
+Tech stack summary for ARPA Reporter
 
 We use Render.com for hosting the server and database.
 The server is Node-based; it serves an API powered by Express and a front-end powered by Vue.

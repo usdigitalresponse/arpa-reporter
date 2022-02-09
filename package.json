@@ -72,6 +72,6 @@
     "mocha": "^8.1.2",
     "prettier": "1.19.1",
     "vue-template-compiler": "^2.6.11",
-    "webpack": "4.0.0"
+    "webpack": "5.68.0"
   }
 }

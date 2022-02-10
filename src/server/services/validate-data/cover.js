@@ -5,7 +5,7 @@ const requiredFields = [
   [
     'agency code',
     matchesFilePart('agencyCode'),
-    `The agency code "{}" in the file name does not match the cover's agency code`
+    'The agency code "{}" in the file name does not match the cover\'s agency code'
   ],
   [
     'project id',
@@ -17,5 +17,5 @@ const requiredFields = [
 module.exports = validateSingleDocument(
   'cover',
   requiredFields,
-  `cover requires a row with "agency code" and "project id"`
+  'cover requires a row with "agency code" and "project id"'
 )

@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h1>CARES Reporter</h1>
+    <h1>ARPA Reporter</h1>
     <h4>Login</h4>
     <form @submit="login">
       <div class="form-group">

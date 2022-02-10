@@ -15,7 +15,7 @@ describe('Navigation.vue', () => {
         periodNames: () => ['September, 2020', 'December, 2020'],
         viewPeriod: () => ({ id: 1 }),
         user: () => ({ email: 'user@example.com', role: 'admin' }),
-        applicationTitle: () => 'CARES Reporter',
+        applicationTitle: () => 'ARPA Reporter',
         agencyName: () => id => `Agency ${id}`
       }
     })
@@ -38,6 +38,6 @@ describe('Navigation.vue', () => {
       stubs: ['router-link', 'router-view']
     })
     const r = wrapper.find('.title')
-    expect(r.text()).to.include('CARES Reporter')
+    expect(r.text()).to.include('ARPA Reporter')
   })
 })

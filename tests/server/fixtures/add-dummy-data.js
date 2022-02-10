@@ -8,7 +8,7 @@ const setupAgencies = knex => {
     { name: 'Department of Health', code: 'DOH' },
     { name: 'Executive Office of Health and Human Services', code: 'EOHHS' }
   ]).then(() => {
-    return `Agency data added OK`
+    return 'Agency data added OK'
   })
 }
 

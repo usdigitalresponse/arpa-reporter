@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div>
     <div class="form-group" :key="n" v-for="(column, n) in columns">

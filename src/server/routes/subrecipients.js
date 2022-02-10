@@ -15,9 +15,6 @@ const {
   createSubrecipient,
   updateSubrecipient
 } = require('../db/subrecipients')
-const {
-  put
-} = require('../lib/subrecipients')
 
 router.get('/', requireUser, function get (req, res) {
   subrecipients().then(subrecipients => res.json({ subrecipients }))

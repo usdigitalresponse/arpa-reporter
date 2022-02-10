@@ -8,10 +8,10 @@
 */
 const knex = require('./connection')
 
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.log
-}
+// let log = () => {}
+// if (process.env.VERBOSE) {
+//   log = console.log
+// }
 
 module.exports = {
   getAggregateAwardData,

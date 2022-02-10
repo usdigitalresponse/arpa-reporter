@@ -1,6 +1,5 @@
 const {
   cumulativeAmountIsEqual,
-  cumulativeAmountIsLessThanOrEqual,
   dateIsInReportingPeriod,
   dropdownIncludes,
   isNotBlank,

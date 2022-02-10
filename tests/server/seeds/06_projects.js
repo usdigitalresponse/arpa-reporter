@@ -2,7 +2,7 @@ require('dotenv').config()
 
 exports.seed = async function (knex) {
   await knex('projects').del()
-  const ids = await knex('projects')
+  await knex('projects')
     .insert([
 
       {

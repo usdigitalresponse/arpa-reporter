@@ -68,6 +68,7 @@ jobs:
           POSTGRES_DB: 'server_test'
           POSTGRES_USER: 'test'
           POSTGRES_PASSWORD: 'password'
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started

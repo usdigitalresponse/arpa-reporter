@@ -13,7 +13,7 @@ const requiredFields = [
   [
     '',
     hasSubrecipientKey,
-    `Each subrecipient must have either an "identification number" or a "duns number"`
+    'Each subrecipient must have either an "identification number" or a "duns number"'
   ],
   ['legal name', isNotBlank, 'Legal name must not be blank'],
   [

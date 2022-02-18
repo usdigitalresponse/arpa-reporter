@@ -24,13 +24,13 @@ describe('validateData', () => {
       type: 'certification',
       content: {
         'agency financial reviewer name': 'John Doe',
-        'date': 44175
+        date: 44175
       }
     },
     {
       type: 'grants',
       content: {
-        'compliance': 'Yes',
+        compliance: 'Yes',
         'project id': '100',
         'subrecipient id': '1001',
         'award number': '1',

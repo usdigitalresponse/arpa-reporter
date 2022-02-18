@@ -8,13 +8,13 @@
 // prettier-ignore
 const sheetNameMap = {
   'Cover Page': 'cover',
-  'Projects': 'projects',
+  Projects: 'projects',
   'Sub Recipient': 'subrecipient',
-  'Contracts': 'contracts',
-  'Grants': 'grants',
-  'Loans': 'loans',
-  'Transfers': 'transfers',
-  'Direct': 'direct',
+  Contracts: 'contracts',
+  Grants: 'grants',
+  Loans: 'loans',
+  Transfers: 'transfers',
+  Direct: 'direct',
   'Aggregate Awards < 50000': 'aggregate awards < 50000',
   'Aggregate Payments Individual': 'aggregate payments individual'
 }
@@ -57,7 +57,7 @@ const columnNameMap = {
   'Current Quarter Expenditure/Payments':
     'current quarter expenditure/payments',
   'Current Quarter Obligation': 'current quarter obligation',
-  'Description': 'description',
+  Description: 'description',
   'DUNS Number': 'duns number',
   'Expenditure End Date': 'expenditure end date',
   'Expenditure Project': 'project id',
@@ -99,7 +99,7 @@ const columnNameMap = {
     'primary place of performance state code',
   'Primary Place of Performance Zip+4': 'primary place of performance zip',
   'Prime Recipient DUNS #': 'prime recipient duns #',
-  'Program': 'program',
+  Program: 'program',
   'Project Identification Number': 'project identification number',
   'Project Name': 'project name',
   'Purpose Description': 'purpose description',
@@ -107,7 +107,7 @@ const columnNameMap = {
   'Reporting Period End Date': 'reporting period end date',
   'Reporting Period Start Date': 'reporting period start date',
   'State Code': 'state code',
-  'Status': 'status',
+  Status: 'status',
   'Sub-Recipient Organization (Contractor)': 'subrecipient id',
   'Sub-Recipient Organization (Payee)': 'subrecipient id',
   'Sub-Recipient Organization (Awardee)': 'subrecipient id',
@@ -149,7 +149,7 @@ const columnTypeMap = {
   'Current Quarter Expenditure': 'amount',
   'Current Quarter Expenditure/Payments': 'amount',
   'Current Quarter Obligation': 'amount',
-  'Description': 'string',
+  Description: 'string',
   'DUNS Number': 'string',
   'Expenditure End Date': 'date',
   'Expenditure Project': 'string',
@@ -182,7 +182,7 @@ const columnTypeMap = {
   'Primary Place of Performance State Code': 'string',
   'Primary Place of Performance Zip+4': 'string',
   'Prime Recipient DUNS #': 'string',
-  'Program': 'string',
+  Program: 'string',
   'Project Identification Number': 'string',
   'Project Name': 'string',
   'Purpose Description': 'string',
@@ -190,7 +190,7 @@ const columnTypeMap = {
   'Reporting Period End Date': 'date',
   'Reporting Period Start Date': 'date',
   'State Code': 'string',
-  'Status': 'string',
+  Status: 'string',
   'Sub-Recipient Organization (Contractor)': 'string',
   'Sub-Recipient Organization (Payee)': 'string',
   'Sub-Recipient Organization (Awardee)': 'string',
@@ -215,7 +215,7 @@ const columnTypeMap = {
   'category description': 'string',
   'city name': 'string',
   'compliance explanation': 'string',
-  'compliance': 'string',
+  compliance: 'string',
   'contract amount': 'amount',
   'contract date': 'date',
   'contract description': 'string',
@@ -227,7 +227,7 @@ const columnTypeMap = {
   'current quarter expenditure': 'amount',
   'current quarter expenditure/payments': 'amount',
   'current quarter obligation': 'amount',
-  'description': 'string',
+  description: 'string',
   'duns number': 'string',
   'expenditure end date': 'date',
   'expenditure start date': 'date',
@@ -254,7 +254,7 @@ const columnTypeMap = {
   'primary place of performance state code': 'string',
   'primary place of performance zip': 'string',
   'prime recipient duns #': 'string',
-  'program': 'string',
+  program: 'string',
   'project id': 'string',
   'project identification number': 'string',
   'project name': 'string',
@@ -263,14 +263,14 @@ const columnTypeMap = {
   'reporting period end date': 'date',
   'reporting period start date': 'date',
   'state code': 'string',
-  'status': 'string',
+  status: 'string',
   'subrecipient id': 'string',
   'total payment amount': 'amount',
   'transfer date': 'date',
   'transfer number': 'string',
   'transfer type': 'string',
   'will these payments be repurposed for future use?': 'string',
-  'zip': 'string'
+  zip: 'string'
 }
 
 // columnAliases are needed by the test fixtures, which have old versions of
@@ -436,7 +436,7 @@ const organizationTypeMap =
     'Alaska Native and Native Hawaiian Serving Institutions',
   'Non-domestic (non-U.S.) Entity':
     'Non-domestic (non-U.S.) Entity',
-  'Other': 'Other'
+  Other: 'Other'
 }
 
 /* added 21 01 13 in response to ohio request:

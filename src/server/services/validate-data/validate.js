@@ -132,10 +132,10 @@ function contractMatches (content) {
 
 function directMatches (content) {
   return s => {
-    const award_number = `${content['subrecipient id']}:${content['obligation date']}`
+    const awardNumber = `${content['subrecipient id']}:${content['obligation date']}`
     const isMatch = s.award_type === 'direct' &&
       withoutLeadingZeroes(s.project_code) === withoutLeadingZeroes(content['project id']) &&
-      award_number === s.award_number
+      awardNumber === s.award_number
     return isMatch
   }
 }

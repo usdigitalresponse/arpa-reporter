@@ -8,3 +8,9 @@ updates:
     schedule:
       interval: "daily"
     target-branch: staging
+    # Don't automatically suggest version updates that conflict with the
+    # package.json specification. This greatly reduces the likeihood that a
+    # dependabot update will break anything.
+    # When the package.json needs to be updated for security purposes, Github
+    # will alert us via a "security advisory" instead.
+    versioning-strategy: lockfile-only

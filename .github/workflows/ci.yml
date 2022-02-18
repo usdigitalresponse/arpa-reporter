@@ -97,7 +97,7 @@ jobs:
         env:
           # FIXME: this doesn't actually matter since the tests hardcode a
           # database name and user/password.
-          POSTGRES_URL: 'postgres://test:test-password@localhost:5432/arpa-reporter-test'
+          POSTGRES_URL: 'postgres://test:password@localhost:5432/server_test'
 
   build:
     runs-on: ubuntu-latest

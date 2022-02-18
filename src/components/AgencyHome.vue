@@ -24,7 +24,7 @@
 <script>
 import UploadHistory from '../components/UploadHistory'
 import moment from 'moment'
-import _ from 'lodash'
+import _ from "lodash"
 export default {
   name: 'Home',
   components: {

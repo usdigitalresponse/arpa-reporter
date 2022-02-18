@@ -14,6 +14,10 @@ module.exports = {
     requireSrc: 'writable'
   },
 
+  rules: {
+    'vue/multi-word-component-names': 'off'
+  },
+
   overrides: [
     {
       files: [

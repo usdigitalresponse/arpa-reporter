@@ -10,10 +10,10 @@ const { format } = require('date-fns')
 
 const parseFilename = async (filename, reportingPeriod) => {
   log(`filename is ${filename}`)
-  log(`Agencies are:`)
+  log('Agencies are:')
   log(await agencies())
   const endDate = (reportingPeriod || {}).end_date
-  if (!endDate) throw new Error(`Error finding reportingPeriod`)
+  if (!endDate) throw new Error('Error finding reportingPeriod')
   log(reportingPeriod)
   log(`endDate is ${endDate}`)
   const expectedEndReportDate = format(endDate, 'MMddyyyy')
@@ -23,7 +23,7 @@ const parseFilename = async (filename, reportingPeriod) => {
   if (ext !== 'xlsx') {
     valog.push(
       new ValidationItem({
-        message: `Uploaded file must have ".xlsx" extension`
+        message: 'Uploaded file must have ".xlsx" extension'
       })
     )
   }
@@ -46,7 +46,7 @@ const parseFilename = async (filename, reportingPeriod) => {
   if (!agencyCode) {
     valog.push(
       new ValidationItem({
-        message: `First part of file name must be an agency code.`
+        message: 'First part of file name must be an agency code.'
       })
     )
   } else {
@@ -64,7 +64,7 @@ const parseFilename = async (filename, reportingPeriod) => {
   if (!projectId) {
     valog.push(
       new ValidationItem({
-        message: `Second part of file name must be a project id.`
+        message: 'Second part of file name must be a project id.'
       })
     )
   } else {
@@ -86,7 +86,7 @@ const parseFilename = async (filename, reportingPeriod) => {
   ) {
     valog.push(
       new ValidationItem({
-        message: `The reporting period end date in the filename is ` +
+        message: 'The reporting period end date in the filename is ' +
         `"${reportingDate}" but should be "${expectedEndReportDate}" or ` +
         `"${shortExpectedEndReportDate}"`
       })
@@ -98,7 +98,7 @@ const parseFilename = async (filename, reportingPeriod) => {
   if (!version) {
     valog.push(
       new ValidationItem({
-        message: `Filename is missing the version number`
+        message: 'Filename is missing the version number'
       })
     )
   }

@@ -13,5 +13,5 @@ const requiredFields = [
 module.exports = validateSingleDocument(
   'certification',
   requiredFields,
-  `certification requires a row with "agency financial reviewer name" and "date"`
+  'certification requires a row with "agency financial reviewer name" and "date"'
 )

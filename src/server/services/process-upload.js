@@ -71,14 +71,14 @@ const processUpload = async ({
   }
 
   let upload
-  let result; // eslint-disable-line
+  let result
   try {
     const project = await getProject(fileParts.projectId)
     const agency = await agencyByCode(fileParts.agencyCode)
     if (agency[0]) {
       agency_id = agency[0].id
     }
-    result = await transact(async trx => {
+    result = await transact(async trx => { // eslint-disable-line
       const current_user = await user(user_id)
       // write an upload record for saved file
       upload = await createUpload(

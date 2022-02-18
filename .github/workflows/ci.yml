@@ -1,0 +1,112 @@
+on:
+  pull_request: {}
+  push:
+    branches:
+      - main
+      - staging
+    paths-ignore:
+      - "doc/**"
+
+name: Continuous Integration
+
+jobs:
+  lint:
+    name: Run linters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: 'yarn install'
+
+      - name: Lint Source Code
+        run: |
+          yarn lint --no-fix
+
+  lint-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cschleiden/actions-linter@v1
+        with:
+          workflows: '[".github/workflows/*.yaml", ".github/workflows/*.yml"]'
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: 'yarn install'
+
+      - name: Run unit tests
+        run: |
+          echo "::warning file=package.json,title=Unit tests are broken::The 'yarn test:unit' command is currently broken"
+          # yarn test:unit
+
+  test-server:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: "postgres:13"
+        env:
+          POSTGRES_DB: arpa-reporter-test
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test-password
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: 'yarn install'
+
+      - name: Run server tests
+        run: |
+          yarn knex migrate:latest
+          yarn test:server
+        env:
+          POSTGRES_URL: 'postgres://test:test-password@localhost:5432/arpa-reporter-test'
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: 'yarn install'
+
+      - name: Build the production bundle
+        run: |
+          yarn build

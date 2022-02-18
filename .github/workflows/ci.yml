@@ -92,6 +92,8 @@ jobs:
 
       - name: Run server tests
         run: |
+          # The .env file needs to be present; the example file is good enough.
+          cp .env.example .env
           yarn knex migrate:latest
           yarn test:server
         env:

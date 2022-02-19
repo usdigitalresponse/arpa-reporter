@@ -31,8 +31,5 @@ else
   psql -h localhost -U postgres -w postgres -c "CREATE DATABASE $dbname"
 fi
 
-echo "Running migrations with POSTGRES_URL: '${POSTGRES_URL}'"
 yarn knex migrate:latest
 yarn knex --knexfile tests/server/knexfile.js seed:run
-echo "Done Migrating"
-

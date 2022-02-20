@@ -74,6 +74,6 @@
     "nodemon": "2.0.15",
     "prettier": "2.5.1",
     "vue-template-compiler": "^2.6.11",
-    "webpack": "5.68.0"
+    "webpack": "^4.46.0"
   }
 }

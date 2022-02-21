@@ -11,7 +11,6 @@ name: Continuous Integration
 
 jobs:
   lint:
-    name: Run linters
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

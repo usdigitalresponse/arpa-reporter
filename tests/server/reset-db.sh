@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 
 # The actual directory of this file.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -32,5 +33,3 @@ fi
 
 yarn knex migrate:latest
 yarn knex --knexfile tests/server/knexfile.js seed:run
-
-

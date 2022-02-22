@@ -52,8 +52,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          echo "::warning file=package.json,title=Unit tests are broken::The 'yarn test:unit' command is currently broken"
-          # yarn test:unit
+          yarn test:unit
 
   test-server:
     runs-on: ubuntu-latest

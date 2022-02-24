@@ -1,6 +1,7 @@
+const configureAPI = require('./src/server/configure')
 
 module.exports = {
   devServer: {
-    proxy: 'http://localhost:3000'
+    onBeforeSetupMiddleware: ({ app }) => configureAPI(app)
   }
 }

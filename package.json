@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "concurrently \"npm:dev:*\"",
-    "dev:vue": "vue-cli-service serve",
-    "dev:express": "NODE_ENV=development nodemon src/server",
+    "serve": "vue-cli-service serve",
     "serve:oh": "POSTGRES_URL=postgres://localhost/ohio UPLOAD_DIRECTORY=\"./uploads/oh\" TREASURY_DIRECTORY=\"./treasury-reports/oh\" REPORTING_TEMPLATE=\"OBM Reporting Template.xlsx\" yarn serve",
     "serve:ri": "POSTGRES_URL=postgres://localhost/ri UPLOAD_DIRECTORY=\"./uploads/ri\" TREASURY_DIRECTORY=\"./treasury-reports/ri\" REPORTING_TEMPLATE=\"RICRF Reporting Workbook for Projects Not Previously Reported.xlsx\" yarn serve",
     "serve:rp1": "POSTGRES_URL=postgres://localhost/rptest AUDIT=true UPLOAD_DIRECTORY=\"./uploads/rp\" TREASURY_DIRECTORY=\"./treasury-reports/rp\" yarn serve",
@@ -30,6 +28,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
     "core-js": "^3.16.0",
+
     "date-fns": "^2.23.0",
     "dotenv": "^16.0.0",
     "eslint-config-standard": "^16.0.3",
@@ -63,7 +62,6 @@
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
-    "concurrently": "7.0.0",
     "eslint": "^7.12.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
@@ -71,7 +69,6 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-vue": "^8.4.1",
     "mocha": "^9.2.0",
-    "nodemon": "2.0.15",
     "prettier": "2.5.1",
     "vue-template-compiler": "^2.6.11",
     "webpack": "5.68.0"

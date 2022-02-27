@@ -13,7 +13,7 @@
 
 const knex = require('./connection')
 const { getCurrentReportingPeriodID } = require('./settings')
-const { cleanString, zeroPad } = require('../lib/spreadsheet')
+const { cleanString } = require('../lib/spreadsheet')
 async function createProject (project) {
   project.created_in_period = await getCurrentReportingPeriodID()
   return knex

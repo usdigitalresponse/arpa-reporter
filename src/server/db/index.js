@@ -34,8 +34,7 @@ const {
   projectByCode,
   projectById,
   projects,
-  updateProject,
-  updateProjectStatus
+  updateProject
 } = require('./projects')
 
 function users () {
@@ -216,7 +215,6 @@ module.exports = {
   transact,
   updateAgency,
   updateProject,
-  updateProjectStatus,
   updateUser,
   upload,
   uploads,

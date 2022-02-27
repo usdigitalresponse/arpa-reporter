@@ -69,48 +69,6 @@ function projectById (id) {
     .then(r => r[0])
 }
 
-/* updateProjectStatus() updates a project status from an uploaded agency
-  spreadsheet
-  */
-async function updateProjectStatus (projectCode, documents) {
-  // find the cover page record in the documents array, and read the project
-  // status from the status column
-  projectCode = zeroPad(projectCode)
-  const projectRecord = await getProject(projectCode)
-
-  if (!projectRecord) {
-    return new Error(`Project record ${projectCode} not found.`)
-  }
-
-  let status = null
-  for (let i = 0; i < documents.length; i++) {
-    const row = documents[i]
-    if (row.type === 'cover') {
-      status = row.content.status
-      break
-    }
-  }
-
-  if (!status) {
-    return new Error('Status is missing from Cover sheet.')
-  }
-
-  // console.log(`Project "${projectCode}" status is "${status}"`);
-  const ok = await knex('projects')
-    .where('code', projectCode)
-    .update({
-      status: status
-    })
-
-  // console.log(`updated project status and description`);
-
-  if (!ok) {
-    return new Error(`Failed to update status of project ${projectCode}`)
-  }
-
-  return null
-}
-
 /* getProjects () returns a map:
   { project id : <project record>
     ...
@@ -138,8 +96,7 @@ module.exports = {
   projectByCode,
   projectById,
   projects,
-  updateProject,
-  updateProjectStatus
+  updateProject
 }
 
 /*                                 *  *  *                                    */

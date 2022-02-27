@@ -3,8 +3,8 @@
     <div>
       <div class="row buttons mt-5">
         <div class="col-3">
-          <a :href="downloadUrl()" class="btn btn-primary"
-            >Download Treasury Report</a
+          <a :href="downloadUrl()" class="btn btn-primary disabled" disabled
+            >🚧 Download Treasury Report</a
           >
         </div>
         <div class="closed" v-show="isClosed">

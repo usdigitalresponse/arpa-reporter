@@ -12,7 +12,7 @@ const {
   setCurrentReportingPeriod
 } = dirSettings
 
-describe('process-upload', () => {
+describe.skip('process-upload', () => {
   describe('certification', async () => {
     const dir = path.resolve(dirFixtures, 'data-certification')
     it('fails when reviewer name is missing', async () => {

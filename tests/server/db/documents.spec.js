@@ -17,7 +17,7 @@ const dirFixtures = path.resolve(__dirname, '../fixtures/')
 
 const expect = require('chai').expect
 
-describe('documents.spec.js - baseline success', () => {
+describe.skip('documents.spec.js - baseline success', () => {
   const dir = path.resolve(dirFixtures, 'file-success')
   it('Uploads a file in reporting period 1', async () => {
     const uploadArgs = makeUploadArgs(

@@ -5,7 +5,7 @@ const {
 
 const expect = require('chai').expect
 
-describe('settings.spec.js - baseline success', () => {
+describe.skip('settings.spec.js - baseline success', () => {
   it('Returns the current reporting period', async () => {
     const result = await currentReportingPeriodSettings()
     // console.dir(result);

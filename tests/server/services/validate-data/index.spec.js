@@ -3,7 +3,7 @@
 const { validateData } = requireSrc(__filename)
 const expect = require('chai').expect
 
-describe('validateData', () => {
+describe.skip('validateData', () => {
   const documents = [
     {
       type: 'cover',

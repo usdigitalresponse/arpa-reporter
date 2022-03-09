@@ -18,7 +18,6 @@ const {
 const FileInterface = require('../lib/server-disk-interface')
 const fileInterface = new FileInterface()
 const { validateUpload } = require('./validate-upload')
-const { updateProjectStatus } = require('../db')
 const subrecipients = require('../lib/subrecipients')
 
 const processUpload = async ({
@@ -46,12 +45,6 @@ const processUpload = async ({
 
   if (!valog.success()) {
     log('valog.success() is false')
-    return { valog, upload: {} }
-  }
-
-  const err = await updateProjectStatus(fileParts.projectId, documents)
-  if (err) {
-    valog.append(err.message)
     return { valog, upload: {} }
   }
 

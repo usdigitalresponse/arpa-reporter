@@ -1,13 +1,13 @@
 const _ = require('lodash')
 const tabValidators = [
   require('./certification'),
-  require('./cover'),
-  require('./subrecipients'),
-  require('./contracts'),
-  require('./grants'),
-  require('./loans'),
-  require('./transfers'),
-  require('./direct')
+  require('./cover')
+  // require('./subrecipients'),
+  // require('./contracts'),
+  // require('./grants'),
+  // require('./loans'),
+  // require('./transfers'),
+  // require('./direct')
 ]
 const { getSubrecipientsHash } = require('./helpers')
 const { format } = require('date-fns')

@@ -342,10 +342,10 @@ describe('validation helpers', () => {
   // isValidState() doesn't work in the testCases array,
   // because it has to run after beforeEach() has initialized
   // the dropdowns, so it has to be invoked inside an it() function.
-  it('isValidState("WA") should return true', () => {
+  it.skip('isValidState("WA") should return true', () => {
     expect(isValidState('WA', {}, validateContext)).to.equal(true)
   })
-  it('isValidState("ZZ") should return false', () => {
+  it.skip('isValidState("ZZ") should return false', () => {
     expect(isValidState('ZZ', {}, validateContext)).to.equal(false)
   })
 })

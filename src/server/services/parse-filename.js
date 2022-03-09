@@ -20,10 +20,10 @@ const parseFilename = async (filename, reportingPeriod) => {
   const valog = []
 
   const [, name, ext] = filename.match(/^(.*)\.([^.]+)$/) || []
-  if (ext !== 'xlsx') {
+  if (!['xlsx', 'xlsm'].includes(ext)) {
     valog.push(
       new ValidationItem({
-        message: 'Uploaded file must have ".xlsx" extension'
+        message: 'Uploaded file must have ".xlsx" or ".xlsm" extension'
       })
     )
   }
@@ -32,9 +32,10 @@ const parseFilename = async (filename, reportingPeriod) => {
   if (nameParts.length < 4) {
     valog.push(
       new ValidationItem({
-        message: `Uploaded file name must match pattern
+        message:
+          `Uploaded file name must match pattern
       <agency abbrev>-<project id>-<reporting due date>-<optional-desc>` +
-      `-v<version number>.xlsx
+          `-v<version number>.xlsx
       Example: EOH-013-${expectedEndReportDate}-v1.xlsx
       `
       })

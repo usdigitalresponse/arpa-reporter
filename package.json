@@ -33,7 +33,7 @@
     "date-fns": "^2.23.0",
     "dotenv": "^16.0.0",
     "eslint-config-standard": "^16.0.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fs-extra": "^9.1.0",
     "knex": "^1.0.3",
     "lodash": "^4.17.21",

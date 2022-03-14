@@ -8,9 +8,16 @@ ARPA Reporter is a web app designed to ease the ARPA grants reporting workflow f
 This readme.md page explains how to set up your development environment. Documentation for sysadmins is at https://github.com/usdigitalresponse/arpa-reporter/wiki/Home.
 
 ## Project setup
+
 You will need a Postgres database running on the same machine.
+You can run one using the `docker-compose.yml` file in this repo:
+
+```
+$ docker-compose up
+```
 
 Copy `.env.example` to `.env` and customize as appropriate.
+* If you're using the Postgres provided by `docker-compose`, add the password from `docker-compose.yaml` to the `POSTGRES_URL` variable.
 * ARPA Reporter uses email in its authentication, and is set up to use AWS Simple Email Service.  Enter the AWS Access Key and Secret in `.env`.
 * In particular you'll want to enter your initial admin email addresses.  Note: the same email cannot be used as both an admin account and a user account.
 

@@ -84,7 +84,7 @@ export default {
       this.dateFields.forEach(f => {
         const v = updatedReportingPeriod[f]
         if (v) {
-          updatedReportingPeriod[f] = moment(v, 'MM/DD/YYYY').utc().format('YYYY-MM-DD')
+          updatedReportingPeriod[f] = moment(v).utc().format('YYYY-MM-DD')
         }
       })
       return this.$store

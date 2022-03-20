@@ -6,7 +6,7 @@
     </div>
     <div v-else>
       <DocumentForm
-        type="ReportingPeriod"
+        type="Reporting Period"
         :columns="fields"
         :record="editReportingPeriod"
         :id="editReportingPeriod.id"

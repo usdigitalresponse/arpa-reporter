@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@vue/cli": "^4.5.13",
-    "aws-sdk": "^2.963.0",
+    "aws-sdk": "^2.1099.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
@@ -50,7 +50,7 @@
     "vue": "^2.6.13",
     "vue-router": "^3.5.2",
     "vuex": "^3.6.2",
-    "xlsx": "^0.18.2"
+    "xlsx": "^0.18.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.3",

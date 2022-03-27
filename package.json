@@ -25,11 +25,11 @@
   },
   "dependencies": {
     "@vue/cli": "^4.5.13",
-    "aws-sdk": "^2.963.0",
+    "aws-sdk": "^2.1101.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
-    "core-js": "^3.16.0",
+    "core-js": "^3.21.1",
     "date-fns": "^2.23.0",
     "dotenv": "^16.0.0",
     "eslint-config-standard": "^16.0.3",

@@ -1,8 +1,12 @@
 require('dotenv').config()
 
-const sourcedb = require('knex')(process.env.POSTGRES_SOURCE_URL)
-
 exports.seed = async function (knex) {
+  if (!process.env.POSTGRES_SOURCE_URL) {
+    console.log('POSTGRES_SOURCE_URL is not specified, so nothing to do')
+    return
+  }
+
+  const sourcedb = require('knex')(process.env.POSTGRES_SOURCE_URL)
   const sourceAgencies = await sourcedb('agencies').select()
   const existingAgencies = await knex('agencies').select()
 

@@ -7,7 +7,7 @@
       </span>
       <span class="float-right">
         {{ email }}
-        <a href="#" @click="logout">Logout</a>
+        <a href="#" @click="logout" v-if="loggedIn">Logout</a>
       </span>
 
       <div class="row">
@@ -41,8 +41,8 @@
           </div>
         </div>
       </div>
-
     </div>
+
     <div class="navigation">
       <ul class="nav nav-tabs mb-4" v-if="loggedIn">
         <li class="nav-item">

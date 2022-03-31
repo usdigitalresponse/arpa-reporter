@@ -1,5 +1,5 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .createTable('users', function (table) {
       table.increments('id').primary()
@@ -15,7 +15,7 @@ exports.up = function(knex) {
       table.json('rules').notNullable()
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
     })
-   .createTable('access_tokens', function (table) {
+    .createTable('access_tokens', function (table) {
       table.increments('id').primary()
       table.integer('user_id').unsigned().notNullable()
       table.string('passcode', 200).notNullable().unique()
@@ -25,7 +25,7 @@ exports.up = function(knex) {
 
       table.foreign('user_id').references('users.id')
     })
-   .createTable('configurations', function (table) {
+    .createTable('configurations', function (table) {
       table.increments('id').primary()
       table.text('type').notNullable()
       table.string('name').notNullable().unique()
@@ -49,9 +49,9 @@ exports.up = function(knex) {
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
       table.string('created_by')
     })
-};
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTable('uploads')
     .dropTable('documents')
@@ -59,4 +59,4 @@ exports.down = function(knex) {
     .dropTable('access_tokens')
     .dropTable('roles')
     .dropTable('users')
-};
+}

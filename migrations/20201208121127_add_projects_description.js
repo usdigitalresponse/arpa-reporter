@@ -1,14 +1,14 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
-    .table("projects", function(table) {
-      table.text("description");
-    });
-};
+    .table('projects', function (table) {
+      table.text('description')
+    })
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
-    .table("projects", function(table) {
-      table.dropColumn("description");
-    });
-};
+    .table('projects', function (table) {
+      table.dropColumn('description')
+    })
+}

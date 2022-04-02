@@ -2797,10 +2797,10 @@ autoprefixer@^10.2.4:
     picocolors "^1.0.0"
     postcss-value-parser "^4.2.0"
 
-aws-sdk@^2.963.0:
-  version "2.1069.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1069.0.tgz#85c8005a61b4a42b08dc1f41e312e9bac4e411ad"
-  integrity sha512-AF7/5JotrVd8g/D3WWHgQto+IryB1V7iudIYm+H+qxmkGOU3xvL63ChhEoLTY/CxuK/diayg0oWILEsXUn3dfw==
+aws-sdk@^2.1106.0:
+  version "2.1106.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1106.0.tgz#5c536f57b484af56ca2e0b15fcf2e7d5846ffbd8"
+  integrity sha512-3dr0TTR2LI70ST8fa4IgXHpWdH4yv7FLnt9YEndwFQ8ar2EMCMpMU67wwCGBA72GUi0aOg4+lsLjGmCvIq3jug==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -9065,10 +9065,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@2.5.1, "prettier@^1.18.2 || ^2.0.0":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
-  integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
+prettier@2.6.1, "prettier@^1.18.2 || ^2.0.0":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.1.tgz#d472797e0d7461605c1609808e27b80c0f9cfe17"
+  integrity sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A==
 
 pretty-error@^4.0.0:
   version "4.0.0"

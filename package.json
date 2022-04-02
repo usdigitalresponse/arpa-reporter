@@ -24,7 +24,7 @@
     "prod": "NODE_ENV=production node src/server"
   },
   "dependencies": {
-    "@vue/cli": "^4.5.13",
+    "@vue/cli": "^5.0.4",
     "aws-sdk": "^2.963.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
@@ -72,7 +72,7 @@
     "eslint-plugin-vue": "^8.5.0",
     "mocha": "^9.2.1",
     "nodemon": "2.0.15",
-    "prettier": "2.5.1",
+    "prettier": "2.6.1",
     "vue-template-compiler": "^2.6.11",
     "webpack": "5.68.0"
   }

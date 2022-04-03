@@ -3,7 +3,7 @@
     <div>
       <div class="row buttons mt-5">
         <div class="col-3">
-          <a :href="downloadUrl()" class="btn btn-primary disabled" disabled
+          <a :href="downloadUrl()" class="btn btn-primary"
             >🚧 Download Treasury Report</a
           >
         </div>

@@ -46,15 +46,15 @@ function loadTreasuryTemplate () {
   if (!process.env.TREASURY_TEMPLATE) {
     throw new Error('Treasury template key missing from environment!')
   }
-  const xlsxTemplate = loadXlsxFile(process.env.TREASURY_TEMPLATE)
+  const csvTemplate = loadXlsxFile(process.env.TREASURY_TEMPLATE)
   const objAoaSheets = {}
 
-  _.keys(xlsxTemplate.Sheets).forEach(sheetName => {
-    const rawSheet = xlsxTemplate.Sheets[sheetName]
+  _.keys(csvTemplate.Sheets).forEach(sheetName => {
+    const rawSheet = csvTemplate.Sheets[sheetName]
     objAoaSheets[sheetName] = sheetToJson(rawSheet, false)
   })
 
-  treasury.template = xlsxTemplate
+  treasury.template = csvTemplate
   treasury.sheets = objAoaSheets
 }
 

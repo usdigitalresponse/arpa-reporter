@@ -25,7 +25,7 @@
    final_report_file              | text                     |
 */
 const knex = require('./connection')
-const treasury = require('../lib/treasury')
+const treasury = require('../lib/treasury.old')
 const { cleanString } = require('../lib/spreadsheet')
 
 const {

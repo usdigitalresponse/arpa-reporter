@@ -11,62 +11,48 @@ exports.seed = async function (knex) {
     return
   }
 
-  await knex('reporting_periods').insert([
+  // first period is all of 2021
+  const periods = [
     {
       name: 'Quarterly 1',
       start_date: '2021-03-03',
       end_date: '2021-12-31',
-      period_of_performance_end_date: '2021-12-31',
       open_date: '2022-01-01',
-      close_date: '2022-01-31',
-      review_period_start_date: '2022-01-16',
-      review_period_end_date: '2022-01-31',
-      crf_end_date: '2021-09-30'
-    },
-    {
-      name: 'Quarterly 2',
-      start_date: '2022-01-01',
-      end_date: '2022-03-31',
-      period_of_performance_end_date: '2022-03-31',
-      open_date: '2022-04-01',
-      close_date: '2022-04-30',
-      review_period_start_date: '2022-04-16',
-      review_period_end_date: '2022-04-30',
-      crf_end_date: '2021-09-30'
-    },
-    {
-      name: 'Quarterly 3',
-      start_date: '2022-04-01',
-      end_date: '2022-06-30',
-      period_of_performance_end_date: '2022-06-30',
-      open_date: '2022-07-01',
-      close_date: '2022-07-31',
-      review_period_start_date: '2022-07-16',
-      review_period_end_date: '2022-07-31',
-      crf_end_date: '2021-09-30'
-    },
-    {
-      name: 'Annual 1',
-      start_date: '2021-03-03',
-      end_date: '2022-03-31',
-      period_of_performance_end_date: '2022-03-31',
-      open_date: '2022-04-01',
-      close_date: '2022-04-30',
-      review_period_start_date: '2022-04-16',
-      review_period_end_date: '2022-04-30',
-      crf_end_date: '2022-04-30'
-    },
-    {
-      name: 'Annual 2',
-      start_date: '2022-04-01',
-      end_date: '2023-03-31',
-      period_of_performance_end_date: '2023-03-31',
-      open_date: '2023-04-01',
-      close_date: '2023-04-30',
-      review_period_start_date: '2023-04-16',
-      review_period_end_date: '2023-04-30',
-      crf_end_date: '2023-04-30'
+      close_date: '2022-01-31'
     }
-  ])
-    .returning('id')
+  ]
+
+  const moment = require('moment')
+  const mstr = (mdate) => mdate.format('YYYY-MM-DD')
+
+  // generate array of reporting periods, starting from right after the first period
+  const start = moment(periods[0].end_date).add(1, 'days')
+  const finalStart = moment('2026-10-01')
+  while (!start.isAfter(finalStart)) {
+    const end = start.clone().add(2, 'months').endOf('month')
+    const open = end.clone().add(1, 'days')
+
+    // according to treasury, final reporting period closes end of march, not end of january
+    const close = start.isSame(finalStart) ? moment('2027-03-31') : open.clone().endOf('month')
+
+    periods.push({
+      name: `Quarterly ${periods.length + 1}`,
+      start_date: mstr(start),
+      end_date: mstr(end),
+      open_date: mstr(open),
+      close_date: mstr(close)
+    })
+
+    start.add(3, 'months')
+  }
+
+  // not sure what these fields are used for; these might be unnecessary
+  periods.forEach(period => {
+    period.period_of_performance_end_date = period.end_date
+    period.review_period_start_date = mstr(moment(period.open_date).add(2, 'weeks'))
+    period.review_period_end_date = period.close_date
+    period.crf_end_date = period.close_date
+  })
+
+  await knex('reporting_periods').insert(periods)
 }

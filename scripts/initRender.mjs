@@ -35,10 +35,10 @@ const run = async () => {
     service.description = `${service.name} owned by ${owners[service.ownerId].name}`
   })
 
-  const { toConfig, toModel } = await inquirer.prompt([
+  const { newService, oldService } = await inquirer.prompt([
     {
       type: 'list',
-      name: 'toConfig',
+      name: 'newService',
       message: 'Which service would you like to configure?',
       choices: Object.values(services).map(service => Object({
         name: service.description,
@@ -47,10 +47,10 @@ const run = async () => {
     },
     {
       type: 'list',
-      name: 'toModel',
+      name: 'oldService',
       message: 'Which service would you like to copy variables from?',
       choices: (answers) => Object.values(services)
-        .filter((service) => service.id !== answers.toConfig.id)
+        .filter((service) => service.id !== answers.newService.id)
         .map(service => Object({
           name: service.description,
           value: service
@@ -58,18 +58,18 @@ const run = async () => {
     }
   ])
 
-  log(`you picked service ${toConfig.slug} to configure; it will be configured based on ${toModel.slug}`)
+  log(`you picked service ${newService.slug} to configure; it will be configured based on ${oldService.slug}`)
 
-  toConfig.envVars = {}
-  await render['get-env-vars-for-service']({ serviceId: toConfig.id })
+  newService.envVars = {}
+  await render['get-env-vars-for-service']({ serviceId: newService.id })
     .then(res => res.forEach(({ envVar }) => {
-      toConfig.envVars[envVar.key] = envVar.value
+      newService.envVars[envVar.key] = envVar.value
     }))
 
-  toModel.envVars = {}
-  await render['get-env-vars-for-service']({ serviceId: toModel.id })
+  oldService.envVars = {}
+  await render['get-env-vars-for-service']({ serviceId: oldService.id })
     .then(res => res.forEach(({ envVar }) => {
-      toModel.envVars[envVar.key] = envVar.value
+      oldService.envVars[envVar.key] = envVar.value
     }))
 
   const questions = []
@@ -79,10 +79,10 @@ const run = async () => {
     questions.push({
       type: 'list',
       name: toCopy,
-      default: toConfig.envVars[toCopy],
+      default: newService.envVars[toCopy],
       choices: [
-        { name: `Existing (${toConfig.envVars[toCopy]})`, value: toConfig.envVars[toCopy] },
-        { name: `Copied (${toModel.envVars[toCopy]})`, value: toModel.envVars[toCopy] }
+        { name: `Existing (${newService.envVars[toCopy]})`, value: newService.envVars[toCopy] },
+        { name: `From ${oldService.slug} (${oldService.envVars[toCopy]})`, value: oldService.envVars[toCopy] }
       ]
     })
   })
@@ -90,33 +90,33 @@ const run = async () => {
   questions.push({
     type: 'input',
     name: 'INITIAL_APP_TITLE',
-    default: toConfig.envVars.INITIAL_APP_TITLE
+    default: newService.envVars.INITIAL_APP_TITLE
   })
 
   questions.push({
     type: 'list',
     name: 'POSTGRES_SOURCE_URL',
-    default: toConfig.envVars.POSTGRES_SOURCE_URL,
+    default: newService.envVars.POSTGRES_SOURCE_URL,
     choices: [
-      { name: `Existing (${toConfig.envVars.POSTGRES_SOURCE_URL})`, value: toConfig.envVars.POSTGRES_SOURCE_URL },
-      { name: `Copied (${toModel.envVars.POSTGRES_URL})`, value: toModel.envVars.POSTGRES_URL }
+      { name: `Existing (${newService.envVars.POSTGRES_SOURCE_URL})`, value: newService.envVars.POSTGRES_SOURCE_URL },
+      { name: `From ${oldService.slug} (${oldService.envVars.POSTGRES_URL})`, value: oldService.envVars.POSTGRES_URL }
     ]
   })
 
   questions.push({
     type: 'input',
     name: 'COOKIE_SECRET',
-    default: toConfig.envVars.COOKIE_SECRET || Math.random().toString(16).substr(2, 10)
+    default: newService.envVars.COOKIE_SECRET || Math.random().toString(16).substr(2, 10)
   })
 
   questions.push({
     type: 'input',
     name: 'POSTGRES_URL',
-    default: toConfig.envVars.POSTGRES_URL
+    default: newService.envVars.POSTGRES_URL
   })
 
   await inquirer.prompt(questions, {
-    SITE_URL: toConfig.serviceDetails.url,
+    SITE_URL: newService.serviceDetails.url,
     UPLOAD_DIRECTORY: '/var/data/uploads',
     TREASURY_DIRECTORY: '/var/data/uploads/treasury',
     REPORTING_TEMPLATE: 'empty-template.xlsx',
@@ -126,12 +126,12 @@ const run = async () => {
     .then(answers => {
       render['update-env-vars-for-service'](
         Object.entries(answers).map(([key, value]) => Object({ key, value })),
-        { serviceId: toConfig.id }
+        { serviceId: newService.id }
       )
         .catch(err => console.log(err))
     })
 
-  log(`Successfully updated environment for service ${toConfig.slug}`)
+  log(`Successfully updated environment for service ${newService.slug}`)
 }
 
 run()

@@ -1,15 +1,15 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
-    .table('uploads', function(table) {
-      table.dropColumn('configuration_id');
+    .table('uploads', function (table) {
+      table.dropColumn('configuration_id')
     })
     .dropTable('configurations')
-};
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
-   .createTable('configurations', function (table) {
+    .createTable('configurations', function (table) {
       table.increments('id').primary()
       table.text('type').notNullable()
       table.string('name').notNullable().unique()
@@ -18,6 +18,6 @@ exports.down = function(knex) {
       table.json('content').notNullable()
     })
     .table('uploads', function (table) {
-      table.integer('configuration_id').references('id').inTable('configurations');
+      table.integer('configuration_id').references('id').inTable('configurations')
     })
-};
+}

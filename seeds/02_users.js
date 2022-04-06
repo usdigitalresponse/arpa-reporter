@@ -1,26 +1,22 @@
-require("dotenv").config();
+require('dotenv').config()
 
-const adminList = (process.env.INITIAL_ADMIN_EMAILS || "").split(/\s*,\s*/);
-const agencyUserList = (process.env.INITIAL_AGENCY_EMAILS || "").split(
-  /\s*,\s*/
-);
+const usdrAdmins = [
+  { email: 'igor47@moomers.org', name: 'Igor Serebryany' },
+  { email: 'ajhyndman@hotmail.com', name: 'Andrew Hyndman' },
+  { email: 'joecomeau01@gmail.com', name: 'Joe Comeau' }
+]
 
-exports.seed = async function(knex) {
-  // Deletes ALL existing admins
-  await knex("users")
-    .where({ role: "admin" })
-    .del();
-  await knex("users").insert(
-    adminList.map(email => {
-      return { email, name: email, role: "admin" };
-    })
-  );
-  await knex("users")
-    .where({ role: "reporter" })
-    .del();
-  await knex("users").insert(
-    agencyUserList.map(email => {
-      return { email, name: email, role: "reporter" };
-    })
-  );
-};
+exports.seed = async function (knex) {
+  usdrAdmins.forEach(async adm => {
+    adm.role = 'admin'
+
+    const [{ count }] = await knex('users')
+      .where({ email: adm.email })
+      .count('email', { as: 'count' })
+
+    if (count === '0') {
+      console.log(`adding user ${adm.email}...`)
+      await knex('users').insert(adm)
+    }
+  })
+}

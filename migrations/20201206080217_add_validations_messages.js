@@ -1,5 +1,5 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .createTable('validation_messages', function (table) {
       table.increments('id').primary()
@@ -10,9 +10,9 @@ exports.up = function(knex) {
       table.integer('row')
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
     })
-};
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTable('validation_messages')
-};
+}

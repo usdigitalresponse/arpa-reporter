@@ -1,14 +1,14 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
-    .table('application_settings', function(table) {
+    .table('application_settings', function (table) {
       table.specificType('validation_rule_tags', 'TEXT[]')
     })
-};
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
-    .table('application_settings', function(table) {
-      table.dropColumn('validation_rule_tags');
+    .table('application_settings', function (table) {
+      table.dropColumn('validation_rule_tags')
     })
-};
+}

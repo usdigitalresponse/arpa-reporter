@@ -28,6 +28,10 @@ jobs:
         run: |
           yarn lint --no-fix
 
+      - name: Lint Migrations & Seeds
+        run: |
+          yarn lint --no-fix migrations/ seeds/
+
   lint-workflows:
     runs-on: ubuntu-latest
     steps:

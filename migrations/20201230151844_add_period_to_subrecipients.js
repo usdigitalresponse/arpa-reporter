@@ -1,15 +1,15 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
-    .table("subrecipients", function(table) {
-      table.integer("created_in_period");
-      table.foreign("created_in_period").references("reporting_periods.id");
-    });
-};
+    .table('subrecipients', function (table) {
+      table.integer('created_in_period')
+      table.foreign('created_in_period').references('reporting_periods.id')
+    })
+}
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
-    .table("subrecipients", function(table) {
-      table.dropColumn("created_in_period");
-    });
-};
+    .table('subrecipients', function (table) {
+      table.dropColumn('created_in_period')
+    })
+}

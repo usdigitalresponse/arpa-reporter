@@ -33,6 +33,7 @@ module.exports = app => {
   app.use('/api/uploads', require('./routes/uploads'))
   app.use('/api/users', require('./routes/users'))
   app.use('/api/validations', require('./routes/validations'))
+  app.use('/api/health', require('./routes/health'))
   app.use('/templates', require('./routes/templates'))
 
   if (process.env.NODE_ENV !== 'development') {

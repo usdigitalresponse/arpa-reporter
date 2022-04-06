@@ -37,10 +37,12 @@ exports.seed = async function (knex) {
   })
 
   // now users
-  const sourceUsers = await sourcedb('users').select()
+  const sourceAll = await sourcedb('users').select()
+  const sourceAdmins = sourceAll.filter(user => user.role === 'admin')
   const existingUsers = await knex('users').select()
 
   // which to insert?
+  const sourceUsers = sourceAdmins // only add admins for now
   const newUsers = []
   sourceUsers.forEach(source => {
     const matching = existingUsers.filter(existing => (existing.email === source.email))

@@ -14,3 +14,7 @@ updates:
     # When the package.json needs to be updated for security purposes, Github
     # will alert us via a "security advisory" instead.
     versioning-strategy: lockfile-only
+    # We want to specifically highlight updates to dependencies that are
+    # customer facing.
+    allow:
+      - dependency-type: production

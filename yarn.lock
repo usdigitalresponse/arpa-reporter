@@ -2945,9 +2945,9 @@ autoprefixer@^10.2.4:
     postcss-value-parser "^4.2.0"
 
 aws-sdk@^2.963.0:
-  version "2.1069.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1069.0.tgz#85c8005a61b4a42b08dc1f41e312e9bac4e411ad"
-  integrity sha512-AF7/5JotrVd8g/D3WWHgQto+IryB1V7iudIYm+H+qxmkGOU3xvL63ChhEoLTY/CxuK/diayg0oWILEsXUn3dfw==
+  version "2.1111.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1111.0.tgz#02b1e5c530ef8140235ee7c48c710bb2dbd7dc84"
+  integrity sha512-WRyNcCckzmu1djTAWfR2r+BuI/PbuLrhG3oa+oH39v4NZ4EecYWFL1CoCPlC2kRUML4maSba5T4zlxjcNl7ELQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -5893,6 +5893,15 @@ fs-exists-sync@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/fs-exists-sync/-/fs-exists-sync-0.1.0.tgz#982d6893af918e72d08dec9e8673ff2b5a8d6add"
   integrity sha1-mC1ok6+RjnLQjeyehnP/K1qNat0=
+
+fs-extra@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.0.1.tgz#27de43b4320e833f6867cc044bfce29fdf0ef3b8"
+  integrity sha512-NbdoVMZso2Lsrn/QwLXOy6rm0ufY2zEOKCDzJR/0kBsb0E6qed0P3iYK+Ath3BfvXEeu4JhEtXLgILx5psUfag==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
 
 fs-extra@^7.0.1:
   version "7.0.1"

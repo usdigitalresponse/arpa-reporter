@@ -2021,17 +2021,17 @@
     webpack-virtual-modules "^0.4.2"
     whatwg-fetch "^3.6.2"
 
-"@vue/cli-shared-utils@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.5.15.tgz#dba3858165dbe3465755f256a4890e69084532d6"
-  integrity sha512-SKaej9hHzzjKSOw1NlFmc6BSE0vcqUQMQiv1cxQ2DhVyy4QxZXBmzmiLBUBe+hYZZs1neXW7n//udeN9bCAY+Q==
+"@vue/cli-shared-utils@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.5.17.tgz#bb4aac8b816036cf5c0adf3af3cc1cb9c425501e"
+  integrity sha512-VoFNdxvTW4vZu3ne+j1Mf7mU99J2SAoRVn9XPrsouTUUJablglM8DASk7Ixhsh6ymyL/W9EADQFR6Pgj8Ujjuw==
   dependencies:
+    "@achrinza/node-ipc" "9.2.2"
     "@hapi/joi" "^15.0.1"
     chalk "^2.4.2"
     execa "^1.0.0"
     launch-editor "^2.2.1"
     lru-cache "^5.1.1"
-    node-ipc "^9.1.1"
     open "^6.3.0"
     ora "^3.4.0"
     read-pkg "^5.1.1"
@@ -2057,23 +2057,24 @@
     semver "^7.3.4"
     strip-ansi "^6.0.0"
 
-"@vue/cli-ui-addon-webpack@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-ui-addon-webpack/-/cli-ui-addon-webpack-4.5.15.tgz#547739ad72add5d632fbd23bf385601563019143"
-  integrity sha512-WpMlsnu4rkQ2fb7lFnPoVtmT0pmCVJI6VkCa/bDMZjz5enLmGewGamJle/RWNwzTsvi59aroYMClXcTa2dQHBw==
+"@vue/cli-ui-addon-webpack@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@vue/cli-ui-addon-webpack/-/cli-ui-addon-webpack-4.5.17.tgz#93c41f6cfd49280245f2bb873d4eea6d652a1ed7"
+  integrity sha512-AZMnDzToM2uxW/73mfjJweea3atC5sxOC3Nel5UEFnQK0hWN0/8NW6nPAiKDc+kJpZWFb7Y6ReP2hwYizUJK2w==
 
-"@vue/cli-ui-addon-widgets@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-ui-addon-widgets/-/cli-ui-addon-widgets-4.5.15.tgz#ff9dff5a1b882b49b927b513ec8061771a53f5eb"
-  integrity sha512-B4Rc4wGgxTAOivy0tmBEuPAbSYeTzv3dusoQUOW1CVT3N5zYkEuxVj8OXmUQ1YECWaK+IjvQQMFkBuXt//lp7g==
+"@vue/cli-ui-addon-widgets@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@vue/cli-ui-addon-widgets/-/cli-ui-addon-widgets-4.5.17.tgz#aa6d3650a68eb4d0ee2bfb887b0466a306246379"
+  integrity sha512-K49weNsBggUL54Etdqml0hR3PpNzQSXUxC0G52qGNuZwPPxpZfZSQIH8GQ4jBTS8ySXmQYDT99DyxKSedE7McQ==
 
-"@vue/cli-ui@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-ui/-/cli-ui-4.5.15.tgz#24fb3290cf85c3e07e1662f101735a8aca8b8130"
-  integrity sha512-n32NC8RxI5HSeDH6QoK5LxgTDSN9HOj7Ra1eHlxQDqN2ppz3OhUAhsSEUe4puCq97dReYQeW6zpvCZOAyZgsIg==
+"@vue/cli-ui@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@vue/cli-ui/-/cli-ui-4.5.17.tgz#1d3ad3bdb371921b270e9cfd63019fd7c34014eb"
+  integrity sha512-x5o+RUNkPLO6wDNY5/Sec9ZuZExzARU8KkP2SwM2SWLirkjKgLVvyL4/snAIWwRLxsxXVuyZ8YJdqnWidixzCg==
   dependencies:
+    "@achrinza/node-ipc" "9.2.2"
     "@akryum/winattr" "^3.0.0"
-    "@vue/cli-shared-utils" "^4.5.15"
+    "@vue/cli-shared-utils" "^4.5.17"
     apollo-server-express "^2.13.1"
     clone "^2.1.1"
     deepmerge "^4.2.2"
@@ -2091,7 +2092,6 @@
     lodash.merge "^4.6.1"
     lowdb "^1.0.0"
     lru-cache "^5.1.1"
-    node-ipc "^9.1.1"
     node-notifier "^9.0.0"
     parse-git-config "^2.0.2"
     portfinder "^1.0.26"
@@ -2102,16 +2102,16 @@
     watch "^1.0.2"
 
 "@vue/cli@^4.5.13":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli/-/cli-4.5.15.tgz#400d8f116c07d9d27c2fe66121b25e8f02c12bb6"
-  integrity sha512-7YkT/xf1RjowIad8JSyerT+XIyja7SXfsHfPNdktUeTx5XAmiJiGsXb7ydq3rVHekaPsIkE2wIAgaGBrnRdTIA==
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@vue/cli/-/cli-4.5.17.tgz#382b2ab7a2315b633019d349f25561210b18d861"
+  integrity sha512-73nK2o/o7Wk9myPySdjxpMzABLynGmnQbJ5wz3CJ9SFrss8Y2LwLAnzlO77mr3uA2nFPdTJbkbUcZlvBWCVSrA==
   dependencies:
     "@types/ejs" "^2.7.0"
     "@types/inquirer" "^6.5.0"
-    "@vue/cli-shared-utils" "^4.5.15"
-    "@vue/cli-ui" "^4.5.15"
-    "@vue/cli-ui-addon-webpack" "^4.5.15"
-    "@vue/cli-ui-addon-widgets" "^4.5.15"
+    "@vue/cli-shared-utils" "^4.5.17"
+    "@vue/cli-ui" "^4.5.17"
+    "@vue/cli-ui-addon-webpack" "^4.5.17"
+    "@vue/cli-ui-addon-widgets" "^4.5.17"
     boxen "^4.1.0"
     cmd-shim "^3.0.3"
     commander "^2.20.0"
@@ -4683,7 +4683,7 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-easy-stack@1.0.1, easy-stack@^1.0.1:
+easy-stack@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
   integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
@@ -7312,13 +7312,6 @@ js-message@1.0.7:
   resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.7.tgz#fbddd053c7a47021871bb8b2c95397cc17c20e47"
   integrity sha512-efJLHhLjIyKRewNS9EGZ4UpI8NguuL6fKkhRxVuMmrGV2xN/0APGdQYwLFky5w9naebSZ0OwAGp0G6/2Cg90rA==
 
-js-queue@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.2.tgz#0be590338f903b36c73d33c31883a821412cd482"
-  integrity sha512-pbKLsbCfi7kriM3s1J4DDCo7jQkI58zPLHi0heXPzPlj0hjUsm+FesPUbE0DSbIVIK503A36aUBoCN7eMFedkA==
-  dependencies:
-    easy-stack "^1.0.1"
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -8439,15 +8432,6 @@ node-forge@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-1.3.0.tgz#37a874ea723855f37db091e6c186e5b67a01d4b2"
   integrity sha512-08ARB91bUi6zNKzVmaj3QO7cr397uiDT2nJ63cHjyNtCTWIgvS47j3eT0WfzUwS9+6Z5YshRaoasFkXCKrIYbA==
-
-node-ipc@^9.1.1:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
-  integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
-  dependencies:
-    event-pubsub "4.3.0"
-    js-message "1.0.7"
-    js-queue "2.0.2"
 
 node-notifier@^9.0.0:
   version "9.0.1"

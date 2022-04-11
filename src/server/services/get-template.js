@@ -106,7 +106,9 @@ function loadValidationTemplate () {
     if (tabName === 'Dropdowns') return
     const sheetName = tabName.toLowerCase().trim()
     const templateSheet = _.get(xlsxTemplate, ['Sheets', tabName])
-    objAoaSheets[sheetName] = sheetToJson(templateSheet)
+    const json = sheetToJson(templateSheet)
+    json[0] = json[0].map(_.toLower)
+    objAoaSheets[sheetName] = json
   })
 
   validation.template = xlsxTemplate

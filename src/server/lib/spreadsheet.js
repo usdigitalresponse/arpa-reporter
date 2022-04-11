@@ -15,6 +15,7 @@ const {
   columnTypeMap,
   sheetNameAliases
 } = require('./field-name-mapping')
+const { removeMetadata } = require('../lib/remove-metadata')
 
 /* loadSpreadsheet() returns an array containing:
   [
@@ -79,12 +80,20 @@ function parseSpreadsheet (workbook, templateSheets) {
   })
 
   // convert the sheets from xlsx format to AOA format
-  const parsedWorkbook = _.mapValues(
-    normalizedSheets || {},
-    sheet => {
-      return sheetToJson(sheet)
-    }
-  )
+  const jsonWorkbook = _.mapValues(normalizedSheets || {}, sheet => {
+    return sheetToJson(sheet)
+  })
+
+  // remove metadata rows & normalize column names
+  const parsedWorkbook = {}
+  Object.entries(jsonWorkbook).forEach(([sheetName, sheet]) => {
+    const normalizedSheet = removeMetadata(sheetName, jsonWorkbook[sheetName])
+    const [headerRow, ...rest] = normalizedSheet
+    const normalizedHeader = _.map(headerRow, colName =>
+      typeof colName === 'string' ? colName.toLowerCase().trim() : colName
+    )
+    parsedWorkbook[sheetName] = [normalizedHeader, ...rest]
+  })
 
   _.forIn(templateSheets, (templateSheet, sheetName) => {
     const workbookSheet = parsedWorkbook[sheetName]
@@ -157,37 +166,14 @@ async function spreadsheetToDocuments (
       const jsonRow = _.omit(_.zipObject(cols, row), ['ignore'])
 
       switch (sheetName) {
-        case 'subrecipient':
-          if (jsonRow['duns number']) {
-            // populate the identification number field for easier deduplication
-            jsonRow['identification number'] = `DUNS${jsonRow['duns number']}`
-          }
-          break
-
-        case 'projects':
-          jsonRow['project identification number'] =
-            zeroPad(jsonRow['project identification number'])
-          break
-
-        case 'contracts':
-        case 'grants':
-        case 'loans':
-        case 'transfers':
-        case 'direct':
-        case 'cover':
-          // note in the projects database table this field is called "code",
-          // and "id" is not this, but the numeric record id.
-          jsonRow['project id'] = zeroPad(jsonRow['project id'])
-          break
-
-        case 'certification':
-        case 'aggregate awards < 50000':
-        case 'aggregate payments individual':
-          break
+        case 'logic':
+        case 'summary':
+        case 'dropdowns':
+          // omit these sheets
+          return
 
         default:
-          // ignore all other sheets
-          return
+          break
       }
 
       documents.push({

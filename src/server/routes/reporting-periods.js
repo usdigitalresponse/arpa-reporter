@@ -38,7 +38,7 @@ router.get('/summaries/', requireUser, async function (req, res) {
   return getPeriodSummaries().then(summaries => res.json({ summaries }))
 })
 
-router.get('/close/', requireAdminUser, async (req, res) => {
+router.post('/close/', requireAdminUser, async (req, res) => {
   console.log('GET 2 /reporting_periods/close/')
 
   const user = await getUser(req.signedCookies.userId)

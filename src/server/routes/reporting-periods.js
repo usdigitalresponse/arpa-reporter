@@ -8,6 +8,7 @@
 
 const express = require('express')
 const router = express.Router()
+const moment = require('moment')
 
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
@@ -19,12 +20,13 @@ const { getPeriodSummaries, user: getUser } = require('../db')
 const reportingPeriods = require('../db/reporting-periods')
 
 router.get('/', requireUser, async function (req, res) {
-  const currentPeriodID = await reportingPeriods.getID()
   const allPeriods = await reportingPeriods.getAll()
   const reporting_periods = []
 
+  const now = moment()
+
   allPeriods.forEach(period => {
-    if (period.id <= currentPeriodID) {
+    if (moment(period.start_date) <= now) {
       reporting_periods[period.id - 1] = period
     }
   })

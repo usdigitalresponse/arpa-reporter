@@ -11,6 +11,10 @@ const xlsx = require('xlsx')
 const _ = require('lodash')
 const { sheetToJson } = require('../lib/spreadsheet')
 
+// Treasury upload spreadsheet template
+// TODO: Support all treasury export templates
+const PROJECT_BASELINE_TEMPLATE = 'treasury/projectBaselineBulkUpload.xlsx'
+
 const treasury = {
   template: null,
   sheets: null
@@ -43,10 +47,7 @@ function getTreasuryTemplateSheets () {
 }
 
 function loadTreasuryTemplate () {
-  if (!process.env.TREASURY_TEMPLATE) {
-    throw new Error('Treasury template key missing from environment!')
-  }
-  const xlsxTemplate = loadXlsxFile(process.env.TREASURY_TEMPLATE)
+  const xlsxTemplate = loadXlsxFile(PROJECT_BASELINE_TEMPLATE)
   const objAoaSheets = {}
 
   _.keys(xlsxTemplate.Sheets).forEach(sheetName => {

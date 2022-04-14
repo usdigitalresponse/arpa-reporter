@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +errexit
+set -o errexit
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -11,7 +11,13 @@ $(grep -v '^#' $DOTENV | sed -E 's|^(.+)=(.*)|: ${\1=\2}; export \1|g')
 DONE
 
 export DEVDBNAME="${POSTGRES_URL##*/}"
-export POSTGRES_URL="${POSTGRES_URL}_test"
+
+# add `_test` to POSTGRES_URL if it's not already there
+if [ ${POSTGRES_URL: -5} != "_test" ]
+then
+  export POSTGRES_URL="${POSTGRES_URL}_test"
+fi
+
 export UPLOAD_DIRECTORY=`dirname $0`/mocha_uploads
 export TREASURY_DIRECTORY=`dirname $0`/mocha_uploads/treasury
 

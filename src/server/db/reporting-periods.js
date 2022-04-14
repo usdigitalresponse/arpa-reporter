@@ -25,7 +25,7 @@
    final_report_file              | text                     |
 */
 const knex = require('./connection')
-const treasury = require('../lib/treasury')
+const { latestReport } = require('../lib/latest-report')
 const { cleanString } = require('../lib/spreadsheet')
 
 const {
@@ -140,7 +140,7 @@ async function closeReportingPeriod (user, period) {
 
   console.log(`closing period ${period}`)
   // throws if there is no report in the period
-  const latestTreasuryReportFileName = await treasury.latestReport(reporting_period_id)
+  const latestTreasuryReportFileName = await latestReport(reporting_period_id)
   console.log(`Treasury Report ${latestTreasuryReportFileName}`)
 
   const errLog = await writeSummaries(reporting_period_id)

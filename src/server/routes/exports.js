@@ -11,14 +11,16 @@ const reportingPeriods = require('../db/reporting-periods')
 router.get('/', requireUser, async function (req, res) {
   const periodId = await reportingPeriods.getID(req.query.period_id)
 
-  let report
+  let generator
   if (await reportingPeriods.isCurrent(periodId)) {
     console.log(`periodId ${periodId} is current`)
-    report = await arpa.generateReport(periodId)
+    generator = arpa.generateReport
   } else {
     console.log(`periodId ${periodId} is not current - sending old report`)
-    report = await arpa.getPriorReport(periodId)
+    generator = arpa.getPriorReport
   }
+
+  const report = await generator(periodId)
 
   if (_.isError(report)) {
     return res.status(500).send(report.message)
@@ -29,7 +31,7 @@ router.get('/', requireUser, async function (req, res) {
     `attachment; filename="${report.filename}"`
   )
   res.header('Content-Type', 'application/octet-stream')
-  res.send(Buffer.from(report.outputWorkBook, 'binary'))
+  res.send(Buffer.from(report.content, 'binary'))
 })
 
 module.exports = router

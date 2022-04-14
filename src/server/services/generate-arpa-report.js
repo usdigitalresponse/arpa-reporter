@@ -1,7 +1,9 @@
 
 const path = require('path')
-const { mkdir, rmdir, open, readdir } = require('fs/promises')
+const { mkdir, rmdir, writeFile, readdir, readFile } = require('fs/promises')
 const moment = require('moment')
+const { stringify } = require('csv-stringify')
+const zipper = require('zip-local')
 
 const { applicationSettings } = require('../db/settings')
 const { ARPA_REPORTS_DIR } = require('../environment')
@@ -29,13 +31,6 @@ async function generateDummyData (periodId) {
   ]
 }
 
-async function writeFile (path, contents) {
-  return open(path, 'w')
-    .then(handle => handle.writeFile(contents)
-      .then(() => handle.close())
-    )
-}
-
 async function generateReport (periodId) {
   // create a directory for the report
   const dirName = path.join(
@@ -54,8 +49,8 @@ async function generateReport (periodId) {
   await Promise.all(csvFiles.map(csvFile => {
     return csvFile.func(periodId)
       .then(csvData => {
-        console.dir(csvData)
-        return writeFile(path.join(dirName, `${csvFile.name}.csv`), csvData)
+        const contents = stringify(csvData)
+        return writeFile(path.join(dirName, `${csvFile.name}.csv`), contents)
       })
   }))
     .catch((err) => {
@@ -64,7 +59,15 @@ async function generateReport (periodId) {
     })
 
   // now we generate a zip file
-  console.log(`wrote files to ${dirName}`)
+  const zipfileName = dirName + '.zip'
+  const zipfile = zipper.sync.zip(dirName)
+  zipfile.compress().save(zipfileName)
+
+  // return the correct format
+  return {
+    filename: path.basename(zipfileName),
+    content: (await readFile(zipfileName))
+  }
 }
 
 async function getPriorReport (periodId) {
@@ -74,11 +77,14 @@ async function getPriorReport (periodId) {
   )
 
   const files = await readdir(periodReportsDir)
-  const lastFile = files.sort()[files.length - 1]
+  const lastFileName = path.join(
+    periodReportsDir,
+    files.sort()[files.length - 1]
+  )
 
   return {
-    filename: lastFile,
-    contents: 'abc'
+    filename: path.basename(lastFileName),
+    contents: (await readFile(lastFileName))
   }
 }
 

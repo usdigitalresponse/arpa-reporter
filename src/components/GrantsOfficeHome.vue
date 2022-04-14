@@ -3,9 +3,7 @@
     <div>
       <div class="row buttons mt-5">
         <div class="col-3">
-          <a :href="downloadUrl()" class="btn btn-primary disabled" disabled
-            >🚧 Download Treasury Report</a
-          >
+          <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
         </div>
         <div class="closed" v-show="isClosed">
           This reporting period is closed.
@@ -116,11 +114,9 @@ export default {
   },
   methods: {
     titleize,
-    /* eslint camelcase: 0 */
     downloadUrl () {
-      const period_id = this.$store.getters.viewPeriod.id || 0
-      // console.dir(this.$store.getters.viewPeriod);
-      return `/api/exports?period_id=${period_id}`
+      const periodId = this.$store.getters.viewPeriod.id || 0
+      return `/api/exports?period_id=${periodId}`
     },
     documentCount (tableName) {
       if (tableName === 'subrecipient') {

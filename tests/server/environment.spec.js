@@ -18,6 +18,11 @@ describe('environment settings', function () {
     process.env.DATA_DIR = savedDataDir
   })
 
+  it('points the CODE_DIR at src', function () {
+    const env = require(underTest)
+    assert.equal(env.SRC_DIR.slice(env.SRC_DIR.length - 3), 'src')
+  })
+
   describe('when there is a DATA_DIR set', function () {
     it('sets the data dir', function () {
       const env = require(underTest)

@@ -2,7 +2,7 @@
 const path = require('path')
 const { mkdir, rmdir, writeFile, readdir, readFile } = require('fs/promises')
 const moment = require('moment')
-const { stringify } = require('csv-stringify')
+const { stringify } = require('csv-stringify/sync')
 const zipper = require('zip-local')
 const XLSX = require('xlsx')
 
@@ -137,6 +137,12 @@ async function generateReport (periodId) {
   await Promise.all(csvFiles.map(csvFile => {
     return csvFile.func(periodId)
       .then(csvData => {
+        if (!Array.isArray(csvData)) {
+          console.dir(csvFile)
+          console.dir(csvData)
+          throw new Error(`CSV Data from ${csvFile.name} was not an array!`)
+        }
+
         const contents = stringify(csvData)
         return writeFile(path.join(dirName, `${csvFile.name}.csv`), contents)
       })

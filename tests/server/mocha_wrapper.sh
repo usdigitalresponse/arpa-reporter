@@ -18,8 +18,8 @@ then
   export POSTGRES_URL="${POSTGRES_URL}_test"
 fi
 
+export DATA_DIR=`dirname $0`/mocha_uploads
 export UPLOAD_DIRECTORY=`dirname $0`/mocha_uploads
-export TREASURY_DIRECTORY=`dirname $0`/mocha_uploads/treasury
 
 $DIR/reset-db.sh
 

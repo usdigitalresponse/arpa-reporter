@@ -17,8 +17,7 @@ describe('Home.vue', () => {
       getters: {
         user: () => ({ email: 'admin@example.com', role: 'admin' }),
         periodNames: () => ['September, 2020', 'December, 2020'],
-        viewPeriod: () => ({ id: 1 }),
-        reportingTemplate: () => 'template.xlsx'
+        viewPeriod: () => ({ id: 1 })
       }
     })
     const wrapper = mount(Home, {

@@ -119,8 +119,7 @@ const run = async () => {
     SITE_URL: newService.serviceDetails.url,
     UPLOAD_DIRECTORY: '/var/data/uploads',
     DATA_DIR: '/var/data/uploads',
-    REPORTING_TEMPLATE: 'empty-template.xlsx',
-    VALIDATION_TEMPLATE: 'validation-template.xlsx',
+    VALIDATION_TEMPLATE: 'validation-template.xlsx'
   })
     .then(answers => {
       render['update-env-vars-for-service'](

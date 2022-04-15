@@ -254,7 +254,7 @@ export default new Vuex.Store({
         })
     },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {
-      return postForm(`/api/reporting_periods/templates/${reportingPeriodId}`, formData)
+      return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
         .then(r => {
           if (!r.ok) { throw new Error(`createUpload: ${r.statusText} (${r.status})`) }
           return r.json()
@@ -430,11 +430,6 @@ export default new Vuex.Store({
     },
     viewPeriodID: state => {
       return Number(state.viewPeriodID)
-    },
-    reportingTemplate: state => {
-      return (
-        state.applicationSettings.reporting_template || 'empty-template.xlsx'
-      )
     },
     viewPeriodIsCurrent: state => {
       // period zero is an alias to the current reporting period.

@@ -56,8 +56,8 @@ export default {
       return this.$store.state.uploads
     },
     downloadTemplateUrl () {
-      const template = this.$store.getters.reportingTemplate
-      return `/templates/${encodeURIComponent(template)}`
+      const period = this.$store.getters.currentReportingPeriod
+      return `/api/reporting_periods/${period.id}/template`
     }
   },
   methods: {

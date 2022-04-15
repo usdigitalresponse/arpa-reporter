@@ -23,7 +23,13 @@ async function generateReportName (periodId) {
   return filename
 }
 
-async function loadTemplate (templateName) {
+/**
+ * Load and parse a .xlsx template file.
+ *
+ * @param {string} templateName
+ * @returns {any[][]}
+ */
+function loadTemplate (templateName) {
   const templatePath = path.join(
     SERVER_DATA_DIR,
     'treasury',
@@ -36,7 +42,7 @@ async function loadTemplate (templateName) {
   }
 
   const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-  return XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+  return XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false })
 }
 
 async function generateProject18 (periodId) {

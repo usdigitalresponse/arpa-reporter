@@ -2,7 +2,6 @@
 const path = require('path')
 const { mkdir, rmdir, writeFile, readdir, readFile } = require('fs/promises')
 const moment = require('moment')
-const { stringify } = require('csv-stringify/sync')
 const zipper = require('zip-local')
 const XLSX = require('xlsx')
 
@@ -143,8 +142,9 @@ async function generateReport (periodId) {
           throw new Error(`CSV Data from ${csvFile.name} was not an array!`)
         }
 
-        const contents = stringify(csvData)
-        return writeFile(path.join(dirName, `${csvFile.name}.csv`), contents)
+        const sheet = XLSX.utils.aoa_to_sheet(csvData)
+        const csv = XLSX.utils.sheet_to_csv(sheet)
+        return writeFile(path.join(dirName, `${csvFile.name}.csv`), csv)
       })
   }))
     .catch((err) => {

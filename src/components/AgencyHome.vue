@@ -7,9 +7,9 @@
         </button>
       </div>
       <div class="col-6" v-show="viewingCurrentPeriod">
-        <a :href="downloadTemplateUrl" class="btn btn-secondary" download
-          >Download Empty Template</a
-        >
+        <a :href="downloadTemplateUrl" class="btn btn-secondary" download :disabled="!downloadTemplateUrl">
+          Download Empty Template
+        </a>
       </div>
 
       <div class="closed" v-show="!viewingCurrentPeriod">
@@ -57,7 +57,7 @@ export default {
     },
     downloadTemplateUrl () {
       const period = this.$store.getters.currentReportingPeriod
-      return `/api/reporting_periods/${period.id}/template`
+      return period ? `/api/reporting_periods/${period.id}/template` : null
     }
   },
   methods: {

@@ -1,34 +1,39 @@
 #!/bin/bash
-set -eo pipefail
 
-# The actual directory of this file.
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-# set -x
-set -e
+set -o pipefail
+set -o errexit
+set -o nounset
 
-# Import .env variables if not already defined.
-DOTENV="$DIR/../../.env"
-source /dev/stdin <<DONE
-$(grep -v '^#' $DOTENV | sed -E 's|^(.+)=(.*)|: ${\1=\2}; export \1|g')
-DONE
+dbconn=${POSTGRES_URL#*//}  # from postgres://user:pass@host/dbname -> user:pass@host/dbname
+userpass=${dbconn%@*}       # 'user:pass'
+hostdbname=${dbconn#*@}         # host/dbname
 
-# Default dbname is "postgres"
-dbname=${1:-postgres}
+username=${userpass%:*}
+password=${userpass#*:}
+
+host=${hostdbname%/*}
+dbname=${hostdbname#*/}
+
+hostname=${host%:*}
+hostport=${host#*:}
+if [ $hostport == $hostname ]
+then
+  hostport="5432"
+fi
 
 echo Using database $dbname
 
 mkdir -p $UPLOAD_DIRECTORY
 rm -rf $UPLOAD_DIRECTORY/*
 
-if [[ $dbname = postgres ]]
+set +x
+if [ $DEVDBNAME == $dbname ]
 then
-  # if the dbname is postgres it's easier to drop the schema than the database.
-  psql -h localhost -U postgres -w postgres -c "DROP SCHEMA public CASCADE"
-  psql -h localhost -U postgres -w postgres -c "CREATE SCHEMA public"
+  PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "DROP SCHEMA public CASCADE"
+  PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "CREATE SCHEMA public"
 else
-
-  psql -h localhost -U postgres -w postgres -c "DROP DATABASE IF EXISTS $dbname"
-  psql -h localhost -U postgres -w postgres -c "CREATE DATABASE $dbname"
+  PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "DROP DATABASE IF EXISTS $dbname"
+  PGPASSWORD=$password psql -h $hostname -p $hostport -U postgres -w ${DEVDBNAME} -c "CREATE DATABASE $dbname"
 fi
 
 yarn knex migrate:latest

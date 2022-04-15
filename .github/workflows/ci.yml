@@ -64,9 +64,7 @@ jobs:
       postgres:
         image: "postgres:13"
         env:
-          # FIXME: the test scripts currently hardcode a database name, user,
-          # and password. The config here must match.
-          # (See tests/*/mocha_wrapper.sh)
+          # The config here must match the POSTGRES_URL specified below
           POSTGRES_DB: 'server_test'
           POSTGRES_USER: 'postgres'
           POSTGRES_PASSWORD: 'password'
@@ -99,9 +97,7 @@ jobs:
           yarn knex migrate:latest
           yarn test:server
         env:
-          # FIXME: this doesn't actually matter since the tests hardcode a
-          # database name and user/password.
-          POSTGRES_URL: 'postgres://postgres:password@localhost:5432/server_test'
+          POSTGRES_URL: 'postgres://postgres:password@localhost/server_test'
 
   build:
     runs-on: ubuntu-latest

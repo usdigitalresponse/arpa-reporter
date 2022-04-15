@@ -322,7 +322,7 @@ export default new Vuex.Store({
       doFetch('uploads', `?period_id=${period_id}`)
     },
     closeReportingPeriod ({ commit }, period_id) {
-      return fetch('/api/reporting_periods/close', { credentials: 'include' })
+      return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })
         .then(r => {
           if (r.ok) {
             fetch('/api/reporting_periods', { credentials: 'include' })

@@ -6,7 +6,6 @@ INITIAL_ADMIN_EMAILS="michael+admin@stanford.cc"
 INITIAL_AGENCY_EMAILS="michael+agency@stanford.cc"
 
 # agency data input template
-REPORTING_TEMPLATE="empty-template.xlsx"
 VALIDATION_TEMPLATE="validation-template.xlsx"
 
 # REPORTING_PERIODS="reporting-periods.xlsx"

@@ -6,15 +6,17 @@
 */
 /* eslint camelcase: 0 */
 
+const path = require('path')
+const { mkdir, writeFile, readFile } = require('fs/promises')
+
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
 
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
-const FileInterface = require('../lib/server-disk-interface')
-const fileInterface = new FileInterface()
 
+const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { getPeriodSummaries, user: getUser } = require('../db')
 const reportingPeriods = require('../db/reporting-periods')
@@ -115,39 +117,82 @@ router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
 })
 
 router.post(
-  '/templates/:id',
-  requireUser,
+  '/:id/template',
+  requireAdminUser,
   multerUpload.single('template'),
   async (req, res, next) => {
-    const id = req.params.id
-    console.log(`POST /api/reporting_periods/${id}/templates`)
     if (!req.file) {
       res.status(400).send('File missing')
       return
     }
-    console.log('Filename:', req.file.originalname, 'size:', req.file.size)
-    const reportingPeriod = await reportingPeriods.reportingPeriodById(id)
+
+    const periodId = req.params.id
+    const reportingPeriod = await reportingPeriods.reportingPeriodById(periodId)
     if (!reportingPeriod) {
       res.status(404).send('Reporting period not found')
       return
     }
+
+    const { originalname: filename, size, buffer } = req.file
+    console.log(
+      `Uploading filename ${filename} size ${size} for period ${periodId}`)
+
     try {
-      await fileInterface.writeFileCarefully(req.file.originalname, req.file.buffer)
+      await mkdir(UPLOAD_DIR, { recursive: true })
+      await writeFile(
+        path.join(UPLOAD_DIR, filename),
+        buffer,
+        { flag: 'wx' }
+      )
     } catch (e) {
       res.json({
         success: false,
         errorMessage: e.code === 'EEXIST'
-          ? `The file ${req.file.originalname} already exists. `
+          ? `The file ${filename} already exists. `
           : e.message
       })
       return
     }
-    reportingPeriod.reporting_template = req.file.originalname
+
+    reportingPeriod.reporting_template = filename
     return reportingPeriods.updateReportingPeriod(reportingPeriod)
       .then(() => res.json({ success: true, reportingPeriod }))
       .catch(e => next(e))
   }
 )
+
+router.get('/:id/template', requireUser, async (req, res, next) => {
+  const periodId = req.params.id
+  const reportingPeriod = await reportingPeriods.reportingPeriodById(periodId)
+  const templateName = reportingPeriod.reporting_template || EMPTY_TEMPLATE_NAME
+
+  let data = null
+  try {
+    data = await readFile(path.join(SERVER_DATA_DIR, templateName))
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      try {
+        data = await readFile(path.join(UPLOAD_DIR, templateName))
+      } catch (err2) {
+        if (err2.code === 'ENOENT') {
+          res.status(404).send(`Could not find template file ${templateName}`)
+          return
+        } else {
+          res.status(500).send(err2.message)
+        }
+      }
+    } else {
+      res.status(500).send(err.message)
+    }
+  }
+
+  res.header(
+    'Content-Disposition',
+    `attachment; filename="${templateName}"`
+  )
+  res.header('Content-Type', 'application/octet-stream')
+  res.end(Buffer.from(data, 'binary'))
+})
 
 module.exports = router
 

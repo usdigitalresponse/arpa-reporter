@@ -6,6 +6,7 @@ const zipper = require('zip-local')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
+const { documentsOfType } = require('../db/documents')
 const { ARPA_REPORTS_DIR, SERVER_DATA_DIR } = require('../environment')
 
 async function generateReportName (periodId) {
@@ -86,7 +87,65 @@ async function generateProject519521 (periodId) {
 }
 
 async function generateProjectBaseline (periodId) {
-  return loadTemplate('Project Templates/projectBaselineBulkUpload')
+  const aoa = loadTemplate('Project Templates/projectBaselineBulkUpload')
+
+  const dataRows = []
+
+  let ec1documents
+  try {
+    ec1documents = await documentsOfType('ec 1 - public health', periodId)
+  } catch (_err) {
+    return new Error('Failed to load document records')
+  }
+
+  ec1documents.forEach(document => {
+    dataRows.push([
+      null, // first col is blank
+      '1-Public Health',
+      document.content['detailed expenditure category'],
+      document.content['project name'], // Name
+      document.content['project identification number\r\n(assigned by recipient)'], // Project_Identification_Number__c
+      document.content['status of completion'], // Completion_Status__c
+      document.content['adopted budget'], // Adopted_Budget__c
+
+      // TODO: should we derive these from subaward and expenditure documents?
+      document.content['total \r\nobligations'], // Total_Obligations__c
+      document.content['total \r\nexpenditures'], // Total_Expenditures__c
+
+      // TODO: what are these?
+      null, // Current_Period_Obligations__c
+      null, // Current_Period_Expenditures__c
+
+      document.content['does this project include a capital expenditure?'], // Does_Project_Include_Capital_Expenditure__c
+      document.content['if yes, what is the total expected capital expenditure?'], // Total_Cost_Capital_Expenditure__c
+
+      // TODO: these are not in input template
+      null, // Type_of_Capital_Expenditure__c
+      null, // Type_of_Capital_Expenditure_Other__c
+      null, // Capital_Expenditure_Justification__c
+
+      document.content['project description'], // Project_Description__c
+      document.content['program income earned'], // Program_Income_Earned__c
+      document.content['program income expended'], // Program_Income_Expended__cs
+
+      // FIXME: Secondary_Project_Demographics__c and Tertiary_Project_Demographics__c have same field name
+      document.content['populations served'], // Primary_Project_Demographics__c
+      document.content['primary project demographic explanation'], // Primary_Project_Demographics_Explanation__c
+      document.content['project demographic distribution - additional populations served'], // Secondary_Project_Demographics__c
+      document.content['secondary project demographic explanation'], // Secondary_Proj_Demographics_Explanation__c
+
+      document.content['project demographic distribution - additional populations served'], // Tertiary_Project_Demographics__c
+      document.content['tertiary project demographic explanation'], // Tertiary_Proj_Demographics_Explanation__c
+
+      document.content['structure and objectives of assistance program'], // Structure_Objectives_of_Asst_Programs__c
+      document.content['recipients approach'] // Recipient_Approach_Description__c
+    ])
+  })
+
+  return [
+    ...aoa,
+    ...dataRows
+  ]
 }
 
 async function generateExpendituresGT50000 (periodId) {
@@ -149,7 +208,7 @@ async function generateReport (periodId) {
         }
 
         const sheet = XLSX.utils.aoa_to_sheet(csvData)
-        const csv = XLSX.utils.sheet_to_csv(sheet)
+        const csv = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
         return writeFile(path.join(dirName, `${csvFile.name}.csv`), csv)
       })
   }))

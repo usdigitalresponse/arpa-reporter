@@ -148,6 +148,8 @@ async function spreadsheetToDocuments (
   const valog = []
   const documents = []
 
+  let detailedExpenditureCategory
+
   _.forIn(templateSheets, (templateSheet, type) => {
     const sheet = spreadsheet[type]
     // This case noted as a validation error in `parseSpreadsheet`
@@ -171,6 +173,21 @@ async function spreadsheetToDocuments (
         case 'dropdowns':
           // omit these sheets
           return
+
+        case 'cover':
+          // expenditure category is only specified in cover sheet, save it here to
+          // populate in individual project "documents"
+          detailedExpenditureCategory = jsonRow['detailed expenditure category']
+          break
+
+        case 'ec 1 - public health':
+        case 'ec 2 - negative economic impact':
+        case 'ec 3 - public sector capacity':
+        case 'ec 4 - premium pay':
+        case 'ec 5 - infrastructure':
+        case 'ec 7 - admin':
+          jsonRow['detailed expenditure category'] = detailedExpenditureCategory
+          break
 
         default:
           break

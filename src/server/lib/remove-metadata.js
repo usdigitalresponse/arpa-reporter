@@ -16,11 +16,25 @@ function removeMetadata (sheetName, sheet) {
     return sheet
   }
 
+  const fieldIdRowIndex = sheet.findIndex(
+    row => row[0]?.toLowerCase() === 'treasury column title (field id)'
+  )
+
   const headerRowIndex = sheet.findIndex(row =>
     ['label', 'column label'].includes(row[0]?.toLowerCase())
   )
 
-  return sheet.slice(headerRowIndex).map(row => row.slice(NUM_METADATA_COLS))
+  // remove metadata cols
+  const sheetWithoutMetadataCols = sheet.map(row =>
+    row.slice(NUM_METADATA_COLS)
+  )
+
+  // remove metadata rows
+  const sheetWithoutMetadata = sheetWithoutMetadataCols.filter(
+    (row, index) => index === fieldIdRowIndex || index > headerRowIndex
+  )
+
+  return sheetWithoutMetadata
 }
 
 module.exports = {

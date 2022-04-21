@@ -103,42 +103,30 @@ async function generateProjectBaseline (periodId) {
       null, // first col is blank
       '1-Public Health',
       document.content['detailed expenditure category'],
-      document.content['project name'], // Name
-      document.content['project identification number\r\n(assigned by recipient)'], // Project_Identification_Number__c
-      document.content['status of completion'], // Completion_Status__c
-      document.content['adopted budget'], // Adopted_Budget__c
-
-      // TODO: should we derive these from subaward and expenditure documents?
-      document.content['total \r\nobligations'], // Total_Obligations__c
-      document.content['total \r\nexpenditures'], // Total_Expenditures__c
-
-      // TODO: what are these?
-      null, // Current_Period_Obligations__c
-      null, // Current_Period_Expenditures__c
-
-      document.content['does this project include a capital expenditure?'], // Does_Project_Include_Capital_Expenditure__c
-      document.content['if yes, what is the total expected capital expenditure?'], // Total_Cost_Capital_Expenditure__c
-
-      // TODO: these are not in input template
-      null, // Type_of_Capital_Expenditure__c
-      null, // Type_of_Capital_Expenditure_Other__c
-      null, // Capital_Expenditure_Justification__c
-
-      document.content['project description'], // Project_Description__c
-      document.content['program income earned'], // Program_Income_Earned__c
-      document.content['program income expended'], // Program_Income_Expended__cs
-
-      // FIXME: Secondary_Project_Demographics__c and Tertiary_Project_Demographics__c have same field name
-      document.content['populations served'], // Primary_Project_Demographics__c
-      document.content['primary project demographic explanation'], // Primary_Project_Demographics_Explanation__c
-      document.content['project demographic distribution - additional populations served'], // Secondary_Project_Demographics__c
-      document.content['secondary project demographic explanation'], // Secondary_Proj_Demographics_Explanation__c
-
-      document.content['project demographic distribution - additional populations served'], // Tertiary_Project_Demographics__c
-      document.content['tertiary project demographic explanation'], // Tertiary_Proj_Demographics_Explanation__c
-
-      document.content['structure and objectives of assistance program'], // Structure_Objectives_of_Asst_Programs__c
-      document.content['recipients approach'] // Recipient_Approach_Description__c
+      document.content.name, // Name
+      document.content.project_identification_number__c, // Project_Identification_Number__c
+      document.content.completion_status__c, // Completion_Status__c
+      document.content.adopted_budget__c, // Adopted_Budget__c
+      document.content.total_obligations__c, // Total_Obligations__c
+      document.content.total_expenditures__c, // Total_Expenditures__c
+      document.content.current_period_obligations__c, // Current_Period_Obligations__c
+      document.current_period_expenditures__c, // Current_Period_Expenditures__c
+      document.content.does_project_include_capital_expenditure__c, // Does_Project_Include_Capital_Expenditure__c
+      document.content.total_cost_capital_expenditure__c, // Total_Cost_Capital_Expenditure__c
+      document.content.type_of_capital_expenditure__c, // Type_of_Capital_Expenditure__c
+      document.content.type_of_capital_expenditure_other__c, // Type_of_Capital_Expenditure_Other__c
+      document.content.capital_expenditure_justification__c, // Capital_Expenditure_Justification__c
+      document.content.project_description__c, // Project_Description__c
+      document.content.program_income_earned__c, // Program_Income_Earned__c
+      document.content.program_income_expended__cs, // Program_Income_Expended__cs
+      document.content.primary_project_demographics__c, // Primary_Project_Demographics__c
+      document.content.primary_project_demographics_explanation__c, // Primary_Project_Demographics_Explanation__c
+      document.content.secondary_project_demographics__c, // Secondary_Project_Demographics__c
+      document.content.secondary_proj_demographics_explanation__c, // Secondary_Proj_Demographics_Explanation__c
+      document.content.tertiary_project_demographics__c, // Tertiary_Project_Demographics__c
+      document.content.tertiary_proj_demographics_explanation__c, // Tertiary_Proj_Demographics_Explanation__c
+      document.content.structure_objectives_of_asst_programs__c, // Structure_Objectives_of_Asst_Programs__c
+      document.content.recipient_approach_description__c // Recipient_Approach_Description__c
     ])
   })
 

@@ -14,7 +14,7 @@ const ARPA_REPORTS_DIR = join(DATA_DIR, 'arpa_reports')
 const SRC_DIR = resolve(join(__dirname, '..'))
 const SERVER_DATA_DIR = join(SRC_DIR, 'server', 'data')
 
-const EMPTY_TEMPLATE_NAME = 'ARPA SFRF Reporting Workbook v20220414.xlsm'
+const EMPTY_TEMPLATE_NAME = 'ARPA SFRF Reporting Workbook v20220419.xlsm'
 
 module.exports = {
   DATA_DIR,

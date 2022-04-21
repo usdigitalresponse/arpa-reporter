@@ -8,6 +8,15 @@ const { ValidationItem } = require('../lib/validation-log')
 const { agencies, agencyByCode, projectByCode } = require('../db')
 const { format } = require('date-fns')
 
+// To more clearly understand this regex, checkout this railroad diagram visualization:
+// https://regexper.com/#%2F%5E%28%5Ba-zA-Z%5D%2B%29-%28.%2B%29-%28%5B0-9%5D%7B8%7D%29-%28%5B%5E-%5D%2B%29%24%2F
+// Capture groups should be:
+// 1. Agency Code (alphanumeric)
+// 2. Project Code (arbitrary string)
+// 3. Reporting period date (MMDDYYYY)
+// 4. Version (v followed by any number of digits)
+const FILENAME_REGEX = /^([a-zA-Z0-9]+)-(.+)-([0-9]{8})-v(\d+)$/
+
 const parseFilename = async (filename, reportingPeriod) => {
   log(`filename is ${filename}`)
   log('Agencies are:')
@@ -27,14 +36,15 @@ const parseFilename = async (filename, reportingPeriod) => {
       })
     )
   }
-  const nameParts = (name || '').split('-')
 
-  if (nameParts.length < 4) {
+  const execResult = FILENAME_REGEX.exec(name)
+
+  if (execResult === null) {
     valog.push(
       new ValidationItem({
         message:
           `Uploaded file name must match pattern
-      <agency abbrev>-<project id>-<reporting due date>-<optional-desc>` +
+      <agency abbrev>-<project id>-<reporting due date>` +
           `-v<version number>.xlsx
       Example: EOH-013-${expectedEndReportDate}-v1.xlsx
       `
@@ -42,7 +52,7 @@ const parseFilename = async (filename, reportingPeriod) => {
     )
   }
 
-  const agencyCode = nameParts.shift()
+  const [, agencyCode, projectId, reportingDate, version_str] = execResult
 
   if (!agencyCode) {
     valog.push(
@@ -60,7 +70,6 @@ const parseFilename = async (filename, reportingPeriod) => {
       )
     }
   }
-  const projectId = nameParts.shift()
 
   if (!projectId) {
     valog.push(
@@ -80,7 +89,6 @@ const parseFilename = async (filename, reportingPeriod) => {
   }
 
   const shortExpectedEndReportDate = format(endDate, 'MMddyy')
-  const reportingDate = nameParts.shift() || ''
   if (
     reportingDate !== expectedEndReportDate &&
     reportingDate !== shortExpectedEndReportDate
@@ -94,7 +102,6 @@ const parseFilename = async (filename, reportingPeriod) => {
     )
   }
 
-  const version_str = ((nameParts.pop() || '').match(/^v(\d+)$/) || [])[1]
   const version = parseInt(version_str, 10)
   if (!version) {
     valog.push(

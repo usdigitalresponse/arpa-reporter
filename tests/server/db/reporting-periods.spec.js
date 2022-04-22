@@ -21,33 +21,45 @@
    review_period_end_date         | date                     |
 
 */
-const reportingPeriods = requireSrc(__filename)
 
-describe('reporting-periods.spec.js - baseline success', () => {
-  it('Returns a list of reporting periods', async () => {
-    const result = await reportingPeriods.get()
-    if (result.length !== 5) {
-      // console.dir(result);
-      throw new Error(`Expected 5 periods, got ${result.length}`)
-    }
-    return result
+const reportingPeriods = requireSrc(__filename)
+const assert = require('assert')
+
+describe('db/reporting-periods.js', function () {
+  describe('getAll', function () {
+    it('Returns a list of reporting periods', async function () {
+      const result = await reportingPeriods.getAll()
+      assert.equal(result.length, 5)
+    })
   })
-  it('Returns one reporting period', async () => {
-    const result = await reportingPeriods.get(2)
-    if (Array.isArray(result)) {
-      // console.dir(result);
-      throw new Error(`Expected 1 period, got ${result.length}`)
-    }
-    if (result.id !== 2) {
-      // console.dir(result);
-      throw new Error(`Expected period 2, got period ${result.id}`)
-    }
-    return result
+
+  describe('get', function () {
+    describe('when a specific id is passed', function () {
+      it('Returns that reporting period', async function () {
+        const result = await reportingPeriods.get(2)
+        assert.equal(result.id, 2)
+      })
+    })
+
+    describe('when an invalid id is passed', function () {
+      it('returns null', async function () {
+        assert.equal((await reportingPeriods.get('')), null)
+        assert.equal((await reportingPeriods.get(null)), null)
+        assert.equal((await reportingPeriods.get(12356)), null)
+      })
+    })
+
+    it('returns the current reporting period', async function () {
+      const result = await reportingPeriods.get()
+      assert.equal(result.id, 1)
+      assert.equal(result.title, undefined)
+    })
   })
-  it.skip('Closes a reporting period', async () => {
-    // skipped because the reporting period close test is in
-    // period-summaries.spec.js
+
+  describe('close', function () {
+    it.skip('Closes a reporting period', async () => {
+      // skipped because the reporting period close test is in
+      // period-summaries.spec.js
+    })
   })
 })
-
-/*                                 *  *  *                                    */

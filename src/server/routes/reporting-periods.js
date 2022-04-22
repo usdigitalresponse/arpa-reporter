@@ -89,7 +89,7 @@ router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
   next
 ) {
   console.log('PUT /reporting_periods/:id', req.body)
-  let reportingPeriod = await reportingPeriods.reportingPeriodById(req.params.id)
+  let reportingPeriod = await reportingPeriods.get(req.params.id)
   if (!reportingPeriod) {
     res.status(404).send('Reporting period not found')
     return
@@ -127,7 +127,7 @@ router.post(
     }
 
     const periodId = req.params.id
-    const reportingPeriod = await reportingPeriods.reportingPeriodById(periodId)
+    const reportingPeriod = await reportingPeriods.get(periodId)
     if (!reportingPeriod) {
       res.status(404).send('Reporting period not found')
       return
@@ -163,7 +163,7 @@ router.post(
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id
-  const reportingPeriod = await reportingPeriods.reportingPeriodById(periodId)
+  const reportingPeriod = await reportingPeriods.get(periodId)
   const templateName = reportingPeriod.reporting_template || EMPTY_TEMPLATE_NAME
 
   let data = null

@@ -4,7 +4,6 @@ const knex = require('./connection')
 const {
   createDocument,
   createDocuments,
-  deleteDocuments,
   documents,
   documentsForAgency,
   documentsWithProjectCode
@@ -198,7 +197,6 @@ module.exports = {
   createUpload,
   createUser,
   currentReportingPeriodSettings,
-  deleteDocuments,
   documents,
   documentsForAgency,
   documentsWithProjectCode,

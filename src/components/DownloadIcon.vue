@@ -1,5 +1,5 @@
 <template>
-  <a :href="`/api/uploads/download/${row.id}`">
+  <a :href="`/api/uploads/${row.id}/download`">
     <img
       class="mr-4"
       src="/assets/img/cloud-download.svg"

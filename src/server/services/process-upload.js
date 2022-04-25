@@ -1,124 +1,95 @@
 /* eslint camelcase: 0 */
 
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.dir
+const path = require('path')
+const { mkdir, writeFile } = require('fs/promises')
+
+const xlsx = require('xlsx')
+
+const knex = require('../db/connection')
+const reportingPeriods = require('../db/reporting-periods')
+const { createUpload } = require('../db/uploads')
+const { createDocuments } = require('../db/documents')
+
+const { UPLOAD_DIR } = require('../environment')
+
+class ValidationError extends Error {
+  constructor (message, { severity = 1, tab = null, row = null, col = null }) {
+    super(message)
+    this.severity = severity
+    this.tab = tab
+    this.row = row
+    this.col = col
+  }
 }
 
-const {
-  agencyByCode,
-  user,
-  createUpload,
-  createDocuments,
-  deleteDocuments,
-  getProject,
-  transact
-} = require('../db')
+const normalizeSheetName = (sheetName) => sheetName.trim().toLowerCase()
 
-const FileInterface = require('../lib/server-disk-interface')
-const fileInterface = new FileInterface()
-const { validateUpload } = require('./validate-upload')
+const uploadFSName = (upload) => {
+  const filename = `upload-id-${upload.id}${path.extname(upload.filename)}`
+  return path.join(UPLOAD_DIR, filename)
+}
 
-const processUpload = async ({
-  filename,
-  user_id,
-  agency_id,
-  data,
-  reporting_period_id = null
-}) => {
-  log(`processUpload(): filename is ${filename}`)
+async function extractDocuments (buffer) {
+  const workbook = await xlsx.read(buffer, { type: 'buffer' })
 
-  const {
-    valog,
-    documents,
-    spreadsheet,
-    fileParts,
-    reportingPeriod
-  } = await validateUpload({
-    filename,
-    user_id,
-    agency_id,
-    data,
-    reporting_period_id
-  })
-
-  if (!valog.success()) {
-    log('valog.success() is false')
-    return { valog, upload: {} }
+  // get begin generating (partial) document rows
+  const documents = []
+  for (const sheetName of workbook.SheetNames) {
+    documents.push({
+      type: normalizeSheetName(sheetName),
+      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 })
+    })
   }
 
+  return documents
+}
+
+async function persistUpload ({ filename, user, buffer }) {
+  // first parse the upload into documents
+  let documents
   try {
-    await fileInterface.writeFileCarefully(filename, data)
+    documents = await extractDocuments(buffer)
   } catch (e) {
-    valog.append(
-      e.code === 'EEXIST'
-        ? `The file ${filename} is already in the database. ` +
-          'Change the version number to upload again.'
-        : e.message
-    )
-  }
-
-  if (!valog.success()) {
-    return { valog, upload: {} }
+    throw new ValidationError(`Cannot parse XLSX from data in ${filename}: ${e}`)
   }
 
   let upload
-  let result
+  await knex.transaction(async trx => {
+    const reportingPeriod = await reportingPeriods.get()
+
+    // next, create an upload row, and document rows for all documents
+    const uploadRow = {
+      filename: path.basename(filename),
+      reporting_period_id: reportingPeriod.id,
+      user_id: user.id,
+      agency_id: user.agency_id // TODO: should the agency id be passed in?
+    }
+    upload = await createUpload(uploadRow, trx)
+
+    // next, create rows for all the documents
+    const docRows = documents.map(doc => ({
+      type: doc.type,
+      content: JSON.stringify(doc.content),
+      upload_id: upload.id
+    }))
+
+    await createDocuments(docRows, trx)
+  })
+
+  // finally, persist the original upload to the filesystem
   try {
-    const project = await getProject(fileParts.projectId)
-    const agency = await agencyByCode(fileParts.agencyCode)
-    if (agency[0]) {
-      agency_id = agency[0].id
-    }
-    result = await transact(async trx => { // eslint-disable-line
-      const current_user = await user(user_id)
-      // write an upload record for saved file
-      upload = await createUpload(
-        {
-          filename,
-          created_by: current_user.email,
-          user_id,
-          agency_id,
-          project_id: project.id,
-          reporting_period_id: reportingPeriod.id
-        },
-        trx
-      )
-      // delete existing records for this agencyCode-projectID-reportingDate
-      await deleteDocuments(fileParts)
-
-      // Enhance the documents with the resulting upload.id. Note this needs
-      // to be done here to get the upload and document insert operations into
-      // the same transaction.
-      const subs = []
-      const docs = []
-      documents.forEach(doc => {
-        doc.upload_id = upload.id
-
-        if (doc.type === 'subrecipient') {
-          subs.push(doc)
-        } else {
-          docs.push(doc)
-        }
-      })
-      // FIXME: Save subrecipients data to subrecipients table?
-      // subrecipients.update(subs)
-      const createResult = createDocuments(docs, trx)
-      return createResult
-    })
-    // console.log(`Inserted ${(result || {}).rowCount} documents.`);
+    await mkdir(UPLOAD_DIR, { recursive: true })
+    await writeFile(
+      uploadFSName(upload),
+      buffer,
+      { flag: 'wx' }
+    )
   } catch (e) {
-    console.log(e)
-    try {
-      await fileInterface.rmFile(filename)
-    } catch (rmErr) {
-      // This should never happen.
-      console.error('rmFile error:', rmErr.message)
-    }
-    valog.append('Upload and import failed. ' + e.message)
+    throw new ValidationError(`Cannot persist ${upload.filename} to filesystem: ${e}`)
   }
 
-  return { valog, upload, spreadsheet }
+  // return the upload we created
+  return upload
 }
 
-module.exports = { processUpload }
+module.exports = { persistUpload, ValidationError, uploadFSName }

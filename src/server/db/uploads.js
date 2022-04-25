@@ -12,7 +12,8 @@ async function uploads (period_id) {
     period_id = await getCurrentReportingPeriodID()
   }
   return knex('uploads')
-    .select('*')
+    .leftJoin('users', 'uploads.user_id', 'users.id')
+    .select('uploads.*', 'users.email as created_by')
     .where({ reporting_period_id: period_id })
     .orderBy('uploads.created_at', 'desc')
 }
@@ -32,7 +33,8 @@ async function uploadsForAgency (agency_id, period_id) {
 
 function upload (id) {
   return knex('uploads')
-    .select('*')
+    .leftJoin('users', 'uploads.user_id', 'users.id')
+    .select('uploads.*', 'users.email as created_by')
     .where('id', id)
     .then(r => r[0])
 }
@@ -43,11 +45,9 @@ function upload (id) {
       id: 1,
       filename: 'DOA-076-093020-v1.xlsx',
       created_at: 2020-11-19T15:14:34.481Z,
-      created_by: 'michael+admin@stanford.cc',
       reporting_period_id: 1,
       user_id: 1,
       agency_id: 3,
-      project_id: 48
     }
     */
 function getUploadSummaries (period_id) {

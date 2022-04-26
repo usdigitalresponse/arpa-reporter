@@ -108,7 +108,7 @@ router.get('/:id/validate', requireUser, async (req, res) => {
   }
 
   const errors = await validateUpload(upload)
-  res.status(errors.length ? 200 : 400).json({
+  res.status(errors.length === 0 ? 200 : 400).json({
     errors: errors.map(e => e.toObject()),
     upload
   })

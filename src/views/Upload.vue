@@ -1,18 +1,17 @@
 <template>
   <div class="upload">
-    <h1>Upload # {{ uploadId }}</h1>
-
     <AlertBox v-if="alert" :text="alert.text" :level="alert.level" :onClose="clearAlert" />
 
     <div v-if="errors.length > 0">
       <h4>Validation Errors</h4>
-      <table class="table table-sm table-bordered table-striped">
+      <table class="table table-sm table-bordered table-striped col-md-6">
         <thead>
           <tr>
             <th>#</th>
             <th>Error</th>
             <th>Tab</th>
             <th>Row</th>
+            <th>Col</th>
           </tr>
         </thead>
         <tbody>
@@ -21,13 +20,21 @@
             <td>{{ error.message }}</td>
             <td>{{ titleize(error.tab) }}</td>
             <td>{{ error.row }}</td>
+            <td>{{ error.col }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
+    <h4>Upload # {{ uploadId }} details:</h4>
+
     <div v-if="upload">
       <ul class="list-group col-md-6">
+        <li class="list-group-item">
+          <span class="font-weight-bold">Filename: </span>
+          {{ upload.filename }}
+        </li>
+
         <li class="list-group-item">
           <span class="font-weight-bold">Reporting Period: </span>
           {{ upload.reporting_period_id }}
@@ -115,18 +122,20 @@ export default {
       const result = (await resp.json()) || { error: (await resp.body) }
 
       if (resp.ok) {
-        this.errors = result.errors
-        if (!this.errors.length) {
-          this.loadUpload()
-          this.alert = {
-            text: 'Upload successfully validated!',
-            level: 'ok'
-          }
+        this.loadUpload()
+        this.alert = {
+          text: 'Upload successfully validated!',
+          level: 'ok'
         }
       } else {
-        this.alert = {
-          text: `validateUpload Error (${resp.status}): ${result.error}`,
-          level: 'err'
+        this.errors = result.errors
+
+        // we got an error from the backend, but the backend didn't send reasons
+        if (!this.errors.length) {
+          this.alert = {
+            text: `validateUpload Error (${resp.status}): ${result.error}`,
+            level: 'err'
+          }
         }
       }
 

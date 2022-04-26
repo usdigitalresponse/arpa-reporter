@@ -1,6 +1,7 @@
 
 const { documentsForUpload } = require('../db/documents')
 const { setAgencyId } = require('../db/uploads')
+const { agencyByCode } = require('../db/agencies')
 
 class ValidationError extends Error {
   constructor (message, { severity = 1, tab = null, row = null, col = null } = {}) {
@@ -22,18 +23,28 @@ class ValidationError extends Error {
   }
 }
 
-function extractAgencyId (coverDocument) {
-}
-
 async function validateAgencyId ({ upload, documents }) {
   // grab agency id from the cover sheet
-  const coverSheet = documents.find(doc => doc.type === 'cover')
-  const agencyId = coverSheet[1][0]
-  console.dir(coverSheet)
+  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  const agencyCode = coverSheet[1][0]
+
+  // must be set
+  if (!agencyCode) {
+    return new ValidationError('Agency code must be set', { tab: 'cover', row: 1, col: 0 })
+  }
+
+  // must exist in the db
+  const matchingAgencies = await agencyByCode(agencyCode)
+  if (matchingAgencies.length < 1) {
+    return new ValidationError(
+      `Agency code ${agencyCode} does not match any known agency`,
+      { tab: 'cover', row: 1, col: 0 }
+    )
+  }
 
   // convenience: set agency id on the upload for easier filtering
-  if (agencyId !== upload.agency_id) {
-    setAgencyId(upload.id, agencyId)
+  if (agencyCode !== upload.agency_id) {
+    setAgencyId(upload.id, agencyCode)
   }
 }
 
@@ -67,6 +78,5 @@ async function validateUpload (upload) {
 
 module.exports = {
   validateUpload,
-  extractAgencyId,
   ValidationError
 }

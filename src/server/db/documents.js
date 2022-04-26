@@ -22,16 +22,6 @@ const {
   getPeriodUploadIDs
 } = require('./uploads')
 
-async function documentsWithProjectCode (period_id) {
-  const periodUploadIDs = await getPeriodUploadIDs(period_id)
-
-  return knex('documents')
-    .select('documents.*')
-    .whereIn('upload_id', periodUploadIDs)
-    .join('uploads', { 'documents.upload_id': 'uploads.id' })
-    .then(purgeDuplicateSubrecipients)
-}
-
 function purgeDuplicateSubrecipients (arrRecords) {
   const arrRecordsOut = []
   const isDuplicate = {}
@@ -103,6 +93,12 @@ async function documentsForAgency (agency_id, period_id) {
   return docs
 }
 
+async function documentsForUpload (uploadId) {
+  return knex('documents')
+    .select('*')
+    .where('upload_id', uploadId)
+}
+
 function createDocument (document) {
   const created = knex
     .insert(document)
@@ -123,5 +119,5 @@ module.exports = {
   documents,
   documentsForAgency,
   documentsOfType,
-  documentsWithProjectCode
+  documentsForUpload
 }

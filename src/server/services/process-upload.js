@@ -12,15 +12,7 @@ const { createDocuments } = require('../db/documents')
 
 const { UPLOAD_DIR } = require('../environment')
 
-class ValidationError extends Error {
-  constructor (message, { severity = 1, tab = null, row = null, col = null }) {
-    super(message)
-    this.severity = severity
-    this.tab = tab
-    this.row = row
-    this.col = col
-  }
-}
+const { ValidationError } = require('./validate-upload')
 
 const normalizeSheetName = (sheetName) => sheetName.trim().toLowerCase()
 
@@ -61,8 +53,7 @@ async function persistUpload ({ filename, user, buffer }) {
     const uploadRow = {
       filename: path.basename(filename),
       reporting_period_id: reportingPeriod.id,
-      user_id: user.id,
-      agency_id: user.agency_id // TODO: should the agency id be passed in?
+      user_id: user.id
     }
     upload = await createUpload(uploadRow, trx)
 
@@ -76,7 +67,7 @@ async function persistUpload ({ filename, user, buffer }) {
     await createDocuments(docRows, trx)
   })
 
-  // finally, persist the original upload to the filesystem
+  // persist the original upload to the filesystem
   try {
     await mkdir(UPLOAD_DIR, { recursive: true })
     await writeFile(

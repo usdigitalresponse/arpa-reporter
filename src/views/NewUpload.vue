@@ -2,12 +2,16 @@
 <template>
   <div class="upload">
     <h1>Upload File</h1>
-    <div v-if="uploadConfiguration">
+    <div>
+      <div v-if="error" class="mt-3 alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
       <form
         method="post"
         encType="multipart/form-data"
         ref="form"
-        @submit.prevent="uploadFile"
+        @submit.prevent="onSubmit"
       >
         <div class="form-group">
           <input
@@ -24,55 +28,28 @@
             class="btn btn-primary"
             type="submit"
             :disabled="uploadDisabled"
-            @click.prevent="uploadFile"
+            @click.prevent="onSubmit"
           >
             {{ uploadButtonLabel }}
           </button>
           <a class="ml-3" href="#" @click="cancelUpload">Cancel</a>
         </div>
       </form>
-      <div class="mt-3 alert alert-danger" v-if="message">{{ message }}</div>
-      <div v-if="errors.length > 0">
-        <h4>Validation Errors: {{ uploadedFilename }}</h4>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Error</th>
-              <th>Tab</th>
-              <th>Row</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr :key="n" class="table-danger" v-for="(error, n) in errors">
-              <td>{{ error.message }}</td>
-              <td>{{ titleize(error.tab) }}</td>
-              <td>{{ error.row }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { titleize } from '../helpers/form-helpers'
-import _ from 'lodash'
 export default {
   name: 'NewUpload',
   data: function () {
     return {
-      message: null,
-      errors: [],
+      error: null,
       files: null,
-      uploading: false,
-      uploadedFilename: null
+      uploading: false
     }
   },
   computed: {
-    uploadConfiguration: function () {
-      return this.$store.getters.template
-    },
     uploadButtonLabel: function () {
       return this.uploading ? 'Uploading...' : 'Upload'
     },
@@ -81,37 +58,43 @@ export default {
     }
   },
   methods: {
-    titleize,
-    changeFiles () {
-      this.files = this.$refs.files.files
+    changeFiles (evt) {
+      this.files = evt.target.files
     },
-    uploadFile: async function () {
-      const file = _.get(this.$refs, 'files.files[0]')
-      const form = _.get(this.$refs, 'form')
-      if (file) {
-        this.uploadedFilename = file.name
-        this.uploading = true
-        this.message = null
-        this.errors = []
-        const formData = new FormData()
-        formData.append('spreadsheet', file)
-        try {
-          const r = await this.$store.dispatch('createUpload', formData)
-          this.uploading = false
-          form.reset()
-          if ((r.errors || []).length > 0) {
-            this.errors = r.errors
-          } else {
-            this.$store
-              .dispatch('refreshDocuments')
-              .then(() => this.$router.push({ path: '/' }))
-          }
-        } catch (e) {
-          this.message = e.message
-          this.uploading = false
+    onSubmit: async function () {
+      const file = this.files[0]
+
+      if (!file) {
+        this.$refs.files.focus()
+        return
+      }
+
+      this.error = null
+      this.uploading = true
+
+      const formData = new FormData()
+      formData.append('spreadsheet', file)
+
+      try {
+        const resp = await fetch('/api/uploads', { method: 'POST', body: formData })
+        const result = (await resp.json()) || { error: (await resp.body) }
+
+        if (resp.ok) {
+          const upload = result.upload
+          if (!upload) throw new Error('Upload failed to return an upload ID')
+
+          this.$store.commit('setRecentUploadId', upload.id)
+          this.$router.push({ path: `/uploads/${upload.id}` })
+        } else {
+          const err = result.error || `${resp.statusText} (${resp.status})`
+          throw new Error(`Upload failed: ${err}`)
         }
+      } catch (e) {
+        this.error = e.message
+        this.uploading = false
       }
     },
+
     cancelUpload (e) {
       e.preventDefault()
       this.$router.push({ path: '/' })

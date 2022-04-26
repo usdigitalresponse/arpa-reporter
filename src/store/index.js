@@ -74,9 +74,13 @@ export default new Vuex.Store({
     reportingPeriods: [],
     allReportingPeriods: [],
     messages: [],
-    viewPeriodID: null
+    viewPeriodID: null,
+    recentUploadId: null
   },
   mutations: {
+    setRecentUploadId (state, uploadId) {
+      state.recentUploadId = uploadId
+    },
     setUser (state, user) {
       state.user = user
     },
@@ -235,23 +239,6 @@ export default new Vuex.Store({
       return put(`/api/users/${user.id}`, user).then(() => {
         commit('updateUser', user)
       })
-    },
-    createUpload ({ commit }, formData) {
-      return postForm('/api/uploads', formData)
-        .then(r => {
-          if (!r.ok) { throw new Error(`createUpload: ${r.statusText} (${r.status})`) }
-          return r.json()
-        })
-        .then(response => {
-          if (response.success && response.upload) {
-            commit('addUpload', response.upload)
-            commit(
-              'addMessage',
-              `File "${response.upload.filename}" uploaded successfully`
-            )
-          }
-          return response
-        })
     },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {
       return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)

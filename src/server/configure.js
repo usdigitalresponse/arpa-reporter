@@ -32,7 +32,6 @@ module.exports = app => {
   app.use('/api/audit_report', require('./routes/audit-report'))
   app.use('/api/uploads', require('./routes/uploads'))
   app.use('/api/users', require('./routes/users'))
-  app.use('/api/validations', require('./routes/validations'))
   app.use('/api/health', require('./routes/health'))
 
   if (process.env.NODE_ENV !== 'development') {

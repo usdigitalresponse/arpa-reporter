@@ -1,7 +1,6 @@
 /* eslint camelcase: 0 */
 
 const knex = require('./connection')
-const _ = require('lodash')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
@@ -35,7 +34,7 @@ function upload (id) {
   return knex('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
     .select('uploads.*', 'users.email as created_by')
-    .where('id', id)
+    .where('uploads.id', id)
     .then(r => r[0])
 }
 
@@ -66,6 +65,12 @@ async function createUpload (upload, queryBuilder = knex) {
   return inserted
 }
 
+async function setAgencyId (uploadId, agencyId) {
+  return await knex('uploads')
+    .where('id', uploadId)
+    .update({ agency_id: agencyId })
+}
+
 async function getPeriodUploadIDs (period_id) {
   if (!period_id) {
     period_id = await getCurrentReportingPeriodID()
@@ -89,5 +94,6 @@ module.exports = {
   createUpload,
   upload,
   uploads,
-  uploadsForAgency
+  uploadsForAgency,
+  setAgencyId
 }

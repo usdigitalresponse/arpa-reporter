@@ -11,6 +11,7 @@ const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const { user: getUser } = require('../db')
+const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
@@ -34,32 +35,19 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
 
   const user = await getUser(req.signedCookies.userId)
 
-  let upload
-  let status = 200
-  const errors = []
-
   try {
-    upload = await persistUpload({
+    const upload = await persistUpload({
       user,
       filename: req.file.originalname,
       buffer: req.file.buffer
     })
 
-    const validationErrors = await validateUpload(upload.id)
-    if (validationErrors.length) {
-      status = 400
-      validationErrors.forEach(e => errors.push(e))
-    }
+    res.status(200).json({ upload, error: null })
   } catch (e) {
     console.dir(e)
-    errors.push(e)
-    status = (e instanceof ValidationError) ? 400 : 500
-  }
 
-  res.status(status).json({
-    errors,
-    upload
-  })
+    res.status(e instanceof ValidationError ? 400 : 500).json({ error: e.message, upload: null })
+  }
 })
 
 router.get('/:id', requireUser, (req, res) => {
@@ -69,8 +57,25 @@ router.get('/:id', requireUser, (req, res) => {
       res.sendStatus(404)
       res.end()
     } else {
-      res.json(upload)
+      res.json({ upload })
     }
+  })
+})
+
+router.get('/:id/documents', requireUser, async (req, res) => {
+  const { id } = req.params
+
+  const upload = await getUpload(id)
+  if (!upload) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const documents = await documentsForUpload(upload.id)
+  res.json({
+    upload,
+    documents
   })
 })
 
@@ -89,6 +94,23 @@ router.get('/:id/download', requireUser, (req, res) => {
       res.header('Content-Type', 'application/octet-stream')
       res.end(Buffer.from(attachmentData, 'binary'))
     }
+  })
+})
+
+router.get('/:id/validate', requireUser, async (req, res) => {
+  const { id } = req.params
+
+  const upload = await getUpload(id)
+  if (!upload) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const errors = await validateUpload(upload)
+  res.status(errors.length ? 200 : 400).json({
+    errors: errors.map(e => e.toObject()),
+    upload
   })
 })
 

@@ -5,8 +5,7 @@ const {
   createDocument,
   createDocuments,
   documents,
-  documentsForAgency,
-  documentsWithProjectCode
+  documentsForAgency
 } = require('./documents')
 
 const {
@@ -199,7 +198,6 @@ module.exports = {
   currentReportingPeriodSettings,
   documents,
   documentsForAgency,
-  documentsWithProjectCode,
   getPeriodSummaries,
   getPriorPeriodSummaries,
   getProject,

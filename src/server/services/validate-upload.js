@@ -1,4 +1,7 @@
 
+const moment = require('moment')
+
+const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { documentsForUpload } = require('../db/documents')
 const { setAgencyId, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
@@ -38,7 +41,7 @@ async function validateAgencyId ({ upload, documents }) {
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
-      { tab: 'cover', row: 1, col: 0 }
+      { tab: 'cover', row: 2, col: 1 }
     )
   }
 
@@ -48,8 +51,43 @@ async function validateAgencyId ({ upload, documents }) {
   }
 }
 
-function validateReportingPeriod ({ upload, documents }) {
-  return null
+// we subtract -2 because of a bug in lotus 1-2-3. fml.
+// https://www.kirix.com/stratablog/excel-date-conversion-days-from-1900.html
+function msDateToMoment (msDate) {
+  return moment('1900-01-01').add(Number(msDate) - 2, 'days')
+}
+
+async function validateReportingPeriod ({ upload, documents }) {
+  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id)
+
+  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  console.dir(coverSheet[1])
+
+  const errors = []
+
+  const periodStart = moment(uploadPeriod.start_date)
+  const sheetStart = msDateToMoment(coverSheet[1][4])
+  if (!periodStart.isSame(sheetStart)) {
+    errors.push(new ValidationError(
+      `Upload reporting period starts ${periodStart.format('L')} while document specifies ${sheetStart.format('L')}`,
+      { tab: 'cover', row: 2, col: 5 }
+    ))
+  }
+
+  const periodEnd = moment(uploadPeriod.end_date)
+  const sheetEnd = msDateToMoment(coverSheet[1][5])
+  if (!periodEnd.isSame(sheetEnd)) {
+    errors.push(new ValidationError(
+      `Upload reporting period ends ${periodEnd.format('L')} while document specifies ${sheetEnd.format('L')}`,
+      { tab: 'cover', row: 2, col: 6 }
+    ))
+  }
+
+  return errors
+}
+
+function validateSubrecipients ({ upload, documents }) {
+
 }
 
 async function validateUpload (upload, user) {
@@ -62,7 +100,8 @@ async function validateUpload (upload, user) {
   // run validations, one by one
   const validations = [
     validateAgencyId,
-    validateReportingPeriod
+    validateReportingPeriod,
+    validateSubrecipients
   ]
 
   for (const validation of validations) {

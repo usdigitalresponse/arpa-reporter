@@ -40,12 +40,16 @@ function upload (id) {
     .then(r => r[0])
 }
 
-function uploadSeries (agencyId, periodId) {
-  return knex('uploads')
-    .select('*')
-    .where('agency_id', agencyId)
-    .where('reporting_period_id', periodId)
-    .orderBy('created_at', 'DESC')
+function validForReportingPeriod (period_id) {
+  return knex.with('agency_max_val', knex.raw(
+    'SELECT agency_id, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id'
+  ))
+    .select('uploads.*')
+    .from('uploads')
+    .innerJoin('agency_max_val', function () {
+      this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
+        .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
+    })
 }
 
 /*  getUploadSummaries() returns a knex promise containing an array of
@@ -130,5 +134,5 @@ module.exports = {
   setAgencyId,
   markValidated,
   markNotValidated,
-  uploadSeries
+  validForReportingPeriod
 }

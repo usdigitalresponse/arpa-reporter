@@ -13,7 +13,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 const { user: getUser } = require('../db')
 const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
-const { uploadsForAgency, uploadSeries, upload: getUpload, uploads: listUploads } = require('../db/uploads')
+const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
 const { persistUpload, uploadFSName, ValidationError } = require('../services/process-upload')
 const { validateUpload } = require('../services/validate-upload')
@@ -74,14 +74,18 @@ router.get('/:id/series', requireUser, async (req, res) => {
 
   let series
   if (upload.agency_id) {
-    series = await uploadSeries(upload.agency_id, upload.reporting_period_id)
+    series = await uploadsForAgency(upload.agency_id, upload.reporting_period_id)
   } else {
     series = [upload]
   }
 
+  const allValid = await validForReportingPeriod(upload.reporting_period_id)
+  const currentValid = allValid.find(upl => upl.agency_id === upload.agency_id)
+
   res.json({
     upload,
-    series
+    series,
+    currently_valid: currentValid
   })
 })
 

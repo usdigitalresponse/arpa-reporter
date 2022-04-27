@@ -65,7 +65,8 @@
             </span>
 
             <button class="btn btn-primary ml-2" @click="validateUpload" :disabled="validating">
-              <span v-if="upload.validated_at">Re-validate</span>
+              <span v-if="validating">Validating...</span>
+              <span v-else-if="upload.validated_at">Re-validate</span>
               <span v-else>Validate</span>
             </button>
           </li>
@@ -75,7 +76,23 @@
       <div class="col-sm-12 col-md-6" v-if="upload.agency_id">
         <h4>All from agency {{ upload.agency_code }} in period {{ upload.reporting_period_id }}</h4>
 
-        <p>The green-highlighted upload will be included in Treasury reports.</p>
+        <template v-if="seriesValid">
+          <p v-if="seriesValid.id === upload.id">
+            The currently-displayed upload will be used for Treasury reporting.
+          </p>
+          <p v-else>
+            Upload
+            <router-link :to="`/uploads/${seriesValid.id}`">{{ seriesValid.id }}</router-link>
+            will be used for Treasury reporting.
+          </p>
+        </template>
+
+        <template v-else>
+          <p>
+            Agency {{ upload.agency_code }}
+            <span class="text-danger">does not</span>
+            have a valid upload to use in Treasury reporting for period {{ upload.reporting_period_id }}.</p>
+        </template>
 
         <table class="table table-sm table-stripped">
           <thead>
@@ -87,7 +104,10 @@
           </thead>
 
           <tbody>
-            <tr v-for="(sUpload, idx) in series" :key="sUpload.id" :class="{ 'table-success': idx === 0 }">
+            <tr
+              v-for="sUpload in series"
+              :key="sUpload.id"
+              :class="{ 'table-success': seriesValid && seriesValid.id == sUpload.id }">
               <template v-if="sUpload.id === upload.id">
                 <td>{{ upload.id }}</td>
                 <td colspan="2">This upload</td>
@@ -126,6 +146,7 @@ export default {
       documents: [],
       errors: [],
       series: [],
+      seriesValid: null,
       alert: null,
       validating: false
     }
@@ -171,8 +192,9 @@ export default {
       const resp = await fetch(`/api/uploads/${this.uploadId}/validate`)
       const result = (await resp.json()) || { error: (await resp.body) }
 
+      await this.loadUpload()
+
       if (resp.ok) {
-        this.loadUpload()
         this.alert = {
           text: 'Upload successfully validated!',
           level: 'ok'
@@ -224,6 +246,7 @@ export default {
 
         if (resp.ok) {
           this.series = result.series
+          this.seriesValid = result.currently_valid
         } else {
           this.alert = {
             text: `loadUpload API Error (${resp.status}): ${result.error}`,

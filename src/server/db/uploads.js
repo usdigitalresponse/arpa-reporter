@@ -40,6 +40,14 @@ function upload (id) {
     .then(r => r[0])
 }
 
+function uploadSeries (agencyId, periodId) {
+  return knex('uploads')
+    .select('*')
+    .where('agency_id', agencyId)
+    .where('reporting_period_id', periodId)
+    .orderBy('created_at', 'DESC')
+}
+
 /*  getUploadSummaries() returns a knex promise containing an array of
     records like this:
     {
@@ -111,6 +119,7 @@ async function markNotValidated (uploadId) {
     .returning('*')
     .then(rows => rows[0])
 }
+
 module.exports = {
   getPeriodUploadIDs,
   getUploadSummaries,
@@ -120,5 +129,6 @@ module.exports = {
   uploadsForAgency,
   setAgencyId,
   markValidated,
-  markNotValidated
+  markNotValidated,
+  uploadSeries
 }

@@ -1,10 +1,13 @@
 <template>
-  <div class="upload">
-    <AlertBox v-if="alert" :text="alert.text" :level="alert.level" :onClose="clearAlert" />
+  <div class="container-fluid" style="width: 90%">
+    <div class="row">
+      <AlertBox v-if="alert" :text="alert.text" :level="alert.level" :onClose="clearAlert" />
+    </div>
 
-    <div v-if="errors.length > 0">
-      <h4>Validation Errors</h4>
-      <table class="table table-sm table-bordered table-striped col-md-6">
+    <h4 v-if="errors.length > 0" class="row text-danger">Validation Errors</h4>
+
+    <div v-if="errors.length > 0" class="row">
+      <table class="table table-sm table-bordered table-striped col-sm-12 col-md-6">
         <thead>
           <tr>
             <th>#</th>
@@ -26,59 +29,83 @@
       </table>
     </div>
 
-    <h4>Upload # {{ uploadId }} details:</h4>
+    <h4 class="row">Upload # {{ uploadId }} details:</h4>
 
-    <div v-if="upload">
-      <ul class="list-group col-md-6">
-        <li class="list-group-item">
-          <span class="font-weight-bold">Filename: </span>
-          {{ upload.filename }}
-        </li>
+    <div v-if="upload" class="row">
+      <div class="col-sm-12 col-md-6 mb-sm-3 mb-md-1">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span class="font-weight-bold">Filename: </span>
+            {{ upload.filename }}
+          </li>
 
-        <li class="list-group-item">
-          <span class="font-weight-bold">Reporting Period: </span>
-          {{ upload.reporting_period_id }}
-        </li>
+          <li class="list-group-item">
+            <span class="font-weight-bold">Reporting Period: </span>
+            {{ upload.reporting_period_id }}
+          </li>
 
-        <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.agency_id }">
-          <span class="font-weight-bold">Agency: </span>
-          {{ upload.agency_code || 'Not set' }}
-        </li>
+          <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.agency_id }">
+            <span class="font-weight-bold">Agency: </span>
+            {{ upload.agency_code || 'Not set' }}
+          </li>
 
-        <li class="list-group-item">
-          <span class="font-weight-bold">Created: </span>
-          {{ upload.created_at }} ({{ fromNow(upload.created_at) }}) by {{ upload.created_by }}
-        </li>
+          <li class="list-group-item">
+            <span class="font-weight-bold">Created: </span>
+            {{ displayTs(upload.created_at) }} ({{ fromNow(upload.created_at) }}) by {{ upload.created_by }}
+          </li>
 
-        <li class="list-group-item" :class="validatedLiClass">
-          <span class="font-weight-bold">Validation: </span>
+          <li class="list-group-item" :class="validatedLiClass">
+            <span class="font-weight-bold">Validation: </span>
 
-          <span v-if="upload.validated_at">
-            {{ upload.validated_at }} ({{ fromNow(upload.validated_at) }}) by {{ upload.validated_by_email }}
-          </span>
-          <span v-else>
-            Not Validated
-          </span>
+            <span v-if="upload.validated_at">
+              {{ displayTs(upload.validated_at) }} ({{ fromNow(upload.validated_at) }}) by {{ upload.validated_by_email }}
+            </span>
+            <span v-else>
+              Not Validated
+            </span>
 
-          <button class="btn btn-primary ml-2" @click="validateUpload" :disabled="validating">
-            <span v-if="upload.validated_at">Re-validate</span>
-            <span v-else>Validate</span>
-          </button>
-        </li>
+            <button class="btn btn-primary ml-2" @click="validateUpload" :disabled="validating">
+              <span v-if="upload.validated_at">Re-validate</span>
+              <span v-else>Validate</span>
+            </button>
+          </li>
+        </ul>
+      </div>
 
-      </ul>
+      <div class="col-sm-12 col-md-6" v-if="upload.agency_id">
+        <h4>All from agency {{ upload.agency_code }} in period {{ upload.reporting_period_id }}</h4>
 
-      <table class="mt-3 table table-striped">
-        <tbody>
-          <tr :key="row.id" v-for="row in rows">
-            <td>{{ row.id }}</td>
-            <td>{{ preview(row) }}</td>
-          </tr>
-        </tbody>
-      </table>
+        <p>The green-highlighted upload will be included in Treasury reports.</p>
+
+        <table class="table table-sm table-stripped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Uploaded</th>
+              <th>Validated</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="(sUpload, idx) in series" :key="sUpload.id" :class="{ 'table-success': idx === 0 }">
+              <template v-if="sUpload.id === upload.id">
+                <td>{{ upload.id }}</td>
+                <td colspan="2">This upload</td>
+              </template>
+
+              <template v-else>
+                <td><router-link :to="`/uploads/${sUpload.id}`">{{ sUpload.id }}</router-link></td>
+                <td>{{ displayTs(sUpload.created_at) }}</td>
+                <td v-if="sUpload.validated_at">{{ displayTs(sUpload.validated_at) }}</td>
+                <td v-else>Not Validated</td>
+              </template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div v-else>
+    <div v-else class="row">
       Loading...
     </div>
   </div>
@@ -95,16 +122,18 @@ export default {
   },
   data: function () {
     return {
-      uploadId: Number(this.$route.params.id),
       upload: null,
       documents: [],
       errors: [],
+      series: [],
       alert: null,
-      validating: false,
-      rows: []
+      validating: false
     }
   },
   computed: {
+    uploadId: function () {
+      return Number(this.$route.params.id)
+    },
     isRecentlyUploaded: function () {
       return this.uploadId === this.$store.state.recentUploadId
     },
@@ -121,6 +150,9 @@ export default {
     titleize,
     clearAlert: function () {
       this.alert = null
+    },
+    displayTs: function (ts) {
+      return moment(ts).format('LTS ll')
     },
     fromNow: function (ts) {
       return moment(ts).fromNow()
@@ -181,6 +213,29 @@ export default {
           level: 'err'
         }
       }
+
+      // each time we refresh the upload, also refresh the series
+      this.loadSeries()
+    },
+    loadSeries: async function () {
+      try {
+        const resp = await fetch(`/api/uploads/${this.uploadId}/series`)
+        const result = (await resp.json()) || { error: (await resp.body) }
+
+        if (resp.ok) {
+          this.series = result.series
+        } else {
+          this.alert = {
+            text: `loadUpload API Error (${resp.status}): ${result.error}`,
+            level: 'err'
+          }
+        }
+      } catch (e) {
+        this.alert = {
+          text: `loadUpload Unknown Error: ${e.message}`,
+          level: 'err'
+        }
+      }
     },
     loadDocuments: async function () {
       try {
@@ -201,19 +256,20 @@ export default {
 
       this.$store.commit('setRecentUploadId', null)
       this.validateUpload()
+    },
+    onLoad: async function () {
+      await this.loadUpload()
+      this.initialValidation()
+      this.loadDocuments()
+    }
+  },
+  watch: {
+    uploadId: function (to, from) {
+      this.onLoad()
     }
   },
   mounted: async function () {
-    await this.loadUpload()
-    this.initialValidation()
-    this.loadDocuments()
+    this.onLoad()
   }
 }
 </script>
-
-<style scoped>
-.upload {
-  margin: 0 auto;
-  width: 90%;
-}
-</style>

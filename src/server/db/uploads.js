@@ -33,7 +33,9 @@ async function uploadsForAgency (agency_id, period_id) {
 function upload (id) {
   return knex('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
-    .select('uploads.*', 'users.email as created_by')
+    .leftJoin('users AS vusers', 'uploads.validated_by', 'vusers.id')
+    .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
+    .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code', 'vusers.email AS validated_by_email')
     .where('uploads.id', id)
     .then(r => r[0])
 }
@@ -66,7 +68,7 @@ async function createUpload (upload, queryBuilder = knex) {
 }
 
 async function setAgencyId (uploadId, agencyId) {
-  return await knex('uploads')
+  return knex('uploads')
     .where('id', uploadId)
     .update({ agency_id: agencyId })
 }
@@ -88,6 +90,27 @@ async function getPeriodUploadIDs (period_id) {
   return rv
 }
 
+async function markValidated (uploadId, userId) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({
+      validated_at: knex.fn.now(),
+      validated_by: userId
+    })
+    .returning('*')
+    .then(rows => rows[0])
+}
+
+async function markNotValidated (uploadId) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({
+      validated_at: null,
+      validated_by: null
+    })
+    .returning('*')
+    .then(rows => rows[0])
+}
 module.exports = {
   getPeriodUploadIDs,
   getUploadSummaries,
@@ -95,5 +118,7 @@ module.exports = {
   upload,
   uploads,
   uploadsForAgency,
-  setAgencyId
+  setAgencyId,
+  markValidated,
+  markNotValidated
 }

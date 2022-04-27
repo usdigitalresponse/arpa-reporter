@@ -100,6 +100,7 @@ router.get('/:id/download', requireUser, (req, res) => {
 router.get('/:id/validate', requireUser, async (req, res) => {
   const { id } = req.params
 
+  const user = await getUser(req.signedCookies.userId)
   const upload = await getUpload(id)
   if (!upload) {
     res.sendStatus(404)
@@ -107,7 +108,7 @@ router.get('/:id/validate', requireUser, async (req, res) => {
     return
   }
 
-  const errors = await validateUpload(upload)
+  const errors = await validateUpload(upload, user)
   res.status(errors.length === 0 ? 200 : 400).json({
     errors: errors.map(e => e.toObject()),
     upload

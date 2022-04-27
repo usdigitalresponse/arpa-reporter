@@ -1,6 +1,6 @@
 
 const { documentsForUpload } = require('../db/documents')
-const { setAgencyId } = require('../db/uploads')
+const { setAgencyId, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 
 class ValidationError extends Error {
@@ -34,8 +34,8 @@ async function validateAgencyId ({ upload, documents }) {
   }
 
   // must exist in the db
-  const matchingAgencies = await agencyByCode(agencyCode)
-  if (matchingAgencies.length < 1) {
+  const matchingAgency = (await agencyByCode(agencyCode))[0]
+  if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
       { tab: 'cover', row: 1, col: 0 }
@@ -43,8 +43,8 @@ async function validateAgencyId ({ upload, documents }) {
   }
 
   // convenience: set agency id on the upload for easier filtering
-  if (agencyCode !== upload.agency_id) {
-    setAgencyId(upload.id, agencyCode)
+  if (matchingAgency.id !== upload.agency_id) {
+    await setAgencyId(upload.id, matchingAgency.id)
   }
 }
 
@@ -52,7 +52,7 @@ function validateReportingPeriod ({ upload, documents }) {
   return null
 }
 
-async function validateUpload (upload) {
+async function validateUpload (upload, user) {
   // holder for our validation errors
   const errors = []
 
@@ -73,7 +73,17 @@ async function validateUpload (upload) {
     }
   }
 
-  return errors.flat().filter(x => x)
+  // if we successfully validated for the first time, let's mark it!
+  const flatErrors = errors.flat().filter(x => x)
+  if (flatErrors.length === 0 && !upload.validated_at) {
+    markValidated(upload.id, user.id)
+
+  // if it was valid before but is no longer valid, clear it
+  } else if (flatErrors.length > 1 && upload.validated_at) {
+    markNotValidated(upload.id)
+  }
+
+  return flatErrors
 }
 
 module.exports = {

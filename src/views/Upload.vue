@@ -47,12 +47,22 @@
 
         <li class="list-group-item">
           <span class="font-weight-bold">Created: </span>
-          {{ upload.created_at }} ({{ fromNow(upload) }}) by {{ upload.created_by }}
+          {{ upload.created_at }} ({{ fromNow(upload.created_at) }}) by {{ upload.created_by }}
         </li>
 
-        <li class="list-group-item">
-          <button class="btn btn-primary" @click="validateUpload" :disabled="validating">
-            Validate
+        <li class="list-group-item" :class="validatedLiClass">
+          <span class="font-weight-bold">Validation: </span>
+
+          <span v-if="upload.validated_at">
+            {{ upload.validated_at }} ({{ fromNow(upload.validated_at) }}) by {{ upload.validated_by_email }}
+          </span>
+          <span v-else>
+            Not Validated
+          </span>
+
+          <button class="btn btn-primary ml-2" @click="validateUpload" :disabled="validating">
+            <span v-if="upload.validated_at">Re-validate</span>
+            <span v-else>Validate</span>
           </button>
         </li>
 
@@ -85,7 +95,7 @@ export default {
   },
   data: function () {
     return {
-      uploadId: this.$route.params.id,
+      uploadId: Number(this.$route.params.id),
       upload: null,
       documents: [],
       errors: [],
@@ -97,6 +107,14 @@ export default {
   computed: {
     isRecentlyUploaded: function () {
       return this.uploadId === this.$store.state.recentUploadId
+    },
+    validatedLiClass: function () {
+      if (!this.upload) return {}
+
+      return {
+        'list-group-item-success': this.upload.validated_at,
+        'list-group-item-warning': !this.upload.validated_at
+      }
     }
   },
   methods: {
@@ -104,8 +122,8 @@ export default {
     clearAlert: function () {
       this.alert = null
     },
-    fromNow: function (upload) {
-      return moment(upload.created_at).fromNow()
+    fromNow: function (ts) {
+      return moment(ts).fromNow()
     },
     preview: function (o) {
       const s = JSON.stringify(o, null, '  ')

@@ -26,7 +26,7 @@ function removeMetadata (sheetName, sheet) {
 
   // remove metadata cols
   const sheetWithoutMetadataCols = sheet.map(row =>
-    row.slice(NUM_METADATA_COLS)
+    row.slice(sheetName.slice(0, 3) === 'ec ' ? 2 : NUM_METADATA_COLS)
   )
 
   // remove metadata rows

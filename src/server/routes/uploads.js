@@ -124,7 +124,7 @@ router.get('/:id/download', requireUser, (req, res) => {
   })
 })
 
-router.get('/:id/validate', requireUser, async (req, res) => {
+router.post('/:id/validate', requireUser, async (req, res) => {
   const { id } = req.params
 
   const user = await getUser(req.signedCookies.userId)
@@ -136,7 +136,7 @@ router.get('/:id/validate', requireUser, async (req, res) => {
   }
 
   const errors = await validateUpload(upload, user)
-  res.status(errors.length === 0 ? 200 : 400).json({
+  res.json({
     errors: errors.map(e => e.toObject()),
     upload
   })

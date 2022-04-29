@@ -17,22 +17,10 @@
 
   */
 const knex = require('./connection')
-const _ = require('lodash')
 
 const {
   getPeriodUploadIDs
 } = require('./uploads')
-
-async function documentsWithProjectCode (period_id) {
-  const periodUploadIDs = await getPeriodUploadIDs(period_id)
-
-  return knex('documents')
-    .select('documents.*', 'projects.code as project_code')
-    .whereIn('upload_id', periodUploadIDs)
-    .join('uploads', { 'documents.upload_id': 'uploads.id' })
-    .join('projects', { 'uploads.project_id': 'projects.id' })
-    .then(purgeDuplicateSubrecipients)
-}
 
 function purgeDuplicateSubrecipients (arrRecords) {
   const arrRecordsOut = []
@@ -94,10 +82,9 @@ async function documentsForAgency (agency_id, period_id) {
   let docs
   try {
     docs = await knex('documents')
-      .select('documents.*', 'projects.code as project_code')
+      .select('documents.*')
       .whereIn('upload_id', periodUploadIDs)
       .join('uploads', { 'documents.upload_id': 'uploads.id' })
-      .join('projects', { 'uploads.project_id': 'projects.id' })
       .join('users', { 'documents.user_id': 'users.id' })
       .where('users.agency_id', agency_id)
   } catch (err) {
@@ -106,41 +93,31 @@ async function documentsForAgency (agency_id, period_id) {
   return docs
 }
 
+async function documentsForUpload (uploadId) {
+  return knex('documents')
+    .select('*')
+    .where('upload_id', uploadId)
+}
+
 function createDocument (document) {
-  return knex
+  const created = knex
     .insert(document)
     .into('documents')
-    .returning('id')
-    .then(id => {
-      const result = {
-        ...document,
-        id: id[0]
-      }
-      return result
-    })
+    .returning('*')
+    .then(rows => rows[0])
+
+  return created
 }
 
 function createDocuments (documents, queryBuilder = knex) {
-  return queryBuilder.insert(documents).into('documents')
-}
-
-async function deleteDocuments ({ agencyCode, projectId, reportingDate }) {
-  const uploads = await knex('uploads')
-    .select('id')
-    .where('filename', 'like', `%-${projectId}-${reportingDate}-%`)
-  const uploadIds = _.map(uploads, 'id')
-  const delResult = await knex('documents')
-    .del()
-    .whereIn('upload_id', uploadIds)
-  return delResult
+  return queryBuilder.insert(documents).into('documents').returning('*')
 }
 
 module.exports = {
   createDocument,
   createDocuments,
-  deleteDocuments,
   documents,
   documentsForAgency,
   documentsOfType,
-  documentsWithProjectCode
+  documentsForUpload
 }

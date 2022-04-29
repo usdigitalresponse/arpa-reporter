@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const knex = require('../../src/server/db/connection')
 const { setupAgencies } = require('./fixtures/add-dummy-data')
 
@@ -10,11 +11,14 @@ const { setupAgencies } = require('./fixtures/add-dummy-data')
 global.requireSrc = f =>
   require(f.replace(/\/tests\//, '/src/').replace(/(\.[^.]*)*\.spec/, ''))
 
-module.exports.mochaHooks = {
-  beforeAll: async () => {
-    return setupAgencies(knex)
-  },
-  afterAll: done => {
-    knex.destroy(done)
+module.exports = {
+  knex,
+  mochaHooks: {
+    beforeAll: async () => {
+      return setupAgencies(knex)
+    },
+    afterAll: done => {
+      knex.destroy(done)
+    }
   }
 }

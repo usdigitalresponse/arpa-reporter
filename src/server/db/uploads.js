@@ -1,7 +1,6 @@
 /* eslint camelcase: 0 */
 
 const knex = require('./connection')
-const _ = require('lodash')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
@@ -12,7 +11,8 @@ async function uploads (period_id) {
     period_id = await getCurrentReportingPeriodID()
   }
   return knex('uploads')
-    .select('*')
+    .leftJoin('users', 'uploads.user_id', 'users.id')
+    .select('uploads.*', 'users.email as created_by')
     .where({ reporting_period_id: period_id })
     .orderBy('uploads.created_at', 'desc')
 }
@@ -32,9 +32,24 @@ async function uploadsForAgency (agency_id, period_id) {
 
 function upload (id) {
   return knex('uploads')
-    .select('*')
-    .where('id', id)
+    .leftJoin('users', 'uploads.user_id', 'users.id')
+    .leftJoin('users AS vusers', 'uploads.validated_by', 'vusers.id')
+    .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
+    .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code', 'vusers.email AS validated_by_email')
+    .where('uploads.id', id)
     .then(r => r[0])
+}
+
+function validForReportingPeriod (period_id) {
+  return knex.with('agency_max_val', knex.raw(
+    'SELECT agency_id, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id'
+  ))
+    .select('uploads.*')
+    .from('uploads')
+    .innerJoin('agency_max_val', function () {
+      this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
+        .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
+    })
 }
 
 /*  getUploadSummaries() returns a knex promise containing an array of
@@ -43,11 +58,9 @@ function upload (id) {
       id: 1,
       filename: 'DOA-076-093020-v1.xlsx',
       created_at: 2020-11-19T15:14:34.481Z,
-      created_by: 'michael+admin@stanford.cc',
       reporting_period_id: 1,
       user_id: 1,
       agency_id: 3,
-      project_id: 48
     }
     */
 function getUploadSummaries (period_id) {
@@ -58,35 +71,18 @@ function getUploadSummaries (period_id) {
 }
 
 async function createUpload (upload, queryBuilder = knex) {
-  // The CONFLICT should never happen, because the file upload should stop
-  // if there is an existing `filename` in the upload directory.
-  // However if `filename` gets deleted for some reason without deleting
-  // the DB record, it's better to update this record than mysteriously fail.
+  const inserted = await queryBuilder('uploads')
+    .insert(upload)
+    .returning('*')
+    .then(rows => rows[0])
 
-  const timestamp = new Date().toISOString()
-  const qResult = await queryBuilder.raw(
-    `INSERT INTO uploads
-      (created_by, filename, user_id, created_at, agency_id, project_id, reporting_period_id)
-      VALUES
-      (:created_by, :filename, :user_id, '${timestamp}', :agency_id, :project_id, :reporting_period_id)
-      ON CONFLICT (filename) DO UPDATE
-        SET
-          created_by = :created_by,
-          filename = :filename,
-          user_id = :user_id,
-          created_at = '${timestamp}',
-          agency_id = :agency_id,
-          project_id = :project_id,
-          reporting_period_id = :reporting_period_id
-      RETURNING "id", "created_at"`,
-    upload
-  )
-  const inserted = _.get(qResult, 'rows[0]')
-  // This should also never happen, but better to know if it does.
-  if (!inserted) throw new Error('Unknown error inserting into uploads table')
-  upload.id = inserted.id
-  upload.created_at = inserted.created_at
-  return upload
+  return inserted
+}
+
+async function setAgencyId (uploadId, agencyId) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({ agency_id: agencyId })
 }
 
 async function getPeriodUploadIDs (period_id) {
@@ -106,11 +102,37 @@ async function getPeriodUploadIDs (period_id) {
   return rv
 }
 
+async function markValidated (uploadId, userId) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({
+      validated_at: knex.fn.now(),
+      validated_by: userId
+    })
+    .returning('*')
+    .then(rows => rows[0])
+}
+
+async function markNotValidated (uploadId) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({
+      validated_at: null,
+      validated_by: null
+    })
+    .returning('*')
+    .then(rows => rows[0])
+}
+
 module.exports = {
   getPeriodUploadIDs,
   getUploadSummaries,
   createUpload,
   upload,
   uploads,
-  uploadsForAgency
+  uploadsForAgency,
+  setAgencyId,
+  markValidated,
+  markNotValidated,
+  validForReportingPeriod
 }

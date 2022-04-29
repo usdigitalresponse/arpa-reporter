@@ -31,7 +31,7 @@
 
 */
 const knex = require('./connection')
-const { documentsWithProjectCode } = require('./documents')
+const { documents: listDocuments } = require('./documents')
 const { getCurrentReportingPeriodID } = require('./settings')
 
 const _ = require('lodash')
@@ -157,7 +157,7 @@ async function generateSummaries (reporting_period_id) {
   const errLog = []
 
   const mapPeriodSummaries = new Map()
-  const documents = await documentsWithProjectCode(reporting_period_id)
+  const documents = await listDocuments(reporting_period_id)
   if (_.isError(documents)) {
     return {
       errors: [documents.message]

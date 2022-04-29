@@ -20,7 +20,6 @@ import Subrecipient from '../views/Subrecipient.vue'
 import Subrecipients from '../views/Subrecipients.vue'
 import User from '../views/User.vue'
 import Users from '../views/Users.vue'
-import UploadValidations from '../views/UploadValidations.vue'
 
 import store from '../store'
 
@@ -158,18 +157,6 @@ const routes = [
     path: '/fix-subrecipients',
     name: 'FixSubrecipients',
     component: FixSubrecipients,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/upload-validations',
-    name: 'UploadValidations',
-    component: UploadValidations,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/upload-validations/:id',
-    name: 'UploadValidationsDetail',
-    component: UploadValidations,
     meta: { requiresLogin: true }
   }
 ]

@@ -3,7 +3,8 @@
 const express = require('express')
 const router = express.Router()
 const { requireAdminUser } = require('../access-helpers')
-const { agencyById, createUser, user: getUser, updateUser } = require('../db')
+const { createUser, user: getUser, updateUser } = require('../db')
+const { agencyById } = require('../db/agencies')
 const { sendWelcomeEmail } = require('../lib/email')
 const _ = require('lodash-checkit')
 

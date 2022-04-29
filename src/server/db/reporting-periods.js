@@ -44,8 +44,8 @@ if (process.env.VERBOSE) {
 }
 
 module.exports = {
-  close: closeReportingPeriod,
   get: getReportingPeriod,
+  close: closeReportingPeriod,
   getEndDates: getEndDates,
   getFirstStartDate: getFirstReportingPeriodStartDate,
 
@@ -54,8 +54,7 @@ module.exports = {
   isClosed,
   getAll,
   createReportingPeriod,
-  updateReportingPeriod,
-  reportingPeriodById
+  updateReportingPeriod
 }
 
 /*  getAll() returns all the records from the reporting_periods table
@@ -69,14 +68,19 @@ async function getAll () {
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
 async function getReportingPeriod (period_id) {
-  if (!period_id) {
-    return getAll()
+  if (period_id && Number(period_id)) {
+    return knex('reporting_periods')
+      .select('*')
+      .where('id', period_id)
+      .then(r => r[0])
+  } else if (period_id === undefined) {
+    return knex('application_settings')
+      .leftJoin('reporting_periods', 'application_settings.current_reporting_period_id', '=', 'reporting_periods.id')
+      .select('reporting_periods.*')
+      .then(r => r[0])
+  } else {
+    return null
   }
-
-  return knex('reporting_periods')
-    .select('*')
-    .where('id', period_id)
-    .then(r => r[0])
 }
 
 /* getFirstReportingPeriodStartDate() returns earliest start date
@@ -175,15 +179,6 @@ async function getEndDates () {
   return await knex('reporting_periods')
     .select('end_date')
     .orderBy('id')
-}
-
-/*  reportingPeriodById()
-  */
-function reportingPeriodById (id) {
-  return knex('reporting_periods')
-    .select('*')
-    .where({ id })
-    .then(r => r[0])
 }
 
 /*  createReportingPeriod()

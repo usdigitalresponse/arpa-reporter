@@ -7,7 +7,7 @@ const {
   agencyById: getAgency,
   createAgency,
   updateAgency
-} = require('../db')
+} = require('../db/agencies')
 
 router.get('/', requireUser, function (req, res) {
   agencies().then(agencies => res.json({ agencies }))

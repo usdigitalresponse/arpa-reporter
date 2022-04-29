@@ -1,25 +1,34 @@
-const {
-  currentReportingPeriodSettings,
-  setCurrentReportingPeriod
-} = requireSrc(__filename)
 
-const expect = require('chai').expect
+const settings = requireSrc(__filename)
+const assert = require('assert')
 
-describe.skip('settings.spec.js - baseline success', () => {
-  it('Returns the current reporting period', async () => {
-    const result = await currentReportingPeriodSettings()
-    // console.dir(result);
-    expect(
-      result.current_reporting_period_id
-    ).to.equal(2)
+describe('application settings db', function () {
+  describe('currentReportingPeriodSettings', function () {
+    it('Returns the current reporting period & title', async () => {
+      const result = await settings.currentReportingPeriodSettings()
+
+      assert.equal(result.current_reporting_period_id, 1)
+      assert.equal(result.title, 'Rhode Island')
+    })
   })
-  it('Changes the current reporting period', async () => {
-    await setCurrentReportingPeriod(1)
-    const result = await currentReportingPeriodSettings()
-    // console.dir(result);
-    await setCurrentReportingPeriod(2) // restore it for later tests
-    expect(
-      result.current_reporting_period_id
-    ).to.equal(1)
+
+  describe('setCurrentReportingPeriod', function () {
+    let savedReportingPeriod
+
+    beforeEach('save current period', async function () {
+      const curr = await settings.currentReportingPeriodSettings()
+      savedReportingPeriod = curr.current_reporting_period_id
+    })
+
+    afterEach('restore reporting period', async function () {
+      await settings.setCurrentReportingPeriod(savedReportingPeriod)
+    })
+
+    it('Changes the current reporting period', async () => {
+      await settings.setCurrentReportingPeriod(2)
+
+      const result = await settings.currentReportingPeriodSettings()
+      assert.equal(result.current_reporting_period_id, 2)
+    })
   })
 })

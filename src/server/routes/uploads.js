@@ -14,7 +14,8 @@ const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
 const { persistUpload, bufferForUpload, documentsForUpload } = require('../services/persist-upload')
-const { validateUpload, ValidationError } = require('../services/validate-upload')
+const { validateUpload } = require('../services/validate-upload')
+const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
   const period_id = await reportingPeriods.getID(req.query.period_id)

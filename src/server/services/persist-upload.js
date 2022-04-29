@@ -10,7 +10,7 @@ const { createUpload } = require('../db/uploads')
 
 const { UPLOAD_DIR } = require('../environment')
 
-const { ValidationError } = require('./validate-upload')
+const ValidationError = require('../lib/validation-error')
 
 const normalizeSheetName = (sheetName) => sheetName.trim().toLowerCase()
 
@@ -77,4 +77,8 @@ async function documentsForUpload (upload) {
   return extractDocuments(bufferForUpload(upload))
 }
 
-module.exports = { persistUpload, ValidationError, bufferForUpload, documentsForUpload }
+module.exports = {
+  persistUpload,
+  bufferForUpload,
+  documentsForUpload
+}

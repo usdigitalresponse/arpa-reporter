@@ -15,7 +15,7 @@ const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { persistUpload, uploadFSName, ValidationError } = require('../services/process-upload')
+const { persistUpload, uploadFSName, ValidationError } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 
 router.get('/', requireUser, async function (req, res) {

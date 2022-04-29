@@ -6,7 +6,7 @@ const {
 } = requireSrc(__filename)
 const {
   processUpload
-} = requireSrc(path.resolve(__dirname, '../services/process-upload')
+} = requireSrc(path.resolve(__dirname, '../services/persist-upload')
 )
 const { makeUploadArgs } = require('../services/helpers')
 const {

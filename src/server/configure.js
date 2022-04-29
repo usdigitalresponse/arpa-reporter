@@ -20,7 +20,6 @@ module.exports = app => {
     require('./routes/application_settings')
   )
   app.use('/api/configuration', require('./routes/configuration'))
-  app.use('/api/documents', require('./routes/documents'))
   app.use('/api/exports', require('./routes/exports'))
   app.use('/api/files', require('./routes/files'))
   // app.use("/api/fix-subrecipients", require("./routes/fix-subrecipients"));

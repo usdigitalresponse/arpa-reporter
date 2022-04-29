@@ -3,9 +3,7 @@ import VueRouter from 'vue-router'
 
 import Agencies from '../views/Agencies.vue'
 import Agency from '../views/Agency.vue'
-import Documents from '../views/Documents.vue'
 import Home from '../views/Home.vue'
-import ImportFile from '../views/ImportFile.vue'
 import Login from '../views/Login.vue'
 import NewTemplate from '../views/NewTemplate.vue'
 import NewUpload from '../views/NewUpload.vue'
@@ -34,12 +32,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/documents/:type',
-    name: 'Documents',
-    component: Documents,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/new_upload',
     name: 'NewUpload',
     component: NewUpload,
@@ -55,12 +47,6 @@ const routes = [
     path: '/uploads/:id',
     name: 'Upload',
     component: Upload,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/imports/:id',
-    name: 'ImportFile',
-    component: ImportFile,
     meta: { requiresLogin: true }
   },
   {

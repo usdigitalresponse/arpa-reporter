@@ -9,7 +9,7 @@ userpass=${dbconn%@*}       # 'user:pass'
 hostdbname=${dbconn#*@}         # host/dbname
 if [ $userpass == $hostdbname ]
 then
-  $userpass = 'postgres'
+  userpass='postgres'
 fi
 
 username=${userpass%:*}

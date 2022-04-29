@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('../db/documents')
+const { documentsForUpload } = require('./persist-upload')
 const { setAgencyId, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 
@@ -95,7 +95,7 @@ async function validateUpload (upload, user) {
   const errors = []
 
   // grab the documents
-  const documents = await documentsForUpload(upload.id)
+  const documents = await documentsForUpload(upload)
 
   // run validations, one by one
   const validations = [

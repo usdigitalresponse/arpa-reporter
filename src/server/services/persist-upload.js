@@ -5,10 +5,8 @@ const { mkdir, writeFile, readFile } = require('fs/promises')
 
 const xlsx = require('xlsx')
 
-const knex = require('../db/connection')
 const reportingPeriods = require('../db/reporting-periods')
 const { createUpload } = require('../db/uploads')
-const { createDocuments } = require('../db/documents')
 
 const { UPLOAD_DIR } = require('../environment')
 
@@ -24,7 +22,6 @@ const uploadFSName = (upload) => {
 async function extractDocuments (buffer) {
   const workbook = await xlsx.read(buffer, { type: 'buffer' })
 
-  // get begin generating (partial) document rows
   const documents = []
   for (const sheetName of workbook.SheetNames) {
     documents.push({
@@ -37,35 +34,23 @@ async function extractDocuments (buffer) {
 }
 
 async function persistUpload ({ filename, user, buffer }) {
-  // first parse the upload into documents
-  let documents
+  // let's make sure we can actually read the supplied buffer (it's a valid spreadsheet)
   try {
-    documents = await extractDocuments(buffer)
+    await xlsx.read(buffer, { type: 'buffer' })
   } catch (e) {
     throw new ValidationError(`Cannot parse XLSX from data in ${filename}: ${e}`)
   }
 
-  let upload
-  await knex.transaction(async trx => {
-    const reportingPeriod = await reportingPeriods.get()
+  // get the current reporting period
+  const reportingPeriod = await reportingPeriods.get()
 
-    // next, create an upload row, and document rows for all documents
-    const uploadRow = {
-      filename: path.basename(filename),
-      reporting_period_id: reportingPeriod.id,
-      user_id: user.id
-    }
-    upload = await createUpload(uploadRow, trx)
-
-    // next, create rows for all the documents
-    const docRows = documents.map(doc => ({
-      type: doc.type,
-      content: JSON.stringify(doc.content),
-      upload_id: upload.id
-    }))
-
-    await createDocuments(docRows, trx)
-  })
+  // create an upload
+  const uploadRow = {
+    filename: path.basename(filename),
+    reporting_period_id: reportingPeriod.id,
+    user_id: user.id
+  }
+  const upload = await createUpload(uploadRow)
 
   // persist the original upload to the filesystem
   try {
@@ -88,4 +73,8 @@ async function bufferForUpload (upload) {
   return Buffer.from(data, 'binary')
 }
 
-module.exports = { persistUpload, ValidationError, bufferForUpload }
+async function documentsForUpload (upload) {
+  return extractDocuments(bufferForUpload(upload))
+}
+
+module.exports = { persistUpload, ValidationError, bufferForUpload, documentsForUpload }

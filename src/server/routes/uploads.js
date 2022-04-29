@@ -10,12 +10,11 @@ const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const { user: getUser } = require('../db')
-const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { persistUpload, bufferForUpload, ValidationError } = require('../services/persist-upload')
-const { validateUpload } = require('../services/validate-upload')
+const { persistUpload, bufferForUpload, documentsForUpload } = require('../services/persist-upload')
+const { validateUpload, ValidationError } = require('../services/validate-upload')
 
 router.get('/', requireUser, async function (req, res) {
   const period_id = await reportingPeriods.getID(req.query.period_id)
@@ -98,7 +97,7 @@ router.get('/:id/documents', requireUser, async (req, res) => {
     return
   }
 
-  const documents = await documentsForUpload(upload.id)
+  const documents = await documentsForUpload(upload)
   res.json({
     upload,
     documents

@@ -2,7 +2,6 @@
 /* eslint camelcase: 0 */
 
 const express = require('express')
-const fs = require('fs')
 
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
@@ -15,7 +14,7 @@ const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { persistUpload, uploadFSName, ValidationError } = require('../services/persist-upload')
+const { persistUpload, bufferForUpload, ValidationError } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 
 router.get('/', requireUser, async function (req, res) {
@@ -106,22 +105,24 @@ router.get('/:id/documents', requireUser, async (req, res) => {
   })
 })
 
-router.get('/:id/download', requireUser, (req, res) => {
+router.get('/:id/download', requireUser, async (req, res) => {
   const { id } = req.params
-  getUpload(id).then(upload => {
-    if (!upload) {
-      res.sendStatus(404)
-      res.end()
-    } else {
-      const attachmentData = fs.readFileSync(uploadFSName(upload))
-      res.header(
-        'Content-Disposition',
-        `attachment; filename="${upload.filename}"`
-      )
-      res.header('Content-Type', 'application/octet-stream')
-      res.end(Buffer.from(attachmentData, 'binary'))
-    }
-  })
+  const upload = await getUpload(id)
+
+  if (!upload) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const buffer = await bufferForUpload(upload)
+
+  res.header(
+    'Content-Disposition',
+    `attachment; filename="${upload.filename}"`
+  )
+  res.header('Content-Type', 'application/octet-stream')
+  res.end(buffer)
 })
 
 router.get('/:id/validate', requireUser, async (req, res) => {

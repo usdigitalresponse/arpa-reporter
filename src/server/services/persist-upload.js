@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */
 
 const path = require('path')
-const { mkdir, writeFile } = require('fs/promises')
+const { mkdir, writeFile, readFile } = require('fs/promises')
 
 const xlsx = require('xlsx')
 
@@ -83,4 +83,9 @@ async function persistUpload ({ filename, user, buffer }) {
   return upload
 }
 
-module.exports = { persistUpload, ValidationError, uploadFSName }
+async function bufferForUpload (upload) {
+  const data = await readFile(uploadFSName(upload))
+  return Buffer.from(data, 'binary')
+}
+
+module.exports = { persistUpload, ValidationError, bufferForUpload }

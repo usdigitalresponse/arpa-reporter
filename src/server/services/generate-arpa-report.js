@@ -6,7 +6,8 @@ const zipper = require('zip-local')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
-const { ARPA_REPORTS_DIR, SERVER_DATA_DIR } = require('../environment')
+const { ARPA_REPORTS_DIR } = require('../environment')
+const { getTemplate } = require('./get-template')
 
 async function generateReportName (periodId) {
   const now = moment().utc()
@@ -23,84 +24,68 @@ async function generateReportName (periodId) {
   return filename
 }
 
-async function loadTemplate (templateName) {
-  const templatePath = path.join(
-    SERVER_DATA_DIR,
-    'treasury',
-    `${templateName}.xlsx`
-  )
-
-  const workbook = XLSX.readFile(templatePath)
-  if (workbook.SheetNames.length !== 1) {
-    throw Error(`template ${templateName} contains multiple sheets`)
-  }
-
-  const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-  return XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-}
-
 async function generateProject18 (periodId) {
-  return loadTemplate('Project Templates/project18_229233BulkUploads')
+  return getTemplate('Project Templates/project18_229233BulkUploads')
 }
 
 async function generateProject19 (periodId) {
-  return loadTemplate('Project Templates/project19_234BulkUploads')
+  return getTemplate('Project Templates/project19_234BulkUploads')
 }
 
 async function generateProject2128 (periodId) {
-  return loadTemplate('Project Templates/project2128BulkUploads')
+  return getTemplate('Project Templates/project2128BulkUploads')
 }
 
 async function generateProject214 (periodId) {
-  return loadTemplate('Project Templates/project214_224227BulkUploads')
+  return getTemplate('Project Templates/project214_224227BulkUploads')
 }
 
 async function generateProject236 (periodId) {
-  return loadTemplate('Project Templates/project236BulkUploads')
+  return getTemplate('Project Templates/project236BulkUploads')
 }
 
 async function generateProject31 (periodId) {
-  return loadTemplate('Project Templates/project31BulkUpload')
+  return getTemplate('Project Templates/project31BulkUpload')
 }
 
 async function generateProject32 (periodId) {
-  return loadTemplate('Project Templates/project32BulkUpload')
+  return getTemplate('Project Templates/project32BulkUpload')
 }
 
 async function generateProject4142 (periodId) {
-  return loadTemplate('Project Templates/project4142BulkUpload')
+  return getTemplate('Project Templates/project4142BulkUpload')
 }
 
 async function generateProject51518 (periodId) {
-  return loadTemplate('Project Templates/project51518BulkUpload')
+  return getTemplate('Project Templates/project51518BulkUpload')
 }
 
 async function generateProject519521 (periodId) {
-  return loadTemplate('Project Templates/project519521BulkUpload')
+  return getTemplate('Project Templates/project519521BulkUpload')
 }
 
 async function generateProjectBaseline (periodId) {
-  return loadTemplate('Project Templates/projectBaselineBulkUpload')
+  return getTemplate('Project Templates/projectBaselineBulkUpload')
 }
 
 async function generateExpendituresGT50000 (periodId) {
-  return loadTemplate('expendituresGT50000BulkUpload')
+  return getTemplate('expendituresGT50000BulkUpload')
 }
 
 async function generateExpendituresLT50000 (periodId) {
-  return loadTemplate('expendituresLT50000BulkUpload')
+  return getTemplate('expendituresLT50000BulkUpload')
 }
 
 async function generatePaymentsIndividualsLT50000 (periodId) {
-  return loadTemplate('paymentsIndividualsLT50000BulkUpload')
+  return getTemplate('paymentsIndividualsLT50000BulkUpload')
 }
 
 async function generateSubaward (periodId) {
-  return loadTemplate('subawardBulkUpload')
+  return getTemplate('subawardBulkUpload')
 }
 
 async function generateSubRecipient (periodId) {
-  return loadTemplate('subawardBulkUpload')
+  return getTemplate('subawardBulkUpload')
 }
 
 async function generateReport (periodId) {

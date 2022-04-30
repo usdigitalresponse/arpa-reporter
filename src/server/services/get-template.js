@@ -9,16 +9,11 @@ const path = require('path')
 const fs = require('fs')
 const xlsx = require('xlsx')
 const _ = require('lodash')
+const { SERVER_DATA_DIR } = require('../environment')
 const { sheetToJson } = require('../lib/spreadsheet')
 
-// Treasury upload spreadsheet template
-// TODO: Support all treasury export templates
-const PROJECT_BASELINE_TEMPLATE = 'treasury/projectBaselineBulkUpload.xlsx'
-
-const treasury = {
-  template: null,
-  sheets: null
-}
+// cache treasury templates in memory after first load
+const treasuryTemplates = new Map()
 
 const validation = {
   template: null,
@@ -28,7 +23,7 @@ const validation = {
 
 module.exports = {
   getDropdownValues,
-  getTreasuryTemplateSheets,
+  getTemplate,
   getValidationTemplateSheets
 }
 
@@ -39,24 +34,13 @@ function getDropdownValues () {
   return validation.dropdownValues
 }
 
-function getTreasuryTemplateSheets () {
-  if (!treasury.sheets) {
-    loadTreasuryTemplate()
+async function getTemplate (templateName) {
+  if (treasuryTemplates.has(templateName)) {
+    return treasuryTemplates.get(templateName)
   }
-  return treasury.sheets
-}
-
-function loadTreasuryTemplate () {
-  const xlsxTemplate = loadXlsxFile(PROJECT_BASELINE_TEMPLATE)
-  const objAoaSheets = {}
-
-  _.keys(xlsxTemplate.Sheets).forEach(sheetName => {
-    const rawSheet = xlsxTemplate.Sheets[sheetName]
-    objAoaSheets[sheetName] = sheetToJson(rawSheet, false)
-  })
-
-  treasury.template = xlsxTemplate
-  treasury.sheets = objAoaSheets
+  const template = await loadTemplate(templateName)
+  treasuryTemplates.set(templateName, template)
+  return template
 }
 
 function getValidationTemplateSheets () {
@@ -94,6 +78,22 @@ function loadDropdownValues () {
     ).slice(1)
   )
   return dropdownValues
+}
+
+async function loadTemplate (templateName) {
+  const templatePath = path.join(
+    SERVER_DATA_DIR,
+    'treasury',
+    `${templateName}.xlsx`
+  )
+
+  const workbook = xlsx.readFile(templatePath)
+  if (workbook.SheetNames.length !== 1) {
+    throw Error(`template ${templateName} contains multiple sheets`)
+  }
+
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+  return xlsx.utils.sheet_to_json(worksheet, { header: 1 })
 }
 
 function loadValidationTemplate () {

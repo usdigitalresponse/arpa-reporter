@@ -102,9 +102,7 @@ async function generateSubRecipient (periodId) {
   return loadTemplate('subawardBulkUpload')
 }
 
-async function generateReport(periodId) {
-  console.log('generateReport called', performance.now())
-
+async function generateReport (periodId) {
   // generate every csv file for the report
   const csvObjects = [
     { name: 'project18_229233BulkUploads', func: generateProject18 },

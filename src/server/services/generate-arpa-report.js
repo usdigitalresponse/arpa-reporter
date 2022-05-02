@@ -132,8 +132,6 @@ async function generateReport (periodId) {
     { name: 'subRecipientBulkUpload', func: generateSubRecipient }
   ]
 
-  console.log('csvFiles generated', performance.now())
-
   const zip = new AdmZip()
 
   // compute the CSV data for each file, and write it into the zip container

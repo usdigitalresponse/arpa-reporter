@@ -135,6 +135,7 @@
 import moment from 'moment'
 import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
+import { post } from '../store'
 export default {
   name: 'Upload',
   components: {
@@ -189,25 +190,23 @@ export default {
     validateUpload: async function () {
       this.validating = true
 
-      const resp = await fetch(`/api/uploads/${this.uploadId}/validate`)
-      const result = (await resp.json()) || { error: (await resp.body) }
+      try {
+        const result = await post(`/api/uploads/${this.uploadId}/validate`)
+        await this.loadUpload()
 
-      await this.loadUpload()
-
-      if (resp.ok) {
-        this.alert = {
-          text: 'Upload successfully validated!',
-          level: 'ok'
-        }
-      } else {
-        this.errors = result.errors
-
-        // we got an error from the backend, but the backend didn't send reasons
-        if (!this.errors.length) {
+        if (result.errors?.length) {
+          this.errors = result.errors
+        } else {
           this.alert = {
-            text: `validateUpload Error (${resp.status}): ${result.error}`,
-            level: 'err'
+            text: 'Upload successfully validated!',
+            level: 'ok'
           }
+        }
+      } catch (error) {
+        // we got an error from the backend, but the backend didn't send reasons
+        this.alert = {
+          text: `validateUpload Error: ${error.message}`,
+          level: 'err'
         }
       }
 

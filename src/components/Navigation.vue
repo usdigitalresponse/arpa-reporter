@@ -17,7 +17,7 @@
           </div>
           <div class="dropdown">
             <div
-              :class="dropdownClass('/documents/')"
+              class="nav-link dropdown-toggle"
               data-toggle="dropdown"
               href="#"
               role="button"
@@ -48,51 +48,29 @@
         <li class="nav-item">
           <router-link :class="navLinkClass('/')" to="/">Dashboard</router-link>
         </li>
-        <li class="nav-item dropdown">
-          <a
-            :class="dropdownClass('/documents/')"
-            data-toggle="dropdown"
-            href="#"
-            role="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Spreadsheet Data
-          </a>
-          <div class="dropdown-menu">
-            <router-link
-              class="dropdown-item"
-              :key="name"
-              :to="`/documents/${name}`"
-              v-for="name in tableNames"
-              >{{ titleize(name) }}</router-link
-            >
-          </div>
-        </li>
+
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/agencies')" to="/agencies"
-            >Agencies</router-link
-          >
+          <router-link :class="navLinkClass('/agencies')" to="/agencies">Agencies</router-link>
         </li>
+
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/projects')" to="/projects"
-            >Projects</router-link
-          >
+          <router-link :class="navLinkClass('/projects')" to="/projects">Projects</router-link>
         </li>
+
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/subrecipients')" to="/subrecipients"
-            >Sub Recipients</router-link
-          >
+          <router-link :class="navLinkClass('/subrecipients')" to="/subrecipients">
+            Sub Recipients
+          </router-link>
         </li>
+
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/users')" to="/users"
-            >Users</router-link
-          >
+          <router-link :class="navLinkClass('/users')" to="/users">Users</router-link>
         </li>
+
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/reporting_periods')" to="/reporting_periods"
-            >Reporting Periods</router-link
-          >
+          <router-link :class="navLinkClass('/reporting_periods')" to="/reporting_periods">
+            Reporting Periods
+          </router-link>
         </li>
       </ul>
     </div>
@@ -129,14 +107,6 @@ export default {
     loggedIn: function () {
       return this.$store.state.user !== null
     },
-    tableNames: function () {
-      const tn = this.$store.getters.tableNames
-      const i = tn.indexOf('subrecipient')
-      if (i !== -1) {
-        tn.splice(i, 1)
-      }
-      return tn
-    },
     periodNames: function () {
       return this.$store.getters.periodNames
     },
@@ -163,12 +133,6 @@ export default {
         return 'nav-link active'
       }
       return 'nav-link'
-    },
-    dropdownClass (prefix) {
-      if (document.location.pathname.startsWith(prefix)) {
-        return 'nav-link dropdown-toggle active'
-      }
-      return 'nav-link dropdown-toggle'
     },
     dateFormat: function (d) {
       return moment(d)

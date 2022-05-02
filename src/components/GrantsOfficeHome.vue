@@ -24,31 +24,7 @@
           </a>
         </div>
       </div>
-      <div class="row mt-5">
-        <div class="col-12">
-          <h3 class="mt-3">Record Summary</h3>
-        </div>
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th :key="table.name" v-for="table in tables">
-                {{ titleize(table.name) }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td :key="table.name" v-for="table in tables" class="count">
-                <span v-if="documentCount(table.name) > 0">
-                  <router-link :to="dataUrl(table)">{{
-                    documentCount(table.name)
-                  }}</router-link>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
       <div class="row mt-3">
         <div class="col-12">
           <h3>Upload History</h3>
@@ -84,20 +60,11 @@ export default {
     }
   },
   computed: {
-
     viewingCurrentPeriod () {
       return this.$store.getters.viewPeriodIsCurrent
     },
     isClosed: function () {
       return !(this.$store.getters.viewPeriodIsCurrent)
-    },
-    template: function () {
-      return _.find(this.$store.state.configuration.templates, t =>
-        t.name.match(/agency/i)
-      )
-    },
-    tables: function () {
-      return this.$store.state.configuration.tables
     },
     uploads: function () {
       return this.$store.state.uploads
@@ -124,13 +91,6 @@ export default {
       } else {
         const records = this.groups[tableName]
         return _.filter(records, r => r.type === tableName).length
-      }
-    },
-    dataUrl (table) {
-      if (table.name === 'subrecipient') {
-        return '/subrecipients'
-      } else {
-        return `/documents/${table.name}`
       }
     },
     uploadUrl (upload) {

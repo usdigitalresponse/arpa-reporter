@@ -317,38 +317,12 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-    tableNames: state => {
-      return _.map(state.configuration.tables, 'name')
-    },
     periodNames: state => {
       return _.map(state.reportingPeriods, 'name')
-    },
-    tables: state => {
-      return _.map(state.configuration.tables, t => {
-        const { content, ...rest } = t
-        return {
-          ...rest,
-          ...content
-        }
-      })
-    },
-    table: state => name => {
-      return _.find(state.configuration.tables, t => t.name === name)
-    },
-    templates: state => {
-      return state.configuration.templates
-    },
-    template: state => {
-      return state.configuration.templates
-        ? state.configuration.templates[0]
-        : {}
     },
     documentGroups: state => {
       return _.groupBy(state.documents, 'type')
     },
-    // subrecipients: state => {
-    //   return 43
-    // },
     foreignKeyValues: state => column => {
       const ds = _.filter(
         state.documents,

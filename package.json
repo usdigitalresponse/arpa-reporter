@@ -25,6 +25,7 @@
     "initRender": "./scripts/initRender.mjs"
   },
   "dependencies": {
+    "adm-zip": "0.5.9",
     "aws-sdk": "^2.963.0",
     "body-parser": "^1.19.0",
     "connect-history-api-fallback": "^1.6.0",
@@ -48,8 +49,7 @@
     "vue": "^2.6.13",
     "vue-router": "^3.5.2",
     "vuex": "^3.6.2",
-    "xlsx": "^0.18.4",
-    "zip-local": "^0.3.5"
+    "xlsx": "^0.18.4"
   },
   "devDependencies": {
     "@vue/cli": "^4.5.13",

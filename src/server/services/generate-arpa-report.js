@@ -1,8 +1,7 @@
-
 const path = require('path')
-const { mkdir, rmdir, writeFile, readdir, readFile } = require('fs/promises')
+const { readdir, readFile } = require('fs/promises')
 const moment = require('moment')
-const zipper = require('zip-local')
+const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
@@ -89,16 +88,8 @@ async function generateSubRecipient (periodId) {
 }
 
 async function generateReport (periodId) {
-  // create a directory for the report
-  const dirName = path.join(
-    ARPA_REPORTS_DIR,
-    periodId.toString(),
-    (await generateReportName(periodId))
-  )
-  await mkdir(dirName, { recursive: true })
-
   // generate every csv file for the report
-  const csvFiles = [
+  const csvObjects = [
     { name: 'project18_229233BulkUploads', func: generateProject18 },
     { name: 'project19_234BulkUploads', func: generateProject19 },
     { name: 'project2128BulkUploads', func: generateProject2128 },
@@ -110,42 +101,51 @@ async function generateReport (periodId) {
     { name: 'project51518BulkUpload', func: generateProject51518 },
     { name: 'project519521BulkUpload', func: generateProject519521 },
     { name: 'projectBaselineBulkUpload', func: generateProjectBaseline },
-    { name: 'expendituresGT50000BulkUpload', func: generateExpendituresGT50000 },
-    { name: 'expendituresLT50000BulkUpload', func: generateExpendituresLT50000 },
-    { name: 'paymentsIndividualsLT50000BulkUpload', func: generatePaymentsIndividualsLT50000 },
+    {
+      name: 'expendituresGT50000BulkUpload',
+      func: generateExpendituresGT50000
+    },
+    {
+      name: 'expendituresLT50000BulkUpload',
+      func: generateExpendituresLT50000
+    },
+    {
+      name: 'paymentsIndividualsLT50000BulkUpload',
+      func: generatePaymentsIndividualsLT50000
+    },
     { name: 'subawardBulkUpload', func: generateSubaward },
     { name: 'subRecipientBulkUpload', func: generateSubRecipient }
   ]
 
-  // compute the CSV data for each file, and write it to disk
-  await Promise.all(csvFiles.map(csvFile => {
-    return csvFile.func(periodId)
-      .then(csvData => {
-        if (!Array.isArray(csvData)) {
-          console.dir(csvFile)
-          console.dir(csvData)
-          throw new Error(`CSV Data from ${csvFile.name} was not an array!`)
-        }
+  const zip = new AdmZip()
 
-        const sheet = XLSX.utils.aoa_to_sheet(csvData)
-        const csv = XLSX.utils.sheet_to_csv(sheet)
-        return writeFile(path.join(dirName, `${csvFile.name}.csv`), csv)
-      })
-  }))
-    .catch((err) => {
-      rmdir(dirName, { recursive: true })
-      throw err
-    })
+  // compute the CSV data for each file, and write it into the zip container
+  const csvPromises = csvObjects.map(async ({ name, func }) => {
+    const csvData = await func(periodId)
 
-  // now we generate a zip file
-  const zipfileName = dirName + '.zip'
-  const zipfile = zipper.sync.zip(dirName)
-  zipfile.compress().save(zipfileName)
+    if (!Array.isArray(csvData)) {
+      console.dir({ name, func })
+      console.dir(csvData)
+      throw new Error(`CSV Data from ${name} was not an array!`)
+    }
+
+    const sheet = XLSX.utils.aoa_to_sheet(csvData)
+    const csvString = XLSX.utils.sheet_to_csv(sheet)
+    const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
+    zip.addFile(name + '.csv', buffer)
+  })
+
+  const reportNamePromise = generateReportName(periodId)
+
+  const [reportName] = await Promise.all([
+    reportNamePromise,
+    ...csvPromises
+  ])
 
   // return the correct format
   return {
-    filename: path.basename(zipfileName),
-    content: (await readFile(zipfileName))
+    filename: reportName + '.zip',
+    content: zip.toBuffer()
   }
 }
 

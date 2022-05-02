@@ -84,9 +84,6 @@ export default new Vuex.Store({
     setUser (state, user) {
       state.user = user
     },
-    setDocuments (state, documents) {
-      state.documents = documents
-    },
     setConfiguration (state, configuration) {
       state.configuration = configuration
     },
@@ -113,12 +110,6 @@ export default new Vuex.Store({
     },
     setUploads (state, uploads) {
       state.uploads = uploads
-    },
-    addDocument (state, document) {
-      state.documents = [...state.documents, document]
-    },
-    addDocuments (state, documents) {
-      state.documents = [...state.documents, ...documents]
     },
     addUpload (state, upload) {
       state.uploads = [upload, ...state.uploads]
@@ -197,7 +188,6 @@ export default new Vuex.Store({
           })
       }
       doFetch('application_settings')
-      doFetch('documents')
       doFetch('configuration')
       doFetch('uploads')
       doFetch('agencies')
@@ -208,27 +198,12 @@ export default new Vuex.Store({
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
     },
-    refreshDocuments ({ commit }) {
-      return fetch('/api/documents', { credentials: 'include' })
-        .then(r => r.json())
-        .then(data => commit('setDocuments', data.documents))
-    },
     loadApplicationSettings ({ commit }) {
       fetch('/api/application_settings')
         .then(r => r.json())
         .then(data =>
           commit('setApplicationSettings', data.application_settings)
         )
-    },
-    createDocument ({ commit }, { type, content }) {
-      return post(`/api/documents/${type}`, content).then(({ document }) => {
-        if (document) {
-          commit('addDocument', document)
-        }
-      })
-    },
-    importDocuments ({ commit }, { documents }) {
-      commit('addDocuments', documents)
     },
     createUser ({ commit }, user) {
       return post('/api/users', user).then(response => {
@@ -305,7 +280,6 @@ export default new Vuex.Store({
             commit(mutation, data[attr])
           })
       }
-      doFetch('documents', `?period_id=${period_id}`)
       doFetch('uploads', `?period_id=${period_id}`)
     },
     closeReportingPeriod ({ commit }, period_id) {
@@ -343,38 +317,12 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-    tableNames: state => {
-      return _.map(state.configuration.tables, 'name')
-    },
     periodNames: state => {
       return _.map(state.reportingPeriods, 'name')
-    },
-    tables: state => {
-      return _.map(state.configuration.tables, t => {
-        const { content, ...rest } = t
-        return {
-          ...rest,
-          ...content
-        }
-      })
-    },
-    table: state => name => {
-      return _.find(state.configuration.tables, t => t.name === name)
-    },
-    templates: state => {
-      return state.configuration.templates
-    },
-    template: state => {
-      return state.configuration.templates
-        ? state.configuration.templates[0]
-        : {}
     },
     documentGroups: state => {
       return _.groupBy(state.documents, 'type')
     },
-    // subrecipients: state => {
-    //   return 43
-    // },
     foreignKeyValues: state => column => {
       const ds = _.filter(
         state.documents,

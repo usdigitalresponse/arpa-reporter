@@ -2,7 +2,6 @@
 /* eslint camelcase: 0 */
 
 const express = require('express')
-const fs = require('fs')
 
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
@@ -11,12 +10,12 @@ const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const { user: getUser } = require('../db')
-const { documentsForUpload } = require('../db/documents')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { persistUpload, uploadFSName, ValidationError } = require('../services/process-upload')
+const { persistUpload, bufferForUpload, documentsForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
+const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
   const period_id = await reportingPeriods.getID(req.query.period_id)
@@ -99,29 +98,31 @@ router.get('/:id/documents', requireUser, async (req, res) => {
     return
   }
 
-  const documents = await documentsForUpload(upload.id)
+  const documents = await documentsForUpload(upload)
   res.json({
     upload,
     documents
   })
 })
 
-router.get('/:id/download', requireUser, (req, res) => {
+router.get('/:id/download', requireUser, async (req, res) => {
   const { id } = req.params
-  getUpload(id).then(upload => {
-    if (!upload) {
-      res.sendStatus(404)
-      res.end()
-    } else {
-      const attachmentData = fs.readFileSync(uploadFSName(upload))
-      res.header(
-        'Content-Disposition',
-        `attachment; filename="${upload.filename}"`
-      )
-      res.header('Content-Type', 'application/octet-stream')
-      res.end(Buffer.from(attachmentData, 'binary'))
-    }
-  })
+  const upload = await getUpload(id)
+
+  if (!upload) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const buffer = await bufferForUpload(upload)
+
+  res.header(
+    'Content-Disposition',
+    `attachment; filename="${upload.filename}"`
+  )
+  res.header('Content-Type', 'application/octet-stream')
+  res.end(buffer)
 })
 
 router.get('/:id/validate', requireUser, async (req, res) => {

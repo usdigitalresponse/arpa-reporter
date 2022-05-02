@@ -24,7 +24,6 @@
 <script>
 import UploadHistory from '../components/UploadHistory'
 import moment from 'moment'
-import _ from 'lodash'
 export default {
   name: 'Home',
   components: {
@@ -46,11 +45,6 @@ export default {
     },
     currentReportingPeriod: function () {
       return this.$store.getters.currentReportingPeriod
-    },
-    template: function () {
-      return _.find(this.$store.state.configuration.templates, t =>
-        t.name.match(/agency/i)
-      )
     },
     uploads: function () {
       return this.$store.state.uploads

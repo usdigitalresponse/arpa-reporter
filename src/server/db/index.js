@@ -2,13 +2,6 @@ const { v4 } = require('uuid')
 const knex = require('./connection')
 
 const {
-  createDocument,
-  createDocuments,
-  documents,
-  documentsForAgency
-} = require('./documents')
-
-const {
   currentReportingPeriodSettings,
   applicationSettings
 } = require('./settings')
@@ -145,14 +138,10 @@ module.exports = {
   accessToken,
   applicationSettings,
   createAccessToken,
-  createDocument,
-  createDocuments,
   createProject,
   createUpload,
   createUser,
   currentReportingPeriodSettings,
-  documents,
-  documentsForAgency,
   getPeriodSummaries,
   getPriorPeriodSummaries,
   getProject,

@@ -2,29 +2,11 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('../db/documents')
+const { documentsForUpload } = require('./persist-upload')
 const { setAgencyId, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 
-class ValidationError extends Error {
-  constructor (message, { severity = 1, tab = null, row = null, col = null } = {}) {
-    super(message)
-    this.severity = severity
-    this.tab = tab
-    this.row = row
-    this.col = col
-  }
-
-  toObject () {
-    return {
-      message: this.message,
-      severity: this.severity,
-      tab: this.tab,
-      row: this.row,
-      col: this.col
-    }
-  }
-}
+const ValidationError = require('../lib/validation-error')
 
 async function validateAgencyId ({ upload, documents }) {
   // grab agency id from the cover sheet
@@ -95,7 +77,7 @@ async function validateUpload (upload, user) {
   const errors = []
 
   // grab the documents
-  const documents = await documentsForUpload(upload.id)
+  const documents = await documentsForUpload(upload)
 
   // run validations, one by one
   const validations = [

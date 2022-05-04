@@ -32,7 +32,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <UploadHistory :uploads="uploads" :views="uploadHistoryViews" />
+          <UploadHistory />
         </div>
       </div>
     </div>
@@ -49,25 +49,12 @@ export default {
   components: {
     UploadHistory
   },
-  data () {
-    return {
-      uploadHistoryViews: [
-        {
-          name: 'Group by Agency',
-          groupBy: 'agency'
-        }
-      ]
-    }
-  },
   computed: {
     viewingCurrentPeriod () {
       return this.$store.getters.viewPeriodIsCurrent
     },
     isClosed: function () {
       return !(this.$store.getters.viewPeriodIsCurrent)
-    },
-    uploads: function () {
-      return this.$store.state.uploads
     },
     groups: function () {
       return this.$store.getters.documentGroups
@@ -92,9 +79,6 @@ export default {
         const records = this.groups[tableName]
         return _.filter(records, r => r.type === tableName).length
       }
-    },
-    uploadUrl (upload) {
-      return `/uploads/${upload.id || 0}`
     },
     fromNow: function (t) {
       return moment(t).fromNow()

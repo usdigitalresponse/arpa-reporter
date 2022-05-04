@@ -67,7 +67,6 @@ export default new Vuex.Store({
     applicationSettings: {},
     documents: {},
     configuration: {},
-    uploads: [],
     agencies: [],
     subrecipients: [],
     reportingPeriods: [],
@@ -103,12 +102,6 @@ export default new Vuex.Store({
       if (!state.viewPeriodID) {
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
-    },
-    setUploads (state, uploads) {
-      state.uploads = uploads
-    },
-    addUpload (state, upload) {
-      state.uploads = [upload, ...state.uploads]
     },
     addUser (state, user) {
       state.configuration.users = _.sortBy(
@@ -176,7 +169,6 @@ export default new Vuex.Store({
       }
       doFetch('application_settings')
       doFetch('configuration')
-      doFetch('uploads')
       doFetch('agencies')
       doFetch('reporting_periods')
       doFetch('subrecipients')
@@ -243,16 +235,6 @@ export default new Vuex.Store({
     },
     viewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
-      const doFetch = (attr, query) => {
-        const url = `/api/${attr}${query}`
-        fetch(url, { credentials: 'include' })
-          .then(r => r.json())
-          .then(data => {
-            const mutation = _.camelCase(`set_${attr}`)
-            commit(mutation, data[attr])
-          })
-      }
-      doFetch('uploads', `?period_id=${period_id}`)
     },
     closeReportingPeriod ({ commit }, period_id) {
       return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })

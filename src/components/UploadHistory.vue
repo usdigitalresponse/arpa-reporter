@@ -61,6 +61,9 @@ export default {
   computed: {
     limUploads: function () {
       return this.uploads?.slice(0, this.limit)
+    },
+    periodId: function () {
+      return this.$store.state.viewPeriodID
     }
   },
   methods: {
@@ -77,7 +80,7 @@ export default {
       this.uploads = null
       this.error = null
 
-      const params = new URLSearchParams()
+      const params = new URLSearchParams({ period_id: this.periodId })
       this.forAgency && params.set('for_agency', this.forAgency)
       this.only_validated && params.set('only_validated', this.onlyValidated)
 
@@ -102,13 +105,15 @@ export default {
         this.onError(this.error)
         this.error = null
       }
-    },
-    onLoad: async function () {
-      await this.loadUploads()
+    }
+  },
+  watch: {
+    periodId: async function () {
+      this.loadUploads()
     }
   },
   mounted: async function () {
-    this.onLoad()
+    this.loadUploads()
   }
 }
 </script>

@@ -17,7 +17,7 @@
       </div>
     </div>
     <h3 class="mt-3">Upload History</h3>
-    <UploadHistory :uploads="uploads" :views="uploadHistoryViews" />
+    <UploadHistory />
   </div>
 </template>
 
@@ -29,25 +29,12 @@ export default {
   components: {
     UploadHistory
   },
-  data () {
-    return {
-      uploadHistoryViews: [
-        {
-          name: 'Group by Agency',
-          groupBy: 'agency'
-        }
-      ]
-    }
-  },
   computed: {
     viewingCurrentPeriod () {
       return this.$store.getters.viewPeriodIsCurrent
     },
     currentReportingPeriod: function () {
       return this.$store.getters.currentReportingPeriod
-    },
-    uploads: function () {
-      return this.$store.state.uploads
     },
     downloadTemplateUrl () {
       const period = this.$store.getters.currentReportingPeriod

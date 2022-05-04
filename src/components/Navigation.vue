@@ -54,10 +54,6 @@
         </li>
 
         <li class="nav-item" v-if="role === 'admin'">
-          <router-link :class="navLinkClass('/projects')" to="/projects">Projects</router-link>
-        </li>
-
-        <li class="nav-item" v-if="role === 'admin'">
           <router-link :class="navLinkClass('/subrecipients')" to="/subrecipients">
             Sub Recipients
           </router-link>

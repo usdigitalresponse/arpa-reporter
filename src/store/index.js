@@ -69,7 +69,6 @@ export default new Vuex.Store({
     configuration: {},
     uploads: [],
     agencies: [],
-    projects: [],
     subrecipients: [],
     reportingPeriods: [],
     allReportingPeriods: [],
@@ -89,9 +88,6 @@ export default new Vuex.Store({
     },
     setAgencies (state, agencies) {
       state.agencies = agencies
-    },
-    setProjects (state, projects) {
-      state.projects = projects
     },
     setSubrecipients (state, subrecipients) {
       state.subrecipients = Object.freeze(subrecipients)
@@ -124,15 +120,6 @@ export default new Vuex.Store({
       state.configuration.users = _.chain(state.configuration.users)
         .map(u => (user.id === u.id ? user : u))
         .sortBy('email')
-        .value()
-    },
-    addProject (state, project) {
-      state.projects = _.sortBy([...state.projects, project], 'name')
-    },
-    updateProject (state, project) {
-      state.projects = _.chain(state.projects)
-        .map(p => (project.id === p.id ? project : p))
-        .sortBy('name')
         .value()
     },
     addSubrecipient (state, subrecipient) {
@@ -191,7 +178,6 @@ export default new Vuex.Store({
       doFetch('configuration')
       doFetch('uploads')
       doFetch('agencies')
-      doFetch('projects')
       doFetch('reporting_periods')
       doFetch('subrecipients')
     },
@@ -230,20 +216,6 @@ export default new Vuex.Store({
           }
           return response
         })
-    },
-    createProject ({ commit }, project) {
-      return post('/api/projects', project).then(response => {
-        const p = {
-          ...project,
-          ...response.project
-        }
-        commit('addProject', p)
-      })
-    },
-    updateProject ({ commit }, project) {
-      return put(`/api/projects/${project.id}`, project).then(() => {
-        commit('updateProject', project)
-      })
     },
     createSubrecipient ({ commit }, subrecipient) {
       return post('/api/subrecipients', subrecipient).then(response => {

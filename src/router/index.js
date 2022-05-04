@@ -11,7 +11,6 @@ import Project from '../views/Project.vue'
 import Projects from '../views/Projects.vue'
 import ProjectUploads from '../views/ProjectUploads.vue'
 import Upload from '../views/Upload.vue'
-import FixSubrecipients from '../views/FixSubrecipients.vue'
 import ReportingPeriod from '../views/ReportingPeriod.vue'
 import ReportingPeriods from '../views/ReportingPeriods.vue'
 import Subrecipient from '../views/Subrecipient.vue'
@@ -137,12 +136,6 @@ const routes = [
     path: '/users/:id',
     name: 'User',
     component: User,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/fix-subrecipients',
-    name: 'FixSubrecipients',
-    component: FixSubrecipients,
     meta: { requiresLogin: true }
   }
 ]

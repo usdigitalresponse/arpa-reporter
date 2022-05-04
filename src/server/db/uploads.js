@@ -5,16 +5,26 @@ const {
   getCurrentReportingPeriodID
 } = require('./settings')
 
-async function uploads (period_id) {
-  if (!period_id) {
-    console.log('uploads()')
-    period_id = await getCurrentReportingPeriodID()
+async function uploads (periodId, agencyId = null, onlyValidated = false) {
+  if (!periodId) {
+    periodId = await getCurrentReportingPeriodID()
   }
-  return knex('uploads')
+
+  let query = knex('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
-    .select('uploads.*', 'users.email as created_by')
-    .where({ reporting_period_id: period_id })
-    .orderBy('uploads.created_at', 'desc')
+    .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
+    .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
+    .where({ reporting_period_id: periodId })
+
+  if (agencyId) {
+    query = query.andWhere('uploads.agency_id', agencyId)
+  }
+
+  if (onlyValidated) {
+    query = query.andWhere('uploads.validated_at IS NOT NULL')
+  }
+
+  return query.orderBy('uploads.created_at', 'desc')
 }
 
 async function uploadsForAgency (agency_id, period_id) {

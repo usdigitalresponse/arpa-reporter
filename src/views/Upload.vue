@@ -37,6 +37,7 @@
           <li class="list-group-item">
             <span class="font-weight-bold">Filename: </span>
             {{ upload.filename }}
+            <DownloadIcon :upload="upload" />
           </li>
 
           <li class="list-group-item">
@@ -135,11 +136,13 @@
 import moment from 'moment'
 import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
+import DownloadIcon from '../components/DownloadIcon'
 import { post } from '../store'
 export default {
   name: 'Upload',
   components: {
-    AlertBox
+    AlertBox,
+    DownloadIcon
   },
   data: function () {
     return {

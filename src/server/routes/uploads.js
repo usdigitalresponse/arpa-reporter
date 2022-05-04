@@ -18,12 +18,14 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const period_id = await reportingPeriods.getID(req.query.period_id)
+  const periodId = await reportingPeriods.getID(req.query.period_id)
+
   const user = await getUser(req.signedCookies.userId)
-  const docs = user.agency_id
-    ? await uploadsForAgency(user.agency_id, period_id)
-    : await listUploads(period_id)
-  return res.json({ uploads: docs })
+  const agencyId = user.agency_id || (req.query.for_agency ?? null)
+  const onlyValidated = req.query.only_validated ?? null
+
+  const uploads = await listUploads(periodId, agencyId, onlyValidated)
+  return res.json({ uploads })
 })
 
 router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, res, next) => {
@@ -49,16 +51,17 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
   }
 })
 
-router.get('/:id', requireUser, (req, res) => {
-  const { id } = req.params
-  getUpload(id).then(upload => {
-    if (!upload) {
-      res.sendStatus(404)
-      res.end()
-    } else {
-      res.json({ upload })
-    }
-  })
+router.get('/:id', requireUser, async (req, res) => {
+  const id = Number(req.params.id)
+
+  const upload = await getUpload(id)
+  if (!upload) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  res.json({ upload })
 })
 
 router.get('/:id/series', requireUser, async (req, res) => {

@@ -1,61 +1,114 @@
 <template>
-  <DataTable v-if="hasUploads" :table="table" :rows="rows" :user="user" />
-  <span v-else>No uploads</span>
+  <table v-if="uploads && uploads.length > 0" class="table table-striped table-small m-0">
+    <thead>
+      <tr>
+        <th>ID #</th>
+        <th v-if="!forAgency">Agency</th>
+        <th>Filename</th>
+        <th>Validated?</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="upload in limUploads" :key="upload.id">
+        <td>
+          <router-link :to="`/uploads/${upload.id}`">
+            {{ upload.id }}
+          </router-link>
+        </td>
+
+        <td v-if="!forAgency">{{ upload.agency_code }}</td>
+        <td>{{ upload.filename }} <DownloadIcon :upload="upload" /></td>
+        <td>{{ upload.validated_at }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <span v-else-if="error" class="text-danger">
+    {{ this.error }}
+  </span>
+
+  <span v-else>
+    No
+    <span v-if="onlyValidated">validated</span>
+    uploads
+    <span v-if="forAgency">for agency {{ forAgency }}</span>
+    .
+  </span>
 </template>
 
 <script>
-import DataTable from '../components/DataTable'
-import DownloadIcon from './DownloadIcon'
 import moment from 'moment'
+import DownloadIcon from '../components/DownloadIcon'
+
 export default {
   name: 'UploadHistory',
-  props: {
-    uploads: Array,
-    views: Array
-  },
   components: {
-    DataTable
+    DownloadIcon
+  },
+  props: {
+    forAgency: Number,
+    onlyValidated: Boolean,
+    onError: Function,
+    limit: Number
   },
   data: function () {
-    const user = this.$store.state.user
     return {
-      user,
-      table: {
-        views: this.views,
-        columns: [
-          { name: 'filename' },
-          { name: 'agency' },
-          { name: 'created_by' },
-          { name: 'uploaded' },
-          { component: DownloadIcon }
-        ]
-      }
+      uploads: null,
+      error: null
     }
   },
   computed: {
-    rows: function () {
-      return this.uploads.map(u => {
-        return {
-          ...u,
-          agency: this.agencyName(u.agency_id),
-          uploaded: this.fromNow(u.created_at)
-        }
-      })
-    },
-    hasUploads () {
-      return this.uploads && this.uploads.length > 0
+    limUploads: function () {
+      return this.uploads?.slice(0, this.limit)
     }
   },
   methods: {
-    uploadUrl (upload) {
+    uploadUrl: function (upload) {
       return `/uploads/${upload.id}`
     },
     fromNow: function (t) {
       return moment(t).fromNow()
     },
-    agencyName (id) {
+    agencyName: function (id) {
       return this.$store.getters.agencyName(id)
+    },
+    loadUploads: async function () {
+      this.uploads = null
+      this.error = null
+
+      const params = new URLSearchParams()
+      this.forAgency && params.set('for_agency', this.forAgency)
+      this.only_validated && params.set('only_validated', this.onlyValidated)
+
+      try {
+        const resp = await fetch('/api/uploads?' + params.toString())
+        const result = (await resp.json()) || { error: (await resp.body) }
+
+        if (resp.ok) {
+          this.uploads = result.uploads
+        } else {
+          this.error = `loadUploads API Error (${resp.status}): ${result.error}`
+        }
+      } catch (e) {
+        this.error = `loadUploads Unknown Error: ${e.message}`
+      }
+
+      this.processError()
+    },
+    processError: async function () {
+      if (!this.error) return
+      if (this.onError) {
+        this.onError(this.error)
+        this.error = null
+      }
+    },
+    onLoad: async function () {
+      await this.loadUploads()
     }
+  },
+  mounted: async function () {
+    this.onLoad()
   }
 }
 </script>

@@ -4,6 +4,7 @@
       <tr>
         <th>ID #</th>
         <th v-if="!forAgency">Agency</th>
+        <th>EC Code</th>
         <th>Filename</th>
         <th>Validated?</th>
       </tr>
@@ -17,7 +18,8 @@
           </router-link>
         </td>
 
-        <td v-if="!forAgency">{{ upload.agency_code }}</td>
+        <td v-if="!forAgency">{{ upload.agency_code || 'Not set' }}</td>
+        <td>{{ upload.ec_code || 'Not set' }}</td>
         <td>{{ upload.filename }} <DownloadIcon :upload="upload" /></td>
         <td>{{ upload.validated_at }}</td>
       </tr>

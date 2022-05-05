@@ -69,12 +69,11 @@ async function persistUpload ({ filename, user, buffer }) {
 }
 
 async function bufferForUpload (upload) {
-  const data = await readFile(uploadFSName(upload))
-  return Buffer.from(data, 'binary')
+  return readFile(uploadFSName(upload))
 }
 
 async function documentsForUpload (upload) {
-  return extractDocuments(bufferForUpload(upload))
+  return extractDocuments(await bufferForUpload(upload))
 }
 
 module.exports = {

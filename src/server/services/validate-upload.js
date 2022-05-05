@@ -3,8 +3,9 @@ const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { documentsForUpload } = require('./persist-upload')
-const { setAgencyId, markValidated, markNotValidated } = require('../db/uploads')
+const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
+const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
 
@@ -27,9 +28,31 @@ async function validateAgencyId ({ upload, documents }) {
     )
   }
 
-  // convenience: set agency id on the upload for easier filtering
+  // set agency id on the upload, for disambiguation
   if (matchingAgency.id !== upload.agency_id) {
     await setAgencyId(upload.id, matchingAgency.id)
+  }
+}
+
+async function validateEcCode ({ upload, documents }) {
+  // grab ec code string from cover sheet
+  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  const codeString = coverSheet[1][3]
+
+  const codeParts = codeString.split('-')
+  const code = codeParts[0]
+  const desc = codeParts.slice(1, codeParts.length).join('-')
+
+  if (ecCodes[code] !== desc) {
+    return new ValidationError(
+      `Document EC code ${code} (${desc}) does not match any known EC code`,
+      { tab: 'cover', row: 2, col: 4 }
+    )
+  }
+
+  // set EC code on the upload, for disambiguation
+  if (code !== upload.ec_code) {
+    await setEcCode(upload.id, code)
   }
 }
 
@@ -76,12 +99,16 @@ async function validateUpload (upload, user) {
   // holder for our validation errors
   const errors = []
 
+  // holder for post-validation functions
+
   // grab the documents
   const documents = await documentsForUpload(upload)
+  console.dir(documents)
 
   // run validations, one by one
   const validations = [
     validateAgencyId,
+    validateEcCode,
     validateReportingPeriod,
     validateSubrecipients
   ]

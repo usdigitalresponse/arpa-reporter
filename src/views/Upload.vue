@@ -50,6 +50,11 @@
             {{ upload.agency_code || 'Not set' }}
           </li>
 
+          <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.ec_code }">
+            <span class="font-weight-bold">EC Code: </span>
+            {{ upload.ec_code || 'Not set' }}
+          </li>
+
           <li class="list-group-item">
             <span class="font-weight-bold">Created: </span>
             {{ displayTs(upload.created_at) }} ({{ fromNow(upload.created_at) }}) by {{ upload.created_by }}
@@ -74,8 +79,8 @@
         </ul>
       </div>
 
-      <div class="col-sm-12 col-md-6" v-if="upload.agency_id">
-        <h4>All from agency {{ upload.agency_code }} in period {{ upload.reporting_period_id }}</h4>
+      <div class="col-sm-12 col-md-6" v-if="upload.agency_id && upload.ec_code">
+        <h4>All from agency {{ upload.agency_code }} EC Code {{ upload.ec_code }} in period {{ upload.reporting_period_id }}</h4>
 
         <template v-if="seriesValid">
           <p v-if="seriesValid.id === upload.id">
@@ -92,7 +97,9 @@
           <p>
             Agency {{ upload.agency_code }}
             <span class="text-danger">does not</span>
-            have a valid upload to use in Treasury reporting for period {{ upload.reporting_period_id }}.</p>
+            have a valid upload with code
+            <span>{{ upload.ec_code }}</span>
+            to use in Treasury reporting for period {{ upload.reporting_period_id }}.</p>
         </template>
 
         <table class="table table-sm table-stripped">

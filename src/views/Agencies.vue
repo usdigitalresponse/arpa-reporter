@@ -24,7 +24,7 @@
             <td>{{ agency.code }}</td>
             <td>{{ agency.name }}</td>
             <td>
-              <UploadHistory :for-agency="agency.id" :only-validated="true" limit="3" />
+              <UploadHistory :for-agency="agency.id" :only-validated="true" :limit="3" />
             </td>
             <td>
               <router-link :to="`/agencies/${agency.id}`" class="btn btn-primary">

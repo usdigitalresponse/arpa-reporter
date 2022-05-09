@@ -1,5 +1,5 @@
 <template>
-  <div class="reporting-period">
+  <div>
     <h1>Reporting Period</h1>
     <div v-if="loading">
       Loading..
@@ -113,10 +113,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.reporting-period {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

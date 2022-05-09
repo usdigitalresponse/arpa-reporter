@@ -26,7 +26,7 @@ async function extractDocuments (buffer) {
   for (const sheetName of workbook.SheetNames) {
     documents.push({
       type: normalizeSheetName(sheetName),
-      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 })
+      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 'A1:AU200' })
     })
   }
 

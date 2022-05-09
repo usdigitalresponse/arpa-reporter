@@ -61,6 +61,10 @@ export function put (url, body) {
   })
 }
 
+function randomId () {
+  return Math.random().toString(16).substr(2, 10)
+}
+
 export default new Vuex.Store({
   state: {
     user: null,
@@ -73,7 +77,10 @@ export default new Vuex.Store({
     allReportingPeriods: [],
     messages: [],
     viewPeriodID: null,
-    recentUploadId: null
+
+    recentUploadId: null,
+    allUploads: null,
+    errors: {}
   },
   mutations: {
     setRecentUploadId (state, uploadId) {
@@ -151,6 +158,15 @@ export default new Vuex.Store({
         .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
         .sortBy('start_date')
         .value()
+    },
+    updateAllUploads (state, updatedUploads) {
+      state.allUploads = updatedUploads
+    },
+    addError (state, error) {
+      state.errors[randomId()] = error
+    },
+    dismisError (state, errorId) {
+      delete state.errors[errorId]
     }
   },
   actions: {
@@ -267,6 +283,28 @@ export default new Vuex.Store({
       return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
         commit('updateReportingPeriod', reportingPeriod)
       })
+    },
+    async updateUploads ({ commit, state }) {
+      const params = new URLSearchParams({ period_id: state.viewPeriodID })
+
+      try {
+        const resp = await fetch('/api/uploads?' + params.toString())
+
+        let result
+        try {
+          result = await resp.json()
+        } catch (jsonErr) {
+          result = await resp.body
+        }
+
+        if (resp.ok) {
+          commit('updateAllUploads', result.uploads)
+        } else {
+          commit('addError', { text: `loadUploads API Error (${resp.status}): ${result.error}`, level: 'err' })
+        }
+      } catch (e) {
+        commit('addError', { text: `loadUploads Unknown Error: ${e.message}`, level: 'err' })
+      }
     }
   },
   modules: {},

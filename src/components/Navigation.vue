@@ -72,23 +72,21 @@
       </li>
     </ul>
 
-    <div class="messages">
-      <Messages />
-    </div>
+    <AlertBox v-for="(alert, alertId) in alerts" :key="alertId" v-bind="alert" v-on:dismiss="dismissAlert(alertId)" />
 
     <router-view />
   </div>
 </template>
 
 <script>
-import Messages from './Messages'
+import AlertBox from './AlertBox'
 import { titleize } from '../helpers/form-helpers'
 import moment from 'moment'
 
 export default {
   name: 'Logout',
   components: {
-    Messages
+    AlertBox
   },
   computed: {
     user: function () {
@@ -114,13 +112,18 @@ export default {
     },
     applicationTitle: function () {
       return this.$store.getters.applicationTitle
+    },
+    alerts: function () {
+      return this.$store.state.alerts
     }
   },
   watch: {
   },
-
   methods: {
     titleize,
+    dismissAlert (alertId) {
+      this.$store.commit('dismissAlert', alertId)
+    },
     logout (e) {
       e.preventDefault()
       this.$store

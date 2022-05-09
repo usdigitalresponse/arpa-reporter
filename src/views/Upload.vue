@@ -1,7 +1,7 @@
 <template>
-  <div class="container-fluid" style="width: 90%">
+  <div>
     <div class="row">
-      <AlertBox v-if="alert" :text="alert.text" :level="alert.level" :onClose="clearAlert" />
+      <AlertBox v-if="alert" :text="alert.text" :level="alert.level" v-on:dismiss="clearAlert" />
     </div>
 
     <h4 v-if="errors.length > 0" class="row text-danger">Validation Errors</h4>
@@ -80,7 +80,13 @@
       </div>
 
       <div class="col-sm-12 col-md-6" v-if="upload.agency_id && upload.ec_code">
-        <h4>All from agency {{ upload.agency_code }} EC Code {{ upload.ec_code }} in period {{ upload.reporting_period_id }}</h4>
+        <h4>
+          All from agency
+          <span class="text-primary bg-light">{{ upload.agency_code }}</span>
+          EC Code
+          <span class="text-primary bg-light">{{ upload.ec_code }}</span>
+          in period {{ upload.reporting_period_id }}
+        </h4>
 
         <template v-if="seriesValid">
           <p v-if="seriesValid.id === upload.id">
@@ -290,6 +296,7 @@ export default {
       this.validateUpload()
     },
     onLoad: async function () {
+      this.clearAlert()
       await this.loadUpload()
       this.initialValidation()
       this.loadDocuments()

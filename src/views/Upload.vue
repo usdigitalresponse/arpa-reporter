@@ -150,7 +150,8 @@ import moment from 'moment'
 import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
 import DownloadIcon from '../components/DownloadIcon'
-import { post } from '../store'
+import { getJson, post } from '../store'
+
 export default {
   name: 'Upload',
   components: {
@@ -232,61 +233,45 @@ export default {
       this.upload = null
       this.errors = []
 
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}`)
-        const result = (await resp.json()) || { error: (await resp.body) }
-
-        if (resp.ok) {
-          this.upload = result.upload
-        } else {
-          this.alert = {
-            text: `loadUpload Error (${resp.status}): ${result.error}`,
-            level: 'err'
-          }
-        }
-      } catch (e) {
-        this.alert = {
-          text: `loadUpload Unknown Error: ${e.message}`,
+      const result = await getJson(`/api/uploads/${this.uploadId}`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadUpload Error (${result.status}): ${result.error}`,
           level: 'err'
-        }
+        })
+      } else {
+        this.upload = result.upload
       }
 
       // each time we refresh the upload, also refresh the series
       this.loadSeries()
     },
     loadSeries: async function () {
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}/series`)
-        const result = (await resp.json()) || { error: (await resp.body) }
+      this.series = []
+      this.seriesValid = null
 
-        if (resp.ok) {
-          this.series = result.series
-          this.seriesValid = result.currently_valid
-        } else {
-          this.alert = {
-            text: `loadUpload API Error (${resp.status}): ${result.error}`,
-            level: 'err'
-          }
-        }
-      } catch (e) {
-        this.alert = {
-          text: `loadUpload Unknown Error: ${e.message}`,
+      const result = await getJson(`/api/uploads/${this.uploadId}/series`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadSeries Error (${result.status}): ${result.error}`,
           level: 'err'
-        }
+        })
+      } else {
+        this.series = result.series
+        this.seriesValid = result.currently_valid
       }
     },
     loadDocuments: async function () {
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}/documents`)
-        const result = (await resp.json()) || { error: (await resp.body) }
+      this.documents = []
 
-        if (resp.ok) {
-          this.documents = result.documents
-        } else {
-          this.errors.push({ message: result.error })
-        }
-      } catch (e) {
-        this.alert = { text: `loadDocuments Unknown Error: ${e.message}`, level: 'err' }
+      const result = await getJson(`/api/uploads/${this.uploadId}/documents`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadDocuments Error: ${result.error}`,
+          level: 'err'
+        })
+      } else {
+        this.documents = result.documents
       }
     },
     initialValidation: async function () {

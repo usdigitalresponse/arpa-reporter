@@ -22,7 +22,7 @@ export async function getJson (url) {
   try {
     resp = await fetch(url)
   } catch (e) {
-    return { error: e }
+    return { error: e, status: null }
   }
 
   if (resp.ok) {
@@ -34,9 +34,10 @@ export async function getJson (url) {
       json = { error: 'Server sent invalid JSON response', text }
     }
 
+    json.status = resp.status
     return json
   } else {
-    return { error: `Server error ${resp.status} (${resp.statusText})` }
+    return { error: `Server error ${resp.status} (${resp.statusText})`, status: resp.status }
   }
 }
 

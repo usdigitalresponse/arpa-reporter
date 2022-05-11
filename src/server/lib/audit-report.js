@@ -12,6 +12,7 @@ const { getCurrentReportingPeriodID } = require('../db/settings')
 const { format } = require('date-fns')
 const { fixCellFormats } = require('../services/fix-cell-formats')
 const reportingPeriods = require('../db/reporting-periods')
+const { log } = require('../lib/log')
 
 const {
   getAggregateAwardData,
@@ -26,15 +27,6 @@ const to$ = new Intl.NumberFormat('en-US', {
 }).format
 
 let endDates
-
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.log
-}
-// let dir = () => {}
-// if (process.env.VERBOSE) {
-//   dir = console.dir
-// }
 
 module.exports = { generate: generateReport }
 

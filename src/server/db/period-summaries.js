@@ -30,15 +30,12 @@
   spreadsheet for that award.
 
 */
+const { log } = require('../lib/log')
+
 const knex = require('./connection')
 const { getCurrentReportingPeriodID } = require('./settings')
 
 const _ = require('lodash')
-
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.log
-}
 
 module.exports = {
   getPeriodSummaries: getSummaries,

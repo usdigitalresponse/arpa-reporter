@@ -1,5 +1,5 @@
 <template>
-  <div class="users">
+  <div>
     <h2>Users</h2>
     <div class="mb-4">
       <router-link to="/new_user" class="btn btn-primary"
@@ -47,18 +47,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.users {
-  width: 90%;
-  margin: 0 auto;
-}
-table {
-  width: 100%;
-  margin: 50px auto;
-}
-h2,
-td {
-  text-align: left;
-}
-</style>

@@ -19,15 +19,6 @@ const {
   uploadsForAgency
 } = require('./uploads')
 
-const {
-  createProject,
-  getProject,
-  projectByCode,
-  projectById,
-  projects,
-  updateProject
-} = require('./projects')
-
 function users () {
   return knex('users')
     .select('*')
@@ -138,22 +129,16 @@ module.exports = {
   accessToken,
   applicationSettings,
   createAccessToken,
-  createProject,
   createUpload,
   createUser,
   currentReportingPeriodSettings,
   getPeriodSummaries,
   getPriorPeriodSummaries,
-  getProject,
   knex,
   markAccessTokenUsed,
-  projectByCode,
-  projectById,
-  projects,
   readSummaries,
   roles,
   transact,
-  updateProject,
   updateUser,
   upload,
   uploads,

@@ -1,5 +1,5 @@
 <template>
-  <div class="subrecipient">
+  <div>
     <h1>Subrecipient</h1>
     <div v-if="loading">
       Loading..
@@ -91,10 +91,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.subrecipient {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

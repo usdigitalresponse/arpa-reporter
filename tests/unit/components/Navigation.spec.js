@@ -20,14 +20,17 @@ describe('Navigation.vue', () => {
     })
   })
 
-  it('renders a nav element', () => {
+  it('renders the nav element', () => {
     const wrapper = shallowMount(Navigation, {
       store,
       localVue,
       stubs: ['router-link', 'router-view']
     })
-    const r = wrapper.findAll('div.navigation')
-    expect(r.length).to.equal(1) // has one nav element
+    const navbars = wrapper.findAll('nav.navbar')
+    expect(navbars.length).to.equal(1) // has one navbar element
+
+    const navs = wrapper.findAll('ul.nav')
+    expect(navs.length).to.equal(1) // has one nav element
   })
 
   it('include title', () => {
@@ -36,7 +39,7 @@ describe('Navigation.vue', () => {
       localVue,
       stubs: ['router-link', 'router-view']
     })
-    const r = wrapper.find('.title')
+    const r = wrapper.find('a.navbar-brand')
     expect(r.text()).to.include('ARPA Reporter')
   })
 })

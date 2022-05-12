@@ -1,5 +1,5 @@
 <template>
-  <div class="agency">
+  <div>
     <h1>Agency</h1>
     <div v-if="loading">
       Loading..
@@ -77,10 +77,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.agency {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

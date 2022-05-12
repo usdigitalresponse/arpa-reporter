@@ -14,6 +14,33 @@ export function get (url) {
   return fetch(url, options)
 }
 
+// this function always returns an object. in case of success, the object is
+// the JSON sent by the server. in case of any errors, the `error` property
+// contains a description of the error.
+export async function getJson (url) {
+  let resp
+  try {
+    resp = await fetch(url)
+  } catch (e) {
+    return { error: e, status: null }
+  }
+
+  if (resp.ok) {
+    const text = await resp.text()
+    let json
+    try {
+      json = JSON.parse(text)
+    } catch (e) {
+      json = { error: 'Server sent invalid JSON response', text }
+    }
+
+    json.status = resp.status
+    return json
+  } else {
+    return { error: `Server error ${resp.status} (${resp.statusText})`, status: resp.status }
+  }
+}
+
 export function post (url, body) {
   const options = {
     method: 'POST',
@@ -61,21 +88,26 @@ export function put (url, body) {
   })
 }
 
+function randomId () {
+  return Math.random().toString(16).substr(2, 10)
+}
+
 export default new Vuex.Store({
   state: {
     user: null,
     applicationSettings: {},
     documents: {},
     configuration: {},
-    uploads: [],
     agencies: [],
-    projects: [],
     subrecipients: [],
     reportingPeriods: [],
     allReportingPeriods: [],
     messages: [],
     viewPeriodID: null,
-    recentUploadId: null
+
+    recentUploadId: null,
+    allUploads: null,
+    alerts: {}
   },
   mutations: {
     setRecentUploadId (state, uploadId) {
@@ -89,9 +121,6 @@ export default new Vuex.Store({
     },
     setAgencies (state, agencies) {
       state.agencies = agencies
-    },
-    setProjects (state, projects) {
-      state.projects = projects
     },
     setSubrecipients (state, subrecipients) {
       state.subrecipients = Object.freeze(subrecipients)
@@ -108,12 +137,6 @@ export default new Vuex.Store({
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
     },
-    setUploads (state, uploads) {
-      state.uploads = uploads
-    },
-    addUpload (state, upload) {
-      state.uploads = [upload, ...state.uploads]
-    },
     addUser (state, user) {
       state.configuration.users = _.sortBy(
         [...state.configuration.users, user],
@@ -124,15 +147,6 @@ export default new Vuex.Store({
       state.configuration.users = _.chain(state.configuration.users)
         .map(u => (user.id === u.id ? user : u))
         .sortBy('email')
-        .value()
-    },
-    addProject (state, project) {
-      state.projects = _.sortBy([...state.projects, project], 'name')
-    },
-    updateProject (state, project) {
-      state.projects = _.chain(state.projects)
-        .map(p => (project.id === p.id ? project : p))
-        .sortBy('name')
         .value()
     },
     addSubrecipient (state, subrecipient) {
@@ -171,6 +185,15 @@ export default new Vuex.Store({
         .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
         .sortBy('start_date')
         .value()
+    },
+    updateAllUploads (state, updatedUploads) {
+      state.allUploads = updatedUploads
+    },
+    addAlert (state, alert) {
+      Vue.set(state.alerts, randomId(), alert)
+    },
+    dismissAlert (state, alertId) {
+      Vue.delete(state.alerts, alertId)
     }
   },
   actions: {
@@ -189,9 +212,7 @@ export default new Vuex.Store({
       }
       doFetch('application_settings')
       doFetch('configuration')
-      doFetch('uploads')
       doFetch('agencies')
-      doFetch('projects')
       doFetch('reporting_periods')
       doFetch('subrecipients')
     },
@@ -231,20 +252,6 @@ export default new Vuex.Store({
           return response
         })
     },
-    createProject ({ commit }, project) {
-      return post('/api/projects', project).then(response => {
-        const p = {
-          ...project,
-          ...response.project
-        }
-        commit('addProject', p)
-      })
-    },
-    updateProject ({ commit }, project) {
-      return put(`/api/projects/${project.id}`, project).then(() => {
-        commit('updateProject', project)
-      })
-    },
     createSubrecipient ({ commit }, subrecipient) {
       return post('/api/subrecipients', subrecipient).then(response => {
         const s = {
@@ -271,16 +278,6 @@ export default new Vuex.Store({
     },
     viewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
-      const doFetch = (attr, query) => {
-        const url = `/api/${attr}${query}`
-        fetch(url, { credentials: 'include' })
-          .then(r => r.json())
-          .then(data => {
-            const mutation = _.camelCase(`set_${attr}`)
-            commit(mutation, data[attr])
-          })
-      }
-      doFetch('uploads', `?period_id=${period_id}`)
     },
     closeReportingPeriod ({ commit }, period_id) {
       return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })
@@ -313,6 +310,16 @@ export default new Vuex.Store({
       return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
         commit('updateReportingPeriod', reportingPeriod)
       })
+    },
+    async updateUploads ({ commit, state }) {
+      const params = new URLSearchParams({ period_id: state.viewPeriodID })
+      const result = await getJson('/api/uploads?' + params.toString())
+
+      if (result.error) {
+        commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
+      } else {
+        commit('updateAllUploads', result.uploads)
+      }
     }
   },
   modules: {},

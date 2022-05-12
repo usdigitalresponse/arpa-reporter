@@ -1,7 +1,7 @@
 <template>
-  <div class="container-fluid" style="width: 90%">
+  <div>
     <div class="row">
-      <AlertBox v-if="alert" :text="alert.text" :level="alert.level" :onClose="clearAlert" />
+      <AlertBox v-if="alert" :text="alert.text" :level="alert.level" v-on:dismiss="clearAlert" />
     </div>
 
     <h4 v-if="errors.length > 0" class="row text-danger">Validation Errors</h4>
@@ -37,6 +37,7 @@
           <li class="list-group-item">
             <span class="font-weight-bold">Filename: </span>
             {{ upload.filename }}
+            <DownloadIcon :upload="upload" />
           </li>
 
           <li class="list-group-item">
@@ -47,6 +48,11 @@
           <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.agency_id }">
             <span class="font-weight-bold">Agency: </span>
             {{ upload.agency_code || 'Not set' }}
+          </li>
+
+          <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.ec_code }">
+            <span class="font-weight-bold">EC Code: </span>
+            {{ upload.ec_code || 'Not set' }}
           </li>
 
           <li class="list-group-item">
@@ -73,8 +79,14 @@
         </ul>
       </div>
 
-      <div class="col-sm-12 col-md-6" v-if="upload.agency_id">
-        <h4>All from agency {{ upload.agency_code }} in period {{ upload.reporting_period_id }}</h4>
+      <div class="col-sm-12 col-md-6" v-if="upload.agency_id && upload.ec_code">
+        <h4>
+          All from agency
+          <span class="text-primary bg-light">{{ upload.agency_code }}</span>
+          EC Code
+          <span class="text-primary bg-light">{{ upload.ec_code }}</span>
+          in period {{ upload.reporting_period_id }}
+        </h4>
 
         <template v-if="seriesValid">
           <p v-if="seriesValid.id === upload.id">
@@ -91,7 +103,9 @@
           <p>
             Agency {{ upload.agency_code }}
             <span class="text-danger">does not</span>
-            have a valid upload to use in Treasury reporting for period {{ upload.reporting_period_id }}.</p>
+            have a valid upload with code
+            <span>{{ upload.ec_code }}</span>
+            to use in Treasury reporting for period {{ upload.reporting_period_id }}.</p>
         </template>
 
         <table class="table table-sm table-stripped">
@@ -135,11 +149,14 @@
 import moment from 'moment'
 import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
-import { post } from '../store'
+import DownloadIcon from '../components/DownloadIcon'
+import { getJson, post } from '../store'
+
 export default {
   name: 'Upload',
   components: {
-    AlertBox
+    AlertBox,
+    DownloadIcon
   },
   data: function () {
     return {
@@ -216,61 +233,45 @@ export default {
       this.upload = null
       this.errors = []
 
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}`)
-        const result = (await resp.json()) || { error: (await resp.body) }
-
-        if (resp.ok) {
-          this.upload = result.upload
-        } else {
-          this.alert = {
-            text: `loadUpload Error (${resp.status}): ${result.error}`,
-            level: 'err'
-          }
-        }
-      } catch (e) {
-        this.alert = {
-          text: `loadUpload Unknown Error: ${e.message}`,
+      const result = await getJson(`/api/uploads/${this.uploadId}`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadUpload Error (${result.status}): ${result.error}`,
           level: 'err'
-        }
+        })
+      } else {
+        this.upload = result.upload
       }
 
       // each time we refresh the upload, also refresh the series
       this.loadSeries()
     },
     loadSeries: async function () {
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}/series`)
-        const result = (await resp.json()) || { error: (await resp.body) }
+      this.series = []
+      this.seriesValid = null
 
-        if (resp.ok) {
-          this.series = result.series
-          this.seriesValid = result.currently_valid
-        } else {
-          this.alert = {
-            text: `loadUpload API Error (${resp.status}): ${result.error}`,
-            level: 'err'
-          }
-        }
-      } catch (e) {
-        this.alert = {
-          text: `loadUpload Unknown Error: ${e.message}`,
+      const result = await getJson(`/api/uploads/${this.uploadId}/series`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadSeries Error (${result.status}): ${result.error}`,
           level: 'err'
-        }
+        })
+      } else {
+        this.series = result.series
+        this.seriesValid = result.currently_valid
       }
     },
     loadDocuments: async function () {
-      try {
-        const resp = await fetch(`/api/uploads/${this.uploadId}/documents`)
-        const result = (await resp.json()) || { error: (await resp.body) }
+      this.documents = []
 
-        if (resp.ok) {
-          this.documents = result.documents
-        } else {
-          this.errors.push({ message: result.error })
-        }
-      } catch (e) {
-        this.alert = { text: `loadDocuments Unknown Error: ${e.message}`, level: 'err' }
+      const result = await getJson(`/api/uploads/${this.uploadId}/documents`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadDocuments Error: ${result.error}`,
+          level: 'err'
+        })
+      } else {
+        this.documents = result.documents
       }
     },
     initialValidation: async function () {
@@ -280,6 +281,7 @@ export default {
       this.validateUpload()
     },
     onLoad: async function () {
+      this.clearAlert()
       await this.loadUpload()
       this.initialValidation()
       this.loadDocuments()

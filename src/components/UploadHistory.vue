@@ -1,61 +1,96 @@
 <template>
-  <DataTable v-if="hasUploads" :table="table" :rows="rows" :user="user" />
-  <span v-else>No uploads</span>
+  <table v-if="uploads && uploads.length > 0" class="table table-striped table-small m-0">
+    <thead>
+      <tr>
+        <th>ID #</th>
+        <th v-if="!forAgency">Agency</th>
+        <th>EC Code</th>
+        <th>Uploaded By</th>
+        <th>Filename</th>
+        <th>Validated?</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="upload in limUploads" :key="upload.id">
+        <td>
+          <router-link :to="`/uploads/${upload.id}`">
+            {{ upload.id }}
+          </router-link>
+        </td>
+
+        <td v-if="!forAgency">{{ upload.agency_code || 'Not set' }}</td>
+        <td>{{ upload.ec_code || 'Not set' }}</td>
+        <td>{{ upload.created_by }}</td>
+        <td>{{ upload.filename }} <DownloadIcon :upload="upload" /></td>
+        <td>{{ upload.validated_at }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <span v-else>
+    No
+    <span v-if="onlyValidated">validated</span>
+    uploads
+    <span v-if="forAgency">for agency {{ forAgency }}</span>
+    .
+  </span>
 </template>
 
 <script>
-import DataTable from '../components/DataTable'
-import DownloadIcon from './DownloadIcon'
 import moment from 'moment'
+import DownloadIcon from '../components/DownloadIcon'
+
 export default {
   name: 'UploadHistory',
-  props: {
-    uploads: Array,
-    views: Array
-  },
   components: {
-    DataTable
+    DownloadIcon
   },
-  data: function () {
-    const user = this.$store.state.user
-    return {
-      user,
-      table: {
-        views: this.views,
-        columns: [
-          { name: 'filename' },
-          { name: 'agency' },
-          { name: 'created_by' },
-          { name: 'uploaded' },
-          { component: DownloadIcon }
-        ]
-      }
-    }
+  props: {
+    forAgency: Number,
+    onlyValidated: Boolean,
+    limit: Number
   },
   computed: {
-    rows: function () {
-      return this.uploads.map(u => {
-        return {
-          ...u,
-          agency: this.agencyName(u.agency_id),
-          uploaded: this.fromNow(u.created_at)
-        }
-      })
+    uploads: function () {
+      let uploads = this.$store.state.allUploads
+      if (uploads === null) return uploads
+
+      if (this.onlyValidated) {
+        uploads = uploads.filter(upload => upload.validated_at)
+      }
+
+      if (this.forAgency) {
+        uploads = uploads.filter(upload => upload.agency_id === this.forAgency)
+      }
+
+      return uploads
     },
-    hasUploads () {
-      return this.uploads && this.uploads.length > 0
+    limUploads: function () {
+      return this.uploads?.slice(0, this.limit)
+    },
+    periodId: function () {
+      return this.$store.state.viewPeriodID
     }
   },
   methods: {
-    uploadUrl (upload) {
+    uploadUrl: function (upload) {
       return `/uploads/${upload.id}`
     },
     fromNow: function (t) {
       return moment(t).fromNow()
     },
-    agencyName (id) {
+    agencyName: function (id) {
       return this.$store.getters.agencyName(id)
     }
+  },
+  watch: {
+    periodId: async function () {
+      this.$store.dispatch('updateUploads')
+    }
+  },
+  mounted: async function () {
+    this.$store.dispatch('updateUploads')
   }
 }
 </script>

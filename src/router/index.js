@@ -7,11 +7,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import NewTemplate from '../views/NewTemplate.vue'
 import NewUpload from '../views/NewUpload.vue'
-import Project from '../views/Project.vue'
-import Projects from '../views/Projects.vue'
-import ProjectUploads from '../views/ProjectUploads.vue'
 import Upload from '../views/Upload.vue'
-import FixSubrecipients from '../views/FixSubrecipients.vue'
 import ReportingPeriod from '../views/ReportingPeriod.vue'
 import ReportingPeriods from '../views/ReportingPeriods.vue'
 import Subrecipient from '../views/Subrecipient.vue'
@@ -68,30 +64,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/projects',
-    name: 'Projects',
-    component: Projects,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/new_project',
-    name: 'NewProject',
-    component: Project,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/projects/:id',
-    name: 'Project',
-    component: Project,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/project_uploads/:id',
-    name: 'ProjectUploads',
-    component: ProjectUploads,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/reporting_periods',
     name: 'ReportingPeriods',
     component: ReportingPeriods,
@@ -137,12 +109,6 @@ const routes = [
     path: '/users/:id',
     name: 'User',
     component: User,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/fix-subrecipients',
-    name: 'FixSubrecipients',
-    component: FixSubrecipients,
     meta: { requiresLogin: true }
   }
 ]

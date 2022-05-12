@@ -1,40 +1,37 @@
 <template>
-  <div class="home">
-    <div>
-      <div class="row buttons mt-5">
-        <div class="col-3">
-          <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
-        </div>
-        <div class="closed" v-show="isClosed">
-          This reporting period is closed.
-        </div>
-        <div class="col-3" v-show="viewingCurrentPeriod">
-          <a href="/api/audit_report" class="btn btn-primary"
-            >Download Audit Report</a
-          >
-        </div>
-        <div class="col-3" v-show="viewingCurrentPeriod">
-          <div @click.prevent="startUpload" class="btn btn-secondary">
-            Upload Agency Spreadsheet
-          </div>
-        </div>
-        <div class="col-3" v-show="viewingCurrentPeriod">
-          <a :href="downloadTemplateUrl" class="btn btn-secondary" download :disabled="!downloadTemplateUrl">
-            Download Empty Template
-          </a>
+  <div>
+    <div class="row buttons mt-5">
+      <div class="col-3">
+        <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
+      </div>
+      <div class="closed" v-show="isClosed">
+        This reporting period is closed.
+      </div>
+      <div class="col-3" v-show="viewingCurrentPeriod">
+        <a href="/api/audit_report" class="btn btn-primary"
+          >Download Audit Report</a
+        >
+      </div>
+      <div class="col-3" v-show="viewingCurrentPeriod">
+        <div @click.prevent="startUpload" class="btn btn-secondary">
+          Upload Agency Spreadsheet
         </div>
       </div>
+      <div class="col-3" v-show="viewingCurrentPeriod">
+        <a :href="downloadTemplateUrl" class="btn btn-secondary" download :disabled="!downloadTemplateUrl">
+          Download Empty Template
+        </a>
+      </div>
+    </div>
 
-      <div class="row mt-3">
-        <div class="col-12">
-          <h3>Upload History</h3>
-        </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <h3>Upload History</h3>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <UploadHistory :uploads="uploads" :views="uploadHistoryViews" />
-        </div>
-      </div>
+    </div>
+
+    <div class="row">
+      <UploadHistory />
     </div>
   </div>
 </template>
@@ -49,25 +46,12 @@ export default {
   components: {
     UploadHistory
   },
-  data () {
-    return {
-      uploadHistoryViews: [
-        {
-          name: 'Group by Agency',
-          groupBy: 'agency'
-        }
-      ]
-    }
-  },
   computed: {
     viewingCurrentPeriod () {
       return this.$store.getters.viewPeriodIsCurrent
     },
     isClosed: function () {
       return !(this.$store.getters.viewPeriodIsCurrent)
-    },
-    uploads: function () {
-      return this.$store.state.uploads
     },
     groups: function () {
       return this.$store.getters.documentGroups
@@ -93,9 +77,6 @@ export default {
         return _.filter(records, r => r.type === tableName).length
       }
     },
-    uploadUrl (upload) {
-      return `/uploads/${upload.id || 0}`
-    },
     fromNow: function (t) {
       return moment(t).fromNow()
     },
@@ -114,15 +95,6 @@ export default {
 </script>
 
 <style scoped>
-.home {
-  width: 90%;
-  margin: 0 auto;
-}
-h2,
-td,
-pre {
-  text-align: left;
-}
 .count {
   text-align: center;
   font-size: 30px;

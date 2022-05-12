@@ -1,11 +1,13 @@
 <template>
-  <div class="reporting-periods">
+  <div>
+    <h2>Reporting Periods</h2>
+
     <div class="mb-4">
       <router-link to="/new_reporting_period" class="btn btn-primary"
         >Create New Reporting Period</router-link
       >
     </div>
-    <h2>Reporting Periods</h2>
+
     <table class="mt-3 table table-striped">
       <thead class="thead-light">
         <tr>
@@ -46,9 +48,11 @@
         </tr>
       </tbody>
     </table>
+
     <div class="mt-3 alert alert-danger" v-if="errorMessage">
       {{ errorMessage }}
     </div>
+
     <div class="modal modal-fade" tabindex="-1" role="dialog" id="certify-reporting-period">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -132,18 +136,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.reporting-periods {
-  width: 90%;
-  margin: 0 auto;
-}
-table {
-  width: 100%;
-  margin: 50px auto;
-}
-h2,
-td {
-  text-align: left;
-}
-</style>

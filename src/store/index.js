@@ -14,6 +14,33 @@ export function get (url) {
   return fetch(url, options)
 }
 
+// this function always returns an object. in case of success, the object is
+// the JSON sent by the server. in case of any errors, the `error` property
+// contains a description of the error.
+export async function getJson (url) {
+  let resp
+  try {
+    resp = await fetch(url)
+  } catch (e) {
+    return { error: e, status: null }
+  }
+
+  if (resp.ok) {
+    const text = await resp.text()
+    let json
+    try {
+      json = JSON.parse(text)
+    } catch (e) {
+      json = { error: 'Server sent invalid JSON response', text }
+    }
+
+    json.status = resp.status
+    return json
+  } else {
+    return { error: `Server error ${resp.status} (${resp.statusText})`, status: resp.status }
+  }
+}
+
 export function post (url, body) {
   const options = {
     method: 'POST',
@@ -61,6 +88,10 @@ export function put (url, body) {
   })
 }
 
+function randomId () {
+  return Math.random().toString(16).substr(2, 10)
+}
+
 export default new Vuex.Store({
   state: {
     user: null,
@@ -73,7 +104,10 @@ export default new Vuex.Store({
     allReportingPeriods: [],
     messages: [],
     viewPeriodID: null,
-    recentUploadId: null
+
+    recentUploadId: null,
+    allUploads: null,
+    alerts: {}
   },
   mutations: {
     setRecentUploadId (state, uploadId) {
@@ -151,6 +185,15 @@ export default new Vuex.Store({
         .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
         .sortBy('start_date')
         .value()
+    },
+    updateAllUploads (state, updatedUploads) {
+      state.allUploads = updatedUploads
+    },
+    addAlert (state, alert) {
+      Vue.set(state.alerts, randomId(), alert)
+    },
+    dismissAlert (state, alertId) {
+      Vue.delete(state.alerts, alertId)
     }
   },
   actions: {
@@ -267,6 +310,16 @@ export default new Vuex.Store({
       return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
         commit('updateReportingPeriod', reportingPeriod)
       })
+    },
+    async updateUploads ({ commit, state }) {
+      const params = new URLSearchParams({ period_id: state.viewPeriodID })
+      const result = await getJson('/api/uploads?' + params.toString())
+
+      if (result.error) {
+        commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
+      } else {
+        commit('updateAllUploads', result.uploads)
+      }
     }
   },
   modules: {},

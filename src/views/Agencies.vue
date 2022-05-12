@@ -1,5 +1,5 @@
 <template>
-  <div class="data">
+  <div>
     <h2>Agencies</h2>
 
     <div class="mb-4">
@@ -53,18 +53,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.data {
-  width: 90%;
-  margin: 0 auto;
-}
-table {
-  width: 100%;
-  margin: 50px auto;
-}
-h2,
-td {
-  text-align: left;
-}
-</style>

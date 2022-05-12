@@ -3,6 +3,7 @@
 const path = require('path')
 const { mkdir, writeFile, readFile } = require('fs/promises')
 
+const debug = require('debug')('persist-uploads')
 const xlsx = require('xlsx')
 
 const reportingPeriods = require('../db/reporting-periods')
@@ -24,12 +25,14 @@ async function extractDocuments (buffer) {
 
   const documents = []
   for (const sheetName of workbook.SheetNames) {
+    debug(`extracting ${sheetName} (${workbook.Sheets[sheetName]['!ref']}`)
     documents.push({
       type: normalizeSheetName(sheetName),
-      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 })
+      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 'A1:AZ5000' })
     })
   }
 
+  debug('done extracting')
   return documents
 }
 
@@ -69,12 +72,11 @@ async function persistUpload ({ filename, user, buffer }) {
 }
 
 async function bufferForUpload (upload) {
-  const data = await readFile(uploadFSName(upload))
-  return Buffer.from(data, 'binary')
+  return readFile(uploadFSName(upload))
 }
 
 async function documentsForUpload (upload) {
-  return extractDocuments(bufferForUpload(upload))
+  return extractDocuments(await bufferForUpload(upload))
 }
 
 module.exports = {

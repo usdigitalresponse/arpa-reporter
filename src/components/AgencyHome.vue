@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <div class="row buttons mt-5">
       <div class="col-6" v-show="viewingCurrentPeriod">
         <button class="btn btn-primary" @click.prevent="startUpload">
@@ -16,8 +16,16 @@
         This reporting period is closed.
       </div>
     </div>
-    <h3 class="mt-3">Upload History</h3>
-    <UploadHistory />
+
+    <div class="row mt-3">
+      <div class="col-12">
+        <h3>Upload History</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <UploadHistory />
+    </div>
   </div>
 </template>
 

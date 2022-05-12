@@ -52,13 +52,14 @@ function upload (id) {
 
 function validForReportingPeriod (period_id) {
   return knex.with('agency_max_val', knex.raw(
-    'SELECT agency_id, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id'
+    'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id, ec_code'
   ))
     .select('uploads.*')
     .from('uploads')
     .innerJoin('agency_max_val', function () {
       this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
         .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
+        .andOn('uploads.ec_code', '=', 'agency_max_val.ec_code')
     })
 }
 
@@ -93,6 +94,12 @@ async function setAgencyId (uploadId, agencyId) {
   return knex('uploads')
     .where('id', uploadId)
     .update({ agency_id: agencyId })
+}
+
+async function setEcCode (uploadId, ecCode) {
+  return knex('uploads')
+    .where('id', uploadId)
+    .update({ ec_code: ecCode })
 }
 
 async function getPeriodUploadIDs (period_id) {
@@ -142,6 +149,7 @@ module.exports = {
   uploads,
   uploadsForAgency,
   setAgencyId,
+  setEcCode,
   markValidated,
   markNotValidated,
   validForReportingPeriod

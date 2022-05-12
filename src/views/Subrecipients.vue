@@ -1,5 +1,5 @@
 <template>
-  <div class="data">
+  <div>
     <h2>Sub Recipients</h2>
     <div>
       <FastTable v-if="subrecipients" :table="table" :rows="subrecipients" :user="user" />
@@ -52,17 +52,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.data {
-  width: 90%;
-  margin: 0 auto;
-}
-table {
-  width: 100%;
-  margin: 50px auto;
-}
-h2,
-td {
-  text-align: left;
-}
-</style>

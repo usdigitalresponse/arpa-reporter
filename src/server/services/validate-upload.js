@@ -64,10 +64,7 @@ function msDateToMoment (msDate) {
 
 async function validateReportingPeriod ({ upload, documents }) {
   const uploadPeriod = await getReportingPeriod(upload.reporting_period_id)
-
   const coverSheet = documents.find(doc => doc.type === 'cover').content
-  console.dir(coverSheet[1])
-
   const errors = []
 
   const periodStart = moment(uploadPeriod.start_date)
@@ -103,7 +100,6 @@ async function validateUpload (upload, user) {
 
   // grab the documents
   const documents = await documentsForUpload(upload)
-  console.dir(documents)
 
   // run validations, one by one
   const validations = [

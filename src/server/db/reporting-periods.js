@@ -141,17 +141,13 @@ async function closeReportingPeriod (user, period) {
 
   console.log(`closing period ${period}`)
 
-  const errLog = await writeSummaries(reporting_period_id)
+  // TODO: Should we be writing summaries?  What are summaries used for?
+  // const errLog = await writeSummaries(reporting_period_id)
 
-  const err = await subrecipients.setPeriod(reporting_period_id)
-  if (err) {
-    errLog.unshift(err)
-  }
-
-  if (errLog && errLog.length > 0) {
-    console.dir(errLog, { depth: 4 })
-    throw new Error(errLog[0])
-  }
+  // if (errLog && errLog.length > 0) {
+  //   console.dir(errLog, { depth: 4 })
+  //   throw new Error(errLog[0])
+  // }
 
   await knex('reporting_periods')
     .where({ id: reporting_period_id })

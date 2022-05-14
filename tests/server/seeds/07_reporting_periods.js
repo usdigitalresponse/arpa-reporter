@@ -13,8 +13,7 @@ exports.seed = async function (knex) {
       review_period_start_date: '2020-12-16',
       review_period_end_date: '2020-12-23',
 
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
+      reporting_template: 'empty-template.xlsx'
     },
     {
       name: 'December, 2020',
@@ -27,8 +26,7 @@ exports.seed = async function (knex) {
       review_period_end_date: '2021-01-20',
       reporting_template: 'empty-template.xlsx',
 
-      validation_rule_tags: ['cumulative'],
-      crf_end_date: '2020-12-30'
+      validation_rule_tags: ['cumulative']
     },
     {
       name: 'March, 2021',
@@ -39,8 +37,7 @@ exports.seed = async function (knex) {
       close_date: '2021-04-12',
       review_period_start_date: '2021-04-13',
       review_period_end_date: '2021-04-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
+      reporting_template: 'empty-template.xlsx'
     },
     {
       name: 'June, 2021',
@@ -51,8 +48,7 @@ exports.seed = async function (knex) {
       close_date: '2021-07-12',
       review_period_start_date: '2021-07-13',
       review_period_end_date: '2021-07-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
+      reporting_template: 'empty-template.xlsx'
     },
     {
       name: 'September, 2021',
@@ -63,8 +59,7 @@ exports.seed = async function (knex) {
       close_date: '2021-10-12',
       review_period_start_date: '2021-10-13',
       review_period_end_date: '2021-10-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
+      reporting_template: 'empty-template.xlsx'
     }
   ])
     .returning('id')

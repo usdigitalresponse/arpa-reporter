@@ -1,11 +1,8 @@
-const path = require('path')
-const { readdir, readFile } = require('fs/promises')
 const moment = require('moment')
 const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
-const { ARPA_REPORTS_DIR } = require('../environment')
 const { getTemplate } = require('./get-template')
 
 async function generateReportName (periodId) {
@@ -149,25 +146,6 @@ async function generateReport (periodId) {
   }
 }
 
-async function getPriorReport (periodId) {
-  const periodReportsDir = path.join(
-    ARPA_REPORTS_DIR,
-    periodId.toString()
-  )
-
-  const files = await readdir(periodReportsDir)
-  const lastFileName = path.join(
-    periodReportsDir,
-    files.sort()[files.length - 1]
-  )
-
-  return {
-    filename: path.basename(lastFileName),
-    contents: (await readFile(lastFileName))
-  }
-}
-
 module.exports = {
-  generateReport,
-  getPriorReport
+  generateReport
 }

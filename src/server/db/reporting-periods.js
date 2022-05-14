@@ -141,10 +141,6 @@ async function closeReportingPeriod (user, period) {
 
   console.log(`closing period ${period}`)
 
-  // throws if there is no report in the period
-  const { filename: latestTreasuryReportFileName } = await arpa.getPriorReport(reporting_period_id)
-  console.log(`Treasury Report ${latestTreasuryReportFileName}`)
-
   const errLog = await writeSummaries(reporting_period_id)
 
   const err = await subrecipients.setPeriod(reporting_period_id)
@@ -161,8 +157,7 @@ async function closeReportingPeriod (user, period) {
     .where({ id: reporting_period_id })
     .update({
       certified_at: new Date().toISOString(),
-      certified_by: user,
-      final_report_file: latestTreasuryReportFileName
+      certified_by: user
     })
 
   await setCurrentReportingPeriod(reporting_period_id + 1)

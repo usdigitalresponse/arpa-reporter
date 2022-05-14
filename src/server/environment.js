@@ -7,6 +7,8 @@ function tempDataDir () {
   return mkdtempSync(join(tmpdir(), 'arpa-data-'))
 }
 
+const VERBOSE = Boolean(process.env.VERBOSE)
+
 const DATA_DIR = resolve(process.env.DATA_DIR || tempDataDir())
 const UPLOAD_DIR = join(DATA_DIR, 'uploads')
 const ARPA_REPORTS_DIR = join(DATA_DIR, 'arpa_reports')
@@ -22,5 +24,6 @@ module.exports = {
   ARPA_REPORTS_DIR,
   SRC_DIR,
   SERVER_DATA_DIR,
-  EMPTY_TEMPLATE_NAME
+  EMPTY_TEMPLATE_NAME,
+  VERBOSE
 }

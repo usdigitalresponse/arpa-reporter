@@ -1,3 +1,5 @@
+const { VERBOSE } = require('../environment')
+
 /**
  * An alias for console.dir.
  *
@@ -6,7 +8,7 @@
  * @param {...*} messages
  */
 let dir = (...messages) => {}
-if (process.env.VERBOSE) {
+if (VERBOSE) {
   dir = console.dir
 }
 
@@ -18,7 +20,7 @@ if (process.env.VERBOSE) {
  * @param {...*} messages
  */
 let log = (...messages) => {}
-if (process.env.VERBOSE) {
+if (VERBOSE) {
   log = console.log
 }
 

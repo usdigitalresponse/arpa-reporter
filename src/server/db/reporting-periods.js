@@ -25,7 +25,6 @@
    final_report_file              | text                     |
 */
 const knex = require('./connection')
-const arpa = require('../services/generate-arpa-report')
 const { log } = require('../lib/log')
 const { cleanString } = require('../lib/spreadsheet')
 
@@ -33,12 +32,6 @@ const {
   getCurrentReportingPeriodID,
   setCurrentReportingPeriod
 } = require('./settings')
-
-const {
-  writeSummaries
-} = require('./period-summaries')
-
-const subrecipients = require('./subrecipients')
 
 module.exports = {
   get: getReportingPeriod,

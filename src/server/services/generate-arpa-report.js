@@ -4,6 +4,7 @@ const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
 const { getTemplate } = require('./get-template')
+const { documentsForPeriod } = require('./documents')
 
 async function generateReportName (periodId) {
   const now = moment().utc()
@@ -61,7 +62,50 @@ async function generateProject519521 (periodId) {
 }
 
 async function generateProjectBaseline (periodId) {
-  return getTemplate('Project Templates/projectBaselineBulkUpload')
+  const template = await getTemplate('Project Templates/projectBaselineBulkUpload')
+  const documents = documentsForPeriod(periodId)
+  const dataRows = []
+
+  documents.forEach(document => {
+    switch (document.type) {
+      case 'ec 1 - public health': {
+        dataRows.push([
+          null, // first col is blank
+          '1-Public Health',
+          'TODO detailed exp category',
+          document.content.name, // Name
+          document.content.project_identification_number__c, // Project_Identification_Number__c
+          document.content.completion_status__c, // Completion_Status__c
+          document.content.adopted_budget__c, // Adopted_Budget__c
+          document.content.total_obligations__c, // Total_Obligations__c
+          document.content.total_expenditures__c, // Total_Expenditures__c
+          document.content.current_period_obligations__c, // Current_Period_Obligations__c
+          document.content.period_expenditures__c, // Current_Period_Expenditures__c
+          document.content.does_project_include_capital_expenditure__c, // Does_Project_Include_Capital_Expenditure__c
+          document.content.total_cost_capital_expenditure__c, // Total_Cost_Capital_Expenditure__c
+          document.content.type_of_capital_expenditure__c, // Type_of_Capital_Expenditure__c
+          document.content.type_of_capital_expenditure_other__c, // Type_of_Capital_Expenditure_Other__c
+          document.content.capital_expenditure_justification__c, // Capital_Expenditure_Justification__c
+          document.content.project_description__c, // Project_Description__c
+          document.content.program_income_earned__c, // Program_Income_Earned__c
+          document.content.program_income_expended__cs, // Program_Income_Expended__cs
+          document.content.primary_project_demographics__c, // Primary_Project_Demographics__c
+          document.content.primary_project_demographics_explanation__c, // Primary_Project_Demographics_Explanation__c
+          document.content.secondary_project_demographics__c, // Secondary_Project_Demographics__c
+          document.content.secondary_proj_demographics_explanation__c, // Secondary_Proj_Demographics_Explanation__c
+          document.content.tertiary_project_demographics__c, // Tertiary_Project_Demographics__c
+          document.content.tertiary_proj_demographics_explanation__c, // Tertiary_Proj_Demographics_Explanation__c
+          document.content.structure_objectives_of_asst_programs__c, // Structure_Objectives_of_Asst_Programs__c
+          document.content.recipient_approach_description__c // Recipient_Approach_Description__c
+        ])
+      }
+    }
+  })
+
+  return [
+    ...template,
+    ...dataRows
+  ]
 }
 
 async function generateExpendituresGT50000 (periodId) {

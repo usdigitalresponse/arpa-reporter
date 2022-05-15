@@ -31,7 +31,6 @@
 
 const knex = require('./connection')
 const { getCurrentReportingPeriodID } = require('./settings')
-const _ = require('lodash')
 
 function subrecipients () {
   return knex('subrecipients')

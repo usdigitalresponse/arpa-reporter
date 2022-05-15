@@ -3,7 +3,7 @@
 const path = require('path')
 const { mkdir, writeFile, readFile } = require('fs/promises')
 
-const debug = require('debug')('persist-uploads')
+
 const xlsx = require('xlsx')
 
 const reportingPeriods = require('../db/reporting-periods')
@@ -13,28 +13,11 @@ const { UPLOAD_DIR } = require('../environment')
 
 const ValidationError = require('../lib/validation-error')
 
-const normalizeSheetName = (sheetName) => sheetName.trim().toLowerCase()
-
 const uploadFSName = (upload) => {
   const filename = `upload-id-${upload.id}${path.extname(upload.filename)}`
   return path.join(UPLOAD_DIR, filename)
 }
 
-async function extractDocuments (buffer) {
-  const workbook = await xlsx.read(buffer, { type: 'buffer' })
-
-  const documents = []
-  for (const sheetName of workbook.SheetNames) {
-    debug(`extracting ${sheetName} (${workbook.Sheets[sheetName]['!ref']}`)
-    documents.push({
-      type: normalizeSheetName(sheetName),
-      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, blankrows: false })
-    })
-  }
-
-  debug('done extracting')
-  return documents
-}
 
 async function persistUpload ({ filename, user, buffer }) {
   // let's make sure we can actually read the supplied buffer (it's a valid spreadsheet)
@@ -75,12 +58,7 @@ async function bufferForUpload (upload) {
   return readFile(uploadFSName(upload))
 }
 
-async function documentsForUpload (upload) {
-  return extractDocuments(await bufferForUpload(upload))
-}
-
 module.exports = {
   persistUpload,
-  bufferForUpload,
-  documentsForUpload
+  bufferForUpload
 }

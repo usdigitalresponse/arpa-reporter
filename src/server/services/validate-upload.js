@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('./persist-upload')
+const { documentsForUpload } = require('../services/documents')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 const { ecCodes } = require('../lib/arpa-ec-codes')

@@ -13,7 +13,8 @@ const { user: getUser } = require('../db')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { persistUpload, bufferForUpload, documentsForUpload } = require('../services/persist-upload')
+const { documentsForUpload } = require('../services/documents')
+const { persistUpload, bufferForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 

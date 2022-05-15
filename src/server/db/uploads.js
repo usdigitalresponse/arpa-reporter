@@ -28,8 +28,8 @@ async function uploads (periodId, agencyId = null, onlyValidated = false) {
 }
 
 async function uploadsForAgency (agency_id, period_id) {
+  console.log('uploadsForAgency()')
   if (!period_id) {
-    console.log('uploadsForAgency()')
     period_id = await getCurrentReportingPeriodID()
   }
 
@@ -37,6 +37,18 @@ async function uploadsForAgency (agency_id, period_id) {
     .select('*')
     .where({ reporting_period_id: period_id })
     .andWhere('agency_id', agency_id)
+    .orderBy('created_at', 'desc')
+}
+
+async function uploadsForPeriod (period_id) {
+  console.log('uploadsForPeriod()')
+  if (!period_id) {
+    period_id = await getCurrentReportingPeriodID()
+  }
+
+  return knex('uploads')
+    .select('*')
+    .where({ reporting_period_id: period_id })
     .orderBy('created_at', 'desc')
 }
 
@@ -148,6 +160,7 @@ module.exports = {
   upload,
   uploads,
   uploadsForAgency,
+  uploadsForPeriod,
   setAgencyId,
   setEcCode,
   markValidated,

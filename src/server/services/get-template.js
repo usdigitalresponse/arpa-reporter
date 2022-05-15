@@ -1,15 +1,10 @@
-
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.dir
-}
-
 const path = require('path')
 
 const fs = require('fs')
 const xlsx = require('xlsx')
 const _ = require('lodash')
 const { SERVER_DATA_DIR } = require('../environment')
+const { log } = require('../lib/log')
 const { sheetToJson } = require('../lib/spreadsheet')
 
 // cache treasury templates in memory after first load

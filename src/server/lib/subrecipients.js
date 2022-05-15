@@ -11,11 +11,7 @@ const _ = require('lodash')
 const { clean, cleanString } = require('./spreadsheet')
 const { getSubRecipients, setSubRecipient } = require('../db/subrecipients')
 const { getReportedSubrecipientIds } = require('../db/period-summaries')
-
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.log
-}
+const { log } = require('../lib/log')
 
 /*  updateSubrecipientTable() adds new subrecipients to the database
   */

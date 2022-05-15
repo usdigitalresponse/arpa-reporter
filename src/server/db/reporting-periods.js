@@ -26,6 +26,7 @@
 */
 const knex = require('./connection')
 const arpa = require('../services/generate-arpa-report')
+const { log } = require('../lib/log')
 const { cleanString } = require('../lib/spreadsheet')
 
 const {
@@ -38,10 +39,6 @@ const {
 } = require('./period-summaries')
 
 const subrecipients = require('./subrecipients')
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.log
-}
 
 module.exports = {
   get: getReportingPeriod,

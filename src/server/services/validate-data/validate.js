@@ -1,10 +1,5 @@
-
-let log = () => {}
-if (process.env.VERBOSE) {
-  log = console.dir
-}
-
 const { ValidationItem } = require('../../lib/validation-log')
+const { log } = require('../../lib/log')
 const { subrecipientKey } = require('./helpers')
 const ssf = require('ssf')
 const mustache = require('mustache')

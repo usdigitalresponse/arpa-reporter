@@ -28,7 +28,7 @@ async function extractDocuments (buffer) {
     debug(`extracting ${sheetName} (${workbook.Sheets[sheetName]['!ref']}`)
     documents.push({
       type: normalizeSheetName(sheetName),
-      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 'A1:AZ5000' })
+      content: xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, blankrows: false })
     })
   }
 

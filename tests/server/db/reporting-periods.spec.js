@@ -29,7 +29,7 @@ describe('db/reporting-periods.js', function () {
   describe('getAll', function () {
     it('Returns a list of reporting periods', async function () {
       const result = await reportingPeriods.getAll()
-      assert.equal(result.length, 5)
+      assert.equal(result.length, 21)
     })
   })
 

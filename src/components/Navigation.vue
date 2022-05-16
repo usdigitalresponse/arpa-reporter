@@ -28,7 +28,7 @@
                 v-for="(name, key) in periodNames"
                 :key="name"
                 >
-                <div @click="setViewPeriodID" :period-id=(key+1)>
+                <div @click="() => setViewPeriodID(key+1)">
                   {{ name }}
                 </div>
               </a>
@@ -141,9 +141,9 @@ export default {
         .utc()
         .format('MM-DD-YYYY')
     },
-    setViewPeriodID: function (e) {
+    setViewPeriodID: function (newID) {
       return this.$store
-        .dispatch('viewPeriodID', e.target.attributes['period-id'].value || 0)
+        .dispatch('viewPeriodID', newID)
         .catch(e => (this.errorMessage = e.message))
     }
   }

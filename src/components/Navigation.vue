@@ -51,6 +51,10 @@
         <router-link :class="navLinkClass('/')" to="/">Dashboard</router-link>
       </li>
 
+      <li class="nav-item">
+        <router-link :class="navLinkClass('/uploads')" to="/uploads">Uploads</router-link>
+      </li>
+
       <li class="nav-item" v-if="role === 'admin'">
         <router-link :class="navLinkClass('/agencies')" to="/agencies">Agencies</router-link>
       </li>
@@ -143,7 +147,7 @@ export default {
     },
     setViewPeriodID: function (newID) {
       return this.$store
-        .dispatch('viewPeriodID', newID)
+        .dispatch('setViewPeriodID', newID)
         .catch(e => (this.errorMessage = e.message))
     }
   }

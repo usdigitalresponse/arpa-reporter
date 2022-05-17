@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row mt-3 p-3 border border-success rounded" v-if="viewingOpenPeriod">
+    <div class="row m-3 p-3 border border-success rounded" v-if="viewingOpenPeriod">
       <div class="col" v-if="isAdmin">
         <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
       </div>
@@ -10,41 +10,43 @@
       </div>
 
       <div class="col">
-        <button @click.prevent="startUpload" class="btn btn-primary">Upload Spreadsheet</button>
+        <button @click.prevent="startUpload" class="btn btn-primary">Submit Spreadsheet</button>
       </div>
 
       <div class="col">
-        <a :href="downloadTemplateUrl" class="btn btn-success" download :disabled="!downloadTemplateUrl">
-          Download Empty Template
-        </a>
+        <DownloadTemplateBtn />
       </div>
     </div>
 
-    <div class="row border border-danger rounded mt-3 p-3" v-else>
+    <div class="row border border-danger rounded m-3 mb-3 p-3" v-else>
       <div class="col">
         This reporting period is closed.
       </div>
     </div>
 
-    <div class="row mt-3">
-      <div class="col-12">
-        <h3>Upload History</h3>
-      </div>
-    </div>
+    <p>
+      Welcome to the ARPA reporter.
+      To get started, click the "Download Empty Template" button, above, to get a copy of an empty template for reporting.
+    </p>
 
-    <div class="row">
-      <UploadHistory />
-    </div>
+    <p>
+      You will need to fill out one template for every EC code that your agency uses.
+      Once you've filled out a template, please return here to submit it.
+      To do that, click the "Submit Spreadsheet" button, above.
+      You can only submit spreadsheets for the currently-open reporting period.
+    </p>
+
+    <p>
+      To view a list of all submitted spreadsheets, please click on the "Uploads" tab.
+    </p>
   </div>
 </template>
 
 <script>
-import UploadHistory from '../components/UploadHistory'
+import DownloadTemplateBtn from '../components/DownloadTemplateBtn'
+
 export default {
   name: 'Home',
-  components: {
-    UploadHistory
-  },
   computed: {
     isAdmin: function () {
       return this.role === 'admin'
@@ -60,10 +62,6 @@ export default {
     },
     groups: function () {
       return this.$store.getters.documentGroups
-    },
-    downloadTemplateUrl () {
-      const period = this.$store.getters.currentReportingPeriod
-      return period ? `/api/reporting_periods/${period.id}/template` : null
     }
   },
   methods: {
@@ -76,7 +74,9 @@ export default {
         this.$router.push({ path: '/new_upload' })
       }
     }
+  },
+  components: {
+    DownloadTemplateBtn
   }
-
 }
 </script>

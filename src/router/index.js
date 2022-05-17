@@ -8,6 +8,7 @@ import Login from '../views/Login.vue'
 import NewTemplate from '../views/NewTemplate.vue'
 import NewUpload from '../views/NewUpload.vue'
 import Upload from '../views/Upload.vue'
+import Uploads from '../views/Uploads.vue'
 import ReportingPeriod from '../views/ReportingPeriod.vue'
 import ReportingPeriods from '../views/ReportingPeriods.vue'
 import Subrecipient from '../views/Subrecipient.vue'
@@ -37,6 +38,12 @@ const routes = [
     path: '/new_template/:id',
     name: 'NewTemplate',
     component: NewTemplate,
+    meta: { requiresLogin: true }
+  },
+  {
+    path: '/uploads',
+    name: 'Uploads',
+    component: Uploads,
     meta: { requiresLogin: true }
   },
   {

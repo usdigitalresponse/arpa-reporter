@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+// when making changes to this file, consider also updating the non-test seed:
+// seeds/04_reporting_periods.js
 exports.seed = async function (knex) {
   await knex('reporting_periods').del()
 

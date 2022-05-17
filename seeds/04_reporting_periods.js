@@ -1,9 +1,10 @@
 require('dotenv').config()
 
-/*
-   reporting periods loosely based on tables 3 and 4 from here:
-   https://home.treasury.gov/system/files/136/SLFRF-Compliance-and-Reporting-Guidance.pdf
-*/
+// reporting periods loosely based on tables 3 and 4 from here:
+// https://home.treasury.gov/system/files/136/SLFRF-Compliance-and-Reporting-Guidance.pdf
+//
+// when making changes to this file, consider also updating the test seed:
+// tests/server/seeds/07_reporting_periods.js
 exports.seed = async function (knex) {
   const [{ count }] = await knex('reporting_periods').count('name', { as: 'count' })
   if (count !== '0') {

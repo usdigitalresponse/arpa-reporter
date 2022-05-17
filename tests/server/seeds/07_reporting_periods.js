@@ -1,71 +1,52 @@
 require('dotenv').config()
 
+// when making changes to this file, consider also updating the non-test seed:
+// seeds/04_reporting_periods.js
 exports.seed = async function (knex) {
   await knex('reporting_periods').del()
-  await knex('reporting_periods').insert([
-    {
-      name: 'September, 2020',
-      start_date: '2020-03-01',
-      end_date: '2020-09-30',
-      period_of_performance_end_date: '2020-12-30',
-      open_date: '2020-12-01',
-      close_date: '2020-12-01',
-      review_period_start_date: '2020-12-16',
-      review_period_end_date: '2020-12-23',
 
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
-    },
+  // first period is all of 2021
+  const periods = [
     {
-      name: 'December, 2020',
-      start_date: '2020-10-01',
-      end_date: '2020-12-31',
-      period_of_performance_end_date: '2020-12-30',
-      open_date: '2020-12-25',
-      close_date: '2021-01-11',
-      review_period_start_date: '2021-01-12',
-      review_period_end_date: '2021-01-20',
-      reporting_template: 'empty-template.xlsx',
-
-      validation_rule_tags: ['cumulative'],
-      crf_end_date: '2020-12-30'
-    },
-    {
-      name: 'March, 2021',
-      start_date: '2021-01-01',
-      end_date: '2021-03-31',
-      period_of_performance_end_date: '2020-12-30',
-      open_date: '2021-01-22',
-      close_date: '2021-04-12',
-      review_period_start_date: '2021-04-13',
-      review_period_end_date: '2021-04-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
-    },
-    {
-      name: 'June, 2021',
-      start_date: '2021-04-01',
-      end_date: '2021-06-30',
-      period_of_performance_end_date: '2020-12-30',
-      open_date: '2021-04-22',
-      close_date: '2021-07-12',
-      review_period_start_date: '2021-07-13',
-      review_period_end_date: '2021-07-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
-    },
-    {
-      name: 'September, 2021',
-      start_date: '2021-07-01',
-      end_date: '2021-09-30',
-      period_of_performance_end_date: '2020-12-30',
-      open_date: '2021-07-22',
-      close_date: '2021-10-12',
-      review_period_start_date: '2021-10-13',
-      review_period_end_date: '2021-10-20',
-      reporting_template: 'empty-template.xlsx',
-      crf_end_date: '2020-12-30'
+      name: 'Quarterly 1',
+      start_date: '2021-03-03',
+      end_date: '2021-12-31',
+      open_date: '2022-01-01',
+      close_date: '2022-01-31'
     }
-  ])
-    .returning('id')
+  ]
+
+  const moment = require('moment')
+  const mstr = (mdate) => mdate.format('YYYY-MM-DD')
+
+  // generate array of reporting periods, starting from right after the first period
+  const start = moment(periods[0].end_date).add(1, 'days')
+  const finalStart = moment('2026-10-01')
+  while (!start.isAfter(finalStart)) {
+    const end = start.clone().add(2, 'months').endOf('month')
+    const open = end.clone().add(1, 'days')
+
+    // according to treasury, final reporting period closes end of march, not end of january
+    const close = start.isSame(finalStart) ? moment('2027-03-31') : open.clone().endOf('month')
+
+    periods.push({
+      name: `Quarterly ${periods.length + 1}`,
+      start_date: mstr(start),
+      end_date: mstr(end),
+      open_date: mstr(open),
+      close_date: mstr(close)
+    })
+
+    start.add(3, 'months')
+  }
+
+  // not sure what these fields are used for; these might be unnecessary
+  periods.forEach(period => {
+    period.period_of_performance_end_date = period.end_date
+    period.review_period_start_date = mstr(moment(period.open_date).add(2, 'weeks'))
+    period.review_period_end_date = period.close_date
+    period.crf_end_date = period.close_date
+  })
+
+  await knex('reporting_periods').insert(periods)
 }

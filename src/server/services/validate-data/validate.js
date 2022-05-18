@@ -4,7 +4,6 @@ const { subrecipientKey } = require('./helpers')
 const ssf = require('ssf')
 const mustache = require('mustache')
 const _ = require('lodash')
-const { getDropdownValues } = require('../get-template')
 
 function dateIsInPeriodOfPerformance (val, content, { reportingPeriod }) {
   const dt = ssf.format('yyyy-MM-dd', val)
@@ -243,19 +242,8 @@ function numberIsGreaterThanOrEqual (key) {
 }
 
 function dropdownIncludes (key) {
-  return val => {
-    const allDropdowns = getDropdownValues()
-    if (!allDropdowns) {
-      console.log(`DROPDOWN VALUES NOT INITIALIZED!! (${key})`)
-      return false
-    }
-    const dropdownValues = _.get(allDropdowns, key, [])
-
-    const rv = _.includes(dropdownValues, val.toLowerCase())
-    log(`${key}:${val} is ${rv ? 'present' : 'missing'}`)
-    // log(dropdownValues);
-    return rv
-  }
+  // TODO: re-write this
+  return val => true
 }
 
 function whenBlank (key, validator) {

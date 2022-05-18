@@ -9,6 +9,7 @@ const { requireUser } = require('../access-helpers')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
+const knex = require('../db/connection')
 const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
@@ -140,11 +141,19 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     return
   }
 
-  const errors = await validateUpload(upload, user)
-  res.json({
-    errors: errors.map(e => e.toObject()),
-    upload
-  })
+  const trns = knex.transaction()
+  try {
+    const errors = await validateUpload(upload, user, trns)
+    trns.commit()
+
+    res.json({
+      errors: errors.map(e => e.toObject()),
+      upload
+    })
+  } catch (e) {
+    trns.rollback()
+    res.status(500).json({ error: e })
+  }
 })
 
 module.exports = router

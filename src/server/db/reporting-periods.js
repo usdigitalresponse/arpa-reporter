@@ -49,22 +49,22 @@ module.exports = {
 
 /*  getAll() returns all the records from the reporting_periods table
   */
-async function getAll () {
-  return knex('reporting_periods')
+async function getAll (trns = knex) {
+  return trns('reporting_periods')
     .select('*')
     .orderBy('end_date', 'desc')
 }
 
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
-async function getReportingPeriod (period_id) {
+async function getReportingPeriod (period_id, trns = knex) {
   if (period_id && Number(period_id)) {
-    return knex('reporting_periods')
+    return trns('reporting_periods')
       .select('*')
       .where('id', period_id)
       .then(r => r[0])
   } else if (period_id === undefined) {
-    return knex('application_settings')
+    return trns('application_settings')
       .leftJoin('reporting_periods', 'application_settings.current_reporting_period_id', '=', 'reporting_periods.id')
       .select('reporting_periods.*')
       .then(r => r[0])
@@ -75,8 +75,8 @@ async function getReportingPeriod (period_id) {
 
 /* getFirstReportingPeriodStartDate() returns earliest start date
   */
-async function getFirstReportingPeriodStartDate () {
-  return knex('reporting_periods')
+async function getFirstReportingPeriodStartDate (trns = knex) {
+  return trns('reporting_periods')
     .min('start_date')
     .then(r => r[0].min)
 }
@@ -110,7 +110,7 @@ async function isCurrent (periodID) {
 
 /* closeReportingPeriod()
   */
-async function closeReportingPeriod (user, period) {
+async function closeReportingPeriod (user, period, trns = knex) {
   const reporting_period_id = await getCurrentReportingPeriodID()
 
   period = period || reporting_period_id
@@ -142,7 +142,7 @@ async function closeReportingPeriod (user, period) {
   //   throw new Error(errLog[0])
   // }
 
-  await knex('reporting_periods')
+  await trns('reporting_periods')
     .where({ id: reporting_period_id })
     .update({
       certified_at: new Date().toISOString(),
@@ -156,16 +156,16 @@ async function closeReportingPeriod (user, period) {
 
 /*  getEndDates()
   */
-async function getEndDates () {
-  return await knex('reporting_periods')
+async function getEndDates (trns = knex) {
+  return await trns('reporting_periods')
     .select('end_date')
     .orderBy('id')
 }
 
 /*  createReportingPeriod()
   */
-async function createReportingPeriod (reportingPeriod) {
-  return knex
+async function createReportingPeriod (reportingPeriod, trns = knex) {
+  return trns
     .insert(reportingPeriod)
     .into('reporting_periods')
     .returning(['id'])
@@ -179,8 +179,8 @@ async function createReportingPeriod (reportingPeriod) {
 
 /*  updateReportingPeriod()
   */
-function updateReportingPeriod (reportingPeriod) {
-  return knex('reporting_periods')
+function updateReportingPeriod (reportingPeriod, trns = knex) {
+  return trns('reporting_periods')
     .where('id', reportingPeriod.id)
     .update({
       name: cleanString(reportingPeriod.name),

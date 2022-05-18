@@ -16,10 +16,13 @@ const moment = require('moment')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
+const knex = require('../db/connection')
+const reportingPeriods = require('../db/reporting-periods')
 const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { user: getUser } = require('../db/users')
-const reportingPeriods = require('../db/reporting-periods')
+
+const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
   const allPeriods = await reportingPeriods.getAll()
@@ -196,7 +199,33 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
 
 router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const periodId = req.params.id
+  const commit = req.query.commit || false
+
+  const user = await getUser(req.signedCookies.userId)
   const reportingPeriod = await reportingPeriods.get(periodId)
+  if (!reportingPeriod) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const trns = await knex.transaction()
+  try {
+    const updates = await revalidateUploads(reportingPeriod, user, trns)
+    if (commit) {
+      trns.commit()
+    } else {
+      trns.rollback()
+    }
+
+    res.json({
+      updates
+    })
+  } catch (e) {
+    if (!trns.isCompleted()) trns.rollback()
+    res.status(500).json({ error: e.message })
+    throw e
+  }
 })
 
 module.exports = router

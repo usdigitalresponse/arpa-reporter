@@ -15,6 +15,7 @@ import Subrecipient from '../views/Subrecipient.vue'
 import Subrecipients from '../views/Subrecipients.vue'
 import User from '../views/User.vue'
 import Users from '../views/Users.vue'
+import Validation from '../views/Validation.vue'
 
 import store from '../store'
 
@@ -116,6 +117,12 @@ const routes = [
     path: '/users/:id',
     name: 'User',
     component: User,
+    meta: { requiresLogin: true }
+  },
+  {
+    path: '/validation',
+    name: 'Validation',
+    component: Validation,
     meta: { requiresLogin: true }
   }
 ]

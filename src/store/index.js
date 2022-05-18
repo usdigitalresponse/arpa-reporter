@@ -106,7 +106,7 @@ export default new Vuex.Store({
     viewPeriodID: null,
 
     recentUploadId: null,
-    allUploads: null,
+    allUploads: [],
     alerts: {}
   },
   mutations: {

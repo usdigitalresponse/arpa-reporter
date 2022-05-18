@@ -5,9 +5,9 @@ const {
   getCurrentReportingPeriodID
 } = require('./settings')
 
-async function uploads (periodId, agencyId = null, onlyValidated = false, trns = knex) {
+async function listUploads ({ periodId, agencyId = null, onlyValidated = false }, trns = knex) {
   if (!periodId) {
-    periodId = await getCurrentReportingPeriodID()
+    periodId = await getCurrentReportingPeriodID(trns)
   }
 
   let query = trns('uploads')
@@ -39,7 +39,7 @@ async function uploadsForAgency (agency_id, period_id, trns = knex) {
     .orderBy('created_at', 'desc')
 }
 
-function upload (id, trns = knex) {
+function getUpload (id, trns = knex) {
   return trns('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
     .leftJoin('users AS vusers', 'uploads.validated_by', 'vusers.id')
@@ -144,8 +144,8 @@ module.exports = {
   getPeriodUploadIDs,
   getUploadSummaries,
   createUpload,
-  upload,
-  uploads,
+  getUpload,
+  listUploads,
   uploadsForAgency,
   setAgencyId,
   setEcCode,

@@ -9,7 +9,7 @@ const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
 
-async function validateAgencyId ({ upload, documents }) {
+async function validateAgencyId ({ upload, documents, trns }) {
   // grab agency id from the cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
   const agencyCode = coverSheet['Agency Code']
@@ -20,7 +20,7 @@ async function validateAgencyId ({ upload, documents }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(agencyCode))[0]
+  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -30,11 +30,11 @@ async function validateAgencyId ({ upload, documents }) {
 
   // set agency id on the upload, for disambiguation
   if (matchingAgency.id !== upload.agency_id) {
-    await setAgencyId(upload.id, matchingAgency.id)
+    await setAgencyId(upload.id, matchingAgency.id, trns)
   }
 }
 
-async function validateEcCode ({ upload, documents }) {
+async function validateEcCode ({ upload, documents, trns }) {
   // grab ec code string from cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
@@ -52,7 +52,7 @@ async function validateEcCode ({ upload, documents }) {
 
   // set EC code on the upload, for disambiguation
   if (code !== upload.ec_code) {
-    await setEcCode(upload.id, code)
+    await setEcCode(upload.id, code, trns)
   }
 }
 

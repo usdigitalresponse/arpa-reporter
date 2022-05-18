@@ -74,6 +74,12 @@
           Reporting Periods
         </router-link>
       </li>
+
+      <li class="nav-item" v-if="role === 'admin'">
+        <router-link :class="navLinkClass('/validation')" to="/validation">
+          Validation
+        </router-link>
+      </li>
     </ul>
 
     <AlertBox v-for="(alert, alertId) in alerts" :key="alertId" v-bind="alert" v-on:dismiss="dismissAlert(alertId)" />

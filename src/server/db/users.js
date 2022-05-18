@@ -1,23 +1,6 @@
 const { v4 } = require('uuid')
+
 const knex = require('./connection')
-
-const {
-  currentReportingPeriodSettings,
-  applicationSettings
-} = require('./settings')
-
-const {
-  getPeriodSummaries,
-  getPriorPeriodSummaries,
-  readSummaries
-} = require('./period-summaries')
-
-const {
-  createUpload,
-  upload,
-  uploads,
-  uploadsForAgency
-} = require('./uploads')
 
 function users () {
   return knex('users')
@@ -117,32 +100,13 @@ function createAccessToken (email) {
   return generatePasscode(email)
 }
 
-async function transact (callback) {
-  let result
-  await knex.transaction(async queryBuilder => {
-    result = await callback(queryBuilder)
-  })
-  return result
-}
-
 module.exports = {
   accessToken,
-  applicationSettings,
   createAccessToken,
-  createUpload,
   createUser,
-  currentReportingPeriodSettings,
-  getPeriodSummaries,
-  getPriorPeriodSummaries,
-  knex,
   markAccessTokenUsed,
-  readSummaries,
   roles,
-  transact,
   updateUser,
-  upload,
-  uploads,
-  uploadsForAgency,
   user,
   userAndRole,
   users

@@ -18,7 +18,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { getPeriodSummaries, user: getUser } = require('../db')
+const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
 
 router.get('/', requireUser, async function (req, res) {
@@ -37,7 +37,7 @@ router.get('/', requireUser, async function (req, res) {
 })
 
 router.get('/summaries/', requireUser, async function (req, res) {
-  return getPeriodSummaries().then(summaries => res.json({ summaries }))
+  return reportingPeriods.getPeriodSummaries().then(summaries => res.json({ summaries }))
 })
 
 router.post('/close/', requireAdminUser, async (req, res) => {
@@ -175,14 +175,14 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
         data = await readFile(path.join(UPLOAD_DIR, templateName))
       } catch (err2) {
         if (err2.code === 'ENOENT') {
-          res.status(404).send(`Could not find template file ${templateName}`)
+          res.status(404).json({ error: `Could not find template file ${templateName}` })
           return
         } else {
-          res.status(500).send(err2.message)
+          res.status(500).json({ error: err2.message })
         }
       }
     } else {
-      res.status(500).send(err.message)
+      res.status(500).json({ error: err.message })
     }
   }
 
@@ -192,6 +192,11 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
   )
   res.header('Content-Type', 'application/octet-stream')
   res.end(Buffer.from(data, 'binary'))
+})
+
+router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
+  const periodId = req.params.id
+  const reportingPeriod = await reportingPeriods.get(periodId)
 })
 
 module.exports = router

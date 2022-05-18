@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */
 
 const fs = require('fs')
-const { upload: getUpload } = require('../db')
+const { upload: getUpload } = require('../db/uploads')
 const { validateUpload } = require('./validate-upload')
 
 const revalidateUpload = async uploadId => {

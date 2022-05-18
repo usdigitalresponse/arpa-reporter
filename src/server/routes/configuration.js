@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
-const { user: getUser, users: getUsers, roles: getRoles } = require('../db')
+const { user: getUser, users: getUsers, roles: getRoles } = require('../db/users')
 
 router.get('/', requireUser, async function (req, res) {
   const user = await getUser(req.signedCookies.userId)

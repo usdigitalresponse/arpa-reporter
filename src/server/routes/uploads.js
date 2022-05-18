@@ -9,7 +9,7 @@ const { requireUser } = require('../access-helpers')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
-const { user: getUser } = require('../db')
+const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 

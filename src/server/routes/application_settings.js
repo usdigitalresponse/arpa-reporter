@@ -3,7 +3,7 @@
 const express = require('express')
 
 const router = express.Router()
-const { applicationSettings } = require('../db')
+const { applicationSettings } = require('../db/settings')
 
 router.get('/', function (req, res) {
   applicationSettings().then(application_settings =>

@@ -1,9 +1,9 @@
-const db = process.env.POSTGRES_URL
+const { DB_URL } = require('../environment')
 
-console.log('\nConnecting to database:', db)
+console.log('\nConnecting to database:', DB_URL)
 const knex = require('knex')({
   client: 'pg',
-  connection: db,
+  connection: DB_URL,
   pool: {
     min: 0,
     idleTimeoutMillis: 10 * 60 * 1000 // minutes * seconds * milliseconds

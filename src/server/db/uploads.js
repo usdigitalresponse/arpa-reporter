@@ -40,18 +40,6 @@ async function uploadsForAgency (agency_id, period_id) {
     .orderBy('created_at', 'desc')
 }
 
-async function uploadsForPeriod (period_id) {
-  console.log('uploadsForPeriod()')
-  if (!period_id) {
-    period_id = await getCurrentReportingPeriodID()
-  }
-
-  return knex('uploads')
-    .select('*')
-    .where({ reporting_period_id: period_id })
-    .orderBy('created_at', 'desc')
-}
-
 function upload (id) {
   return knex('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
@@ -160,7 +148,6 @@ module.exports = {
   upload,
   uploads,
   uploadsForAgency,
-  uploadsForPeriod,
   setAgencyId,
   setEcCode,
   markValidated,

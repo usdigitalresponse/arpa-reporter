@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('../services/documents')
+const { recordsForUpload } = require('./records')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 const { ecCodes } = require('../lib/arpa-ec-codes')
@@ -99,7 +99,7 @@ async function validateUpload (upload, user) {
   // holder for post-validation functions
 
   // grab the documents
-  const documents = await documentsForUpload(upload)
+  const documents = await recordsForUpload(upload)
 
   // run validations, one by one
   const validations = [

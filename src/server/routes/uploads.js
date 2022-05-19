@@ -146,8 +146,9 @@ router.post('/:id/validate', requireUser, async (req, res) => {
       upload
     })
   } catch (e) {
+    console.dir(e)
     trns.rollback()
-    res.status(500).json({ error: e })
+    res.status(500).json({ error: e.message })
   }
 })
 

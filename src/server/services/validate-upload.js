@@ -2,9 +2,12 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { recordsForUpload } = require('./records')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
+const { createRecipient, getRecipient } = require('../db/arpa_recipients')
+
+const { recordsForUpload } = require('./records')
+const { rulesForUpload } = require('./validation-rules')
 const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
@@ -82,8 +85,95 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   return errors
 }
 
-function validateSubrecipients ({ upload, records }) {
+async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
+  const errors = []
 
+  // does the row already exist?
+  let existing = null
+  if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
+    existing = await getRecipient(recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
+  } else {
+    errors.push(new ValidationError(
+      'At least one of UEI or TIN must be set, but both are missing',
+      { col: 'C, D' }
+    ))
+  }
+
+  // validate that existing record and given recipient match
+  //
+  // TODO: what if the same upload specifies the same recipient multiple times,
+  // but different?
+  //
+  if (existing && existing.upload_id !== upload.id) {
+    const recipientId = existing.uei || existing.tin
+    const record = JSON.parse(existing.record)
+
+    // make sure that each key in the record matches the recipient
+    //
+    // TODO : what if the recipient has keys not found in the record?
+    //
+    for (const ek of Object.keys(record)) {
+      if (record[ek] !== recipient[ek]) {
+        errors.push(new ValidationError(
+          `Recipient ${recipientId} exists with ${ek} as ${record[ek]}, \
+          but upload specifies ${recipient[ek]}`,
+          { col: rules[ek]?.columnName }
+        ))
+      }
+    }
+
+  // validate that the record is valid before inserting
+  } else {
+    // check all the rules
+    for (const [key, rule] of Object.entries(rules)) {
+      if (rule.required) {
+        if (!recipient[key]) {
+          errors.push(new ValidationError(
+            `Value is required for ${key}`,
+            { col: rule.columnName }
+          ))
+        }
+      }
+    }
+
+    // if it's valid, we can insert it into the db
+    if (errors.length === 0) {
+      const dbRow = {
+        uei: recipient.Unique_Entity_Identifier__c,
+        tin: recipient.EIN__c,
+        record: recipient
+      }
+      await createRecipient(dbRow, trns)
+    }
+  }
+
+  return errors
+}
+
+async function validateRecipients ({ upload, records, rules, trns }) {
+  const errors = []
+
+  // validate each, and save the errors
+  const recipients = records.filter(rec => rec.type === 'subrecipient').map(r => r.content)
+
+  for (const [rowIdx, recipient] of recipients.entries()) {
+    try {
+      for (const error of await validateRecipientRecord({
+        upload, recipient, rules: rules.subrecipient, trns
+      })) {
+        error.tab = 'subrecipient'
+        error.row = 13 + rowIdx // TODO: how do we know the data starts at row 13?
+        errors.push(error)
+      }
+    } catch (e) {
+      errors.push(new ValidationError(
+        `unexpected error validating recipient: ${e}`,
+        { tab: 'subrecipient', row: 13 + rowIdx }
+      ))
+    }
+  }
+
+  return errors
 }
 
 async function validateUpload (upload, user, trns) {
@@ -95,18 +185,21 @@ async function validateUpload (upload, user, trns) {
   // grab the records
   const records = await recordsForUpload(upload)
 
+  // grab the rules
+  const rules = await rulesForUpload(upload)
+
   // list of all of our validations
   const validations = [
     validateAgencyId,
     validateEcCode,
     validateReportingPeriod,
-    validateSubrecipients
+    validateRecipients
   ]
 
   // run validations, one by one
   for (const validation of validations) {
     try {
-      errors.push(await validation({ records, upload, trns }))
+      errors.push(await validation({ upload, records, rules, trns }))
     } catch (e) {
       errors.push(new ValidationError(`validation ${validation.name} failed: ${e}`))
     }

@@ -4,10 +4,12 @@
       <AlertBox v-if="alert" :text="alert.text" :level="alert.level" v-on:dismiss="clearAlert" />
     </div>
 
-    <h4 v-if="errors.length > 0" class="row text-danger">Validation Errors</h4>
+    <div class="row">
+      <h4 v-if="errors.length > 0" class="col text-danger">Validation Errors</h4>
+    </div>
 
     <div v-if="errors.length > 0" class="row">
-      <table class="table table-sm table-bordered table-striped col-sm-12 col-md-6">
+      <table class="col table table-sm table-bordered table-striped col-sm-12 col-md-6">
         <thead>
           <tr>
             <th>#</th>
@@ -29,7 +31,9 @@
       </table>
     </div>
 
-    <h4 class="row">Upload # {{ uploadId }} details:</h4>
+    <div class="row">
+      <h4 class="col">Upload # {{ uploadId }} details:</h4>
+    </div>
 
     <div v-if="upload" class="row">
       <div class="col-sm-12 col-md-6 mb-sm-3 mb-md-1">
@@ -140,7 +144,7 @@
     </div>
 
     <div v-else class="row">
-      Loading...
+      <span class="col">Loading...</span>
     </div>
   </div>
 </template>

@@ -37,13 +37,17 @@ function extractRecords (buffer) {
 
     // entire sheet
     const sheetRange = XLSX.utils.decode_range(sheet['!ref'])
+
     // range B3:3
     const headerRange = merge({}, sheetRange, {
       s: { c: 1, r: 2 },
       e: { r: 2 }
     })
-    // range 12:
-    const contentRange = merge({}, sheetRange, { s: { c: 1, r: 11 } })
+
+    // TODO: How can we safely get the row number in which data starts
+    // across template versions?
+    // range B13:
+    const contentRange = merge({}, sheetRange, { s: { c: 1, r: 12 } })
 
     const [header] = XLSX.utils.sheet_to_json(sheet, {
       header: 1, // ask for array-of-arrays

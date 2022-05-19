@@ -25,7 +25,6 @@
    final_report_file              | text                     |
 */
 const knex = require('./connection')
-const arpa = require('../services/generate-arpa-report')
 const { log } = require('../lib/log')
 const { cleanString } = require('../lib/spreadsheet')
 
@@ -33,12 +32,6 @@ const {
   getCurrentReportingPeriodID,
   setCurrentReportingPeriod
 } = require('./settings')
-
-const {
-  writeSummaries
-} = require('./period-summaries')
-
-const subrecipients = require('./subrecipients')
 
 module.exports = {
   get: getReportingPeriod,
@@ -141,28 +134,19 @@ async function closeReportingPeriod (user, period) {
 
   console.log(`closing period ${period}`)
 
-  // throws if there is no report in the period
-  const { filename: latestTreasuryReportFileName } = await arpa.getPriorReport(reporting_period_id)
-  console.log(`Treasury Report ${latestTreasuryReportFileName}`)
+  // TODO: Should we be writing summaries?  What are summaries used for?
+  // const errLog = await writeSummaries(reporting_period_id)
 
-  const errLog = await writeSummaries(reporting_period_id)
-
-  const err = await subrecipients.setPeriod(reporting_period_id)
-  if (err) {
-    errLog.unshift(err)
-  }
-
-  if (errLog && errLog.length > 0) {
-    console.dir(errLog, { depth: 4 })
-    throw new Error(errLog[0])
-  }
+  // if (errLog && errLog.length > 0) {
+  //   console.dir(errLog, { depth: 4 })
+  //   throw new Error(errLog[0])
+  // }
 
   await knex('reporting_periods')
     .where({ id: reporting_period_id })
     .update({
       certified_at: new Date().toISOString(),
-      certified_by: user,
-      final_report_file: latestTreasuryReportFileName
+      certified_by: user
     })
 
   await setCurrentReportingPeriod(reporting_period_id + 1)

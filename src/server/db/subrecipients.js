@@ -31,7 +31,6 @@
 
 const knex = require('./connection')
 const { getCurrentReportingPeriodID } = require('./settings')
-const _ = require('lodash')
 
 function subrecipients () {
   return knex('subrecipients')
@@ -163,55 +162,11 @@ function updateSubrecipient (oldRecord, newObject) {
     })
 }
 
-/*  setPeriod() sets the created_in_period field of all the subrecipients
-  reported in this period
-  */
-async function setPeriod (reporting_period_id) {
-  let query = `
-    select distinct
-      d.content->>'subrecipient id' as subrecipient_id
-    from documents as d
-    left join uploads as u on d.upload_id = u.id
-    where u.reporting_period_id='${reporting_period_id}'
-    and d.type in ('contracts','grants','loans','transfers','direct')
-    ;`
-
-  let result = await knex.raw(query)
-  result = result.rows.map(o => o.subrecipient_id.trim())
-  result = _.uniq(result) // because trim() may have found something
-  const referenceCount = result.length
-  const subIDs = `'${result.join("','")}'`
-
-  query = `
-    update subrecipients
-    set created_in_period=${reporting_period_id}
-    where identification_number in (${subIDs})
-  ;`
-  result = await knex.raw(query)
-  let updateCount = Number(result.rowCount) || 0
-
-  if (updateCount !== referenceCount) {
-    query = `
-      update subrecipients
-      set created_in_period=${reporting_period_id}
-      where duns_number in (${subIDs})
-    ;`
-    result = await knex.raw(query)
-    updateCount += Number(result.rowCount) || 0
-  }
-  const diff = referenceCount - updateCount
-  if (diff) {
-    return `Failed to update ${diff} subrecipient records`
-  }
-  return null
-}
-
 module.exports = {
   getSubRecipients,
   getSubRecipientsByPeriod,
   setSubRecipient,
   subrecipients,
-  setPeriod,
   createSubrecipient,
   updateSubrecipient,
   subrecipientById

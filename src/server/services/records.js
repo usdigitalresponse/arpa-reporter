@@ -8,7 +8,12 @@ const { log } = require('../lib/log')
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
 
-const DATA_SHEETS = ['EC 1 - Public Health', 'EC 2 - Negative Economic Impact']
+const DATA_SHEETS = [
+  'EC 1 - Public Health',
+  'EC 2 - Negative Economic Impact',
+  'Awards > 50000',
+  'Expenditures > 50000'
+]
 
 const normalizeSheetName = sheetName => sheetName.trim().toLowerCase()
 

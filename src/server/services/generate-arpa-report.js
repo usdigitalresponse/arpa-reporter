@@ -116,7 +116,28 @@ async function generateProjectBaseline (periodId) {
 }
 
 async function generateExpendituresGT50000 (periodId) {
-  return await getTemplate('expendituresGT50000BulkUpload')
+  const template = await getTemplate('expendituresGT50000BulkUpload')
+  const records = await recordsForReportingPeriod(periodId)
+  const dataRows = []
+
+  records.forEach(record => {
+    switch (record.type) {
+      case 'expenditures > 50000': {
+        dataRows.push([
+          null, // first col is blank
+          record.content.Sub_Award_Lookup__c,
+          record.content.Expenditure_Start__c,
+          record.content.Expenditure_End__c,
+          record.content.Expenditure_Amount__c
+        ])
+      }
+    }
+  })
+
+  return [
+    ...template,
+    ...dataRows
+  ]
 }
 
 async function generateExpendituresLT50000 (periodId) {
@@ -128,7 +149,44 @@ async function generatePaymentsIndividualsLT50000 (periodId) {
 }
 
 async function generateSubaward (periodId) {
-  return await getTemplate('subawardBulkUpload')
+  const template = await getTemplate('subawardBulkUpload')
+  const records = await recordsForReportingPeriod(periodId)
+  const dataRows = []
+
+  records.forEach(record => {
+    switch (record.type) {
+      case 'awards > 50000': {
+        dataRows.push([
+          null, // first col is blank
+          record.content.Recipient_UEI__c,
+          record.content.Recipient_EIN__c,
+          record.content.Project_Identification_Number__c,
+          record.content.Award_No__c,
+          record.content.Award_Type__c,
+          record.content.Award_Amount__c,
+          record.content.Award_Date__c,
+          record.content.Primary_Sector__c,
+          record.content.If_Other__c,
+          record.content.Period_of_Performance_Start__c,
+          record.content.Period_of_Performance_End__c,
+          record.content.Place_of_Performance_Address_1__c,
+          record.content.Place_of_Performance_Address_2__c,
+          record.content.Place_of_Performance_Address_3__c,
+          record.content.Place_of_Performance_City__c,
+          record.content.State_Abbreviated__c,
+          record.content.Place_of_Performance_Zip__c,
+          record.content.Place_of_Performance_Zip_4__c,
+          record.content.Purpose_of_Funds__c,
+          record.content.Description__c
+        ])
+      }
+    }
+  })
+
+  return [
+    ...template,
+    ...dataRows
+  ]
 }
 
 async function generateSubRecipient (periodId) {

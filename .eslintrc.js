@@ -15,7 +15,8 @@ module.exports = {
   },
 
   rules: {
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'quote-props': [2, 'consistent-as-needed']
   },
 
   overrides: [

@@ -79,7 +79,7 @@ async function generateProjectBaseline (periodId) {
         dataRows.push([
           null, // first col is blank
           '1-Public Health',
-          'TODO detailed exp category',
+          record.subcategory,
           record.content.Name,
           record.content.Project_Identification_Number__c,
           record.content.Completion_Status__c,

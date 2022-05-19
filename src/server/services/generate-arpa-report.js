@@ -3,7 +3,9 @@ const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
+const { log } = require('../lib/log')
 const { getTemplate } = require('./get-template')
+const { recordsForReportingPeriod } = require('./records')
 
 async function generateReportName (periodId) {
   const now = moment().utc()
@@ -61,7 +63,56 @@ async function generateProject519521 (periodId) {
 }
 
 async function generateProjectBaseline (periodId) {
-  return getTemplate('Project Templates/projectBaselineBulkUpload')
+  const template = await getTemplate('Project Templates/projectBaselineBulkUpload')
+  const records = await recordsForReportingPeriod(periodId)
+  const dataRows = []
+
+  log(`generateProjectBaseline(${periodId})`)
+  log('records.length', records.length)
+
+  log('records', records)
+
+  records.forEach(record => {
+    log('record.type', record.type)
+    switch (record.type) {
+      case 'ec 1 - public health': {
+        dataRows.push([
+          null, // first col is blank
+          '1-Public Health',
+          'TODO detailed exp category',
+          record.content.Name,
+          record.content.Project_Identification_Number__c,
+          record.content.Completion_Status__c,
+          record.content.Adopted_Budget__c,
+          record.content.Total_Obligations__c,
+          record.content.Total_Expenditures__c,
+          record.content.Current_Period_Obligations__c,
+          record.content.Current_Period_Expenditures__c,
+          record.content.Does_Project_Include_Capital_Expenditure__c,
+          record.content.Total_Cost_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure_Other__c,
+          record.content.Capital_Expenditure_Justification__c,
+          record.content.Project_Description__c,
+          record.content.Program_Income_Earned__c,
+          record.content.Program_Income_Expended__cs,
+          record.content.Primary_Project_Demographics__c,
+          record.content.Primary_Project_Demographics_Explanation__c,
+          record.content.Secondary_Project_Demographics__c,
+          record.content.Secondary_Proj_Demographics_Explanation__c,
+          record.content.Tertiary_Project_Demographics__c,
+          record.content.Tertiary_Proj_Demographics_Explanation__c,
+          record.content.Structure_Objectives_of_Asst_Programs__c,
+          record.content.Recipient_Approach_Description__c
+        ])
+      }
+    }
+  })
+
+  return [
+    ...template,
+    ...dataRows
+  ]
 }
 
 async function generateExpendituresGT50000 (periodId) {

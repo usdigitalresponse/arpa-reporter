@@ -29,7 +29,6 @@ async function uploads (periodId, agencyId = null, onlyValidated = false) {
 
 async function uploadsForAgency (agency_id, period_id) {
   if (!period_id) {
-    console.log('uploadsForAgency()')
     period_id = await getCurrentReportingPeriodID()
   }
 

@@ -12,7 +12,7 @@ const {
   loanMatches,
   matchesFilePart,
   numberIsLessThanOrEqual,
-  validateDocuments,
+  validateRecords,
   whenNotBlank,
   whenUS
 } = require('./validate')
@@ -105,4 +105,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('loans', requiredFields)
+module.exports = validateRecords('loans', requiredFields)

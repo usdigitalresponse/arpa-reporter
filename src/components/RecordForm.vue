@@ -15,7 +15,7 @@
         >
           {{ buttonLabel }}
         </button>
-        <a class="ml-5" href="#" @click="cancelEditDocument">Cancel</a>
+        <a class="ml-5" href="#" @click="cancelEditRecord">Cancel</a>
       </div>
     </form>
     <div class="mt-3 alert alert-danger" v-if="errorMessage">
@@ -41,7 +41,7 @@ import {
 } from '../helpers/form-helpers'
 import _ from 'lodash'
 export default {
-  name: 'DocumentForm',
+  name: 'RecordForm',
   props: {
     type: String,
     columns: Array,
@@ -111,7 +111,7 @@ export default {
       }
       return Promise.resolve(null)
     },
-    cancelEditDocument (e) {
+    cancelEditRecord (e) {
       e.preventDefault()
       if (_.isFunction(this.onCancel)) {
         this.onCancel()

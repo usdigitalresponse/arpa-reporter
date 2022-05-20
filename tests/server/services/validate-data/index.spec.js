@@ -4,7 +4,7 @@ const { validateData } = requireSrc(__filename)
 const expect = require('chai').expect
 
 describe.skip('validateData', () => {
-  const documents = [
+  const records = [
     {
       type: 'cover',
       content: {
@@ -55,7 +55,7 @@ describe.skip('validateData', () => {
       validation_rule_tags: []
     }
     const fileParts = { agencyCode: '1', projectId: '100' }
-    const result = validateData(documents, fileParts, reportingPeriod, {}, new Date(2020, 3, 1))
+    const result = validateData(records, fileParts, reportingPeriod, {}, new Date(2020, 3, 1))
     expect(result, JSON.stringify(result)).to.be.empty
   })
   it('includes tagged validations', () => {
@@ -67,7 +67,7 @@ describe.skip('validateData', () => {
       validation_rule_tags: ['v2']
     }
     const fileParts = { agencyCode: '1', projectId: '100' }
-    const result = validateData(documents, fileParts, reportingPeriod, {}, new Date(2020, 3, 1))
+    const result = validateData(records, fileParts, reportingPeriod, {}, new Date(2020, 3, 1))
     expect(result, JSON.stringify(result)).to.have.length(1)
     expect(result[0].info.message).to.equal('Contract amount must be at least $50,000')
   })

@@ -20,7 +20,7 @@ const {
   isValidZip,
   matchesFilePart,
   numberIsLessThanOrEqual,
-  validateDocuments,
+  validateRecords,
   whenGreaterThanZero,
   whenNotBlank,
   whenUS
@@ -233,4 +233,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('contracts', requiredFields)
+module.exports = validateRecords('contracts', requiredFields)

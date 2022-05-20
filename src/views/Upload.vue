@@ -161,7 +161,6 @@ export default {
   data: function () {
     return {
       upload: null,
-      documents: [],
       errors: [],
       series: [],
       seriesValid: null,
@@ -261,19 +260,6 @@ export default {
         this.seriesValid = result.currently_valid
       }
     },
-    loadDocuments: async function () {
-      this.documents = []
-
-      const result = await getJson(`/api/uploads/${this.uploadId}/documents`)
-      if (result.error) {
-        this.$store.commit('addAlert', {
-          text: `loadDocuments Error: ${result.error}`,
-          level: 'err'
-        })
-      } else {
-        this.documents = result.documents
-      }
-    },
     initialValidation: async function () {
       if (!this.isRecentlyUploaded) return
 
@@ -284,7 +270,6 @@ export default {
       this.clearAlert()
       await this.loadUpload()
       this.initialValidation()
-      this.loadDocuments()
     }
   },
   watch: {

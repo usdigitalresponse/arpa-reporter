@@ -93,7 +93,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   })
 })
 
-router.get('/:id/documents', requireUser, async (req, res) => {
+router.get('/:id/records', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
@@ -103,10 +103,10 @@ router.get('/:id/documents', requireUser, async (req, res) => {
     return
   }
 
-  const documents = await recordsForUpload(upload)
+  const records = await recordsForUpload(upload)
   res.json({
     upload,
-    documents
+    records
   })
 })
 

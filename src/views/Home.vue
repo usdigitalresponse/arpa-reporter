@@ -59,9 +59,6 @@ export default {
     },
     isClosed: function () {
       return !(this.$store.getters.viewPeriodIsCurrent)
-    },
-    groups: function () {
-      return this.$store.getters.documentGroups
     }
   },
   methods: {

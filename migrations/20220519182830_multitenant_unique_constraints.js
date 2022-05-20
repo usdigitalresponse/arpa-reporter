@@ -3,15 +3,14 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  // In order to drop the UNIQUE constraint, we have to first drop FOREIGN KEY
-  // references to it (then re-add a composite version after), otherwise Postgres
-  // errors with "cannot drop constraint projects_code_unique on table projects
-  // because other objects depend on it"
-  // See https://dba.stackexchange.com/q/137240
-
   // projects table
   let schema = knex.schema
     .alterTable("period_summaries", function (table) {
+      // In order to drop the UNIQUE constraint, we have to first drop FOREIGN KEY
+      // references to it (then re-add a composite version after), otherwise Postgres
+      // errors with "cannot drop constraint projects_code_unique on table projects
+      // because other objects depend on it"
+      // See https://dba.stackexchange.com/q/137240
       table.dropForeign(["project_code"]);
     })
     .alterTable("projects", function (table) {
@@ -38,6 +37,29 @@ exports.up = function (knex) {
     table.unique(["tenant_id", "name"]).dropUnique(["name"]);
   });
 
+  // subrecipients table
+  schema = schema
+    .alterTable("period_summaries", function (table) {
+      // In order to drop the UNIQUE constraint, we have to first drop FOREIGN KEY
+      // references to it (then re-add a composite version after), otherwise Postgres
+      // errors with "cannot drop constraint projects_code_unique on table projects
+      // because other objects depend on it"
+      // See https://dba.stackexchange.com/q/137240
+      table.dropForeign("subrecipient_identification_number");
+    })
+    .alterTable("subrecipients", function (table) {
+      table
+        .unique(["tenant_id", "identification_number"])
+        .dropUnique(["identification_number"]);
+      table.unique(["tenant_id", "duns_number"]).dropUnique(["duns_number"]);
+    })
+    .alterTable("period_summaries", function (table) {
+      table
+        .foreign(["tenant_id", "subrecipient_identification_number"])
+        .references(["tenant_id", "identification_number"])
+        .inTable("subrecipients");
+    });
+
   return schema;
 };
 
@@ -49,6 +71,11 @@ exports.down = function (knex) {
   // projects table
   let schema = knex.schema
     .alterTable("period_summaries", function (table) {
+      // In order to drop the UNIQUE constraint, we have to first drop FOREIGN KEY
+      // references to it (then re-add a composite version after), otherwise Postgres
+      // errors with "cannot drop constraint projects_code_unique on table projects
+      // because other objects depend on it"
+      // See https://dba.stackexchange.com/q/137240
       table.dropForeign(["tenant_id", "project_code"]);
     })
     .alterTable("projects", function (table) {
@@ -71,6 +98,28 @@ exports.down = function (knex) {
   schema = schema.alterTable("reporting_periods", function (table) {
     table.unique(["name"]).dropUnique(["tenant_id", "name"]);
   });
+
+  // subrecipients table
+  schema = schema
+    .alterTable("period_summaries", function (table) {
+      // In order to drop the UNIQUE constraint, we have to first drop FOREIGN KEY
+      // references to it (then re-add a composite version after), otherwise Postgres
+      // errors with "cannot drop constraint projects_code_unique on table projects
+      // because other objects depend on it"
+      // See https://dba.stackexchange.com/q/137240
+      table.dropForeign(["tenant_id", "subrecipient_identification_number"]);
+    })
+    .alterTable("subrecipients", function (table) {
+      table
+        .unique(["identification_number"])
+        .dropUnique(["tenant_id", "identification_number"]);
+      table.unique(["duns_number"]).dropUnique(["tenant_id", "duns_number"]);
+    })
+    .alterTable("period_summaries", function (table) {
+      table
+        .foreign("subrecipient_identification_number")
+        .references("subrecipients.identification_number");
+    });
 
   return schema;
 };

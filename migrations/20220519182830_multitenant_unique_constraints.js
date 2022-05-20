@@ -33,6 +33,11 @@ exports.up = function (knex) {
     table.unique(["tenant_id", "code"]).dropUnique(["code"]);
   });
 
+  // reporting_periods table
+  schema = schema.alterTable("reporting_periods", function (table) {
+    table.unique(["tenant_id", "name"]).dropUnique(["name"]);
+  });
+
   return schema;
 };
 
@@ -60,6 +65,11 @@ exports.down = function (knex) {
   schema = schema.alterTable("agencies", function (table) {
     table.unique(["name"]).dropUnique(["tenant_id", "name"]);
     table.unique(["code"]).dropUnique(["tenant_id", "code"]);
+  });
+
+  // reporting_periods table
+  schema = schema.alterTable("reporting_periods", function (table) {
+    table.unique(["name"]).dropUnique(["tenant_id", "name"]);
   });
 
   return schema;

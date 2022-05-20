@@ -32,7 +32,7 @@ async function loadTemplate (templateName) {
   }
 
   const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-  return xlsx.utils.sheet_to_json(worksheet, { header: 1 })
+  return xlsx.utils.sheet_to_json(worksheet, { header: 1, blankrows: false })
 }
 
 /*                                 *  *  *                                    */

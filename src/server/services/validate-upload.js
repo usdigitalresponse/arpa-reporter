@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('../services/documents')
+const { recordsForUpload } = require('./records')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 const { ecCodes } = require('../lib/arpa-ec-codes')
@@ -12,7 +12,7 @@ const ValidationError = require('../lib/validation-error')
 async function validateAgencyId ({ upload, documents }) {
   // grab agency id from the cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
-  const agencyCode = coverSheet[1][0]
+  const agencyCode = coverSheet['Agency Code']
 
   // must be set
   if (!agencyCode) {
@@ -37,7 +37,7 @@ async function validateAgencyId ({ upload, documents }) {
 async function validateEcCode ({ upload, documents }) {
   // grab ec code string from cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
-  const codeString = coverSheet[1][3]
+  const codeString = coverSheet['Detailed Expenditure Category']
 
   const codeParts = codeString.split('-')
   const code = codeParts[0]
@@ -68,7 +68,7 @@ async function validateReportingPeriod ({ upload, documents }) {
   const errors = []
 
   const periodStart = moment(uploadPeriod.start_date)
-  const sheetStart = msDateToMoment(coverSheet[1][4])
+  const sheetStart = msDateToMoment(coverSheet['Reporting Period Start Date'])
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
       `Upload reporting period starts ${periodStart.format('L')} while document specifies ${sheetStart.format('L')}`,
@@ -77,7 +77,7 @@ async function validateReportingPeriod ({ upload, documents }) {
   }
 
   const periodEnd = moment(uploadPeriod.end_date)
-  const sheetEnd = msDateToMoment(coverSheet[1][5])
+  const sheetEnd = msDateToMoment(coverSheet['Reporting Period End Date'])
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
       `Upload reporting period ends ${periodEnd.format('L')} while document specifies ${sheetEnd.format('L')}`,
@@ -99,7 +99,7 @@ async function validateUpload (upload, user) {
   // holder for post-validation functions
 
   // grab the documents
-  const documents = await documentsForUpload(upload)
+  const documents = await recordsForUpload(upload)
 
   // run validations, one by one
   const validations = [

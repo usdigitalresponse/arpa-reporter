@@ -13,7 +13,7 @@ const { user: getUser } = require('../db')
 const reportingPeriods = require('../db/reporting-periods')
 const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
 
-const { documentsForUpload } = require('../services/documents')
+const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
@@ -102,7 +102,7 @@ router.get('/:id/documents', requireUser, async (req, res) => {
     return
   }
 
-  const documents = await documentsForUpload(upload)
+  const documents = await recordsForUpload(upload)
   res.json({
     upload,
     documents

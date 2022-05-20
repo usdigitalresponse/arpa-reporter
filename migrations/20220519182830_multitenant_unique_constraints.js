@@ -25,6 +25,14 @@ exports.up = function (knex) {
         .inTable("projects");
     });
 
+  // agencies table
+  // NOTE(mbroussard): when copying this migration to GOST repo, comment out sections dealing with
+  // agencies table since it already exists there with appropriate constraints.
+  schema = schema.alterTable("agencies", function (table) {
+    table.unique(["tenant_id", "name"]).dropUnique(["name"]);
+    table.unique(["tenant_id", "code"]).dropUnique(["code"]);
+  });
+
   return schema;
 };
 
@@ -45,6 +53,14 @@ exports.down = function (knex) {
     .alterTable("period_summaries", function (table) {
       table.foreign("project_code").references("projects.code");
     });
+
+  // agencies table
+  // NOTE(mbroussard): when copying this migration to GOST repo, comment out sections dealing with
+  // agencies table since it already exists there with appropriate constraints.
+  schema = schema.alterTable("agencies", function (table) {
+    table.unique(["name"]).dropUnique(["tenant_id", "name"]);
+    table.unique(["code"]).dropUnique(["tenant_id", "code"]);
+  });
 
   return schema;
 };

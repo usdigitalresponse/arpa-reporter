@@ -292,6 +292,11 @@ async function generateReport (periodId) {
       throw new Error(`CSV Data from ${name} was not an array!`)
     }
 
+    // ignore empty CSV files
+    if (csvData.length === 0) {
+      return
+    }
+
     const template = await getTemplate(name)
 
     const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData])

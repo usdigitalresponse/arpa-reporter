@@ -301,7 +301,7 @@ async function generateReport (periodId) {
 
     const template = await getTemplate(name)
 
-    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData])
+    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
     const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
     const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
     zip.addFile(name + '.csv', buffer)

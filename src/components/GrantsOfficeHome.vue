@@ -2,7 +2,22 @@
   <div>
     <div class="row buttons mt-5">
       <div class="col-3">
-        <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
+        <a
+          :href="downloadUrl()"
+          class="btn btn-primary"
+          :class="{ disabled: isLoading }"
+          @click="setLoadingState"
+          download
+        >
+          <span
+            v-if="isLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          <span v-if="isLoading"> Loading...</span>
+          <span v-else> Download Treasury Report</span>
+        </a>
       </div>
       <div class="closed" v-show="isClosed">
         This reporting period is closed.
@@ -46,6 +61,13 @@ export default {
   components: {
     UploadHistory
   },
+  mounted () {
+    window.addEventListener('focus', this.clearLoadingState.bind(this))
+  },
+  destroyed () {
+    window.addEventListener('focus', this.clearLoadingState.bind(this))
+  },
+
   computed: {
     viewingCurrentPeriod () {
       return this.$store.getters.viewPeriodIsCurrent
@@ -61,13 +83,22 @@ export default {
       return period ? `/api/reporting_periods/${period.id}/template` : null
     }
   },
-  watch: {
+  data () {
+    return {
+      isLoading: false
+    }
   },
   methods: {
     titleize,
     downloadUrl () {
       const periodId = this.$store.getters.viewPeriod.id || 0
       return `/api/exports?period_id=${periodId}`
+    },
+    clearLoadingState () {
+      this.isLoading = false
+    },
+    setLoadingState () {
+      this.isLoading = true
     },
     documentCount (tableName) {
       if (tableName === 'subrecipient') {

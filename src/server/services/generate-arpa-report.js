@@ -180,6 +180,8 @@ async function generateExpendituresGT50000 (records) {
           record.content.Expenditure_Amount__c
         ]
       }
+      default:
+        return null
     }
   }).filter(isNotNull)
 }

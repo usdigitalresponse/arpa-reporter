@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="row m-3 p-3 border border-success rounded" v-if="viewingOpenPeriod">
+    <div class="row mt-5 mb-5" v-if="viewingOpenPeriod">
       <div class="col" v-if="isAdmin">
-        <a :href="downloadUrl()" class="btn btn-primary">Download Treasury Report</a>
+        <a :href="downloadUrl()" class="btn btn-primary btn-block">Download Treasury Report</a>
       </div>
 
       <div class="col" v-if="isAdmin && false">
-        <a href="/api/audit_report" class="btn btn-info">Download Audit Report</a>
+        <a href="/api/audit_report" class="btn btn-info btn-block">Download Audit Report</a>
       </div>
 
       <div class="col">
-        <button @click.prevent="startUpload" class="btn btn-primary">Submit Spreadsheet</button>
+        <button @click.prevent="startUpload" class="btn btn-primary btn-block">Submit Spreadsheet</button>
       </div>
 
       <div class="col">

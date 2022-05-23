@@ -19,12 +19,13 @@
         </div>
 
         <button class="btn ml-2" :class="revalidateBtnClass" @click="revalidate" :disabled="disableRevalidateBtn">
-          <div class="spinner-grow" role="status" v-if="revalidating">
-            <span class="sr-only">Loading...</span>
-          </div>
-
-          <span v-if="commit">Revalidate uploads</span>
-          <span v-else>Check upload validity</span>
+          <span v-if="revalidating" class="spinner-grow spinner-grow-sm" role="status">
+          </span>
+          <span v-if="revalidating"> Loading...</span>
+          <span v-else>
+            <span v-if="commit">Revalidate uploads</span>
+            <span v-else>Check upload validity</span>
+          </span>
         </button>
       </div>
     </div>

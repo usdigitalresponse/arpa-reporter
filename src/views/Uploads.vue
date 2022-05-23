@@ -124,7 +124,8 @@ export default {
         {
           label: 'EC Code',
           field: 'ec_code',
-          tdClass: (row) => { if (!row.ec_code) return 'table-danger' }
+          tdClass: (row) => { if (!row.ec_code) return 'table-danger' },
+          width: '120px'
         },
         {
           label: 'Uploaded By',

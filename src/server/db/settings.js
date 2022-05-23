@@ -2,20 +2,20 @@ const knex = require('./connection')
 let currentReportingPeriodID = null
 
 // setCurrentReportingPeriod()
-function setCurrentReportingPeriod (id) {
+function setCurrentReportingPeriod (id, trns = knex) {
   currentReportingPeriodID = id
-  return knex('application_settings')
+  return trns('application_settings')
     .update('current_reporting_period_id', id)
 }
 
 // update application_settings set current_reporting_period_id=1;
-async function getCurrentReportingPeriodID () {
+async function getCurrentReportingPeriodID (trns = knex) {
   if (currentReportingPeriodID !== null) {
     return currentReportingPeriodID
   }
   let crpID
   try {
-    crpID = await knex('application_settings')
+    crpID = await trns('application_settings')
       .select('*')
       .then(r => {
         currentReportingPeriodID = r[0].current_reporting_period_id
@@ -62,10 +62,10 @@ function applicationSettings () {
     reporting_template
     validation_rule_tags
  */
-async function currentReportingPeriodSettings () {
+async function currentReportingPeriodSettings (trns = knex) {
   let rv
   try {
-    rv = await knex('application_settings')
+    rv = await trns('application_settings')
       .join(
         'reporting_periods',
         'application_settings.current_reporting_period_id',

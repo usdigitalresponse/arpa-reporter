@@ -2,6 +2,8 @@ const { join, resolve } = require('path')
 
 const VERBOSE = Boolean(process.env.VERBOSE)
 
+const POSTGRES_URL = process.env.POSTGRES_URL
+
 const DATA_DIR = resolve(process.env.DATA_DIR)
 const UPLOAD_DIR = join(DATA_DIR, 'uploads')
 
@@ -16,5 +18,6 @@ module.exports = {
   SRC_DIR,
   SERVER_DATA_DIR,
   EMPTY_TEMPLATE_NAME,
+  POSTGRES_URL,
   VERBOSE
 }

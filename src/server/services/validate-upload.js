@@ -9,7 +9,7 @@ const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
 
-async function validateAgencyId ({ upload, documents }) {
+async function validateAgencyId ({ upload, documents, trns }) {
   // grab agency id from the cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
   const agencyCode = coverSheet['Agency Code']
@@ -20,7 +20,7 @@ async function validateAgencyId ({ upload, documents }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(agencyCode))[0]
+  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -30,11 +30,11 @@ async function validateAgencyId ({ upload, documents }) {
 
   // set agency id on the upload, for disambiguation
   if (matchingAgency.id !== upload.agency_id) {
-    await setAgencyId(upload.id, matchingAgency.id)
+    await setAgencyId(upload.id, matchingAgency.id, trns)
   }
 }
 
-async function validateEcCode ({ upload, documents }) {
+async function validateEcCode ({ upload, documents, trns }) {
   // grab ec code string from cover sheet
   const coverSheet = documents.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
@@ -52,7 +52,7 @@ async function validateEcCode ({ upload, documents }) {
 
   // set EC code on the upload, for disambiguation
   if (code !== upload.ec_code) {
-    await setEcCode(upload.id, code)
+    await setEcCode(upload.id, code, trns)
   }
 }
 
@@ -62,8 +62,8 @@ function msDateToMoment (msDate) {
   return moment('1900-01-01').add(Number(msDate) - 2, 'days')
 }
 
-async function validateReportingPeriod ({ upload, documents }) {
-  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id)
+async function validateReportingPeriod ({ upload, documents, trns }) {
+  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
   const coverSheet = documents.find(doc => doc.type === 'cover').content
   const errors = []
 
@@ -92,7 +92,7 @@ function validateSubrecipients ({ upload, documents }) {
 
 }
 
-async function validateUpload (upload, user) {
+async function validateUpload (upload, user, trns) {
   // holder for our validation errors
   const errors = []
 
@@ -101,7 +101,7 @@ async function validateUpload (upload, user) {
   // grab the documents
   const documents = await recordsForUpload(upload)
 
-  // run validations, one by one
+  // list of all of our validations
   const validations = [
     validateAgencyId,
     validateEcCode,
@@ -109,9 +109,10 @@ async function validateUpload (upload, user) {
     validateSubrecipients
   ]
 
+  // run validations, one by one
   for (const validation of validations) {
     try {
-      errors.push(await validation({ documents, upload }))
+      errors.push(await validation({ documents, upload, trns }))
     } catch (e) {
       errors.push(new ValidationError(`validation ${validation.name} failed: ${e}`))
     }
@@ -120,11 +121,11 @@ async function validateUpload (upload, user) {
   // if we successfully validated for the first time, let's mark it!
   const flatErrors = errors.flat().filter(x => x)
   if (flatErrors.length === 0 && !upload.validated_at) {
-    markValidated(upload.id, user.id)
+    markValidated(upload.id, user.id, trns)
 
   // if it was valid before but is no longer valid, clear it
   } else if (flatErrors.length > 1 && upload.validated_at) {
-    markNotValidated(upload.id)
+    markNotValidated(upload.id, trns)
   }
 
   return flatErrors

@@ -106,7 +106,7 @@ export default new Vuex.Store({
     viewPeriodID: null,
 
     recentUploadId: null,
-    allUploads: null,
+    allUploads: [],
     alerts: {}
   },
   mutations: {
@@ -197,8 +197,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login ({ commit }, user) {
+    login ({ commit, dispatch }, user) {
       commit('setUser', user)
+      dispatch('loadApplicationSettings')
+      dispatch('updateAgencies')
+
       const doFetch = attr => {
         fetch(`/api/${attr}`, { credentials: 'include' })
           .then(r => r.json())
@@ -210,9 +213,7 @@ export default new Vuex.Store({
             }
           })
       }
-      doFetch('application_settings')
       doFetch('configuration')
-      doFetch('agencies')
       doFetch('reporting_periods')
       doFetch('subrecipients')
     },
@@ -222,9 +223,10 @@ export default new Vuex.Store({
     loadApplicationSettings ({ commit }) {
       fetch('/api/application_settings')
         .then(r => r.json())
-        .then(data =>
+        .then(data => {
           commit('setApplicationSettings', data.application_settings)
-        )
+          commit('setViewPeriodID', data.application_settings.current_reporting_period_id)
+        })
     },
     createUser ({ commit }, user) {
       return post('/api/users', user).then(response => {
@@ -276,7 +278,7 @@ export default new Vuex.Store({
         commit('updateAgency', agency)
       })
     },
-    viewPeriodID ({ commit }, period_id) {
+    setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
     },
     closeReportingPeriod ({ commit }, period_id) {
@@ -311,6 +313,7 @@ export default new Vuex.Store({
         commit('updateReportingPeriod', reportingPeriod)
       })
     },
+
     async updateUploads ({ commit, state }) {
       const params = new URLSearchParams({ period_id: state.viewPeriodID })
       const result = await getJson('/api/uploads?' + params.toString())
@@ -319,6 +322,14 @@ export default new Vuex.Store({
         commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
       } else {
         commit('updateAllUploads', result.uploads)
+      }
+    },
+    async updateAgencies ({ commit, state }) {
+      const result = await getJson('/api/agencies')
+      if (result.error) {
+        commit('addAlert', { text: `updateAgencies Error: ${result.error} (${result.text})`, level: 'err' })
+      } else {
+        commit('setAgencies', result.agencies)
       }
     }
   },
@@ -374,10 +385,6 @@ export default new Vuex.Store({
       return Number(state.viewPeriodID)
     },
     viewPeriodIsCurrent: state => {
-      // period zero is an alias to the current reporting period.
-      if (!state.viewPeriodID) {
-        return true
-      }
       return Number(state.viewPeriodID) ===
         Number(state.applicationSettings.current_reporting_period_id)
     }

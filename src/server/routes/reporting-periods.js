@@ -16,10 +16,13 @@ const moment = require('moment')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
+const knex = require('../db/connection')
+const reportingPeriods = require('../db/reporting-periods')
 const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { getPeriodSummaries, user: getUser } = require('../db')
-const reportingPeriods = require('../db/reporting-periods')
+const { user: getUser } = require('../db/users')
+
+const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
   const allPeriods = await reportingPeriods.getAll()
@@ -37,7 +40,7 @@ router.get('/', requireUser, async function (req, res) {
 })
 
 router.get('/summaries/', requireUser, async function (req, res) {
-  return getPeriodSummaries().then(summaries => res.json({ summaries }))
+  return reportingPeriods.getPeriodSummaries().then(summaries => res.json({ summaries }))
 })
 
 router.post('/close/', requireAdminUser, async (req, res) => {
@@ -175,14 +178,14 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
         data = await readFile(path.join(UPLOAD_DIR, templateName))
       } catch (err2) {
         if (err2.code === 'ENOENT') {
-          res.status(404).send(`Could not find template file ${templateName}`)
+          res.status(404).json({ error: `Could not find template file ${templateName}` })
           return
         } else {
-          res.status(500).send(err2.message)
+          res.status(500).json({ error: err2.message })
         }
       }
     } else {
-      res.status(500).send(err.message)
+      res.status(500).json({ error: err.message })
     }
   }
 
@@ -192,6 +195,37 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
   )
   res.header('Content-Type', 'application/octet-stream')
   res.end(Buffer.from(data, 'binary'))
+})
+
+router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
+  const periodId = req.params.id
+  const commit = req.query.commit || false
+
+  const user = await getUser(req.signedCookies.userId)
+  const reportingPeriod = await reportingPeriods.get(periodId)
+  if (!reportingPeriod) {
+    res.sendStatus(404)
+    res.end()
+    return
+  }
+
+  const trns = await knex.transaction()
+  try {
+    const updates = await revalidateUploads(reportingPeriod, user, trns)
+    if (commit) {
+      trns.commit()
+    } else {
+      trns.rollback()
+    }
+
+    res.json({
+      updates
+    })
+  } catch (e) {
+    if (!trns.isCompleted()) trns.rollback()
+    res.status(500).json({ error: e.message })
+    throw e
+  }
 })
 
 module.exports = router

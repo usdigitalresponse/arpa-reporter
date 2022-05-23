@@ -32,14 +32,14 @@
 const knex = require('./connection')
 const { getCurrentReportingPeriodID } = require('./settings')
 
-function subrecipients () {
-  return knex('subrecipients')
+function subrecipients (trns = knex) {
+  return trns('subrecipients')
     .select('*')
     .orderBy('legal_name')
 }
 
-async function getSubRecipients () {
-  let records = await knex('subrecipients')
+async function getSubRecipients (trns = knex) {
+  let records = await trns('subrecipients')
     .select('*')
 
   records = records.map(record => respace(record))
@@ -55,21 +55,21 @@ async function getSubRecipients () {
   return mapSubrecipients
 }
 
-async function getSubRecipientsByPeriod (period_id) {
+async function getSubRecipientsByPeriod (period_id, trns = knex) {
   // console.log(`getting subrecipients from period ${period_id}`)
-  const records = await knex('subrecipients')
+  const records = await trns('subrecipients')
     .select('*')
     .where('created_in_period', period_id)
   //
   return records.map(record => respace(record))
 }
 
-async function setSubRecipient (record) {
+async function setSubRecipient (record, trns = knex) {
   record = despace(record)
 
   try {
-    await knex('subrecipients').insert(record)
-    // let result = await knex("subrecipients").insert(record);
+    await trns('subrecipients').insert(record)
+    // let result = await trns("subrecipients").insert(record);
     // console.dir(result);
   } catch (err) {
     console.dir(err)
@@ -96,16 +96,16 @@ function respace (_obj) {
   return obj
 }
 
-function subrecipientById (id) {
-  return knex('subrecipients')
+function subrecipientById (id, trns = knex) {
+  return trns('subrecipients')
     .select('*')
     .where({ id })
     .then(r => r[0])
 }
 
-async function createSubrecipient (subrecipient) {
+async function createSubrecipient (subrecipient, trns = knex) {
   subrecipient.created_in_period = await getCurrentReportingPeriodID()
-  return knex
+  return trns
     .insert(subrecipient)
     .into('subrecipients')
     .returning(['id'])
@@ -117,7 +117,7 @@ async function createSubrecipient (subrecipient) {
     })
 }
 
-function updateSubrecipient (oldRecord, newObject) {
+function updateSubrecipient (oldRecord, newObject, trns = knex) {
   const {
     identification_number,
     duns_number,
@@ -145,7 +145,7 @@ function updateSubrecipient (oldRecord, newObject) {
     country_name,
     organization_type
   }
-  return knex('subrecipients')
+  return trns('subrecipients')
     .where('id', subrecipient.id)
     .update({
       identification_number: subrecipient.identification_number,

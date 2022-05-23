@@ -46,8 +46,8 @@ module.exports = {
   writeSummaries
 }
 
-async function readSummaries (reporting_period_id = 1) {
-  const periodSummaries = await knex('period_summaries')
+async function readSummaries (reporting_period_id = 1, trns = knex) {
+  const periodSummaries = await trns('period_summaries')
     .select('*')
     .where('reporting_period_id', reporting_period_id)
   return periodSummaries
@@ -57,28 +57,28 @@ async function readSummaries (reporting_period_id = 1) {
   prior period summary records.
   The subrecipient ids have already been stripped of double quotes.
   */
-async function getReportedSubrecipientIds () {
-  const subrecipientIDs = await knex('period_summaries')
+async function getReportedSubrecipientIds (trns = knex) {
+  const subrecipientIDs = await trns('period_summaries')
     .select('subrecipient_identification_number')
     .distinct()
 
   return subrecipientIDs.map(r => r.subrecipient_identification_number)
 }
 
-async function regenerateSummaries (reporting_period_id) {
+async function regenerateSummaries (reporting_period_id, trns = knex) {
   console.log('regenerateSummaries')
-  console.dir(await knex('period_summaries').count('*'))
+  console.dir(await trns('period_summaries').count('*'))
   log(`deleting summaries for period ${reporting_period_id}`)
-  await knex('period_summaries')
+  await trns('period_summaries')
     .where('reporting_period_id', reporting_period_id)
     .del()
-  console.dir(await knex('period_summaries').count('*'))
+  console.dir(await trns('period_summaries').count('*'))
   await writeSummaries(reporting_period_id)
-  console.dir(await knex('period_summaries').count('*'))
+  console.dir(await trns('period_summaries').count('*'))
   return null
 }
 
-async function writeSummaries (reporting_period_id) {
+async function writeSummaries (reporting_period_id, trns = knex) {
   log('writeSummaries()')
   const summaryData = await generateSummaries(reporting_period_id)
 
@@ -96,7 +96,7 @@ async function writeSummaries (reporting_period_id) {
   reporting period is specified, it returns summaries for the current
   reporting period.
   */
-async function getSummaries (reporting_period_id) {
+async function getSummaries (reporting_period_id, trns = knex) {
   if (!reporting_period_id) {
     log('getSummaries()')
     reporting_period_id = await getCurrentReportingPeriodID()
@@ -115,21 +115,21 @@ async function getSummaries (reporting_period_id) {
   return summaryData
 }
 
-async function saveSummaries (periodSummaries) {
+async function saveSummaries (periodSummaries, trns = knex) {
   const errLog = []
   let count = 0
   log(`saving ${periodSummaries.length} records`)
 
   for (let i = 0; i < periodSummaries.length; i++) {
     try {
-      const { rowCount } = await knex('period_summaries').insert(periodSummaries[i])
+      const { rowCount } = await trns('period_summaries').insert(periodSummaries[i])
       count += rowCount
     } catch (err) {
       // the ID might be a DUNS number
       const subrecipientID = periodSummaries[i].subrecipient_identification_number
       periodSummaries[i].subrecipient_identification_number = `DUNS${subrecipientID}`
       try {
-        const { rowCount: rc } = await knex('period_summaries').insert(periodSummaries[i])
+        const { rowCount: rc } = await trns('period_summaries').insert(periodSummaries[i])
         count += rc
       } catch (err1) {
         // it wasn't a DUNS number - must be another error
@@ -147,7 +147,7 @@ async function saveSummaries (periodSummaries) {
   return errLog
 }
 
-async function generateSummaries (reporting_period_id) {
+async function generateSummaries (reporting_period_id, trns = knex) {
   log(`Generating summaries for period ${reporting_period_id}`)
   const periodSummaries = []
   const errLog = []
@@ -246,13 +246,13 @@ async function generateSummaries (reporting_period_id) {
 /* getPriorPeriodSummaries() finds all the summaries for periods before
   the report_period_id argument.
   */
-async function getPriorPeriodSummaries (reporting_period_id) {
+async function getPriorPeriodSummaries (reporting_period_id, trns = knex) {
   const query = `select p.id, p.start_date, p.end_date
     from reporting_periods p, reporting_periods r
     where p.end_date < r.start_date and r.id = ${reporting_period_id}
     order by p.end_date, p.id desc
     limit 1`
-  const result = await knex.raw(query).then(r => r.rows ? r.rows[0] : null)
+  const result = await trns.raw(query).then(r => r.rows ? r.rows[0] : null)
   if (!result) {
     return { periodSummaries: [] }
   }

@@ -14,7 +14,7 @@
       </div>
 
       <div class="col">
-        <DownloadTemplateBtn />
+        <DownloadTemplateBtn :block="true" />
       </div>
     </div>
 

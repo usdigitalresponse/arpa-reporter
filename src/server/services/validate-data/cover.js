@@ -1,5 +1,5 @@
 const { matchesFilePart } = require('./validate')
-const { validateSingleDocument } = require('./validate')
+const { validateSingleRecord } = require('./validate')
 
 const requiredFields = [
   [
@@ -9,7 +9,7 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateSingleDocument(
+module.exports = validateSingleRecord(
   'cover',
   requiredFields,
   'cover requires a row with "agency code"'

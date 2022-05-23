@@ -329,10 +329,10 @@ function validateFields (requiredFields, content, tab, row, context = {}) {
   return valog
 }
 
-function validateDocuments (tab, validations) {
-  return function (groupedDocuments, validateContext) {
-    const documents = groupedDocuments[tab]
-    return _.flatMap(documents, ({ content, sourceRow }) => {
+function validateRecords (tab, validations) {
+  return function (groupedRecords, validateContext) {
+    const records = groupedRecords[tab]
+    return _.flatMap(records, ({ content, sourceRow }) => {
       return validateFields(
         validations,
         content,
@@ -344,13 +344,13 @@ function validateDocuments (tab, validations) {
   }
 }
 
-function validateSingleDocument (tab, validations, message) {
-  return function (groupedDocuments, validateContext) {
-    const documents = groupedDocuments[tab]
+function validateSingleRecord (tab, validations, message) {
+  return function (groupedRecords, validateContext) {
+    const records = groupedRecords[tab]
     let valog = []
 
-    if (documents && documents.length === 1) {
-      const { content } = documents[0]
+    if (records && records.length === 1) {
+      const { content } = records[0]
       const row = 2
       const results = validateFields(validations, content, tab, row, validateContext)
       valog = valog.concat(results)
@@ -392,9 +392,9 @@ module.exports = {
   numberIsLessThanOrEqual,
   numberIsGreaterThanOrEqual,
   transferMatches,
-  validateDocuments,
+  validateRecords,
   validateFields,
-  validateSingleDocument,
+  validateSingleRecord,
   whenBlank,
   whenGreaterThanZero,
   whenNotBlank,

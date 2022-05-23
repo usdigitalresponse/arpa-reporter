@@ -30,8 +30,8 @@ const subrecipientKey = subrecipient => {
     ...
   }
   */
-const getSubrecipientsHash = subrecipientDocuments => {
-  return _.keyBy(subrecipientDocuments, ({ content }) => {
+const getSubrecipientsHash = subrecipientRecords => {
+  return _.keyBy(subrecipientRecords, ({ content }) => {
     return subrecipientKey(content)
   })
 }

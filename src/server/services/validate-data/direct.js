@@ -11,7 +11,7 @@ const {
   isValidSubrecipient,
   matchesFilePart,
   numberIsLessThanOrEqual,
-  validateDocuments,
+  validateRecords,
   whenGreaterThanZero,
   whenNotBlank
 } = require('./validate')
@@ -114,4 +114,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('direct', requiredFields)
+module.exports = validateRecords('direct', requiredFields)

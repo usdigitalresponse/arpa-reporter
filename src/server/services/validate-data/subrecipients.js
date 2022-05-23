@@ -4,7 +4,7 @@ const {
   isNotBlank,
   isValidState,
   isValidZip,
-  validateDocuments,
+  validateRecords,
   whenBlank,
   whenUS
 } = require('./validate')
@@ -49,4 +49,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('subrecipient', requiredFields)
+module.exports = validateRecords('subrecipient', requiredFields)

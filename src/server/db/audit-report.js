@@ -1,5 +1,7 @@
 /* eslint camelcase: 0 */
 
+// !! FIXME !! This file has not been updated to support the ARPA codebase
+
 /*
 --------------------------------------------------------------------------------
 -                           db/audit-report.js

@@ -5,7 +5,7 @@
       Loading..
     </div>
     <div v-else>
-      <DocumentForm
+      <RecordForm
         type="Agency"
         :columns="fields"
         :record="editAgency"
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import DocumentForm from '../components/DocumentForm'
+import RecordForm from '../components/RecordForm'
 import _ from 'lodash'
 export default {
   name: 'Agency',
   components: {
-    DocumentForm
+    RecordForm
   },
   data: function () {
     let id = 0

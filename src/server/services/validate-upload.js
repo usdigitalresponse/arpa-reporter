@@ -9,9 +9,9 @@ const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
 
-async function validateAgencyId ({ upload, documents, trns }) {
+async function validateAgencyId ({ upload, records, trns }) {
   // grab agency id from the cover sheet
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  const coverSheet = records.find(doc => doc.type === 'cover').content
   const agencyCode = coverSheet['Agency Code']
 
   // must be set
@@ -34,9 +34,9 @@ async function validateAgencyId ({ upload, documents, trns }) {
   }
 }
 
-async function validateEcCode ({ upload, documents, trns }) {
+async function validateEcCode ({ upload, records, trns }) {
   // grab ec code string from cover sheet
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
 
   const codeParts = codeString.split('-')
@@ -45,7 +45,7 @@ async function validateEcCode ({ upload, documents, trns }) {
 
   if (ecCodes[code] !== desc) {
     return new ValidationError(
-      `Document EC code ${code} (${desc}) does not match any known EC code`,
+      `Record EC code ${code} (${desc}) does not match any known EC code`,
       { tab: 'cover', row: 2, col: 4 }
     )
   }
@@ -62,16 +62,16 @@ function msDateToMoment (msDate) {
   return moment('1900-01-01').add(Number(msDate) - 2, 'days')
 }
 
-async function validateReportingPeriod ({ upload, documents, trns }) {
+async function validateReportingPeriod ({ upload, records, trns }) {
   const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
+  const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 
   const periodStart = moment(uploadPeriod.start_date)
   const sheetStart = msDateToMoment(coverSheet['Reporting Period Start Date'])
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
-      `Upload reporting period starts ${periodStart.format('L')} while document specifies ${sheetStart.format('L')}`,
+      `Upload reporting period starts ${periodStart.format('L')} while record specifies ${sheetStart.format('L')}`,
       { tab: 'cover', row: 2, col: 5 }
     ))
   }
@@ -80,7 +80,7 @@ async function validateReportingPeriod ({ upload, documents, trns }) {
   const sheetEnd = msDateToMoment(coverSheet['Reporting Period End Date'])
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
-      `Upload reporting period ends ${periodEnd.format('L')} while document specifies ${sheetEnd.format('L')}`,
+      `Upload reporting period ends ${periodEnd.format('L')} while record specifies ${sheetEnd.format('L')}`,
       { tab: 'cover', row: 2, col: 6 }
     ))
   }
@@ -88,7 +88,7 @@ async function validateReportingPeriod ({ upload, documents, trns }) {
   return errors
 }
 
-function validateSubrecipients ({ upload, documents }) {
+function validateSubrecipients ({ upload, records }) {
 
 }
 
@@ -98,8 +98,8 @@ async function validateUpload (upload, user, trns) {
 
   // holder for post-validation functions
 
-  // grab the documents
-  const documents = await recordsForUpload(upload)
+  // grab the records
+  const records = await recordsForUpload(upload)
 
   // list of all of our validations
   const validations = [
@@ -112,7 +112,7 @@ async function validateUpload (upload, user, trns) {
   // run validations, one by one
   for (const validation of validations) {
     try {
-      errors.push(await validation({ documents, upload, trns }))
+      errors.push(await validation({ records, upload, trns }))
     } catch (e) {
       errors.push(new ValidationError(`validation ${validation.name} failed: ${e}`))
     }

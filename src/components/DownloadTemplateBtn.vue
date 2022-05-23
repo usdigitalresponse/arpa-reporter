@@ -7,6 +7,9 @@
 <script>
 export default {
   name: 'DownloadTemplateBtn',
+  props: {
+    block: Boolean
+  },
   computed: {
     periodId: function () {
       return this.$store.state.viewPeriodID
@@ -21,7 +24,8 @@ export default {
       return {
         'btn-secondary': this.isDisabled,
         'btn-success': !this.isDisabled,
-        disabled: this.isDisabled
+        disabled: this.isDisabled,
+        'btn-block': this.block
       }
     }
   }

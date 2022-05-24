@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid" style="width: 90%">
-    <nav class="row navbar navbar-expand navbar-light bg-light">
+    <nav class="row navbar navbar-expand navbar-light bg-light" v-if="loggedIn">
       <a class="navbar-brand" href="#">
         {{ applicationTitle }}
         <span v-if="agencyName"> : {{ agencyName }}</span>
@@ -94,7 +94,7 @@ import { titleize } from '../helpers/form-helpers'
 import moment from 'moment'
 
 export default {
-  name: 'Logout',
+  name: 'Navigation',
   components: {
     AlertBox
   },

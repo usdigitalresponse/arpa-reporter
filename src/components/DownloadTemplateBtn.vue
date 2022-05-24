@@ -1,5 +1,5 @@
 <template>
-  <DownloadButton :href="href" :classes="classes">
+  <DownloadButton :href="href" :classes="classes" :disabled="isDisabled">
     Download Empty Template
   </DownloadButton>
 </template>
@@ -29,7 +29,6 @@ export default {
       return {
         'btn-block': this.block,
         'btn-secondary': true
-        // disabled: this.isDisabled
       }
     }
   }

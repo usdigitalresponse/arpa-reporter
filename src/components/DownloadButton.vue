@@ -23,7 +23,8 @@ export default {
   props: {
     href: String,
     customClass: String,
-    classes: Object
+    classes: Object,
+    disabled: Boolean
   },
   mounted () {
     window.addEventListener('focus', this.clearLoadingState)
@@ -40,10 +41,7 @@ export default {
     computedClasses () {
       return {
         ...this.classes,
-
-        // override parent disabled class if in loading state
-        // disabled: this?.classes?.disabled || this.isLoading
-        disabled: this.isLoading
+        disabled: this.disabled || this.isLoading
       }
     }
   },

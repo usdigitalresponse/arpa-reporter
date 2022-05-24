@@ -1,4 +1,9 @@
 const express = require('express')
+
+// This patches Express to better handle errors thrown in async functions, which are otherwise not
+// handled. It just calls next(err) with them.
+require('express-async-errors')
+
 const configureAPI = require('./configure')
 
 const { PORT = 3000 } = process.env

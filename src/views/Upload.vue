@@ -9,26 +9,28 @@
     </div>
 
     <div v-if="errors.length > 0" class="row">
-      <table class="col table table-sm table-bordered table-striped col-sm-12 col-md-6">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Error</th>
-            <th>Tab</th>
-            <th>Row</th>
-            <th>Col</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr :key="n" v-for="(error, n) in errors">
-            <td>{{ n }}</td>
-            <td>{{ error.message }}</td>
-            <td>{{ titleize(error.tab) }}</td>
-            <td>{{ error.row }}</td>
-            <td>{{ error.col }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="col">
+        <table class="table table-sm table-bordered table-striped col-sm-12 col-md-6">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Error</th>
+              <th>Tab</th>
+              <th>Row</th>
+              <th>Col</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr :key="n" v-for="(error, n) in errors">
+              <td>{{ n }}</td>
+              <td>{{ error.message }}</td>
+              <td>{{ titleize(error.tab) }}</td>
+              <td>{{ error.row }}</td>
+              <td>{{ error.col }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="row">

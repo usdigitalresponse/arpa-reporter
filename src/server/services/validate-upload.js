@@ -4,7 +4,7 @@ const moment = require('moment')
 const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
-const { createRecipient, getRecipient } = require('../db/arpa_recipients')
+const { createRecipient, getRecipient, updateRecipient } = require('../db/arpa_recipients')
 
 const { recordsForUpload } = require('./records')
 const { rulesForUpload } = require('./validation-rules')
@@ -115,8 +115,8 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
     for (const ek of Object.keys(record)) {
       if (record[ek] !== recipient[ek]) {
         errors.push(new ValidationError(
-          `Recipient ${recipientId} exists with ${ek} as ${record[ek]}, \
-          but upload specifies ${recipient[ek]}`,
+          `Recipient ${recipientId} exists with '${ek}' as '${record[ek]}', \
+          but upload specifies '${recipient[ek]}'`,
           { col: rules[ek]?.columnName }
         ))
       }
@@ -141,9 +141,15 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
       const dbRow = {
         uei: recipient.Unique_Entity_Identifier__c,
         tin: recipient.EIN__c,
-        record: recipient
+        record: recipient,
+        upload_id: upload.id
       }
-      await createRecipient(dbRow, trns)
+
+      if (existing?.upload_id === upload.id) {
+        await updateRecipient(dbRow, trns)
+      } else {
+        await createRecipient(dbRow, trns)
+      }
     }
   }
 

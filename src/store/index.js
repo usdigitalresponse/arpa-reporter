@@ -133,7 +133,7 @@ export default new Vuex.Store({
     setApplicationSettings (state, applicationSettings) {
       state.applicationSettings = applicationSettings
       if (!state.viewPeriodID) {
-        state.viewPeiodID = applicationSettings.current_reporting_period_id
+        state.viewPeriodID = applicationSettings.current_reporting_period_id
       }
     },
     addUser (state, user) {

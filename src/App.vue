@@ -5,7 +5,11 @@
 </template>
 
 <script>
+import '../scss/index.scss'
+import 'bootstrap/dist/js/bootstrap.min.js'
+
 import Navigation from '@/components/Navigation.vue'
+
 export default {
   name: 'App',
   components: {

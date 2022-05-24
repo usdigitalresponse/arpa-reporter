@@ -1,5 +1,5 @@
 <template>
-  <a download :href="href" class="btn" :class="classes">
+  <a download :href="href" class="btn btn-secondary" :class="classes">
     Download Empty Template
   </a>
 </template>
@@ -22,8 +22,6 @@ export default {
     },
     classes: function () {
       return {
-        'btn-secondary': this.isDisabled,
-        'btn-success': !this.isDisabled,
         disabled: this.isDisabled,
         'btn-block': this.block
       }

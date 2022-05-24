@@ -1,14 +1,19 @@
 <template>
-  <a download :href="href" class="btn btn-secondary" :class="classes">
+  <DownloadButton :href="href" :classes="classes">
     Download Empty Template
-  </a>
+  </DownloadButton>
 </template>
 
 <script>
+import DownloadButton from './DownloadButton.vue'
+
 export default {
   name: 'DownloadTemplateBtn',
   props: {
     block: Boolean
+  },
+  components: {
+    DownloadButton
   },
   computed: {
     periodId: function () {
@@ -22,8 +27,9 @@ export default {
     },
     classes: function () {
       return {
-        'disabled': this.isDisabled,
-        'btn-block': this.block
+        'btn-block': this.block,
+        'btn-secondary': true
+        // disabled: this.isDisabled
       }
     }
   }

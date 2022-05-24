@@ -2,7 +2,7 @@
   <div>
     <div class="row mt-5 mb-5" v-if="viewingOpenPeriod">
       <div class="col" v-if="isAdmin">
-        <a :href="downloadUrl()" class="btn btn-primary btn-block">Download Treasury Report</a>
+        <DownloadButton :href="downloadUrl()" class="btn btn-primary btn-block">Download Treasury Report</DownloadButton>
       </div>
 
       <div class="col" v-if="isAdmin && false">
@@ -43,7 +43,8 @@
 </template>
 
 <script>
-import DownloadTemplateBtn from '../components/DownloadTemplateBtn'
+import DownloadButton from '../components/DownloadButton.vue'
+import DownloadTemplateBtn from '../components/DownloadTemplateBtn.vue'
 
 export default {
   name: 'Home',
@@ -73,6 +74,7 @@ export default {
     }
   },
   components: {
+    DownloadButton,
     DownloadTemplateBtn
   }
 }

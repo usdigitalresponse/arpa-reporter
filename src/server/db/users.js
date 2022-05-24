@@ -49,6 +49,7 @@ function userAndRole (id, trns = knex) {
       'users.role',
       'users.agency_id',
       'users.tags',
+      'users.tenant_id',
       'roles.rules'
     )
     .where('users.id', id)

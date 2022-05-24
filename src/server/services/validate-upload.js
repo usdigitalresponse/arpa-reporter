@@ -20,7 +20,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
+  const matchingAgency = (await agencyByCode(upload.tenant_id, agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -86,6 +86,7 @@ function validateSubrecipients ({ upload, records }) {
 
 }
 
+// TODO(mbroussard): is it a bug that user is not always passed in?
 async function validateUpload (upload, user, trns) {
   // holder for our validation errors
   const errors = []

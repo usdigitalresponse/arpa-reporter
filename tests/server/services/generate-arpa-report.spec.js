@@ -3,6 +3,7 @@ const assert = require('assert')
 const arpa = require('../../../src/server/services/generate-arpa-report')
 
 // Default tenant ID
+// TODO(mbroussard): add multitenant-specific tests
 const tenantId = 0;
 
 describe('arpa report generation', function () {

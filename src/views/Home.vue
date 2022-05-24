@@ -67,7 +67,7 @@ export default {
       return `/api/exports?period_id=${periodId}`
     },
     startUpload: function () {
-      if (this.viewingCurrentPeriod) {
+      if (this.viewingOpenPeriod) {
         this.$router.push({ path: '/new_upload' })
       }
     }

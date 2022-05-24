@@ -17,7 +17,7 @@ async function getCurrentReportingPeriodID (tenantId, trns = knex) {
     throw new Error('must specify tenantId');
   }
 
-  if (currentReportingPeriodIDCache[tenantId] !== null) {
+  if (currentReportingPeriodIDCache[tenantId] !== undefined) {
     return currentReportingPeriodIDCache[tenantId]
   }
 
@@ -80,7 +80,7 @@ async function currentReportingPeriodSettings (tenantId, trns = knex) {
   let rv
   try {
     rv = await trns('application_settings')
-      .where('tenant_id', tenantId)
+      .where('application_settings.tenant_id', tenantId)
       .join(
         'reporting_periods',
         'application_settings.current_reporting_period_id',

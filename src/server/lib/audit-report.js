@@ -33,12 +33,16 @@ module.exports = { generate: generateReport }
 /*  generateReport generates a fresh Audit Report spreadsheet
     and writes it out if successful.
     */
-async function generateReport () {
+async function generateReport (tenantId) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId');
+  }
+
   endDates = await reportingPeriods.getEndDates()
   endDates = endDates.map(ed => format(new Date(ed.end_date), 'M/d/yy'))
   endDates.unshift(null) // because the first period is period 1
 
-  const nPeriods = await getCurrentReportingPeriodID()
+  const nPeriods = await getCurrentReportingPeriodID(tenantId)
   log(`generateReport() for ${nPeriods} periods`)
 
   const contracts = createAwardSheet('contracts', nPeriods)

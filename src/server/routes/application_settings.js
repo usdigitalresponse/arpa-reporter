@@ -6,7 +6,8 @@ const router = express.Router()
 const { applicationSettings } = require('../db/settings')
 
 router.get('/', function (req, res) {
-  applicationSettings().then(application_settings =>
+  const tenantId = req.session.user.tenant_id;
+  applicationSettings(tenantId).then(application_settings =>
     res.json({ application_settings })
   )
 })

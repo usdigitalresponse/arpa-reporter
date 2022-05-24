@@ -93,14 +93,20 @@ async function isClosed (period_id) {
   case it returns the current reporting period ID.
   */
 async function getPeriodID (periodID) {
-  return Number(periodID) || getCurrentReportingPeriodID()
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
+  return Number(periodID) || getCurrentReportingPeriodID(tenantId)
 }
 
 /*  isCurrent() returns the current reporting period ID if the argument is
     falsy, or if it matches the current reporting period ID
   */
 async function isCurrent (periodID) {
-  const currentID = await getCurrentReportingPeriodID()
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
+  const currentID = await getCurrentReportingPeriodID(tenantId)
 
   if (!periodID || (Number(periodID) === Number(currentID))) {
     return currentID
@@ -111,7 +117,11 @@ async function isCurrent (periodID) {
 /* closeReportingPeriod()
   */
 async function closeReportingPeriod (user, period, trns = knex) {
-  const reporting_period_id = await getCurrentReportingPeriodID()
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
+  // TODO(mbroussard): should this call pass trns?
+  const reporting_period_id = await getCurrentReportingPeriodID(tenantId)
 
   period = period || reporting_period_id
   if (period !== reporting_period_id) {
@@ -146,10 +156,11 @@ async function closeReportingPeriod (user, period, trns = knex) {
     .where({ id: reporting_period_id })
     .update({
       certified_at: new Date().toISOString(),
+      // TODO(mbroussard): is this correct? We write a stringified json of user row?
       certified_by: user
     })
 
-  await setCurrentReportingPeriod(reporting_period_id + 1)
+  await setCurrentReportingPeriod(user.tenant_id, reporting_period_id + 1)
 
   return null
 }

@@ -79,7 +79,15 @@ async function recordsForUpload (upload) {
   return extractRecords(await bufferForUpload(upload))
 }
 
-async function recordsForReportingPeriod (periodId) {
+async function recordsForReportingPeriod (tenantId, periodId) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in recordsForReportingPeriod');
+  }
+  if (periodId === undefined) {
+    throw new Error('must specify periodId in recordsForReportingPeriod');
+  }
+
+  // TODO(mbroussard): pass tenantId when updating db/uploads
   const uploads = await validForReportingPeriod(periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))

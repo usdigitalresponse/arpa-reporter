@@ -9,7 +9,7 @@ const auditReport = require('../lib/audit-report')
 
 router.get('/', requireUser, async function (req, res) {
   console.log('/api/audit-report GET')
-  const report = await auditReport.generate()
+  const report = await auditReport.generate(req.session.user.tenant_id)
 
   if (_.isError(report)) {
     return res.status(500).send(report.message)

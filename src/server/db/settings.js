@@ -1,25 +1,35 @@
 const knex = require('./connection')
-let currentReportingPeriodID = null
+
+// tenantId -> currentReportingPeriodID
+let currentReportingPeriodIDCache = {};
 
 // setCurrentReportingPeriod()
-function setCurrentReportingPeriod (id, trns = knex) {
-  currentReportingPeriodID = id
+function setCurrentReportingPeriod (tenantId, id, trns = knex) {
+  currentReportingPeriodIDCache[tenantId] = id
   return trns('application_settings')
+    .where('tenantId', tenantId)
     .update('current_reporting_period_id', id)
 }
 
 // update application_settings set current_reporting_period_id=1;
-async function getCurrentReportingPeriodID (trns = knex) {
-  if (currentReportingPeriodID !== null) {
-    return currentReportingPeriodID
+async function getCurrentReportingPeriodID (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId');
   }
+
+  if (currentReportingPeriodIDCache[tenantId] !== null) {
+    return currentReportingPeriodIDCache[tenantId]
+  }
+
   let crpID
   try {
     crpID = await trns('application_settings')
       .select('*')
+      .where('tenant_id', tenantId)
       .then(r => {
-        currentReportingPeriodID = r[0].current_reporting_period_id
-        return currentReportingPeriodID
+        const id = r[0].current_reporting_period_id
+        currentReportingPeriodIDCache[tenantId] = id
+        return id
       })
   } catch (err) {
     console.dir(err)
@@ -35,8 +45,8 @@ async function getCurrentReportingPeriodID (trns = knex) {
     duns_number: '809031776'
   }
   */
-function applicationSettings () {
-  return currentReportingPeriodSettings()
+function applicationSettings (tenantId) {
+  return currentReportingPeriodSettings(tenantId)
 }
 
 /* currentReportingPeriodSettings() returns:
@@ -62,10 +72,15 @@ function applicationSettings () {
     reporting_template
     validation_rule_tags
  */
-async function currentReportingPeriodSettings (trns = knex) {
+async function currentReportingPeriodSettings (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId');
+  }
+
   let rv
   try {
     rv = await trns('application_settings')
+      .where('tenant_id', tenantId)
       .join(
         'reporting_periods',
         'application_settings.current_reporting_period_id',

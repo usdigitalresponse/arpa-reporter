@@ -6,8 +6,11 @@ const {
 } = require('./settings')
 
 async function listUploads ({ periodId, agencyId = null, onlyValidated = false }, trns = knex) {
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
   if (!periodId) {
-    periodId = await getCurrentReportingPeriodID(trns)
+    periodId = await getCurrentReportingPeriodID(tenantId, trns)
   }
 
   let query = trns('uploads')
@@ -28,8 +31,12 @@ async function listUploads ({ periodId, agencyId = null, onlyValidated = false }
 }
 
 async function uploadsForAgency (agency_id, period_id, trns = knex) {
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
   if (!period_id) {
-    period_id = await getCurrentReportingPeriodID()
+    // TODO(mbroussard): should this pass trns?
+    period_id = await getCurrentReportingPeriodID(tenantId)
   }
 
   return trns('uploads')
@@ -102,8 +109,12 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
 }
 
 async function getPeriodUploadIDs (period_id, trns = knex) {
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
   if (!period_id) {
-    period_id = await getCurrentReportingPeriodID()
+    // TODO(mbroussard): should this pass trns?
+    period_id = await getCurrentReportingPeriodID(tenantId)
   }
   let rv
   try {

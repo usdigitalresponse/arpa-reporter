@@ -104,7 +104,11 @@ function subrecipientById (id, trns = knex) {
 }
 
 async function createSubrecipient (subrecipient, trns = knex) {
-  subrecipient.created_in_period = await getCurrentReportingPeriodID()
+  // TODO(mbroussard): replace with actual plumbing of tenantId field
+  const tenantId = 0;
+
+  // TODO(mbroussard): should this pass trns?
+  subrecipient.created_in_period = await getCurrentReportingPeriodID(tenantId)
   return trns
     .insert(subrecipient)
     .into('subrecipients')

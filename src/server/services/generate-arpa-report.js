@@ -12,9 +12,9 @@ function isNotNull (value) {
   return value != null
 }
 
-async function generateReportName (periodId) {
+async function generateReportName (tenantId, periodId) {
   const now = moment().utc()
-  const { title: state } = await applicationSettings()
+  const { title: state } = await applicationSettings(tenantId)
 
   const filename = [
     state.replace(/ /g, '-'),
@@ -250,8 +250,18 @@ async function generateSubRecipient (records) {
   }).filter(isNotNull)
 }
 
+<<<<<<< HEAD
 async function generateReport (periodId) {
   const records = await recordsForReportingPeriod(periodId)
+=======
+async function generateReport (tenantId, periodId) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId');
+  }
+  if (periodId === undefined) {
+    throw new Error('must specify periodId');
+  }
+>>>>>>> cca0638 (feat: add tenant_id to db/settings methods & callers (minus tests))
 
   // generate every csv file for the report
   const csvObjects = [
@@ -307,7 +317,7 @@ async function generateReport (periodId) {
     zip.addFile(name + '.csv', buffer)
   })
 
-  const reportNamePromise = generateReportName(periodId)
+  const reportNamePromise = generateReportName(tenantId, periodId)
 
   const [reportName] = await Promise.all([
     reportNamePromise,

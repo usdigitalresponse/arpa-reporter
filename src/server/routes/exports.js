@@ -17,10 +17,11 @@ router.get('/', requireUser, async function (req, res) {
     generator = arpa.generateReport
   } else {
     console.log(`periodId ${periodId} is not current - sending old report`)
+    // TODO(mbroussard): this method doesn't seem to exist?
     generator = arpa.getPriorReport
   }
 
-  const report = await generator(periodId)
+  const report = await generator(req.session.user.tenant_id, periodId)
 
   if (_.isError(report)) {
     return res.status(500).send(report.message)

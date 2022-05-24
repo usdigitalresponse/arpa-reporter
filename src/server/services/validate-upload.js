@@ -56,19 +56,13 @@ async function validateEcCode ({ upload, records, trns }) {
   }
 }
 
-// we subtract -2 because of a bug in lotus 1-2-3. fml.
-// https://www.kirix.com/stratablog/excel-date-conversion-days-from-1900.html
-function msDateToMoment (msDate) {
-  return moment('1900-01-01').add(Number(msDate) - 2, 'days')
-}
-
 async function validateReportingPeriod ({ upload, records, trns }) {
   const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
   const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 
   const periodStart = moment(uploadPeriod.start_date)
-  const sheetStart = msDateToMoment(coverSheet['Reporting Period Start Date'])
+  const sheetStart = moment(coverSheet['Reporting Period Start Date'])
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
       `Upload reporting period starts ${periodStart.format('L')} while record specifies ${sheetStart.format('L')}`,
@@ -77,7 +71,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   }
 
   const periodEnd = moment(uploadPeriod.end_date)
-  const sheetEnd = msDateToMoment(coverSheet['Reporting Period End Date'])
+  const sheetEnd = moment(coverSheet['Reporting Period End Date'])
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
       `Upload reporting period ends ${periodEnd.format('L')} while record specifies ${sheetEnd.format('L')}`,

@@ -46,7 +46,8 @@ router.post('/', requireAdminUser, validateUser, async function (
     email: email.toLowerCase().trim(),
     role,
     name,
-    agency_id
+    agency_id,
+    tenant_id: req.session.user.tenant_id
   }
   createUser(user)
     .then(result => res.json({ user: result }))
@@ -67,7 +68,7 @@ router.put('/:id', requireAdminUser, validateUser, async function (
 ) {
   console.log('PUT /users/:id', req.body)
   let user = await getUser(req.params.id)
-  if (!user) {
+  if (!user || user.tenant_id !== req.session.user.tenant_id) {
     res.status(400).send('User not found')
     return
   }

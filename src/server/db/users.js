@@ -2,13 +2,22 @@ const { v4 } = require('uuid')
 
 const knex = require('./connection')
 
-function users (trns = knex) {
+function users (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId when querying user list');
+  }
+
   return trns('users')
     .select('*')
+    .where('tenant_id', tenantId)
     .orderBy('email')
 }
 
 function createUser (user, trns = knex) {
+  if (user.tenant_id === undefined) {
+    throw new Error("can't create user without specifying tenant_id");
+  }
+
   return trns
     .insert(user)
     .into('users')
@@ -30,6 +39,7 @@ function updateUser (user, trns = knex) {
       name: user.name,
       role: user.role,
       agency_id: user.agency_id
+      // tenant_id is immutable
     })
 }
 

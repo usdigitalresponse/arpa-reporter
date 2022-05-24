@@ -7,7 +7,7 @@ let currentReportingPeriodIDCache = {};
 function setCurrentReportingPeriod (tenantId, id, trns = knex) {
   currentReportingPeriodIDCache[tenantId] = id
   return trns('application_settings')
-    .where('tenantId', tenantId)
+    .where('tenant_id', tenantId)
     .update('current_reporting_period_id', id)
 }
 

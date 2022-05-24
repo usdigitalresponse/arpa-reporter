@@ -228,8 +228,8 @@ async function generateSubaward (records) {
           record.content.Place_of_Performance_Address_3__c,
           record.content.Place_of_Performance_City__c,
           record.content.State_Abbreviated__c,
-          record.content.Place_of_Performance_Zip__c,
-          record.content.Place_of_Performance_Zip_4__c,
+          String(record.content.Place_of_Performance_Zip__c).padStart(5, '0'), // required
+          record.content.Place_of_Performance_Zip_4__c && String(record.content.Place_of_Performance_Zip_4__c).padStart(4, '0'), // optional
           record.content.Purpose_of_Funds__c,
           record.content.Description__c
         ]
@@ -301,8 +301,8 @@ async function generateReport (periodId) {
 
     const template = await getTemplate(name)
 
-    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData])
-    const csvString = XLSX.utils.sheet_to_csv(sheet)
+    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
+    const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
     const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
     zip.addFile(name + '.csv', buffer)
   })

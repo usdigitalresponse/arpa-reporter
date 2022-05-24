@@ -21,6 +21,7 @@ function extractRecords (buffer) {
   log('extractRecords()')
 
   const workbook = XLSX.read(buffer, {
+    cellDates: true,
     type: 'buffer',
     sheets: [CERTIFICATION_SHEET, COVER_SHEET, ...DATA_SHEETS]
   })

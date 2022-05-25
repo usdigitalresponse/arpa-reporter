@@ -255,7 +255,7 @@ async function generateProjectBaseline (records) {
       case '2.37': {
         return [
           null, // first col is blank
-          '1-Public Health',
+          record.type, // FIXME: transform from sheet tab to export format
           record.subcategory,
           record.content.Name,
           record.content.Project_Identification_Number__c,

@@ -17,8 +17,12 @@ module.exports = {
   getAwardData
 }
 
-async function getAwardData (type, trns = knex) {
-  const q = {
+async function getAwardData (tenantId, type, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getAwardData');
+  }
+
+  const qTypes = {
     contracts: {
       number: 'contract number',
       amount: 'contract amount',
@@ -48,7 +52,11 @@ async function getAwardData (type, trns = knex) {
       amount: 'obligation amount',
       expenditure: 'total expenditure amount'
     }
-  }[type]
+  }
+  if (type === undefined || !(type in qTypes)) {
+    throw new Error('must specify type in getAwardData');
+  }
+  const q = qTypes[type]
 
   const query = `
     select
@@ -69,7 +77,9 @@ async function getAwardData (type, trns = knex) {
     left join agencies as a on a.id = u.agency_id
     left join subrecipients as r on
       r.identification_number = d.content->>'subrecipient id'
-    where d.type='${type}'
+    where
+      d.type = :type
+      and d.tenant_id = :tenantId
     order by
       a.code,
       p.code,
@@ -78,11 +88,15 @@ async function getAwardData (type, trns = knex) {
       u.reporting_period_id
     ;`
 
-  const result = await trns.raw(query)
+  const result = await trns.raw(query, {type, tenantId})
   return result.rows
 }
 
-async function getAggregateAwardData (trns = knex) {
+async function getAggregateAwardData (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getAggregateAwardData');
+  }
+
   const result = await trns.raw(`
     select
       a.code as Agency,
@@ -95,17 +109,24 @@ async function getAggregateAwardData (trns = knex) {
     left join uploads as u on d.upload_id = u.id
     left join projects as p on p.id = u.project_id
     left join agencies as a on a.id = u.agency_id
-    where d.type='aggregate awards < 50000'
+    where
+      d.type='aggregate awards < 50000'
+      and d.tenant_id = :tenantId
     order by
       a.code,
       p.code,
       d.content->>'funding type'
-    ;`
+    ;`,
+    {tenantId}
   )
   return result.rows
 }
 
-async function getAggregatePaymentData (trns = knex) {
+async function getAggregatePaymentData (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getAggregatePaymentData');
+  }
+
   const result = await trns.raw(`
     select
       a.code as Agency,
@@ -117,15 +138,22 @@ async function getAggregatePaymentData (trns = knex) {
     left join uploads as u on d.upload_id = u.id
     left join projects as p on p.id = u.project_id
     left join agencies as a on a.id = u.agency_id
-    where d.type='aggregate payments individual'
+    where
+      d.type='aggregate payments individual'
+      and d.tenant_id = :tenantId
     order by
       p.code
-    ;`
+    ;`,
+    {tenantId}
   )
   return result.rows
 }
 
-async function getProjectSummaryData (trns = knex) {
+async function getProjectSummaryData (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getProjectSummaryData');
+  }
+
   const result = await trns.raw(`
     select
       a.code as Agency,
@@ -150,15 +178,17 @@ async function getProjectSummaryData (trns = knex) {
     left join uploads as u on d.upload_id = u.id
     left join projects as p on p.id = u.project_id
     left join agencies as a on a.id = u.agency_id
-    where d.type in (
-      'contracts',
-      'grants',
-      'loans',
-      'transfers',
-      'direct',
-      'aggregate awards < 50000',
-      'aggregate payments individual'
-    )
+    where
+      d.type in (
+        'contracts',
+        'grants',
+        'loans',
+        'transfers',
+        'direct',
+        'aggregate awards < 50000',
+        'aggregate payments individual'
+      )
+      and d.tenant_id = :tenantId
     order by
       a.code,
       p.code,
@@ -169,7 +199,8 @@ async function getProjectSummaryData (trns = knex) {
       transfer_number,
       obligation_date,
       reporting_period_id
-    ;`
+    ;`,
+    {tenantId}
   )
   return result.rows
 }

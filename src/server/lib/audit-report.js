@@ -45,14 +45,14 @@ async function generateReport (tenantId) {
   const nPeriods = await getCurrentReportingPeriodID(tenantId)
   log(`generateReport() for ${nPeriods} periods`)
 
-  const contracts = createAwardSheet('contracts', nPeriods)
-  const grants = createAwardSheet('grants', nPeriods)
-  const loans = createAwardSheet('loans', nPeriods)
-  const transfers = createAwardSheet('transfers', nPeriods)
-  const direct = createAwardSheet('direct', nPeriods)
-  const aa = createAwardAggregateSheet(nPeriods)
-  const ap = createAggregatePaymentSheet(nPeriods)
-  const ps = createProjectSummarySheet(nPeriods)
+  const contracts = createAwardSheet(tenantId, 'contracts', nPeriods)
+  const grants = createAwardSheet(tenantId, 'grants', nPeriods)
+  const loans = createAwardSheet(tenantId, 'loans', nPeriods)
+  const transfers = createAwardSheet(tenantId, 'transfers', nPeriods)
+  const direct = createAwardSheet(tenantId, 'direct', nPeriods)
+  const aa = createAwardAggregateSheet(tenantId, nPeriods)
+  const ap = createAggregatePaymentSheet(tenantId, nPeriods)
+  const ps = createProjectSummarySheet(tenantId, nPeriods)
 
   let sheets
   try {
@@ -86,12 +86,12 @@ async function generateReport (tenantId) {
   return { filename, outputWorkBook }
 }
 
-async function createAwardSheet (type, nPeriods) {
-  log(`createAwardSheet(${type}, ${nPeriods})`)
+async function createAwardSheet (tenantId, type, nPeriods) {
+  log(`createAwardSheet(${tenantId}, ${type}, ${nPeriods})`)
   let errorRows
   const sheet = []
   try {
-    const sqlRows = await getAwardData(type)
+    const sqlRows = await getAwardData(tenantId, type)
     const rowData = consolidatePeriods(sqlRows, type)
     errorRows = addErrorChecks(rowData, type, nPeriods)
     await addAwardSheetColumnTitles(sheet, type, nPeriods)
@@ -222,12 +222,12 @@ async function addAwardSheetColumnTitles (sheet, type, nPeriods) {
   sheet.push(line1)
 }
 
-async function createAwardAggregateSheet (nPeriods) {
-  log(`createAwardAggregateSheet(${nPeriods} periods)`)
+async function createAwardAggregateSheet (tenantId, nPeriods) {
+  log(`createAwardAggregateSheet(tenant ${tenantId}, ${nPeriods} periods)`)
   let errorRows = 0
   const sheet = []
   try {
-    const sqlRows = await getAggregateAwardData()
+    const sqlRows = await getAggregateAwardData(tenantId)
     const rowData = consolidatePeriods(sqlRows)
     errorRows = addErrorChecks(rowData, 'Aggregate Awards < 50000', nPeriods)
     addColumnTitles(sheet, nPeriods)
@@ -325,12 +325,12 @@ async function createAwardAggregateSheet (nPeriods) {
       a.  Formula: Cumulative Expenditure Amount
 
   */
-async function createAggregatePaymentSheet (nPeriods) {
-  log(`createAggregatePaymentSheet(${nPeriods})`)
+async function createAggregatePaymentSheet (tenantId, nPeriods) {
+  log(`createAggregatePaymentSheet(${tenantId}, ${nPeriods})`)
   let errorRows
   const sheet = []
   try {
-    const sqlRows = await getAggregatePaymentData()
+    const sqlRows = await getAggregatePaymentData(tenantId)
     const rowData = consolidatePeriods(sqlRows)
     errorRows = addErrorChecks(rowData, 'Aggregate Payments Individual', nPeriods)
     addColumnTitles(sheet, nPeriods)
@@ -581,12 +581,12 @@ function addErrorChecks (rowData, type, nPeriods) {
 
 /* createProjectSummarySheet()
   */
-async function createProjectSummarySheet (nPeriods) {
-  log(`createProjectSummarySheet(${nPeriods})`)
+async function createProjectSummarySheet (tenantId, nPeriods) {
+  log(`createProjectSummarySheet(${tenantId}, ${nPeriods})`)
 
   const sheet = []
   try {
-    const sqlRows = await getProjectSummaryData()
+    const sqlRows = await getProjectSummaryData(tenantId)
     log(`${sqlRows.length} SQL rows`)
     const rowData = consolidateProjects(sqlRows)
     log(`${rowData.length} consolidated rows`)

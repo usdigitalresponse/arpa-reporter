@@ -60,8 +60,8 @@
       </li>
 
       <li class="nav-item" v-if="role === 'admin'">
-        <router-link :class="navLinkClass('/subrecipients')" to="/subrecipients">
-          Sub Recipients
+        <router-link :class="navLinkClass('/recipients')" to="/recipients">
+          Sub-recipients
         </router-link>
       </li>
 

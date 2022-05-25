@@ -49,8 +49,15 @@ async function getRecipient (uei = null, tin = null, trns = knex) {
   return query.then(rows => rows[0])
 }
 
+async function listRecipients (trns = knex) {
+  return trns('arpa_recipients AS r')
+    .leftJoin('uploads AS u', 'r.upload_id', 'u.id')
+    .select('r.*', 'u.reporting_period_id AS reporting_period_id')
+}
+
 module.exports = {
   createRecipient,
   getRecipient,
-  updateRecipient
+  updateRecipient,
+  listRecipients
 }

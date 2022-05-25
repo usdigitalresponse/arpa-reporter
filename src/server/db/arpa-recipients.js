@@ -5,10 +5,12 @@ function baseQuery (trns) {
     .select(
       'arpa_recipients.*',
       'uploads.reporting_period_id AS reporting_period_id',
-      'users.email AS created_by'
+      'users.email AS created_by',
+      'users2.email AS updated_by_email'
     )
     .leftJoin('uploads', 'arpa_recipients.upload_id', 'uploads.id')
     .leftJoin('users', 'uploads.user_id', 'users.id')
+    .leftJoin('users AS users2', 'arpa_recipients.updated_by', 'users2.id')
 }
 
 async function createRecipient (recipient, trns = knex) {
@@ -22,18 +24,18 @@ async function createRecipient (recipient, trns = knex) {
     .then(rows => rows[0])
 }
 
-async function updateRecipient ({ uei, tin, record }, trns = knex) {
-  if (!(uei || tin)) {
-    throw new Error('recipient row must include a `uei` or a `tin` field')
-  }
+async function updateRecipient (id, { updatedByUser, record }, trns = knex) {
   const query = trns('arpa_recipients')
-    .update('record', record)
+    .where('id', id)
     .returning('*')
 
-  if (uei) {
-    query.where('uei', uei)
-  } else if (tin) {
-    query.where('tin', tin)
+  if (record) {
+    query.update('record', record)
+  }
+
+  if (updatedByUser) {
+    query.update('updated_by', updatedByUser.id)
+    query.update('updated_at', knex.fn.now())
   }
 
   return query.then(rows => rows[0])

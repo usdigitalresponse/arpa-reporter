@@ -88,6 +88,13 @@ async function validateReportingPeriod ({ upload, records, trns }) {
 async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
   const errors = []
 
+  // start by trimming any whitespace
+  for (const key of Object.keys(rules)) {
+    if (recipient[key] && (typeof recipient[key]) === 'string') {
+      recipient[key] = recipient[key].trim()
+    }
+  }
+
   // does the row already exist?
   let existing = null
   if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
@@ -104,20 +111,17 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
   // TODO: what if the same upload specifies the same recipient multiple times,
   // but different?
   //
-  if (existing && existing.upload_id !== upload.id) {
+  if (existing && (existing.upload_id !== upload.id || existing.updated_at)) {
     const recipientId = existing.uei || existing.tin
     const record = JSON.parse(existing.record)
 
     // make sure that each key in the record matches the recipient
-    //
-    // TODO : what if the recipient has keys not found in the record?
-    //
-    for (const ek of Object.keys(record)) {
-      if (record[ek] !== recipient[ek]) {
+    for (const [key, rule] of Object.entries(rules)) {
+      if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
         errors.push(new ValidationError(
-          `Recipient ${recipientId} exists with '${ek}' as '${record[ek]}', \
-          but upload specifies '${recipient[ek]}'`,
-          { col: rules[ek]?.columnName }
+          `Recipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
+          but upload specifies '${recipient[key]}'`,
+          { col: rule.columnName }
         ))
       }
     }
@@ -126,6 +130,7 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
   } else {
     // check all the rules
     for (const [key, rule] of Object.entries(rules)) {
+      // make sure required keys are present
       if (rule.required) {
         if (!recipient[key]) {
           errors.push(new ValidationError(
@@ -138,16 +143,15 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
 
     // if it's valid, we can insert it into the db
     if (errors.length === 0) {
-      const dbRow = {
-        uei: recipient.Unique_Entity_Identifier__c,
-        tin: recipient.EIN__c,
-        record: recipient,
-        upload_id: upload.id
-      }
-
       if (existing?.upload_id === upload.id) {
-        await updateRecipient(dbRow, trns)
+        await updateRecipient(existing.id, { record: recipient }, trns)
       } else {
+        const dbRow = {
+          uei: recipient.Unique_Entity_Identifier__c,
+          tin: recipient.EIN__c,
+          record: recipient,
+          upload_id: upload.id
+        }
         await createRecipient(dbRow, trns)
       }
     }

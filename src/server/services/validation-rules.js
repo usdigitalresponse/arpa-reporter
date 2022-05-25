@@ -6,6 +6,7 @@ const { DATA_SHEET_TYPES } = require('./records')
 const { templateForPeriod } = require('./get-template')
 
 const COLNAMES = makeColNames()
+const STATES = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'VI', 'WA', 'WV', 'WI', 'WY']
 
 function makeColNames () {
   const upcaseLetters = []
@@ -15,6 +16,14 @@ function makeColNames () {
 
   const secondSet = upcaseLetters.map(letter => 'A' + letter)
   return [...upcaseLetters, ...secondSet]
+}
+
+async function addCustomRules (rules) {
+  // subrecipient state dropdown should contain all states
+  rules.subrecipient.State_Abbreviated__c.listVals = STATES
+
+  // return the modified rules
+  return rules
 }
 
 async function extractRules (buffer) {
@@ -63,11 +72,11 @@ async function extractRules (buffer) {
       // construct rule
       const rule = {
         key,
-        columnName: COLNAMES[colIdx],
-        type: dataTypes[colIdx],
         required: required[colIdx],
+        dataType: dataTypes[colIdx],
         maxLength: maxLengths[colIdx],
         listVals: listVals[colIdx],
+        columnName: COLNAMES[colIdx],
         humanColName: humanColNames[colIdx]
       }
 
@@ -77,7 +86,7 @@ async function extractRules (buffer) {
     rules[type] = sheetRules
   }
 
-  return rules
+  return addCustomRules(rules)
 }
 
 async function rulesForUpload (upload) {

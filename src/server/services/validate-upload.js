@@ -4,7 +4,7 @@ const moment = require('moment')
 const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
-const { createRecipient, getRecipient, updateRecipient } = require('../db/arpa-recipients')
+const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-recipients')
 
 const { recordsForUpload } = require('./records')
 const { rulesForUpload } = require('./validation-rules')
@@ -91,7 +91,7 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
   // does the row already exist?
   let existing = null
   if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
-    existing = await getRecipient(recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
+    existing = await findRecipient(recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
   } else {
     errors.push(new ValidationError(
       'At least one of UEI or TIN must be set, but both are missing',

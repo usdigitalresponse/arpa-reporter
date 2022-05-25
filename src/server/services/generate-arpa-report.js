@@ -3,13 +3,28 @@ const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
-const { log } = require('../lib/log')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 
 function isNotNull (value) {
   // `== null` matches null AND undefined
   return value != null
+}
+
+/**
+ * Extract the Detailed Expenditure Category code from a record.
+ *
+ * @returns {string} The detailed EC code in format "#.##".
+ */
+function getDetailedEcCode (record) {
+  const EC_CODE_REGEX = /^(\d.\d\d?)/
+  const { subcategory } = record
+
+  if (EC_CODE_REGEX.test(subcategory)) {
+    const [, detailedECCode] = EC_CODE_REGEX.exec(subcategory)
+    return detailedECCode
+  }
+  return undefined
 }
 
 async function generateReportName (periodId) {
@@ -29,8 +44,17 @@ async function generateReportName (periodId) {
 
 async function generateProject18 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '1.8':
+      case '2.29':
+      case '2.30':
+      case '2.31':
+      case '2.32':
+      case '2.33': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -39,8 +63,14 @@ async function generateProject18 (records) {
 
 async function generateProject19 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '1.9':
+      case '2.34': {
+        return [
+          // TODO
+        ]
+      }
       default:
         return null
     }
@@ -49,8 +79,19 @@ async function generateProject19 (records) {
 
 async function generateProject2128 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '2.1':
+      case '2.2':
+      case '2.3':
+      case '2.4':
+      case '2.5':
+      case '2.6':
+      case '2.7':
+      case '2.8': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -59,8 +100,16 @@ async function generateProject2128 (records) {
 
 async function generateProject214 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '2.14':
+      case '2.24':
+      case '2.25':
+      case '2.26':
+      case '2.27': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -69,8 +118,12 @@ async function generateProject214 (records) {
 
 async function generateProject236 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '2.36': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -79,8 +132,12 @@ async function generateProject236 (records) {
 
 async function generateProject31 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '3.1': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -89,8 +146,12 @@ async function generateProject31 (records) {
 
 async function generateProject32 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '3.2': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -99,8 +160,13 @@ async function generateProject32 (records) {
 
 async function generateProject4142 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '4.1':
+      case '4.2': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -109,8 +175,29 @@ async function generateProject4142 (records) {
 
 async function generateProject51518 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '5.1':
+      case '5.2':
+      case '5.3':
+      case '5.4':
+      case '5.5':
+      case '5.6':
+      case '5.7':
+      case '5.8':
+      case '5.9':
+      case '5.10':
+      case '5.11':
+      case '5.12':
+      case '5.13':
+      case '5.14':
+      case '5.15':
+      case '5.16':
+      case '5.17':
+      case '5.18': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -119,8 +206,14 @@ async function generateProject51518 (records) {
 
 async function generateProject519521 (records) {
   return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '5.19':
+      case '5.20':
+      case '5.21': {
+        // TODO
+        return null
+      }
       default:
         return null
     }
@@ -129,9 +222,37 @@ async function generateProject519521 (records) {
 
 async function generateProjectBaseline (records) {
   return records.map(record => {
-    log('record.type', record.type)
-    switch (record.type) {
-      case 'ec 1 - public health': {
+    const detailedEcCode = getDetailedEcCode(record)
+    switch (detailedEcCode) {
+      case '1.1':
+      case '1.2':
+      case '1.3':
+      case '1.4':
+      case '1.5':
+      case '1.6':
+      case '1.7':
+      case '1.10':
+      case '1.11':
+      case '1.12':
+      case '1.13':
+      case '1.14':
+      case '2.9':
+      case '2.10':
+      case '2.11':
+      case '2.12':
+      case '2.13':
+      case '2.15':
+      case '2.16':
+      case '2.17':
+      case '2.18':
+      case '2.19':
+      case '2.20':
+      case '2.21':
+      case '2.22':
+      case '2.23':
+      case '2.28':
+      case '2.35':
+      case '2.37': {
         return [
           null, // first col is blank
           '1-Public Health',

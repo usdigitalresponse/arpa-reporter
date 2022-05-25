@@ -4,7 +4,7 @@ const moment = require('moment')
 const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
-const { createRecipient, getRecipient, updateRecipient } = require('../db/arpa_recipients')
+const { createRecipient, getRecipient, updateRecipient } = require('../db/arpa-recipients')
 
 const { recordsForUpload } = require('./records')
 const { rulesForUpload } = require('./validation-rules')

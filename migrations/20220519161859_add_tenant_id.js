@@ -1,4 +1,4 @@
-const tables = [
+const TABLES = [
   "application_settings",
   "period_summaries",
   "reporting_periods",
@@ -18,7 +18,7 @@ const tables = [
  */
 exports.up = function (knex) {
   // This reduce in effect chains each of these calls together and returns the resulting promise
-  let schema = tables.reduce(
+  let schema = TABLES.reduce(
     (schema, tableName) =>
       schema.alterTable(tableName, function (table) {
         // We add a default value for two reasons:
@@ -41,7 +41,7 @@ exports.up = function (knex) {
  */
 exports.down = function (knex) {
   // This reduce in effect chains each of these calls together and returns the resulting promise
-  return tables.reduce(
+  return TABLES.reduce(
     (schema, tableName) =>
       schema.alterTable(tableName, function (table) {
         table.dropColumn("tenant_id");

@@ -19,7 +19,7 @@ const {
   isValidZip,
   matchesFilePart,
   numberIsLessThanOrEqual,
-  validateDocuments,
+  validateRecords,
   whenGreaterThanZero,
   whenNotBlank,
   whenUS
@@ -230,4 +230,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('grants', requiredFields)
+module.exports = validateRecords('grants', requiredFields)

@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import { mount } from '@vue/test-utils'
-import DocumentForm from '@/components/DocumentForm.vue'
+import RecordForm from '@/components/RecordForm.vue'
 
-describe('DocumentForm.vue', () => {
+describe('RecordForm.vue', () => {
   it('renders a form for a new record', () => {
-    const wrapper = mount(DocumentForm, {
+    const wrapper = mount(RecordForm, {
       propsData: {
         type: 'products',
         columns: [{ name: 'name' }, { name: 'description' }],

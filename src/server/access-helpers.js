@@ -1,4 +1,4 @@
-const { userAndRole } = require('./db')
+const { userAndRole } = require('./db/users')
 
 function requireUser (req, res, next) {
   if (!req.signedCookies.userId) {

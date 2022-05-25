@@ -118,8 +118,7 @@ const run = async () => {
   await inquirer.prompt(questions, {
     SITE_URL: newService.serviceDetails.url,
     UPLOAD_DIRECTORY: '/var/data/uploads',
-    DATA_DIR: '/var/data/uploads',
-    VALIDATION_TEMPLATE: 'validation-template.xlsx'
+    DATA_DIR: '/var/data/uploads'
   })
     .then(answers => {
       render['update-env-vars-for-service'](

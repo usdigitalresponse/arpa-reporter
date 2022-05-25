@@ -9,11 +9,12 @@ const { requireUser } = require('../access-helpers')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
-const { user: getUser } = require('../db')
+const knex = require('../db/connection')
+const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
-const { uploadsForAgency, validForReportingPeriod, upload: getUpload, uploads: listUploads } = require('../db/uploads')
+const { uploadsForAgency, validForReportingPeriod, getUpload, listUploads } = require('../db/uploads')
 
-const { documentsForUpload } = require('../services/documents')
+const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
@@ -25,7 +26,7 @@ router.get('/', requireUser, async function (req, res) {
   const agencyId = user.agency_id || (req.query.for_agency ?? null)
   const onlyValidated = req.query.only_validated ?? null
 
-  const uploads = await listUploads(periodId, agencyId, onlyValidated)
+  const uploads = await listUploads({ periodId, agencyId, onlyValidated })
   return res.json({ uploads })
 })
 
@@ -92,7 +93,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   })
 })
 
-router.get('/:id/documents', requireUser, async (req, res) => {
+router.get('/:id/records', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
@@ -102,10 +103,10 @@ router.get('/:id/documents', requireUser, async (req, res) => {
     return
   }
 
-  const documents = await documentsForUpload(upload)
+  const records = await recordsForUpload(upload)
   res.json({
     upload,
-    documents
+    records
   })
 })
 
@@ -140,11 +141,19 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     return
   }
 
-  const errors = await validateUpload(upload, user)
-  res.json({
-    errors: errors.map(e => e.toObject()),
-    upload
-  })
+  const trns = await knex.transaction()
+  try {
+    const errors = await validateUpload(upload, user, trns)
+    trns.commit()
+
+    res.json({
+      errors: errors.map(e => e.toObject()),
+      upload
+    })
+  } catch (e) {
+    trns.rollback()
+    res.status(500).json({ error: e })
+  }
 })
 
 module.exports = router

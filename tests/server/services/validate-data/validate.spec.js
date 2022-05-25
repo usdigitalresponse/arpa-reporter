@@ -19,7 +19,7 @@ const {
   numberIsLessThanOrEqual,
   numberIsGreaterThanOrEqual,
   validateFields,
-  validateDocuments,
+  validateRecords,
   whenBlank,
   whenGreaterThanZero,
   whenUS
@@ -356,7 +356,7 @@ describe('validateFields', () => {
     ['date', isValidDate],
     ['description', isNotBlank, 'Description is required']
   ]
-  it('can validate a document', () => {
+  it('can validate a record', () => {
     const content = {
       name: 'George',
       date: '2020-10-02',
@@ -421,8 +421,8 @@ describe('custom message', () => {
   })
 })
 
-describe('validateDocuments', () => {
-  const documents = {
+describe('validateRecords', () => {
+  const records = {
     test: [
       { content: { name: 'George' } },
       { content: { name: 'John' } },
@@ -432,8 +432,8 @@ describe('validateDocuments', () => {
     ]
   }
   const validations = [['name', isNotBlank]]
-  it('can validate a collection of documents', () => {
-    const log = validateDocuments('test', validations)(documents, {})
+  it('can validate a collection of records', () => {
+    const log = validateRecords('test', validations)(records, {})
     expect(log).to.have.length(1)
   })
 })

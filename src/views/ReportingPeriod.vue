@@ -5,7 +5,7 @@
       Loading..
     </div>
     <div v-else>
-      <DocumentForm
+      <RecordForm
         type="Reporting Period"
         :columns="fields"
         :record="editReportingPeriod"
@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import DocumentForm from '../components/DocumentForm'
+import RecordForm from '../components/RecordForm'
 import moment from 'moment'
 import _ from 'lodash'
 export default {
   name: 'ReportingPeriod',
   components: {
-    DocumentForm
+    RecordForm
   },
   data: function () {
     let id = 0

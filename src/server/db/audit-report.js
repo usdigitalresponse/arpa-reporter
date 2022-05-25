@@ -1,5 +1,7 @@
 /* eslint camelcase: 0 */
 
+// !! FIXME !! This file has not been updated to support the ARPA codebase
+
 /*
 --------------------------------------------------------------------------------
 -                           db/audit-report.js
@@ -15,7 +17,7 @@ module.exports = {
   getAwardData
 }
 
-async function getAwardData (type) {
+async function getAwardData (type, trns = knex) {
   const q = {
     contracts: {
       number: 'contract number',
@@ -76,12 +78,12 @@ async function getAwardData (type) {
       u.reporting_period_id
     ;`
 
-  const result = await knex.raw(query)
+  const result = await trns.raw(query)
   return result.rows
 }
 
-async function getAggregateAwardData () {
-  const result = await knex.raw(`
+async function getAggregateAwardData (trns = knex) {
+  const result = await trns.raw(`
     select
       a.code as Agency,
       p.code as Project,
@@ -103,8 +105,8 @@ async function getAggregateAwardData () {
   return result.rows
 }
 
-async function getAggregatePaymentData () {
-  const result = await knex.raw(`
+async function getAggregatePaymentData (trns = knex) {
+  const result = await trns.raw(`
     select
       a.code as Agency,
       p.code as Project,
@@ -123,8 +125,8 @@ async function getAggregatePaymentData () {
   return result.rows
 }
 
-async function getProjectSummaryData () {
-  const result = await knex.raw(`
+async function getProjectSummaryData (trns = knex) {
+  const result = await trns.raw(`
     select
       a.code as Agency,
       p.code as Project,

@@ -1,12 +1,13 @@
 const express = require('express')
 const _ = require('lodash-checkit')
 const router = express.Router()
+
 const {
   userAndRole,
   accessToken,
   createAccessToken,
   markAccessTokenUsed
-} = require('../db')
+} = require('../db/users')
 const { sendPasscode } = require('../lib/email')
 
 function isExpired (expires) {

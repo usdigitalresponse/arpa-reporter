@@ -15,7 +15,7 @@ const {
   matchesFilePart,
   numberIsLessThanOrEqual,
   transferMatches,
-  validateDocuments,
+  validateRecords,
   whenNotBlank,
   whenGreaterThanZero
 } = require('./validate')
@@ -150,4 +150,4 @@ const requiredFields = [
   ]
 ]
 
-module.exports = validateDocuments('transfers', requiredFields)
+module.exports = validateRecords('transfers', requiredFields)

@@ -15,7 +15,7 @@ const { log } = require('../lib/log')
 
 /*  updateSubrecipientTable() adds new subrecipients to the database
   */
-async function updateSubrecipientTable (documents) {
+async function updateSubrecipientTable (records) {
   // get all the subrecipients currently in the subrecipients table
   let mapSubrecipients
   try {
@@ -24,7 +24,7 @@ async function updateSubrecipientTable (documents) {
     return err
   }
 
-  documents.forEach(async record => {
+  records.forEach(async record => {
     switch (record.type) {
       case 'subrecipient': {
         const subrecipientIN = cleanString(record.content['identification number'])

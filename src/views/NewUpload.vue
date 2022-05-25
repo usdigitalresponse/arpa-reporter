@@ -1,7 +1,8 @@
 
 <template>
   <div class="upload">
-    <h1>Upload File</h1>
+    <h1>Submit Spreadsheet</h1>
+
     <div>
       <div v-if="error" class="mt-3 alert alert-danger" role="alert">
         {{ error }}
@@ -102,10 +103,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.upload {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

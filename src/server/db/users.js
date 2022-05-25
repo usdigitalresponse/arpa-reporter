@@ -1,32 +1,15 @@
 const { v4 } = require('uuid')
+
 const knex = require('./connection')
 
-const {
-  currentReportingPeriodSettings,
-  applicationSettings
-} = require('./settings')
-
-const {
-  getPeriodSummaries,
-  getPriorPeriodSummaries,
-  readSummaries
-} = require('./period-summaries')
-
-const {
-  createUpload,
-  upload,
-  uploads,
-  uploadsForAgency
-} = require('./uploads')
-
-function users () {
-  return knex('users')
+function users (trns = knex) {
+  return trns('users')
     .select('*')
     .orderBy('email')
 }
 
-function createUser (user) {
-  return knex
+function createUser (user, trns = knex) {
+  return trns
     .insert(user)
     .into('users')
     .returning(['id', 'created_at'])
@@ -39,8 +22,8 @@ function createUser (user) {
     })
 }
 
-function updateUser (user) {
-  return knex('users')
+function updateUser (user, trns = knex) {
+  return trns('users')
     .where('id', user.id)
     .update({
       email: user.email,
@@ -50,15 +33,15 @@ function updateUser (user) {
     })
 }
 
-function user (id) {
-  return knex('users')
+function user (id, trns = knex) {
+  return trns('users')
     .select('*')
     .where('id', id)
     .then(r => r[0])
 }
 
-function userAndRole (id) {
-  return knex('users')
+function userAndRole (id, trns = knex) {
+  return trns('users')
     .join('roles', 'roles.name', 'users.role')
     .select(
       'users.id',
@@ -72,28 +55,28 @@ function userAndRole (id) {
     .then(r => r[0])
 }
 
-function roles () {
-  return knex('roles')
+function roles (trns = knex) {
+  return trns('roles')
     .select('*')
     .orderBy('name')
 }
 
-function accessToken (passcode) {
-  return knex('access_tokens')
+function accessToken (passcode, trns = knex) {
+  return trns('access_tokens')
     .select('*')
     .where('passcode', passcode)
     .then(r => r[0])
 }
 
-function markAccessTokenUsed (passcode) {
-  return knex('access_tokens')
+function markAccessTokenUsed (passcode, trns = knex) {
+  return trns('access_tokens')
     .where('passcode', passcode)
     .update({ used: true })
 }
 
-async function generatePasscode (email) {
+async function generatePasscode (email, trns = knex) {
   console.log('generatePasscode for :', email)
-  const users = await knex('users')
+  const users = await trns('users')
     .select('*')
     .where('email', email)
   if (users.length === 0) {
@@ -104,7 +87,7 @@ async function generatePasscode (email) {
   const expiryMinutes = parseInt(process.env.LOGIN_EXPIRY_MINUTES) || 30
   const expires = new Date()
   expires.setMinutes(expires.getMinutes() + expiryMinutes)
-  await knex('access_tokens').insert({
+  await trns('access_tokens').insert({
     user_id: users[0].id,
     passcode,
     expires,
@@ -117,32 +100,13 @@ function createAccessToken (email) {
   return generatePasscode(email)
 }
 
-async function transact (callback) {
-  let result
-  await knex.transaction(async queryBuilder => {
-    result = await callback(queryBuilder)
-  })
-  return result
-}
-
 module.exports = {
   accessToken,
-  applicationSettings,
   createAccessToken,
-  createUpload,
   createUser,
-  currentReportingPeriodSettings,
-  getPeriodSummaries,
-  getPriorPeriodSummaries,
-  knex,
   markAccessTokenUsed,
-  readSummaries,
   roles,
-  transact,
   updateUser,
-  upload,
-  uploads,
-  uploadsForAgency,
   user,
   userAndRole,
   users

@@ -1,5 +1,5 @@
 const { isNotBlank, isValidDate } = require('./validate')
-const { validateSingleDocument } = require('./validate')
+const { validateSingleRecord } = require('./validate')
 
 const requiredFields = [
   [
@@ -10,7 +10,7 @@ const requiredFields = [
   ['date', isValidDate, 'Date must be a valid date', { isDate: true }]
 ]
 
-module.exports = validateSingleDocument(
+module.exports = validateSingleRecord(
   'certification',
   requiredFields,
   'certification requires a row with "agency financial reviewer name" and "date"'

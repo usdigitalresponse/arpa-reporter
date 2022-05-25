@@ -3,7 +3,14 @@ const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
+const { log } = require('../lib/log')
 const { getTemplate } = require('./get-template')
+const { recordsForReportingPeriod } = require('./records')
+
+function isNotNull (value) {
+  // `== null` matches null AND undefined
+  return value != null
+}
 
 async function generateReportName (periodId) {
   const now = moment().utc()
@@ -20,71 +27,232 @@ async function generateReportName (periodId) {
   return filename
 }
 
-async function generateProject18 (periodId) {
-  return getTemplate('Project Templates/project18_229233BulkUploads')
+async function generateProject18 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject19 (periodId) {
-  return getTemplate('Project Templates/project19_234BulkUploads')
+async function generateProject19 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject2128 (periodId) {
-  return getTemplate('Project Templates/project2128BulkUploads')
+async function generateProject2128 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject214 (periodId) {
-  return getTemplate('Project Templates/project214_224227BulkUploads')
+async function generateProject214 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject236 (periodId) {
-  return getTemplate('Project Templates/project236BulkUploads')
+async function generateProject236 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject31 (periodId) {
-  return getTemplate('Project Templates/project31BulkUpload')
+async function generateProject31 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject32 (periodId) {
-  return getTemplate('Project Templates/project32BulkUpload')
+async function generateProject32 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject4142 (periodId) {
-  return getTemplate('Project Templates/project4142BulkUpload')
+async function generateProject4142 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject51518 (periodId) {
-  return getTemplate('Project Templates/project51518BulkUpload')
+async function generateProject51518 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProject519521 (periodId) {
-  return getTemplate('Project Templates/project519521BulkUpload')
+async function generateProject519521 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateProjectBaseline (periodId) {
-  return getTemplate('Project Templates/projectBaselineBulkUpload')
+async function generateProjectBaseline (records) {
+  return records.map(record => {
+    log('record.type', record.type)
+    switch (record.type) {
+      case 'ec 1 - public health': {
+        return [
+          null, // first col is blank
+          '1-Public Health',
+          record.subcategory,
+          record.content.Name,
+          record.content.Project_Identification_Number__c,
+          record.content.Completion_Status__c,
+          record.content.Adopted_Budget__c,
+          record.content.Total_Obligations__c,
+          record.content.Total_Expenditures__c,
+          record.content.Current_Period_Obligations__c,
+          record.content.Current_Period_Expenditures__c,
+          record.content.Does_Project_Include_Capital_Expenditure__c,
+          record.content.Total_Cost_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure_Other__c,
+          record.content.Capital_Expenditure_Justification__c,
+          record.content.Project_Description__c,
+          record.content.Program_Income_Earned__c,
+          record.content.Program_Income_Expended__cs,
+          record.content.Primary_Project_Demographics__c,
+          record.content.Primary_Project_Demographics_Explanation__c,
+          record.content.Secondary_Project_Demographics__c,
+          record.content.Secondary_Proj_Demographics_Explanation__c,
+          record.content.Tertiary_Project_Demographics__c,
+          record.content.Tertiary_Proj_Demographics_Explanation__c,
+          record.content.Structure_Objectives_of_Asst_Programs__c,
+          record.content.Recipient_Approach_Description__c
+        ]
+      }
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateExpendituresGT50000 (periodId) {
-  return getTemplate('expendituresGT50000BulkUpload')
+async function generateExpendituresGT50000 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      case 'expenditures > 50000': {
+        return [
+          null, // first col is blank
+          record.content.Sub_Award_Lookup__c,
+          record.content.Expenditure_Start__c,
+          record.content.Expenditure_End__c,
+          record.content.Expenditure_Amount__c
+        ]
+      }
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateExpendituresLT50000 (periodId) {
-  return getTemplate('expendituresLT50000BulkUpload')
+async function generateExpendituresLT50000 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generatePaymentsIndividualsLT50000 (periodId) {
-  return getTemplate('paymentsIndividualsLT50000BulkUpload')
+async function generatePaymentsIndividualsLT50000 (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateSubaward (periodId) {
-  return getTemplate('subawardBulkUpload')
+async function generateSubaward (records) {
+  return records.map(record => {
+    switch (record.type) {
+      case 'awards > 50000': {
+        return [
+          null, // first col is blank
+          record.content.Recipient_UEI__c,
+          record.content.Recipient_EIN__c,
+          record.content.Project_Identification_Number__c,
+          record.content.Award_No__c,
+          record.content.Award_Type__c,
+          record.content.Award_Amount__c,
+          record.content.Award_Date__c,
+          record.content.Primary_Sector__c,
+          record.content.If_Other__c,
+          record.content.Period_of_Performance_Start__c,
+          record.content.Period_of_Performance_End__c,
+          record.content.Place_of_Performance_Address_1__c,
+          record.content.Place_of_Performance_Address_2__c,
+          record.content.Place_of_Performance_Address_3__c,
+          record.content.Place_of_Performance_City__c,
+          record.content.State_Abbreviated__c,
+          String(record.content.Place_of_Performance_Zip__c).padStart(5, '0'), // required
+          record.content.Place_of_Performance_Zip_4__c && String(record.content.Place_of_Performance_Zip_4__c).padStart(4, '0'), // optional
+          record.content.Purpose_of_Funds__c,
+          record.content.Description__c
+        ]
+      }
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
-async function generateSubRecipient (periodId) {
-  return getTemplate('subawardBulkUpload')
+async function generateSubRecipient (records) {
+  return records.map(record => {
+    switch (record.type) {
+      // TODO: Handle matching records
+      default:
+        return null
+    }
+  }).filter(isNotNull)
 }
 
 async function generateReport (periodId) {
+  const records = await recordsForReportingPeriod(periodId)
+
   // generate every csv file for the report
   const csvObjects = [
     { name: 'project18_229233BulkUploads', func: generateProject18 },
@@ -118,7 +286,7 @@ async function generateReport (periodId) {
 
   // compute the CSV data for each file, and write it into the zip container
   const csvPromises = csvObjects.map(async ({ name, func }) => {
-    const csvData = await func(periodId)
+    const csvData = await func(records)
 
     if (!Array.isArray(csvData)) {
       console.dir({ name, func })
@@ -126,8 +294,15 @@ async function generateReport (periodId) {
       throw new Error(`CSV Data from ${name} was not an array!`)
     }
 
-    const sheet = XLSX.utils.aoa_to_sheet(csvData)
-    const csvString = XLSX.utils.sheet_to_csv(sheet)
+    // ignore empty CSV files
+    if (csvData.length === 0) {
+      return
+    }
+
+    const template = await getTemplate(name)
+
+    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
+    const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
     const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
     zip.addFile(name + '.csv', buffer)
   })

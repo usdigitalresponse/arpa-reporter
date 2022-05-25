@@ -5,9 +5,6 @@ COOKIE_SECRET="hellosailor"
 INITIAL_ADMIN_EMAILS="michael+admin@stanford.cc"
 INITIAL_AGENCY_EMAILS="michael+agency@stanford.cc"
 
-# agency data input template
-VALIDATION_TEMPLATE="validation-template.xlsx"
-
 # REPORTING_PERIODS="reporting-periods.xlsx"
 
 SAM_API_KEY=

@@ -1,27 +1,27 @@
 
 const knex = require('./connection')
 
-function agencies () {
-  return knex('agencies')
+function agencies (trns = knex) {
+  return trns('agencies')
     .select('*')
     .orderBy('name')
 }
 
-function agencyById (id) {
-  return knex('agencies')
+function agencyById (id, trns = knex) {
+  return trns('agencies')
     .select('*')
     .where('id', id)
     .then(r => r[0])
 }
 
-function agencyByCode (code) {
-  return knex('agencies')
+function agencyByCode (code, trns = knex) {
+  return trns('agencies')
     .select('*')
     .where({ code })
 }
 
-function createAgency (agency) {
-  return knex
+function createAgency (agency, trns = knex) {
+  return trns
     .insert(agency)
     .into('agencies')
     .returning(['id'])
@@ -33,8 +33,8 @@ function createAgency (agency) {
     })
 }
 
-function updateAgency (agency) {
-  return knex('agencies')
+function updateAgency (agency, trns = knex) {
+  return trns('agencies')
     .where('id', agency.id)
     .update({
       code: agency.code,

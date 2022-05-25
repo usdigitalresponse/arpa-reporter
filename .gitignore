@@ -33,13 +33,15 @@ pnpm-debug.log*
 # state confidential data
 snapshots/
 examples/
-uploads/
 treasury-reports/
 mocha_uploads/
 old/
 datadir/
 notes.txt
 ~$*
+
+# Default location for DATA_DIR
+/data
 
 # there is a zip file of this in tests/server/fixtures/period-summaries
 rptest.sql

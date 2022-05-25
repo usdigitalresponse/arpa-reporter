@@ -4,7 +4,6 @@ const { subrecipientKey } = require('./helpers')
 const ssf = require('ssf')
 const mustache = require('mustache')
 const _ = require('lodash')
-const { getDropdownValues } = require('../get-template')
 
 function dateIsInPeriodOfPerformance (val, content, { reportingPeriod }) {
   const dt = ssf.format('yyyy-MM-dd', val)
@@ -243,19 +242,8 @@ function numberIsGreaterThanOrEqual (key) {
 }
 
 function dropdownIncludes (key) {
-  return val => {
-    const allDropdowns = getDropdownValues()
-    if (!allDropdowns) {
-      console.log(`DROPDOWN VALUES NOT INITIALIZED!! (${key})`)
-      return false
-    }
-    const dropdownValues = _.get(allDropdowns, key, [])
-
-    const rv = _.includes(dropdownValues, val.toLowerCase())
-    log(`${key}:${val} is ${rv ? 'present' : 'missing'}`)
-    // log(dropdownValues);
-    return rv
-  }
+  // TODO: re-write this
+  return val => true
 }
 
 function whenBlank (key, validator) {
@@ -341,10 +329,10 @@ function validateFields (requiredFields, content, tab, row, context = {}) {
   return valog
 }
 
-function validateDocuments (tab, validations) {
-  return function (groupedDocuments, validateContext) {
-    const documents = groupedDocuments[tab]
-    return _.flatMap(documents, ({ content, sourceRow }) => {
+function validateRecords (tab, validations) {
+  return function (groupedRecords, validateContext) {
+    const records = groupedRecords[tab]
+    return _.flatMap(records, ({ content, sourceRow }) => {
       return validateFields(
         validations,
         content,
@@ -356,13 +344,13 @@ function validateDocuments (tab, validations) {
   }
 }
 
-function validateSingleDocument (tab, validations, message) {
-  return function (groupedDocuments, validateContext) {
-    const documents = groupedDocuments[tab]
+function validateSingleRecord (tab, validations, message) {
+  return function (groupedRecords, validateContext) {
+    const records = groupedRecords[tab]
     let valog = []
 
-    if (documents && documents.length === 1) {
-      const { content } = documents[0]
+    if (records && records.length === 1) {
+      const { content } = records[0]
       const row = 2
       const results = validateFields(validations, content, tab, row, validateContext)
       valog = valog.concat(results)
@@ -404,9 +392,9 @@ module.exports = {
   numberIsLessThanOrEqual,
   numberIsGreaterThanOrEqual,
   transferMatches,
-  validateDocuments,
+  validateRecords,
   validateFields,
-  validateSingleDocument,
+  validateSingleRecord,
   whenBlank,
   whenGreaterThanZero,
   whenNotBlank,

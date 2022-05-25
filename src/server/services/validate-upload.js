@@ -2,17 +2,17 @@
 const moment = require('moment')
 
 const { get: getReportingPeriod } = require('../db/reporting-periods')
-const { documentsForUpload } = require('../services/documents')
+const { recordsForUpload } = require('./records')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
 
-async function validateAgencyId ({ upload, documents }) {
+async function validateAgencyId ({ upload, records, trns }) {
   // grab agency id from the cover sheet
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
-  const agencyCode = coverSheet[1][0]
+  const coverSheet = records.find(doc => doc.type === 'cover').content
+  const agencyCode = coverSheet['Agency Code']
 
   // must be set
   if (!agencyCode) {
@@ -20,7 +20,7 @@ async function validateAgencyId ({ upload, documents }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(agencyCode))[0]
+  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -30,14 +30,14 @@ async function validateAgencyId ({ upload, documents }) {
 
   // set agency id on the upload, for disambiguation
   if (matchingAgency.id !== upload.agency_id) {
-    await setAgencyId(upload.id, matchingAgency.id)
+    await setAgencyId(upload.id, matchingAgency.id, trns)
   }
 }
 
-async function validateEcCode ({ upload, documents }) {
+async function validateEcCode ({ upload, records, trns }) {
   // grab ec code string from cover sheet
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
-  const codeString = coverSheet[1][3]
+  const coverSheet = records.find(doc => doc.type === 'cover').content
+  const codeString = coverSheet['Detailed Expenditure Category']
 
   const codeParts = codeString.split('-')
   const code = codeParts[0]
@@ -45,42 +45,36 @@ async function validateEcCode ({ upload, documents }) {
 
   if (ecCodes[code] !== desc) {
     return new ValidationError(
-      `Document EC code ${code} (${desc}) does not match any known EC code`,
+      `Record EC code ${code} (${desc}) does not match any known EC code`,
       { tab: 'cover', row: 2, col: 4 }
     )
   }
 
   // set EC code on the upload, for disambiguation
   if (code !== upload.ec_code) {
-    await setEcCode(upload.id, code)
+    await setEcCode(upload.id, code, trns)
   }
 }
 
-// we subtract -2 because of a bug in lotus 1-2-3. fml.
-// https://www.kirix.com/stratablog/excel-date-conversion-days-from-1900.html
-function msDateToMoment (msDate) {
-  return moment('1900-01-01').add(Number(msDate) - 2, 'days')
-}
-
-async function validateReportingPeriod ({ upload, documents }) {
-  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id)
-  const coverSheet = documents.find(doc => doc.type === 'cover').content
+async function validateReportingPeriod ({ upload, records, trns }) {
+  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
+  const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 
   const periodStart = moment(uploadPeriod.start_date)
-  const sheetStart = msDateToMoment(coverSheet[1][4])
+  const sheetStart = moment(coverSheet['Reporting Period Start Date'])
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
-      `Upload reporting period starts ${periodStart.format('L')} while document specifies ${sheetStart.format('L')}`,
+      `Upload reporting period starts ${periodStart.format('L')} while record specifies ${sheetStart.format('L')}`,
       { tab: 'cover', row: 2, col: 5 }
     ))
   }
 
   const periodEnd = moment(uploadPeriod.end_date)
-  const sheetEnd = msDateToMoment(coverSheet[1][5])
+  const sheetEnd = moment(coverSheet['Reporting Period End Date'])
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
-      `Upload reporting period ends ${periodEnd.format('L')} while document specifies ${sheetEnd.format('L')}`,
+      `Upload reporting period ends ${periodEnd.format('L')} while record specifies ${sheetEnd.format('L')}`,
       { tab: 'cover', row: 2, col: 6 }
     ))
   }
@@ -88,20 +82,20 @@ async function validateReportingPeriod ({ upload, documents }) {
   return errors
 }
 
-function validateSubrecipients ({ upload, documents }) {
+function validateSubrecipients ({ upload, records }) {
 
 }
 
-async function validateUpload (upload, user) {
+async function validateUpload (upload, user, trns) {
   // holder for our validation errors
   const errors = []
 
   // holder for post-validation functions
 
-  // grab the documents
-  const documents = await documentsForUpload(upload)
+  // grab the records
+  const records = await recordsForUpload(upload)
 
-  // run validations, one by one
+  // list of all of our validations
   const validations = [
     validateAgencyId,
     validateEcCode,
@@ -109,9 +103,10 @@ async function validateUpload (upload, user) {
     validateSubrecipients
   ]
 
+  // run validations, one by one
   for (const validation of validations) {
     try {
-      errors.push(await validation({ documents, upload }))
+      errors.push(await validation({ records, upload, trns }))
     } catch (e) {
       errors.push(new ValidationError(`validation ${validation.name} failed: ${e}`))
     }
@@ -120,11 +115,11 @@ async function validateUpload (upload, user) {
   // if we successfully validated for the first time, let's mark it!
   const flatErrors = errors.flat().filter(x => x)
   if (flatErrors.length === 0 && !upload.validated_at) {
-    markValidated(upload.id, user.id)
+    markValidated(upload.id, user.id, trns)
 
   // if it was valid before but is no longer valid, clear it
   } else if (flatErrors.length > 1 && upload.validated_at) {
-    markNotValidated(upload.id)
+    markNotValidated(upload.id, trns)
   }
 
   return flatErrors

@@ -12,9 +12,9 @@ const tabValidators = [
 const { getSubrecipientsHash } = require('./helpers')
 const { format } = require('date-fns')
 
-const validateData = (documents, fileParts, reportingPeriod, periodSummaries, firstReportingPeriodStartDate) => {
-  const groupedDocuments = _.groupBy(documents, 'type')
-  const subrecipientsHash = getSubrecipientsHash(groupedDocuments.subrecipient)
+const validateData = (records, fileParts, reportingPeriod, periodSummaries, firstReportingPeriodStartDate) => {
+  const groupedRecords = _.groupBy(records, 'type')
+  const subrecipientsHash = getSubrecipientsHash(groupedRecords.subrecipient)
 
   const validateContext = {
     fileParts,
@@ -33,7 +33,7 @@ const validateData = (documents, fileParts, reportingPeriod, periodSummaries, fi
     periodSummaries
   }
   return _.flatMap(tabValidators, tabValidator => {
-    return _.take(tabValidator(groupedDocuments, validateContext), 100)
+    return _.take(tabValidator(groupedRecords, validateContext), 100)
   })
 }
 

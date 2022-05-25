@@ -8,12 +8,14 @@ import Login from '../views/Login.vue'
 import NewTemplate from '../views/NewTemplate.vue'
 import NewUpload from '../views/NewUpload.vue'
 import Upload from '../views/Upload.vue'
+import Uploads from '../views/Uploads.vue'
 import ReportingPeriod from '../views/ReportingPeriod.vue'
 import ReportingPeriods from '../views/ReportingPeriods.vue'
 import Subrecipient from '../views/Subrecipient.vue'
 import Subrecipients from '../views/Subrecipients.vue'
 import User from '../views/User.vue'
 import Users from '../views/Users.vue'
+import Validation from '../views/Validation.vue'
 
 import store from '../store'
 
@@ -37,6 +39,12 @@ const routes = [
     path: '/new_template/:id',
     name: 'NewTemplate',
     component: NewTemplate,
+    meta: { requiresLogin: true }
+  },
+  {
+    path: '/uploads',
+    name: 'Uploads',
+    component: Uploads,
     meta: { requiresLogin: true }
   },
   {
@@ -109,6 +117,12 @@ const routes = [
     path: '/users/:id',
     name: 'User',
     component: User,
+    meta: { requiresLogin: true }
+  },
+  {
+    path: '/validation',
+    name: 'Validation',
+    component: Validation,
     meta: { requiresLogin: true }
   }
 ]

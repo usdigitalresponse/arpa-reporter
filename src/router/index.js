@@ -11,7 +11,7 @@ import Upload from '../views/Upload.vue'
 import Uploads from '../views/Uploads.vue'
 import ReportingPeriod from '../views/ReportingPeriod.vue'
 import ReportingPeriods from '../views/ReportingPeriods.vue'
-import Subrecipient from '../views/Subrecipient.vue'
+import Recipient from '../views/Recipient.vue'
 import Recipients from '../views/Recipients.vue'
 import User from '../views/User.vue'
 import Users from '../views/Users.vue'
@@ -96,9 +96,9 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/subrecipients/:id',
-    name: 'Subrecipient',
-    component: Subrecipient,
+    path: '/recipients/:id',
+    name: 'Recipient',
+    component: Recipient,
     meta: { requiresLogin: true }
   },
   {

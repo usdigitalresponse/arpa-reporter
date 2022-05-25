@@ -45,11 +45,12 @@ async function extractRules (buffer) {
 
     const colKeys = rows[2]
     const required = rows[3].map(req => req === 'Required')
-    const listVals = rows[5]
+    const listVals = rows[5].map(str => str === 'N/A' ? '' : str)
       .map(lvStr => [...lvStr.matchAll(/\w+/g)]
         .map(match => match[0]))
     const dataTypes = rows[6]
     const maxLengths = rows[7].map(ml => Number(ml))
+    const humanColNames = rows[11]
 
     const sheetRules = {}
     for (const [colIdx, key] of colKeys.entries()) {
@@ -66,7 +67,8 @@ async function extractRules (buffer) {
         type: dataTypes[colIdx],
         required: required[colIdx],
         maxLength: maxLengths[colIdx],
-        listVals: listVals[colIdx]
+        listVals: listVals[colIdx],
+        humanColName: humanColNames[colIdx]
       }
 
       sheetRules[key] = rule
@@ -84,7 +86,7 @@ async function rulesForUpload (upload) {
 
 async function rulesForPeriod (periodId) {
   return extractRules(
-    (await templateForPeriod).data
+    (await templateForPeriod(periodId)).data
   )
 }
 

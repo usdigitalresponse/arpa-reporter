@@ -1,16 +1,16 @@
 const TABLES = [
-  "application_settings",
-  "period_summaries",
-  "reporting_periods",
-  "subrecipients",
-  "uploads",
-  "projects",
+  'application_settings',
+  'period_summaries',
+  'reporting_periods',
+  'subrecipients',
+  'uploads',
+  'projects',
 
   // NOTE(mbroussard): when copying this migration to GOST repo, comment these out since these tables
   // already exist there with the tenant_id field.
-  "users",
-  "agencies",
-];
+  'users',
+  'agencies'
+]
 
 /**
  * @param { import("knex").Knex } knex
@@ -18,7 +18,7 @@ const TABLES = [
  */
 exports.up = function (knex) {
   // This reduce in effect chains each of these calls together and returns the resulting promise
-  let schema = TABLES.reduce(
+  const schema = TABLES.reduce(
     (schema, tableName) =>
       schema.alterTable(tableName, function (table) {
         // We add a default value for two reasons:
@@ -27,13 +27,13 @@ exports.up = function (knex) {
         //  - Allow existing inserts to function as-is until updated (instead of throwing)
         // Once we're sure all inserts have a tenant ID specified explicitly, we can do another
         // migration that drops the default value from future inserts.
-        table.integer("tenant_id").notNullable().defaultTo(0);
+        table.integer('tenant_id').notNullable().defaultTo(0)
       }),
     knex.schema
-  );
+  )
 
-  return schema;
-};
+  return schema
+}
 
 /**
  * @param { import("knex").Knex } knex
@@ -44,8 +44,8 @@ exports.down = function (knex) {
   return TABLES.reduce(
     (schema, tableName) =>
       schema.alterTable(tableName, function (table) {
-        table.dropColumn("tenant_id");
+        table.dropColumn('tenant_id')
       }),
     knex.schema
-  );
-};
+  )
+}

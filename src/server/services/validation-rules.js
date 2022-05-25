@@ -3,6 +3,7 @@ const { merge } = require('lodash')
 
 const { bufferForUpload } = require('./persist-upload')
 const { DATA_SHEET_TYPES } = require('./records')
+const { templateForPeriod } = require('./get-template')
 
 const COLNAMES = makeColNames()
 
@@ -81,6 +82,13 @@ async function rulesForUpload (upload) {
   return extractRules(await bufferForUpload(upload))
 }
 
+async function rulesForPeriod (periodId) {
+  return extractRules(
+    (await templateForPeriod).data
+  )
+}
+
 module.exports = {
-  rulesForUpload
+  rulesForUpload,
+  rulesForPeriod
 }

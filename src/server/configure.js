@@ -22,8 +22,6 @@ module.exports = app => {
   app.use('/api/configuration', require('./routes/configuration'))
   app.use('/api/exports', require('./routes/exports'))
   app.use('/api/files', require('./routes/files'))
-  // app.use("/api/fix-subrecipients", require("./routes/fix-subrecipients"));
-  app.use('/api/subrecipients', require('./routes/subrecipients'))
   app.use('/api/recipients', require('./routes/recipients'))
   app.use('/api/reporting_periods', require('./routes/reporting-periods'))
   app.use('/api/sessions', require('./routes/sessions'))

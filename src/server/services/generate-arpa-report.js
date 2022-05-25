@@ -96,7 +96,34 @@ async function generateProject19 (records) {
       case '1.9':
       case '2.34': {
         return [
-          // TODO
+          null, // first col is blank
+          record.type, // FIXME: transform from sheet tab to export format
+          record.subcategory,
+          record.content.Name,
+          record.content.Project_Identification_Number__c,
+          record.content.Completion_Status__c,
+          record.content.Adopted_Budget__c,
+          record.content.Total_Obligations__c,
+          record.content.Total_Expenditures__c,
+          record.content.Current_Period_Obligations__c,
+          record.content.Current_Period_Expenditures__c,
+          record.content.Does_Project_Include_Capital_Expenditure__c,
+          record.content.Total_Cost_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure__c,
+          record.content.Type_of_Capital_Expenditure_Other__c,
+          record.content.Capital_Expenditure_Justification__c,
+          record.content.Project_Description__c,
+          record.content.Program_Income_Earned__c,
+          record.content.Program_Income_Expended__c,
+          record.content.Primary_Project_Demographics__c,
+          record.content.Primary_Project_Demographics_Explanation__c,
+          record.content.Secondary_Project_Demographics__c,
+          record.content.Secondary_Proj_Demographics_Explanation__c,
+          record.content.Tertiary_Project_Demographics__c,
+          record.content.Tertiary_Proj_Demographics_Explanation__c,
+          record.content.Structure_Objectives_of_Asst_Programs__c,
+          record.content.Recipient_Approach_Description__c,
+          record.content.Number_Non_Profits_Served__c
         ]
       }
       default:

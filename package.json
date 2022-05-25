@@ -2,6 +2,9 @@
   "name": "arpa-reporter",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.x.x"
+  },
   "scripts": {
     "serve": "concurrently \"npm:dev:*\"",
     "dev:vue": "vue-cli-service serve",

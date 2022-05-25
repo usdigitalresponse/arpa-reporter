@@ -250,10 +250,6 @@ async function generateSubRecipient (records) {
   }).filter(isNotNull)
 }
 
-<<<<<<< HEAD
-async function generateReport (periodId) {
-  const records = await recordsForReportingPeriod(periodId)
-=======
 async function generateReport (tenantId, periodId) {
   if (tenantId === undefined) {
     throw new Error('must specify tenantId');
@@ -261,7 +257,7 @@ async function generateReport (tenantId, periodId) {
   if (periodId === undefined) {
     throw new Error('must specify periodId');
   }
->>>>>>> cca0638 (feat: add tenant_id to db/settings methods & callers (minus tests))
+  const records = await recordsForReportingPeriod(tenantId, periodId)
 
   // generate every csv file for the report
   const csvObjects = [

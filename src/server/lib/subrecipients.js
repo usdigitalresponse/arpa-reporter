@@ -6,6 +6,10 @@
 */
 /* eslint camelcase: 0 */
 
+// TODO(mbroussard): holding off for now on making tenant_id changes in this
+// file because it is either removed or revamped in
+// https://github.com/usdigitalresponse/arpa-reporter/pull/260
+
 const _ = require('lodash')
 
 const { clean, cleanString } = require('./spreadsheet')

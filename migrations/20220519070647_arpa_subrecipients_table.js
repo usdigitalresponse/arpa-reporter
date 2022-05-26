@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema
-    .createTable('arpa_recipients', function (table) {
+    .createTable('arpa_subrecipients', function (table) {
       table.increments('id').primary()
       table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
       table.timestamp('updated_at')
@@ -17,5 +17,5 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return knex.schema
-    .dropTable('arpa_recipients')
+    .dropTable('arpa_subrecipients')
 }

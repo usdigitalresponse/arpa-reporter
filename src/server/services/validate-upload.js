@@ -4,7 +4,7 @@ const moment = require('moment')
 const { get: getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
-const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-recipients')
+const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
 const { recordsForUpload } = require('./records')
 const { rulesForUpload } = require('./validation-rules')
@@ -85,7 +85,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   return errors
 }
 
-async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
+async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
   const errors = []
 
   // start by trimming any whitespace
@@ -160,7 +160,7 @@ async function validateRecipientRecord ({ upload, recipient, rules, trns }) {
   return errors
 }
 
-async function validateRecipients ({ upload, records, rules, trns }) {
+async function validateSubrecipients ({ upload, records, rules, trns }) {
   const errors = []
 
   // validate each, and save the errors
@@ -168,7 +168,7 @@ async function validateRecipients ({ upload, records, rules, trns }) {
 
   for (const [rowIdx, recipient] of recipients.entries()) {
     try {
-      for (const error of await validateRecipientRecord({
+      for (const error of await validateSubrecipientRecord({
         upload, recipient, rules: rules.subrecipient, trns
       })) {
         error.tab = 'subrecipient'
@@ -203,7 +203,7 @@ async function validateUpload (upload, user, trns) {
     validateAgencyId,
     validateEcCode,
     validateReportingPeriod,
-    validateRecipients
+    validateSubrecipients
   ]
 
   // run validations, one by one

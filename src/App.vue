@@ -7,8 +7,13 @@
 <script>
 import '../scss/index.scss'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import bsCustomFileInput from 'bs-custom-file-input'
 
-import Navigation from '@/components/Navigation.vue'
+import Navigation from './components/Navigation.vue'
+
+window.addEventListener('load', function () {
+  bsCustomFileInput.init()
+})
 
 export default {
   name: 'App',

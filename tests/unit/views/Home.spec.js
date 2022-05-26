@@ -11,9 +11,6 @@ describe('Home.vue', () => {
     const store = new Vuex.Store({
       state: {
         viewPeriodID: 0,
-        configuration: {
-          templates: [{ name: 'Agency' }]
-        }
       },
       getters: {
         user: () => ({ email: 'admin@example.com', role: 'admin' }),

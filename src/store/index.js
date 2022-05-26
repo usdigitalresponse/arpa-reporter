@@ -132,18 +132,6 @@ export default new Vuex.Store({
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
     },
-    addUser (state, user) {
-      state.configuration.users = _.sortBy(
-        [...state.configuration.users, user],
-        'email'
-      )
-    },
-    updateUser (state, user) {
-      state.configuration.users = _.chain(state.configuration.users)
-        .map(u => (user.id === u.id ? user : u))
-        .sortBy('email')
-        .value()
-    },
     addAgency (state, agency) {
       state.agencies = _.sortBy([...state.agencies, agency], 'name')
     },
@@ -215,12 +203,10 @@ export default new Vuex.Store({
     },
     createUser ({ commit }, user) {
       return post('/api/users', user).then(response => {
-        commit('addUser', response.user)
       })
     },
     updateUser ({ commit }, user) {
       return put(`/api/users/${user.id}`, user).then(() => {
-        commit('updateUser', user)
       })
     },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {

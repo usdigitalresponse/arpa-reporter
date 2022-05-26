@@ -4,7 +4,8 @@ const knex = require('./connection')
 
 function users (trns = knex) {
   return trns('users')
-    .select('*')
+    .leftJoin('agencies', 'users.agency_id', 'agencies.id')
+    .select('users.*', 'agencies.name AS agency_name', 'agencies.code AS agency_code')
     .orderBy('email')
 }
 

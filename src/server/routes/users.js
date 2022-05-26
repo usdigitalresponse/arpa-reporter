@@ -2,8 +2,8 @@
 
 const express = require('express')
 const router = express.Router()
-const { requireAdminUser } = require('../access-helpers')
-const { createUser, user: getUser, updateUser } = require('../db/users')
+const { requireUser, requireAdminUser } = require('../access-helpers')
+const { createUser, user: getUser, users: listUsers, updateUser } = require('../db/users')
 const { agencyById } = require('../db/agencies')
 const { sendWelcomeEmail } = require('../lib/email')
 const _ = require('lodash-checkit')
@@ -34,6 +34,24 @@ async function validateUser (req, res, next) {
   }
   next()
 }
+
+router.get('/', requireUser, async function (req, res, next) {
+  const allUsers = await listUsers()
+  const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
+
+  let users
+  if (curUser.role === 'admin') {
+    if (curUser.agency_id) {
+      users = allUsers.filter(u => u.agency_id === curUser.agency_id)
+    } else {
+      users = allUsers
+    }
+  } else {
+    users = [curUser]
+  }
+
+  res.json({ users })
+})
 
 router.post('/', requireAdminUser, validateUser, async function (
   req,

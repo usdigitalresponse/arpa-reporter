@@ -6,44 +6,108 @@
         >Create New User</router-link
       >
     </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Agency</th>
-          <th>Created At</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr :key="user.email" v-for="user in users">
-          <td>{{ user.email }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{ agencyName(user.agency_id) }}</td>
-          <td>{{ user.created_at }}</td>
-          <td><router-link :to="`/users/${user.id}`" class="btn btn-sm btn-secondary">Edit</router-link></td>
-        </tr>
-      </tbody>
-    </table>
+
+    <vue-good-table
+      :columns="columns"
+      :rows="users"
+      :search-options="{
+        enabled: true,
+        placeholder: 'Filter users...'
+      }"
+      styleClass="vgt-table table table-striped table-bordered"
+      >
+      <div slot="emptystate">
+        No Recipients
+      </div>
+
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field === 'edit'">
+          <router-link tag="button" :to="`/users/${props.row.id}`" class="btn btn-sm btn-secondary">Edit</router-link>
+        </span>
+
+        <span v-else-if="props.column.field === 'agency_id' && props.row.agency_id">
+          {{ props.row.agency_name }} ({{ props.row.agency_code }})
+        </span>
+
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
+    </vue-good-table>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+import 'vue-good-table/dist/vue-good-table.css'
+import { VueGoodTable } from 'vue-good-table'
+
+import { getJson } from '../store'
+
 export default {
   name: 'Users',
+  data: function () {
+    return {
+      users: []
+    }
+  },
   computed: {
-    users: function () {
-      const { users } = this.$store.state.configuration
-      return users
+    columns: function () {
+      return [
+        {
+          label: 'Email',
+          field: 'email'
+        },
+        {
+          label: 'Name',
+          field: 'name'
+        },
+        {
+          label: 'Role',
+          field: 'role'
+        },
+        {
+          label: 'Agency',
+          field: 'agency_id'
+        },
+        {
+          label: 'Created',
+          field: 'created_at',
+          formatFn: (date) => {
+            if (!date) return 'Not set'
+            return moment(date).local().format('MMM Do YYYY, h:mm:ss A')
+          }
+        },
+        {
+          label: 'Edit',
+          field: 'edit'
+        }
+      ]
     }
   },
   methods: {
     agencyName (id) {
       return this.$store.getters.agencyName(id)
+    },
+    loadUsers: async function (evt) {
+      const result = await getJson('/api/users')
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadUsers Error (${result.status}): ${result.error}`,
+          level: 'err'
+        })
+      } else {
+        this.users = result.users
+      }
+
+      this.loading = false
     }
+  },
+  mounted: async function () {
+    this.loadUsers()
+  },
+  components: {
+    VueGoodTable
   }
 }
 </script>

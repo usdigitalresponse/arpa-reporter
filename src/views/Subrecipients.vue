@@ -42,7 +42,7 @@
         </ul>
 
         <span v-else-if="props.column.field === 'edit'">
-          <router-link tag="button" class="btn btn-secondary" :to="`/subrecipients/${props.row.id}`">Edit</router-link>
+          <router-link tag="button" class="btn btn-sm btn-secondary" :to="`/subrecipients/${props.row.id}`">Edit</router-link>
         </span>
 
         <span v-else>

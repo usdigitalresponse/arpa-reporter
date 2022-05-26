@@ -1,16 +1,16 @@
 const knex = require('./connection')
 
 function baseQuery (trns) {
-  return trns('arpa_recipients')
+  return trns('arpa_subrecipients')
     .select(
-      'arpa_recipients.*',
+      'arpa_subrecipients.*',
       'uploads.reporting_period_id AS reporting_period_id',
       'users.email AS created_by',
       'users2.email AS updated_by_email'
     )
-    .leftJoin('uploads', 'arpa_recipients.upload_id', 'uploads.id')
+    .leftJoin('uploads', 'arpa_subrecipients.upload_id', 'uploads.id')
     .leftJoin('users', 'uploads.user_id', 'users.id')
-    .leftJoin('users AS users2', 'arpa_recipients.updated_by', 'users2.id')
+    .leftJoin('users AS users2', 'arpa_subrecipients.updated_by', 'users2.id')
 }
 
 async function createRecipient (recipient, trns = knex) {
@@ -18,14 +18,14 @@ async function createRecipient (recipient, trns = knex) {
     throw new Error('recipient row must include a `uei` or a `tin` field')
   }
 
-  return trns('arpa_recipients')
+  return trns('arpa_subrecipients')
     .insert(recipient)
     .returning('*')
     .then(rows => rows[0])
 }
 
 async function updateRecipient (id, { updatedByUser, record }, trns = knex) {
-  const query = trns('arpa_recipients')
+  const query = trns('arpa_subrecipients')
     .where('id', id)
     .returning('*')
 
@@ -43,7 +43,7 @@ async function updateRecipient (id, { updatedByUser, record }, trns = knex) {
 
 async function getRecipient (id, trns = knex) {
   return baseQuery(trns)
-    .where('arpa_recipients.id', id)
+    .where('arpa_subrecipients.id', id)
     .then(rows => rows[0])
 }
 
@@ -51,9 +51,9 @@ async function findRecipient (uei = null, tin = null, trns = knex) {
   const query = baseQuery(trns)
 
   if (uei) {
-    query.where('arpa_recipients.uei', uei)
+    query.where('arpa_subrecipients.uei', uei)
   } else if (tin) {
-    query.where('arpa_recipients.tin', tin)
+    query.where('arpa_subrecipients.tin', tin)
   } else {
     return null
   }

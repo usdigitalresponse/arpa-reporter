@@ -5,7 +5,7 @@ const router = express.Router()
 const { requireUser } = require('../access-helpers')
 
 const { user: getUser } = require('../db/users')
-const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-recipients')
+const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 const { rulesForPeriod } = require('../services/validation-rules')
 
 router.get('/', requireUser, async function (req, res) {

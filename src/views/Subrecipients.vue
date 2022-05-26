@@ -42,7 +42,7 @@
         </ul>
 
         <span v-else-if="props.column.field === 'edit'">
-          <router-link tag="button" class="btn btn-secondary" :to="`/recipients/${props.row.id}`">Edit</router-link>
+          <router-link tag="button" class="btn btn-secondary" :to="`/subrecipients/${props.row.id}`">Edit</router-link>
         </span>
 
         <span v-else>
@@ -62,7 +62,7 @@ import { VueGoodTable } from 'vue-good-table'
 import { getJson } from '../store'
 
 export default {
-  name: 'Recipients',
+  name: 'Subrecipients',
   data: function () {
     return {
       loading: false,
@@ -129,7 +129,7 @@ export default {
     loadRecipients: async function (evt) {
       this.loading = true
 
-      const result = await getJson('/api/recipients')
+      const result = await getJson('/api/subrecipients')
       if (result.error) {
         this.$store.commit('addAlert', {
           text: `loadRecipients Error (${result.status}): ${result.error}`,

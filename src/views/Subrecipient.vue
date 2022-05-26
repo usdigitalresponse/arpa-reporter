@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Recipient {{ recipientId }}</h2>
+    <h2>Subrecipient {{ recipientId }}</h2>
 
     <div v-if="!recipient" class="spinner-grow text-primary" role="status">
         <span class="sr-only">Loading...</span>
@@ -63,7 +63,7 @@ import moment from 'moment'
 import { getJson, post } from '../store'
 
 export default {
-  name: 'Recipient',
+  name: 'Subrecipient',
   data: function () {
     return {
       recipient: null,
@@ -84,7 +84,7 @@ export default {
     loadRecipient: async function () {
       this.recipient = null
 
-      const result = await getJson(`/api/recipients/${this.recipientId}`)
+      const result = await getJson(`/api/subrecipients/${this.recipientId}`)
       if (result.error) {
         this.$store.commit('addAlert', {
           text: `loadRecipient Error (${result.status}): ${result.error}`,
@@ -104,7 +104,7 @@ export default {
           Object.entries(this.record).filter(([key, val]) => val !== null)
         ))
 
-        const result = await post(`/api/recipients/${this.recipientId}`, { record })
+        const result = await post(`/api/subrecipients/${this.recipientId}`, { record })
         if (result.error) throw new Error(result.error)
 
         this.$store.commit('addAlert', {

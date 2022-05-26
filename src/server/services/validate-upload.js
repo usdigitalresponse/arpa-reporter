@@ -218,11 +218,11 @@ async function validateUpload (upload, user, trns) {
   // if we successfully validated for the first time, let's mark it!
   const flatErrors = errors.flat().filter(x => x)
   if (flatErrors.length === 0 && !upload.validated_at) {
-    markValidated(upload.id, user.id, trns)
+    await markValidated(upload.id, user.id, trns)
 
   // if it was valid before but is no longer valid, clear it
   } else if (flatErrors.length > 1 && upload.validated_at) {
-    markNotValidated(upload.id, trns)
+    await markNotValidated(upload.id, trns)
   }
 
   return flatErrors

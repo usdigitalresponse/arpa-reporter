@@ -38,7 +38,9 @@ module.exports = {
         project: ['./tsconfig.json']
       },
       rules: {
-        '@typescript-eslint/no-floating-promises': 'error'
+        '@typescript-eslint/no-floating-promises': 'error',
+        // void keyword useful for explicitly ignoring a promise
+        'no-void': 'off'
       }
     }
   ],

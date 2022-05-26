@@ -11,6 +11,10 @@ const COVER_SHEET = 'Cover'
 const DATA_SHEET_TYPES = {
   'EC 1 - Public Health': 'ec1',
   'EC 2 - Negative Economic Impact': 'ec2',
+  'EC 3 - Public Sector Capacity': 'ec3',
+  'EC 4 - Premium Pay': 'ec4',
+  'EC 5 - Infrastructure': 'ec5',
+  'EC 7 - Admin': 'ec7',
   'Subrecipient': 'subrecipient',
   'Awards > 50000': 'awards50k',
   'Expenditures > 50000': 'expenditures50k'

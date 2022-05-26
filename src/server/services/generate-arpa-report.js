@@ -13,12 +13,7 @@ function isNotNull (value) {
 
 function isProjectRecord (record) {
   return [
-    'ec 1 - public health',
-    'ec 2 - negative economic impact',
-    'EC 3 - Public Sector Capacity',
-    'EC 4 - Premium Pay',
-    'EC 5 - Infrastructure',
-    'EC 7 - Admin'
+    'ec1', 'ec2', 'ec3', 'ec4', 'ec5', 'ec7'
   ].includes(record.type)
 }
 
@@ -475,7 +470,7 @@ async function generateProjectBaseline (records) {
 async function generateExpendituresGT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      case 'expenditures > 50000': {
+      case 'expenditures50k': {
         return [
           null, // first col is blank
           record.content.Sub_Award_Lookup__c,
@@ -513,7 +508,7 @@ async function generatePaymentsIndividualsLT50000 (records) {
 async function generateSubaward (records) {
   return records.map(record => {
     switch (record.type) {
-      case 'awards > 50000': {
+      case 'awards50k': {
         return [
           null, // first col is blank
           record.content.Recipient_UEI__c,

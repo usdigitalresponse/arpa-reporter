@@ -15,14 +15,19 @@
         @submit.prevent="onSubmit"
       >
         <div class="form-group">
-          <input
-            class="form-control"
-            type="file"
-            id="spreadsheet"
-            name="spreadsheet"
-            @change="changeFiles"
-            ref="files"
-          />
+          <div class="custom-file">
+            <input
+              class="custom-file-input"
+              type="file"
+              id="spreadsheet"
+              name="spreadsheet"
+              @change="changeFiles"
+              ref="files"
+            />
+            <label class="custom-file-label" for="spreadsheet">
+              {{fileInputLabel}}
+            </label>
+          </div>
         </div>
         <div class="form-group">
           <button
@@ -56,6 +61,9 @@ export default {
     },
     uploadDisabled: function () {
       return this.files === null || this.uploading
+    },
+    fileInputLabel: function () {
+      return this.files?.[0]?.name ?? 'Choose Files'
     }
   },
   methods: {

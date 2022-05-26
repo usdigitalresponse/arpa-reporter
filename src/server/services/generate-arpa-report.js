@@ -6,6 +6,20 @@ const { applicationSettings } = require('../db/settings')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 
+const EC_CODE_REGEX = /^(\d.\d\d?)/
+
+/**
+ * Extract the Detailed Expenditure Category code from a record.
+ *
+ * @returns {string} The detailed EC code in format "#.##".
+ */
+function getDetailedEcCode (record) {
+  const { subcategory } = record
+
+  const match = EC_CODE_REGEX.exec(subcategory)
+  return match?.[1]
+}
+
 function isNotNull (value) {
   // `== null` matches null AND undefined
   return value != null
@@ -20,22 +34,6 @@ function isProjectRecord (record) {
     'EC 5 - Infrastructure',
     'EC 7 - Admin'
   ].includes(record.type)
-}
-
-/**
- * Extract the Detailed Expenditure Category code from a record.
- *
- * @returns {string} The detailed EC code in format "#.##".
- */
-function getDetailedEcCode (record) {
-  const EC_CODE_REGEX = /^(\d.\d\d?)/
-  const { subcategory } = record
-
-  if (EC_CODE_REGEX.test(subcategory)) {
-    const [, detailedECCode] = EC_CODE_REGEX.exec(subcategory)
-    return detailedECCode
-  }
-  return undefined
 }
 
 async function generateReportName (periodId) {

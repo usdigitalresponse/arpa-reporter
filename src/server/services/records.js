@@ -87,8 +87,7 @@ async function recordsForReportingPeriod (tenantId, periodId) {
     throw new Error('must specify periodId in recordsForReportingPeriod');
   }
 
-  // TODO(mbroussard): pass tenantId when updating db/uploads
-  const uploads = await validForReportingPeriod(periodId)
+  const uploads = await validForReportingPeriod(tenantId, periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))
   )

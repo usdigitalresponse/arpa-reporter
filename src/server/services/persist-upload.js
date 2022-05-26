@@ -30,7 +30,8 @@ async function persistUpload ({ filename, user, buffer }) {
   const uploadRow = {
     filename: path.basename(filename),
     reporting_period_id: reportingPeriod.id,
-    user_id: user.id
+    user_id: user.id,
+    tenant_id: user.tenant_id
   }
   const upload = await createUpload(uploadRow)
 

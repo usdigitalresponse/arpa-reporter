@@ -24,9 +24,10 @@ router.get('/', requireUser, async function (req, res) {
 
   const user = await getUser(req.signedCookies.userId)
   const agencyId = user.agency_id || (req.query.for_agency ?? null)
+  const tenantId = user.tenant_id
   const onlyValidated = req.query.only_validated ?? null
 
-  const uploads = await listUploads({ periodId, agencyId, onlyValidated })
+  const uploads = await listUploads({ periodId, agencyId, tenantId, onlyValidated })
   return res.json({ uploads })
 })
 
@@ -70,6 +71,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
+  // TODO(mbroussard): tenant access check on getUpload
   if (!upload) {
     res.sendStatus(404)
     res.end()
@@ -83,7 +85,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
     series = [upload]
   }
 
-  const allValid = await validForReportingPeriod(upload.reporting_period_id)
+  const allValid = await validForReportingPeriod(upload.tenant_id, upload.reporting_period_id)
   const currentValid = allValid.find(upl => upl.agency_id === upload.agency_id)
 
   res.json({

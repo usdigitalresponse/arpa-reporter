@@ -4,11 +4,12 @@ const knex = require('./connection')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
+const {agencyById} = require('./agencies');
 
-async function listUploads ({ periodId, agencyId = null, onlyValidated = false }, trns = knex) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
-
+async function listUploads ({ periodId, tenantId, agencyId = null, onlyValidated = false }, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in listUploads');
+  }
   if (!periodId) {
     periodId = await getCurrentReportingPeriodID(tenantId, trns)
   }
@@ -17,7 +18,7 @@ async function listUploads ({ periodId, agencyId = null, onlyValidated = false }
     .leftJoin('users', 'uploads.user_id', 'users.id')
     .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
     .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
-    .where({ reporting_period_id: periodId })
+    .where({ reporting_period_id: periodId, tenant_id: tenantId })
 
   if (agencyId) {
     query = query.andWhere('uploads.agency_id', agencyId)
@@ -31,12 +32,14 @@ async function listUploads ({ periodId, agencyId = null, onlyValidated = false }
 }
 
 async function uploadsForAgency (agency_id, period_id, trns = knex) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
+  const agency = agencyById(agency_id, trns);
+  if (!agency) {
+    throw new Error('invalid agency in uploadsForAgency');
+  }
 
   if (!period_id) {
     // TODO(mbroussard): should this pass trns?
-    period_id = await getCurrentReportingPeriodID(tenantId)
+    period_id = await getCurrentReportingPeriodID(agency.tenant_id)
   }
 
   return trns('uploads')
@@ -56,12 +59,26 @@ function getUpload (id, trns = knex) {
     .then(r => r[0])
 }
 
-function validForReportingPeriod (period_id, trns = knex) {
-  return trns.with('agency_max_val', trns.raw(
-    'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id, ec_code'
-  ))
+function validForReportingPeriod (tenantId, period_id, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('tenant must be specified in validForReportingPeriod');
+  }
+  if (period_id === undefined) {
+    throw new Error('period_id must be specified in validForReportingPeriod');
+  }
+
+  return trns.with('agency_max_val', trns.raw(`
+    SELECT agency_id, ec_code, MAX(created_at)
+    AS most_recent
+    FROM uploads
+    WHERE
+      validated_at IS NOT NULL
+      AND tenant_id = :tenantId
+    GROUP BY agency_id, ec_code
+  `, {tenantId}))
     .select('uploads.*')
     .from('uploads')
+    .where('tenant_id', tenantId)
     .innerJoin('agency_max_val', function () {
       this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
         .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
@@ -69,7 +86,7 @@ function validForReportingPeriod (period_id, trns = knex) {
     })
 }
 
-/*  getUploadSummaries() returns a trns promise containing an array of
+/*  getUploadSummaries() returns a knex promise containing an array of
     records like this:
     {
       id: 1,
@@ -80,14 +97,18 @@ function validForReportingPeriod (period_id, trns = knex) {
       agency_id: 3,
     }
     */
-function getUploadSummaries (period_id, trns = knex) {
+function getUploadSummaries (tenantId, period_id, trns = knex) {
   // console.log(`period_id is ${period_id}`)
   return trns('uploads')
     .select('*')
-    .where('reporting_period_id', period_id)
+    .where({'reporting_period_id': period_id, tenant_id: tenantId})
 }
 
 async function createUpload (upload, trns = knex) {
+  if (upload.tenant_id === undefined) {
+    throw new Error('must specify tenant when creating upload');
+  }
+
   const inserted = await trns('uploads')
     .insert(upload)
     .returning('*')
@@ -108,9 +129,10 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
     .update({ ec_code: ecCode })
 }
 
-async function getPeriodUploadIDs (period_id, trns = knex) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
+async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getPeriodUploadIDs');
+  }
 
   if (!period_id) {
     // TODO(mbroussard): should this pass trns?
@@ -120,7 +142,7 @@ async function getPeriodUploadIDs (period_id, trns = knex) {
   try {
     rv = await trns('uploads')
       .select('id')
-      .where({ reporting_period_id: period_id })
+      .where({ reporting_period_id: period_id, tenant_id: tenantId })
       .then(recs => recs.map(rec => rec.id))
   } catch (err) {
     console.log('trns threw in getPeriodUploadIDs()!')

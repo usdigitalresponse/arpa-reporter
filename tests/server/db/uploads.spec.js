@@ -8,7 +8,9 @@ describe('db/uploads.js', function () {
 
   beforeEach('init an upload row', async function () {
     upload = {
-      filename: 'filename'
+      filename: 'filename',
+      // TODO(mbroussard): Multitenant specific tests
+      tenant_id: 0
     }
   })
 

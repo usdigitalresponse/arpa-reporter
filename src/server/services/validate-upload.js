@@ -57,7 +57,7 @@ async function validateEcCode ({ upload, records, trns }) {
 }
 
 async function validateReportingPeriod ({ upload, records, trns }) {
-  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
+  const uploadPeriod = await getReportingPeriod(upload.tenant_id, upload.reporting_period_id, trns)
   const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 

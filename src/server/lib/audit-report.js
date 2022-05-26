@@ -38,7 +38,7 @@ async function generateReport (tenantId) {
     throw new Error('must specify tenantId');
   }
 
-  endDates = await reportingPeriods.getEndDates()
+  endDates = await reportingPeriods.getEndDates(tenantId)
   endDates = endDates.map(ed => format(new Date(ed.end_date), 'M/d/yy'))
   endDates.unshift(null) // because the first period is period 1
 
@@ -747,7 +747,7 @@ async function createProjectSummarySheet (tenantId, nPeriods) {
   }
 
   async function addColumnTitles (sheet, nPeriods) {
-    let endDates = await reportingPeriods.getEndDates()
+    let endDates = await reportingPeriods.getEndDates(tenantId)
     endDates = endDates.map(ed => format(new Date(ed.end_date), 'M/d/yy'))
     endDates.unshift(null) // because the first period is period 1
     const line1 = [

@@ -24,7 +24,7 @@ async function persistUpload ({ filename, user, buffer }) {
   }
 
   // get the current reporting period
-  const reportingPeriod = await reportingPeriods.get()
+  const reportingPeriod = await reportingPeriods.get(user.tenant_id)
 
   // create an upload
   const uploadRow = {

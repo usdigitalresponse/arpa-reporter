@@ -25,7 +25,7 @@ const { user: getUser } = require('../db/users')
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const allPeriods = await reportingPeriods.getAll()
+  const allPeriods = await reportingPeriods.getAll(req.session.user.tenant_id)
   const reporting_periods = []
 
   const now = moment()
@@ -77,7 +77,8 @@ router.post('/', requireAdminUser, validateReportingPeriod, function (req, res, 
     start_date,
     end_date,
     period_of_performance_end_date,
-    crf_end_date
+    crf_end_date,
+    tenant_id: req.session.user.tenant_id
   }
   reportingPeriods.createReportingPeriod(reportingPeriod)
     .then(result => res.json({ reportingPeriod: result }))
@@ -92,7 +93,7 @@ router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
   next
 ) {
   console.log('PUT /reporting_periods/:id', req.body)
-  let reportingPeriod = await reportingPeriods.get(req.params.id)
+  let reportingPeriod = await reportingPeriods.get(req.session.user.tenant_id, req.params.id)
   if (!reportingPeriod) {
     res.status(404).send('Reporting period not found')
     return
@@ -130,7 +131,7 @@ router.post(
     }
 
     const periodId = req.params.id
-    const reportingPeriod = await reportingPeriods.get(periodId)
+    const reportingPeriod = await reportingPeriods.get(req.session.user.tenant_id, periodId)
     if (!reportingPeriod) {
       res.status(404).send('Reporting period not found')
       return
@@ -166,7 +167,7 @@ router.post(
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id
-  const reportingPeriod = await reportingPeriods.get(periodId)
+  const reportingPeriod = await reportingPeriods.get(req.session.user.tenant_id, periodId)
   const templateName = reportingPeriod.reporting_template || EMPTY_TEMPLATE_NAME
 
   let data = null
@@ -202,7 +203,7 @@ router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const commit = req.query.commit || false
 
   const user = await getUser(req.signedCookies.userId)
-  const reportingPeriod = await reportingPeriods.get(periodId)
+  const reportingPeriod = await reportingPeriods.get(user.tenant_id, periodId)
   if (!reportingPeriod) {
     res.sendStatus(404)
     res.end()

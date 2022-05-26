@@ -49,22 +49,29 @@ module.exports = {
 
 /*  getAll() returns all the records from the reporting_periods table
   */
-async function getAll (trns = knex) {
+async function getAll (tenantId, trns = knex) {
   return trns('reporting_periods')
     .select('*')
+    .where('tenant_id', tenantId)
     .orderBy('end_date', 'desc')
 }
 
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
-async function getReportingPeriod (period_id, trns = knex) {
+async function getReportingPeriod (tenantId, period_id, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in getReportingPeriod');
+  }
+
   if (period_id && Number(period_id)) {
     return trns('reporting_periods')
       .select('*')
       .where('id', period_id)
+      .where('tenant_id', tenantId)
       .then(r => r[0])
   } else if (period_id === undefined) {
     return trns('application_settings')
+      .where('application_settings.tenant_id', tenantId)
       .leftJoin('reporting_periods', 'application_settings.current_reporting_period_id', '=', 'reporting_periods.id')
       .select('reporting_periods.*')
       .then(r => r[0])
@@ -75,14 +82,15 @@ async function getReportingPeriod (period_id, trns = knex) {
 
 /* getFirstReportingPeriodStartDate() returns earliest start date
   */
-async function getFirstReportingPeriodStartDate (trns = knex) {
+async function getFirstReportingPeriodStartDate (tenantId, trns = knex) {
   return trns('reporting_periods')
+    .where('tenant_id', tenantId)
     .min('start_date')
     .then(r => r[0].min)
 }
 
-async function isClosed (period_id) {
-  return getReportingPeriod(period_id)
+async function isClosed (tenantId, period_id) {
+  return getReportingPeriod(tenantId, period_id)
     .then(period => {
       log(`period ${period_id} certified: ${Boolean(period.certified_at)}`)
       return Boolean(period.certified_at)
@@ -92,20 +100,14 @@ async function isClosed (period_id) {
 /*  getPeriodID() returns the argument unchanged unless it is falsy, in which
   case it returns the current reporting period ID.
   */
-async function getPeriodID (periodID) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
-
+async function getPeriodID (tenantId, periodID) {
   return Number(periodID) || getCurrentReportingPeriodID(tenantId)
 }
 
 /*  isCurrent() returns the current reporting period ID if the argument is
     falsy, or if it matches the current reporting period ID
   */
-async function isCurrent (periodID) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
-
+async function isCurrent (tenantId, periodID) {
   const currentID = await getCurrentReportingPeriodID(tenantId)
 
   if (!periodID || (Number(periodID) === Number(currentID))) {
@@ -117,11 +119,8 @@ async function isCurrent (periodID) {
 /* closeReportingPeriod()
   */
 async function closeReportingPeriod (user, period, trns = knex) {
-  // TODO(mbroussard): replace with actual plumbing of tenantId field
-  const tenantId = 0;
-
   // TODO(mbroussard): should this call pass trns?
-  const reporting_period_id = await getCurrentReportingPeriodID(tenantId)
+  const reporting_period_id = await getCurrentReportingPeriodID(user.tenant_id)
 
   period = period || reporting_period_id
   if (period !== reporting_period_id) {
@@ -130,12 +129,12 @@ async function closeReportingPeriod (user, period, trns = knex) {
     )
   }
 
-  if (await isClosed(reporting_period_id)) {
+  if (await isClosed(user.tenant_id, reporting_period_id)) {
     throw new Error(
       `Reporting period ${reporting_period_id} is already closed`
     )
   } else if (reporting_period_id > 1) {
-    if (!(await isClosed(reporting_period_id - 1))) {
+    if (!(await isClosed(user.tenant_id, reporting_period_id - 1))) {
       throw new Error(
         `Prior reporting period ${reporting_period_id - 1} is not closed`
       )
@@ -167,8 +166,9 @@ async function closeReportingPeriod (user, period, trns = knex) {
 
 /*  getEndDates()
   */
-async function getEndDates (trns = knex) {
+async function getEndDates (tenantId, trns = knex) {
   return await trns('reporting_periods')
+    .where('tenant_id', tenantId)
     .select('end_date')
     .orderBy('id')
 }
@@ -176,6 +176,10 @@ async function getEndDates (trns = knex) {
 /*  createReportingPeriod()
   */
 async function createReportingPeriod (reportingPeriod, trns = knex) {
+  if (reportingPeriod.tenant_id === undefined) {
+    throw new Error('createReportingPeriod caller must specify tenantId');
+  }
+
   return trns
     .insert(reportingPeriod)
     .into('reporting_periods')
@@ -200,6 +204,7 @@ function updateReportingPeriod (reportingPeriod, trns = knex) {
       period_of_performance_end_date: reportingPeriod.period_of_performance_end_date,
       crf_end_date: reportingPeriod.crf_end_date,
       reporting_template: reportingPeriod.reporting_template
+      // tenant_id is immutable
     })
 }
 

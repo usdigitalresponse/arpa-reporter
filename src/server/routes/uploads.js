@@ -20,7 +20,7 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const periodId = await reportingPeriods.getID(req.query.period_id)
+  const periodId = await reportingPeriods.getID(req.session.user.tenant_id, req.query.period_id)
 
   const user = await getUser(req.signedCookies.userId)
   const agencyId = user.agency_id || (req.query.for_agency ?? null)

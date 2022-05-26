@@ -9,10 +9,11 @@ const arpa = require('../services/generate-arpa-report')
 const reportingPeriods = require('../db/reporting-periods')
 
 router.get('/', requireUser, async function (req, res) {
-  const periodId = await reportingPeriods.getID(req.query.period_id)
+  const tenantId = req.session.user.tenant_id
+  const periodId = await reportingPeriods.getID(tenantId, req.query.period_id)
 
   let generator
-  if (await reportingPeriods.isCurrent(periodId)) {
+  if (await reportingPeriods.isCurrent(tenantId, periodId)) {
     console.log(`periodId ${periodId} is current`)
     generator = arpa.generateReport
   } else {
@@ -21,7 +22,7 @@ router.get('/', requireUser, async function (req, res) {
     generator = arpa.getPriorReport
   }
 
-  const report = await generator(req.session.user.tenant_id, periodId)
+  const report = await generator(tenantId, periodId)
 
   if (_.isError(report)) {
     return res.status(500).send(report.message)

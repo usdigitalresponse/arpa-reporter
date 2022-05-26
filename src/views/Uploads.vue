@@ -125,7 +125,11 @@ export default {
           label: 'EC Code',
           field: 'ec_code',
           tdClass: (row) => { if (!row.ec_code) return 'table-danger' },
-          width: '120px'
+          width: '120px',
+          filterOptions: {
+            enabled: true,
+            placeholder: 'Filter...'
+          }
         },
         {
           label: 'Uploaded By',

@@ -28,8 +28,22 @@ module.exports = {
       env: {
         mocha: true
       }
+    },
+    {
+      files: [
+        'src/server/**/*.js'
+      ],
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        project: ['./tsconfig.json']
+      },
+      rules: {
+        '@typescript-eslint/no-floating-promises': 'error'
+      }
     }
   ],
+
+  plugins: ['@typescript-eslint'],
 
   parserOptions: {
     parser: 'babel-eslint'

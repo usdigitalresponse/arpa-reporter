@@ -5,37 +5,28 @@ const {
   getCurrentReportingPeriodID
 } = require('./settings')
 
-async function listUploads ({ periodId, agencyId = null, onlyValidated = false }, trns = knex) {
+function baseQuery (trns) {
+  return trns('uploads')
+    .leftJoin('users', 'uploads.user_id', 'users.id')
+    .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
+    .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
+}
+
+async function uploadsInPeriod (periodId, trns = knex) {
   if (!periodId) {
     periodId = await getCurrentReportingPeriodID(trns)
   }
 
-  let query = trns('uploads')
-    .leftJoin('users', 'uploads.user_id', 'users.id')
-    .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
-    .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
-    .where({ reporting_period_id: periodId })
-
-  if (agencyId) {
-    query = query.andWhere('uploads.agency_id', agencyId)
-  }
-
-  if (onlyValidated) {
-    query = query.andWhere('uploads.validated_at IS NOT NULL')
-  }
-
-  return query.orderBy('uploads.created_at', 'desc')
+  return baseQuery(trns)
+    .where('reporting_period_id', periodId)
+    .orderBy('uploads.created_at', 'desc')
 }
 
-async function uploadsForAgency (agency_id, period_id, trns = knex) {
-  if (!period_id) {
-    period_id = await getCurrentReportingPeriodID()
-  }
-
-  return trns('uploads')
-    .select('*')
-    .where({ reporting_period_id: period_id })
-    .andWhere('agency_id', agency_id)
+async function uploadsInSeries (upload, trns = knex) {
+  return baseQuery(trns)
+    .where('reporting_period_id', upload.reporting_period_id)
+    .andWhere('uploads.agency_id', upload.agency_id)
+    .andWhere('uploads.ec_code', upload.ec_code)
     .orderBy('created_at', 'desc')
 }
 
@@ -145,8 +136,8 @@ module.exports = {
   getUploadSummaries,
   createUpload,
   getUpload,
-  listUploads,
-  uploadsForAgency,
+  uploadsInPeriod,
+  uploadsInSeries,
   setAgencyId,
   setEcCode,
   markValidated,

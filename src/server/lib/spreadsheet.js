@@ -6,10 +6,6 @@
 */
 /* eslint camelcase: 0 */
 
-function uploadFilename (filename) {
-  return `${process.env.UPLOAD_DIRECTORY}/${filename}`
-}
-
 // cleanString() trims leading and trailing spaces.
 // - If the entire string is enclosed in double quotes, removes them (does
 // not remove a trailing or leading double quote without a corresponding

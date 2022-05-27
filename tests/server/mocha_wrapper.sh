@@ -19,7 +19,6 @@ then
 fi
 
 export DATA_DIR=`dirname $0`/mocha_uploads
-export UPLOAD_DIRECTORY=`dirname $0`/mocha_uploads
 
 $DIR/reset-db.sh
 

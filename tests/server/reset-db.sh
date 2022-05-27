@@ -27,9 +27,6 @@ fi
 
 echo Using database $dbname
 
-mkdir -p $UPLOAD_DIRECTORY
-rm -rf $UPLOAD_DIRECTORY/*
-
 set -x
 if [ $DEVDBNAME == $dbname ]
 then

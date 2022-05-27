@@ -86,7 +86,6 @@ function validateSubrecipients ({ upload, records }) {
 
 }
 
-// TODO(mbroussard): is it a bug that user is not always passed in?
 async function validateUpload (upload, user, trns) {
   // holder for our validation errors
   const errors = []

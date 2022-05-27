@@ -38,8 +38,7 @@ async function uploadsForAgency (agency_id, period_id, trns = knex) {
   }
 
   if (!period_id) {
-    // TODO(mbroussard): should this pass trns?
-    period_id = await getCurrentReportingPeriodID(agency.tenant_id)
+    period_id = await getCurrentReportingPeriodID(agency.tenant_id, trns)
   }
 
   return trns('uploads')
@@ -135,8 +134,7 @@ async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
   }
 
   if (!period_id) {
-    // TODO(mbroussard): should this pass trns?
-    period_id = await getCurrentReportingPeriodID(tenantId)
+    period_id = await getCurrentReportingPeriodID(tenantId, trns)
   }
   let rv
   try {

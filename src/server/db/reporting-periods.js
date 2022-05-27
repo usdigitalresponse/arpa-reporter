@@ -119,8 +119,7 @@ async function isCurrent (tenantId, periodID) {
 /* closeReportingPeriod()
   */
 async function closeReportingPeriod (user, period, trns = knex) {
-  // TODO(mbroussard): should this call pass trns?
-  const reporting_period_id = await getCurrentReportingPeriodID(user.tenant_id)
+  const reporting_period_id = await getCurrentReportingPeriodID(user.tenant_id, trns)
 
   period = period || reporting_period_id
   if (period !== reporting_period_id) {

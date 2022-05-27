@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
-const { user: getUser, users: getUsers, roles: getRoles } = require('../db/users')
+const { users: getUsers, roles: getRoles } = require('../db/users')
 
 router.get('/', requireUser, async function (req, res) {
   const user = req.session.user

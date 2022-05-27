@@ -20,7 +20,6 @@ const knex = require('../db/connection')
 const reportingPeriods = require('../db/reporting-periods')
 const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { user: getUser } = require('../db/users')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
@@ -47,10 +46,8 @@ router.get('/summaries/', requireUser, async function (req, res) {
 router.post('/close/', requireAdminUser, async (req, res) => {
   console.log('POST /reporting_periods/close/')
 
-  const user = await getUser(req.signedCookies.userId)
-
   try {
-    await reportingPeriods.close(user)
+    await reportingPeriods.close(req.session.user)
   } catch (err) {
     return res.status(500).send(err.message)
   }
@@ -203,7 +200,7 @@ router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const periodId = req.params.id
   const commit = req.query.commit || false
 
-  const user = await getUser(req.signedCookies.userId)
+  const user = req.session.user
   const reportingPeriod = await reportingPeriods.get(user.tenant_id, periodId)
   if (!reportingPeriod) {
     res.sendStatus(404)

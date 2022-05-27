@@ -59,11 +59,11 @@
         <router-link :class="navLinkClass('/agencies')" to="/agencies">Agencies</router-link>
       </li>
 
-      <li class="nav-item" v-if="role === 'admin'">
+      <!-- <li class="nav-item" v-if="role === 'admin'">
         <router-link :class="navLinkClass('/subrecipients')" to="/subrecipients">
           Sub Recipients
         </router-link>
-      </li>
+      </li> -->
 
       <li class="nav-item" v-if="role === 'admin'">
         <router-link :class="navLinkClass('/users')" to="/users">Users</router-link>

@@ -22,7 +22,7 @@ export default {
     },
     classes: function () {
       return {
-        disabled: this.isDisabled,
+        'disabled': this.isDisabled,
         'btn-block': this.block
       }
     }

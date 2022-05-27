@@ -335,8 +335,26 @@ async function generateProject4142 (records) {
       switch (detailedEcCode) {
         case '4.1':
         case '4.2': {
-          // TODO
-          return null
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Sectors_Critical_to_Health_Well_Being__c,
+            record.content.Workers_Served__c,
+            record.content.Premium_Pay_Narrative__c,
+            record.content.Number_of_Workers_K_12__c
+          ]
         }
         default:
           return null

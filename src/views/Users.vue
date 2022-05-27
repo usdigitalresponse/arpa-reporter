@@ -24,7 +24,7 @@
           <td>{{ user.role }}</td>
           <td>{{ agencyName(user.agency_id) }}</td>
           <td>{{ user.created_at }}</td>
-          <td><router-link :to="`/users/${user.id}`">Edit</router-link></td>
+          <td><router-link :to="`/users/${user.id}`" class="btn btn-sm btn-secondary">Edit</router-link></td>
         </tr>
       </tbody>
     </table>

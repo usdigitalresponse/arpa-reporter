@@ -587,7 +587,7 @@ async function createProjectSummarySheet (nPeriods) {
     const rowData = consolidateProjects(sqlRows)
     log(`${rowData.length} consolidated rows`)
     await addColumnTitles(sheet, nPeriods)
-    addDataRows(sheet, rowData, nPeriods)
+    await addDataRows(sheet, rowData, nPeriods)
   } catch (err) {
     return err
   }

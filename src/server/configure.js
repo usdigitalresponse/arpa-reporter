@@ -22,7 +22,7 @@ module.exports = app => {
   app.use('/api/configuration', require('./routes/configuration'))
   app.use('/api/exports', require('./routes/exports'))
   app.use('/api/files', require('./routes/files'))
-  // app.use('/api/subrecipients', require('./routes/subrecipients'))
+  app.use('/api/subrecipients', require('./routes/subrecipients'))
   app.use('/api/reporting_periods', require('./routes/reporting-periods'))
   app.use('/api/sessions', require('./routes/sessions'))
   app.use('/api/audit_report', require('./routes/audit-report'))

@@ -410,8 +410,27 @@ async function generateProject519521 (records) {
         case '5.19':
         case '5.20':
         case '5.21': {
-          // TODO
-          return null
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Proj_Actual_Construction_Start_Date__c,
+            record.content.Initiation_of_Operations_Date__c,
+            record.content.Is_project_designed_to_meet_100_mbps__c,
+            record.content.Project_not_met_100_mbps_explanation__c,
+            record.content.Is_project_designed_to_exceed_100_mbps__c
+          ]
         }
         default:
           return null

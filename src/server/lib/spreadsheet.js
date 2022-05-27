@@ -34,7 +34,6 @@ function zeroPad (code) {
 
 module.exports = {
   cleanString,
-  uploadFilename,
   zeroPad
 }
 

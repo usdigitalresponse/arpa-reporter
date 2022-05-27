@@ -40,6 +40,7 @@ router.get('/', requireUser, async function (req, res) {
 })
 
 router.get('/summaries/', requireUser, async function (req, res) {
+  // TODO(mbroussard): this method doesn't seem to exist?
   return reportingPeriods.getPeriodSummaries().then(summaries => res.json({ summaries }))
 })
 

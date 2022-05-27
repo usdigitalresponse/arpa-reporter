@@ -58,7 +58,7 @@ router.get('/:id', requireUser, async (req, res) => {
   const id = Number(req.params.id)
 
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -71,8 +71,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
-  // TODO(mbroussard): tenant access check on getUpload
-  if (!upload) {
+  if (!upload || upload.tenant_id != req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -99,7 +98,7 @@ router.get('/:id/records', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -116,7 +115,7 @@ router.get('/:id/download', requireUser, async (req, res) => {
   const { id } = req.params
   const upload = await getUpload(id)
 
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -137,7 +136,7 @@ router.post('/:id/validate', requireUser, async (req, res) => {
 
   const user = await getUser(req.signedCookies.userId)
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return

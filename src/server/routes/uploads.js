@@ -12,7 +12,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 const knex = require('../db/connection')
 const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
-const { uploadsForAgency, validForReportingPeriod, getUpload, listUploads } = require('../db/uploads')
+const { validForReportingPeriod, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
 const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
@@ -21,12 +21,7 @@ const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
   const periodId = await reportingPeriods.getID(req.query.period_id)
-
-  const user = await getUser(req.signedCookies.userId)
-  const agencyId = user.agency_id || (req.query.for_agency ?? null)
-  const onlyValidated = req.query.only_validated ?? null
-
-  const uploads = await listUploads({ periodId, agencyId, onlyValidated })
+  const uploads = await uploadsInPeriod(periodId)
   return res.json({ uploads })
 })
 
@@ -77,14 +72,14 @@ router.get('/:id/series', requireUser, async (req, res) => {
   }
 
   let series
-  if (upload.agency_id) {
-    series = await uploadsForAgency(upload.agency_id, upload.reporting_period_id)
+  if (upload.agency_id && upload.ec_code) {
+    series = await uploadsInSeries(upload)
   } else {
     series = [upload]
   }
 
   const allValid = await validForReportingPeriod(upload.reporting_period_id)
-  const currentValid = allValid.find(upl => upl.agency_id === upload.agency_id)
+  const currentValid = allValid.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
 
   res.json({
     upload,

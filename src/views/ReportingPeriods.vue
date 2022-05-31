@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     user: function () {
-      return this.$store.state.user
+      return this.$store.getters.user
     },
     reportingPeriods: function () {
       return _.sortBy(this.$store.state.allReportingPeriods, ['start_date'])

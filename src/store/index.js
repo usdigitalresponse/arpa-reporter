@@ -5,7 +5,9 @@ import Vuex from 'vuex'
 import moment from 'moment'
 import _ from 'lodash'
 
+import users from './users'
 import { getJson, post, postForm, put } from './ajax'
+
 export * from './ajax'
 
 Vue.use(Vuex)
@@ -15,10 +17,11 @@ function randomId () {
 }
 
 export default new Vuex.Store({
+  modules: {
+    users
+  },
   state: {
-    user: null,
     applicationSettings: {},
-    configuration: {},
     agencies: [],
     subrecipients: [],
     reportingPeriods: [],
@@ -33,12 +36,6 @@ export default new Vuex.Store({
   mutations: {
     setRecentUploadId (state, uploadId) {
       state.recentUploadId = uploadId
-    },
-    setUser (state, user) {
-      state.user = user
-    },
-    setConfiguration (state, configuration) {
-      state.configuration = configuration
     },
     setAgencies (state, agencies) {
       state.agencies = agencies
@@ -57,18 +54,6 @@ export default new Vuex.Store({
       if (!state.viewPeriodID) {
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
-    },
-    addUser (state, user) {
-      state.configuration.users = _.sortBy(
-        [...state.configuration.users, user],
-        'email'
-      )
-    },
-    updateUser (state, user) {
-      state.configuration.users = _.chain(state.configuration.users)
-        .map(u => (user.id === u.id ? user : u))
-        .sortBy('email')
-        .value()
     },
     addSubrecipient (state, subrecipient) {
       state.subrecipients = _.sortBy([...state.subrecipients, subrecipient], 'name')
@@ -118,29 +103,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login ({ commit, dispatch }, user) {
-      commit('setUser', user)
-      dispatch('loadApplicationSettings')
-      dispatch('updateAgencies')
-
-      const doFetch = attr => {
-        fetch(`/api/${attr}`, { credentials: 'include' })
-          .then(r => r.json())
-          .then(data => {
-            const mutation = _.camelCase(`set_${attr}`)
-            commit(mutation, data[attr])
-            if (attr === 'reporting_periods') { // yuck
-              commit('setAllReportingPeriods', data.all_reporting_periods)
-            }
-          })
-      }
-      doFetch('configuration')
-      doFetch('reporting_periods')
-      doFetch('subrecipients')
-    },
-    logout ({ commit }) {
-      fetch('/api/sessions/logout').then(() => commit('setUser', null))
-    },
     loadApplicationSettings ({ commit }) {
       fetch('/api/application_settings')
         .then(r => r.json())
@@ -148,16 +110,6 @@ export default new Vuex.Store({
           commit('setApplicationSettings', data.application_settings)
           commit('setViewPeriodID', data.application_settings.current_reporting_period_id)
         })
-    },
-    createUser ({ commit }, user) {
-      return post('/api/users', user).then(response => {
-        commit('addUser', response.user)
-      })
-    },
-    updateUser ({ commit }, user) {
-      return put(`/api/users/${user.id}`, user).then(() => {
-        commit('updateUser', user)
-      })
     },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {
       return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
@@ -254,13 +206,9 @@ export default new Vuex.Store({
       }
     }
   },
-  modules: {},
   getters: {
     periodNames: state => {
       return _.map(state.reportingPeriods, 'name')
-    },
-    user: state => {
-      return state.user || {}
     },
     agencyName: state => id => {
       const agency = _.find(state.agencies, { id })

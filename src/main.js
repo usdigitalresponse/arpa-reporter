@@ -10,7 +10,7 @@ async function main () {
   const data = await session.json()
 
   if (data && data.user) {
-    await store.dispatch('login', data.user)
+    await store.dispatch('users/login', data.user)
   } else {
     await store.dispatch('loadApplicationSettings')
   }

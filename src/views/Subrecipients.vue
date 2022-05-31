@@ -15,7 +15,7 @@ export default {
     FastTable
   },
   data: function () {
-    const user = this.$store.getters.user
+    const user = this.$store.getters['users/loggedInUser']
     return {
       user,
       table: {

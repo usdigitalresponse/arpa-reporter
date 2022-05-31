@@ -60,19 +60,22 @@ export default {
       )
     },
     roles: function () {
-      return _.map(this.$store.state.configuration.roles, r => {
+      return _.map(this.$store.state.users.configuration.roles, r => {
         return { value: r.name, name: r.name }
       })
+    },
+    users: function () {
+      return this.$store.state.users.configuration.users
     }
   },
   watch: {
-    '$store.state.configuration.users': function () {
+    users: function () {
       this.editUser = this.findUser(this.id)
     }
   },
   methods: {
     findUser (id) {
-      const user = _.find(this.$store.state.configuration.users, { id }) || {}
+      const user = _.find(this.users, { id }) || {}
       return { ...user }
     },
     getAgencies () {
@@ -90,7 +93,7 @@ export default {
         delete updatedUser.agency_id
       }
       return this.$store
-        .dispatch(this.isNew ? 'createUser' : 'updateUser', updatedUser)
+        .dispatch(this.isNew ? 'users/createUser' : 'users/updateUser', updatedUser)
         .then(() => this.onDone())
         .catch(e => (this.errorMessage = e.message))
     },

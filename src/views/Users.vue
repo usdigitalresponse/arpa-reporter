@@ -36,7 +36,7 @@ export default {
   name: 'Users',
   computed: {
     users: function () {
-      const { users } = this.$store.state.configuration
+      const { users } = this.$store.state.users.configuration
       return users
     }
   },

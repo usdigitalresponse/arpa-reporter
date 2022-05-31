@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     user: function () {
-      return this.$store.getters.user
+      return this.$store.getters['users/loggedInUser']
     },
     email: function () {
       return this.user.email
@@ -109,7 +109,7 @@ export default {
       return this.$store.getters.agencyName(this.user.agency_id)
     },
     role: function () {
-      return this.$store.getters.user.role
+      return this.$store.getters['users/loggedInUser'].role
     },
     loggedIn: function () {
       return this.$store.state.user !== null
@@ -137,7 +137,7 @@ export default {
     logout (e) {
       e.preventDefault()
       this.$store
-        .dispatch('logout')
+        .dispatch('users/logout')
         .then(() => this.$router.push({ path: '/login' }))
     },
     navLinkClass (to) {

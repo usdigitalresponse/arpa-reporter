@@ -134,7 +134,7 @@ const router = new VueRouter({
 })
 
 function loggedIn () {
-  return store.getters.user != null
+  return store.getters['users/loggedInUser'] != null
 }
 
 router.beforeEach((to, from, next) => {

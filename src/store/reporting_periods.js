@@ -47,7 +47,7 @@ export default {
         .then(response => {
           if (response.success && response.reportingPeriod) {
             commit('updateReportingPeriod', response.reportingPeriod)
-            dispatch('reloadApplicationSettings')
+            dispatch('applicationSettings/reloadApplicationSettings', { root: true })
           }
           return response
         })
@@ -59,7 +59,7 @@ export default {
             fetch('/api/reporting_periods', { credentials: 'include' })
               .then(r => r.json())
               .then(data => commit('setReportingPeriods', data.reporting_periods))
-            dispatch('reloadApplicationSettings')
+            dispatch('applicationSettings/reloadApplicationSettings', { root: true })
           }
           return r
         })
@@ -84,8 +84,8 @@ export default {
     }
   },
   getters: {
-    currentReportingPeriod: (state, getters) => {
-      const id = getters.currentPeriodID
+    currentReportingPeriod: (state, getters, rootState, rootGetters) => {
+      const id = rootGetters['applicationSettings/currentPeriodID']
       if (!id) {
         return null
       }
@@ -94,9 +94,9 @@ export default {
     periodNames: state => {
       return _.map(state.reportingPeriods, 'name')
     },
-    viewPeriod: (state, getters) => {
+    viewPeriod: (state, getters, rootState, rootGetters) => {
       const id = Number(state.viewPeriodID ||
-      getters.currentPeriodID
+      rootGetters['applicationSettings/currentPeriodID']
       )
 
       return _.find(state.reportingPeriods, { id }) || { id: 0, name: '' }
@@ -104,9 +104,9 @@ export default {
     viewPeriodID: state => {
       return Number(state.viewPeriodID)
     },
-    viewPeriodIsCurrent: (state, getters) => {
+    viewPeriodIsCurrent: (state, getters, rootState, rootGetters) => {
       return Number(state.viewPeriodID) ===
-        Number(getters.currentPeriodID)
+        Number(rootGetters['applicationSettings/currentPeriodID'])
     }
   }
 }

@@ -14,6 +14,7 @@ describe('Navigation.vue', () => {
         periodNames: () => ['September, 2020', 'December, 2020'],
         viewPeriod: () => ({ id: 1 }),
         user: () => ({ email: 'user@example.com', role: 'admin' }),
+        // TODO(mbroussard): update tests to look like namespaced version
         applicationTitle: () => 'ARPA Reporter',
         agencyName: () => id => `Agency ${id}`
       }

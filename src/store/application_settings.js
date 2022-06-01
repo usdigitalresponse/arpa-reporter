@@ -1,5 +1,6 @@
 
 export default {
+  namespaced: true,
   state: {
     current_reporting_period_id: null,
     title: null
@@ -19,7 +20,7 @@ export default {
     },
     async loadApplicationSettings ({ commit, dispatch, getters }) {
       await dispatch('reloadApplicationSettings')
-      commit('setViewPeriodID', getters.currentPeriodID)
+      dispatch('setViewPeriodID', getters.currentPeriodID, { root: true })
     }
   },
   getters: {

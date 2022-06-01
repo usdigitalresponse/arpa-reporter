@@ -32,7 +32,7 @@ export default {
   actions: {
     login ({ commit, dispatch }, user) {
       commit('setUser', user)
-      dispatch('loadApplicationSettings', null, { root: true })
+      dispatch('applicationSettings/loadApplicationSettings', null, { root: true })
       dispatch('updateAgencies', null, { root: true })
 
       // root: whether the needed mutation is at the root level of the store or

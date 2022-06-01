@@ -121,7 +121,7 @@ export default {
       return this.$store.getters.viewPeriod
     },
     applicationTitle: function () {
-      return this.$store.getters.applicationTitle
+      return this.$store.getters['applicationSettings/applicationTitle']
     },
     alerts: function () {
       return this.$store.state.alerts

@@ -12,7 +12,7 @@ async function main () {
   if (data && data.user) {
     await store.dispatch('users/login', data.user)
   } else {
-    await store.dispatch('loadApplicationSettings')
+    await store.dispatch('applicationSettings/loadApplicationSettings')
   }
 
   new Vue({

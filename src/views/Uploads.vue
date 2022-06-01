@@ -163,7 +163,7 @@ export default {
       ]
     },
     periodId: function () {
-      return this.$store.state.viewPeriodID
+      return this.$store.state.reportingPeriods.viewPeriodID
     }
   },
   methods: {

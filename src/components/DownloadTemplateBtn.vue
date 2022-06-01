@@ -12,7 +12,7 @@ export default {
   },
   computed: {
     periodId: function () {
-      return this.$store.state.viewPeriodID
+      return this.$store.state.reportingPeriods.viewPeriodID
     },
     href: function () {
       return `/api/reporting_periods/${this.periodId}/template`

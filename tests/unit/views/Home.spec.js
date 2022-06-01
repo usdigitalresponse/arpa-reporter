@@ -10,6 +10,7 @@ describe('Home.vue', () => {
   it('renders', () => {
     const store = new Vuex.Store({
       state: {
+        // TODO(mbroussard): fixup this test to look like namespaced version
         viewPeriodID: 0,
         configuration: {
           templates: [{ name: 'Agency' }]

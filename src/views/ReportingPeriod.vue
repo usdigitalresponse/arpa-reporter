@@ -59,13 +59,14 @@ export default {
     }
   },
   watch: {
-    '$store.state.reportingPeriods': function () {
+    // TODO(mbroussard): should this be watching allReportingPeriods instead?
+    '$store.state.reportingPeriods.reportingPeriods': function () {
       this.editReportingPeriod = this.findReportingPeriod(this.id)
     }
   },
   methods: {
     findReportingPeriod (id) {
-      const r = _.find(this.$store.state.allReportingPeriods, { id })
+      const r = _.find(this.$store.state.reportingPeriods.allReportingPeriods, { id })
       if (r) {
         const result = { ...r }
         this.dateFields.forEach(f => {

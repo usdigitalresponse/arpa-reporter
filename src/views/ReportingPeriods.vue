@@ -91,7 +91,7 @@ export default {
       return this.$store.getters['users/loggedInUser']
     },
     reportingPeriods: function () {
-      return _.sortBy(this.$store.state.allReportingPeriods, ['start_date'])
+      return _.sortBy(this.$store.state.reportingPeriods.allReportingPeriods, ['start_date'])
     },
     currentReportingPeriodName () {
       return this.$store.getters.currentReportingPeriod.name
@@ -119,7 +119,7 @@ export default {
         el.modal('hide')
         this.certifying = true
         this.errorMessage = null
-        this.$store.dispatch('closeReportingPeriod', this.currentReportingPeriodId)
+        this.$store.dispatch('closeReportingPeriod')
           .then((r) => {
             if (!r.ok) {
               r.text().then(errorMessage => {

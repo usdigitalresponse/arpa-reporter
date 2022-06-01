@@ -90,7 +90,7 @@ export default {
       })
       return this.$store
         .dispatch(
-          this.isNew ? 'createReportingPeriod' : 'updateReportingPeriod',
+          this.isNew ? 'reportingPeriods/createReportingPeriod' : 'reportingPeriods/updateReportingPeriod',
           updatedReportingPeriod
         )
         .then(() => this.onDone())

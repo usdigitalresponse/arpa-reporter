@@ -55,15 +55,15 @@ export default {
       return this.$store.getters['users/loggedInUser'].role
     },
     viewingOpenPeriod () {
-      return this.$store.getters.viewPeriodIsCurrent
+      return this.$store.getters['reportingPeriods/viewPeriodIsCurrent']
     },
     isClosed: function () {
-      return !(this.$store.getters.viewPeriodIsCurrent)
+      return !(this.$store.getters['reportingPeriods/viewPeriodIsCurrent'])
     }
   },
   methods: {
     downloadUrl () {
-      const periodId = this.$store.getters.viewPeriod.id || 0
+      const periodId = this.$store.getters['reportingPeriods/viewPeriod'].id || 0
       return `/api/exports?period_id=${periodId}`
     },
     startUpload: function () {

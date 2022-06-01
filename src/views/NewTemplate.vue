@@ -73,7 +73,7 @@ export default {
             formData,
             reportingPeriodId: this.reportingPeriodId
           }
-          const r = await this.$store.dispatch('createTemplate', params)
+          const r = await this.$store.dispatch('reportingPeriods/createTemplate', params)
           this.uploading = false
           form.reset()
           if (r.errorMessage) {

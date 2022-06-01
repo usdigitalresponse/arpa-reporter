@@ -20,7 +20,7 @@ export default {
     },
     async loadApplicationSettings ({ commit, dispatch, getters }) {
       await dispatch('reloadApplicationSettings')
-      dispatch('setViewPeriodID', getters.currentPeriodID, { root: true })
+      dispatch('reportingPeriods/setViewPeriodID', getters.currentPeriodID, { root: true })
     }
   },
   getters: {

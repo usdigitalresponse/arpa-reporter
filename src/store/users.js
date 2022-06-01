@@ -44,13 +44,10 @@ export default {
           .then(data => {
             const mutation = _.camelCase(`set_${attr}`)
             commit(mutation, data[attr], { root })
-            if (attr === 'reporting_periods') { // yuck
-              commit('setAllReportingPeriods', data.all_reporting_periods, { root })
-            }
           })
       }
       doFetch('configuration', false /* root */)
-      doFetch('reporting_periods')
+      dispatch('reportingPeriods/loadReportingPeriods', null, { root: true })
       doFetch('subrecipients')
     },
     logout ({ commit }) {

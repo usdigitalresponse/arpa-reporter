@@ -18,7 +18,7 @@ export default {
       return `/api/reporting_periods/${this.periodId}/template`
     },
     isDisabled: function () {
-      return !this.$store.getters.viewPeriodIsCurrent
+      return !this.$store.getters['reportingPeriods/viewPeriodIsCurrent']
     },
     classes: function () {
       return {

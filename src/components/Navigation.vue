@@ -115,10 +115,10 @@ export default {
       return this.$store.state.user !== null
     },
     periodNames: function () {
-      return this.$store.getters.periodNames
+      return this.$store.getters['reportingPeriods/periodNames']
     },
     viewPeriod: function () {
-      return this.$store.getters.viewPeriod
+      return this.$store.getters['reportingPeriods/viewPeriod']
     },
     applicationTitle: function () {
       return this.$store.getters['applicationSettings/applicationTitle']
@@ -153,7 +153,7 @@ export default {
     },
     setViewPeriodID: function (newID) {
       return this.$store
-        .dispatch('setViewPeriodID', newID)
+        .dispatch('reportingPeriods/setViewPeriodID', newID)
         .catch(e => (this.errorMessage = e.message))
     }
   }

@@ -18,6 +18,7 @@ describe('Home.vue', () => {
       },
       getters: {
         user: () => ({ email: 'admin@example.com', role: 'admin' }),
+        // TODO(mbroussard): update tests to look like namespaced version
         periodNames: () => ['September, 2020', 'December, 2020']
       }
     })

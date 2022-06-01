@@ -94,10 +94,10 @@ export default {
       return _.sortBy(this.$store.state.reportingPeriods.allReportingPeriods, ['start_date'])
     },
     currentReportingPeriodName () {
-      return this.$store.getters.currentReportingPeriod.name
+      return this.$store.getters['reportingPeriods/currentReportingPeriod'].name
     },
     currentReportingPeriodId () {
-      return this.$store.getters.currentReportingPeriod.id
+      return this.$store.getters['reportingPeriods/currentReportingPeriod'].id
     },
     certifyLabel () {
       return this.certifying ? 'Certifying Reporting Period...' : 'Certify Reporting Period'
@@ -105,8 +105,8 @@ export default {
   },
   methods: {
     isCurrentReportingPeriod: function (p) {
-      if (this.$store.getters.currentReportingPeriod) {
-        return p.id === this.$store.getters.currentReportingPeriod.id
+      if (this.$store.getters['reportingPeriods/currentReportingPeriod']) {
+        return p.id === this.$store.getters['reportingPeriods/currentReportingPeriod'].id
       }
       return false
     },
@@ -119,7 +119,7 @@ export default {
         el.modal('hide')
         this.certifying = true
         this.errorMessage = null
-        this.$store.dispatch('closeReportingPeriod')
+        this.$store.dispatch('reportingPeriods/closeReportingPeriod')
           .then((r) => {
             if (!r.ok) {
               r.text().then(errorMessage => {

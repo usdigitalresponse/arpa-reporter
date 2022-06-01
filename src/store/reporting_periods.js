@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { post, put, postForm } from './ajax'
 
 export default {
+  namespaced: true,
   state: {
     viewPeriodID: null,
     reportingPeriods: [],
@@ -81,6 +82,14 @@ export default {
       return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
         commit('updateReportingPeriod', reportingPeriod)
       })
+    },
+    loadReportingPeriods ({ commit }) {
+      return fetch('/api/reporting_periods', { credentials: 'include' })
+        .then(r => r.json())
+        .then(data => {
+          commit('setReportingPeriods', data.reporting_periods)
+          commit('setAllReportingPeriods', data.all_reporting_periods)
+        })
     }
   },
   getters: {

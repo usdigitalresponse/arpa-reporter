@@ -16,6 +16,7 @@ describe('Uploads.vue', () => {
       getters: {
         // TODO(mbroussard): update tests to look like namespaced version
         periodNames: () => ['September, 2020', 'December, 2020'],
+        // TODO(mbroussard): update tests to look like namespaced version
         agencyName: () => () => 'Test Agency'
       }
     })

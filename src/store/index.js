@@ -7,6 +7,7 @@ import _ from 'lodash'
 import users from './users'
 import applicationSettings from './application_settings'
 import reportingPeriods from './reporting_periods'
+import agencies from './agencies'
 import { getJson, post, put } from './ajax'
 
 export * from './ajax'
@@ -21,10 +22,10 @@ export default new Vuex.Store({
   modules: {
     users,
     applicationSettings,
-    reportingPeriods
+    reportingPeriods,
+    agencies
   },
   state: {
-    agencies: [],
     subrecipients: [],
     messages: [],
 
@@ -36,9 +37,6 @@ export default new Vuex.Store({
     setRecentUploadId (state, uploadId) {
       state.recentUploadId = uploadId
     },
-    setAgencies (state, agencies) {
-      state.agencies = agencies
-    },
     setSubrecipients (state, subrecipients) {
       state.subrecipients = Object.freeze(subrecipients)
     },
@@ -48,15 +46,6 @@ export default new Vuex.Store({
     updateSubrecipient (state, subrecipient) {
       state.subrecipients = _.chain(state.subrecipients)
         .map(s => (subrecipient.id === s.id ? subrecipient : s))
-        .sortBy('name')
-        .value()
-    },
-    addAgency (state, agency) {
-      state.agencies = _.sortBy([...state.agencies, agency], 'name')
-    },
-    updateAgency (state, agency) {
-      state.agencies = _.chain(state.agencies)
-        .map(a => (agency.id === a.id ? agency : a))
         .sortBy('name')
         .value()
     },
@@ -88,16 +77,6 @@ export default new Vuex.Store({
         commit('updateSubrecipient', subrecipient)
       })
     },
-    createAgency ({ commit }, agency) {
-      return post('/api/agencies', agency).then(response => {
-        commit('addAgency', response.agency)
-      })
-    },
-    updateAgency ({ commit }, agency) {
-      return put(`/api/agencies/${agency.id}`, agency).then(() => {
-        commit('updateAgency', agency)
-      })
-    },
     async updateUploads ({ commit, state }) {
       const params = new URLSearchParams({ period_id: state.reportingPeriods.viewPeriodID })
       const result = await getJson('/api/uploads?' + params.toString())
@@ -107,20 +86,6 @@ export default new Vuex.Store({
       } else {
         commit('updateAllUploads', result.uploads)
       }
-    },
-    async updateAgencies ({ commit, state }) {
-      const result = await getJson('/api/agencies')
-      if (result.error) {
-        commit('addAlert', { text: `updateAgencies Error: ${result.error} (${result.text})`, level: 'err' })
-      } else {
-        commit('setAgencies', result.agencies)
-      }
-    }
-  },
-  getters: {
-    agencyName: state => id => {
-      const agency = _.find(state.agencies, { id })
-      return agency ? agency.name : ''
     }
   }
 })

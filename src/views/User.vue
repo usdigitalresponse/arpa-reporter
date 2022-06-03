@@ -54,7 +54,7 @@ export default {
     },
     agencies: function () {
       return [{ value: 0, name: 'None' }].concat(
-        _.map(this.$store.state.agencies, a => {
+        _.map(this.$store.state.agencies.agencies, a => {
           return { value: a.id, name: a.name }
         })
       )
@@ -81,7 +81,7 @@ export default {
     getAgencies () {
       this.agencyIds = [
         { value: 'None', name: 'None' },
-        ..._.map(this.$store.state.agencies, 'id')
+        ..._.map(this.$store.state.agencies.agencies, 'id')
       ]
     },
     onSave (user) {

@@ -107,7 +107,7 @@ export default {
       return this.$store.state.allUploads
     },
     agencies: function () {
-      return this.$store.state.agencies
+      return this.$store.state.agencies.agencies
     },
     validUploads: function () {
       return this.uploads.filter(upl => upl.validated_at)

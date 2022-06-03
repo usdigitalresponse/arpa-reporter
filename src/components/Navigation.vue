@@ -106,7 +106,7 @@ export default {
       return this.user.email
     },
     agencyName: function () {
-      return this.$store.getters.agencyName(this.user.agency_id)
+      return this.$store.getters['agencies/agencyName'](this.user.agency_id)
     },
     role: function () {
       return this.$store.getters['users/loggedInUser'].role

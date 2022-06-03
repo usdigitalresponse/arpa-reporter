@@ -72,7 +72,7 @@ export default {
       return this.$store.state.allUploads
     },
     agencies: function () {
-      return this.$store.state.agencies
+      return this.$store.state.agencies.agencies
     },
     groupOptions: function () {
       return {
@@ -179,7 +179,7 @@ export default {
   },
   mounted: async function () {
     this.$store.dispatch('updateUploads')
-    this.$store.dispatch('updateAgencies')
+    this.$store.dispatch('agencies/updateAgencies')
   },
   components: {
     VueGoodTable,

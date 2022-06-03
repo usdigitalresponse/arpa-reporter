@@ -33,7 +33,7 @@ export default {
     login ({ commit, dispatch }, user) {
       commit('setUser', user)
       dispatch('applicationSettings/loadApplicationSettings', null, { root: true })
-      dispatch('updateAgencies', null, { root: true })
+      dispatch('agencies/updateAgencies', null, { root: true })
 
       // root: whether the needed mutation is at the root level of the store or
       // nested within this module. This is probably temporary and we should probably

@@ -39,11 +39,11 @@ export default {
   name: 'Agencies',
   computed: {
     agencies: function () {
-      return this.$store.state.agencies
+      return this.$store.state.agencies.agencies
     }
   },
   mounted: async function () {
-    this.$store.dispatch('updateAgencies')
+    this.$store.dispatch('agencies/updateAgencies')
   }
 }
 </script>

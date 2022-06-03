@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     agencyName (id) {
-      return this.$store.getters.agencyName(id)
+      return this.$store.getters['agencies/agencyName'](id)
     }
   }
 }

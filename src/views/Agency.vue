@@ -49,13 +49,13 @@ export default {
     }
   },
   watch: {
-    '$store.state.agencies': function () {
+    '$store.state.agencies.agencies': function () {
       this.editAgency = this.findAgency(this.id)
     }
   },
   methods: {
     findAgency (id) {
-      const agency = _.find(this.$store.state.agencies, { id }) || {}
+      const agency = _.find(this.$store.state.agencies.agencies, { id }) || {}
       return { ...agency }
     },
     onSave (agency) {
@@ -64,7 +64,7 @@ export default {
         ...agency
       }
       return this.$store
-        .dispatch(this.isNew ? 'createAgency' : 'updateAgency', updatedAgency)
+        .dispatch(this.isNew ? 'agencies/createAgency' : 'agencies/updateAgency', updatedAgency)
         .then(() => this.onDone())
         .catch(e => (this.errorMessage = e.message))
     },

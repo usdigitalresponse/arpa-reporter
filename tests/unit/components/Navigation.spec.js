@@ -17,6 +17,7 @@ describe('Navigation.vue', () => {
         user: () => ({ email: 'user@example.com', role: 'admin' }),
         // TODO(mbroussard): update tests to look like namespaced version
         applicationTitle: () => 'ARPA Reporter',
+        // TODO(mbroussard): update tests to look like namespaced version
         agencyName: () => id => `Agency ${id}`
       }
     })

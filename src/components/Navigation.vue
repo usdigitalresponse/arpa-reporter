@@ -112,7 +112,7 @@ export default {
       return this.$store.getters['users/loggedInUser'].role
     },
     loggedIn: function () {
-      return this.$store.state.user !== null
+      return this.$store.state.users.user !== null
     },
     periodNames: function () {
       return this.$store.getters['reportingPeriods/periodNames']

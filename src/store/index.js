@@ -27,7 +27,6 @@ export default new Vuex.Store({
   },
   state: {
     subrecipients: [],
-    messages: [],
 
     recentUploadId: null,
     allUploads: [],
@@ -48,9 +47,6 @@ export default new Vuex.Store({
         .map(s => (subrecipient.id === s.id ? subrecipient : s))
         .sortBy('name')
         .value()
-    },
-    addMessage (state, message) {
-      state.messages = [...state.messages, message]
     },
     updateAllUploads (state, updatedUploads) {
       state.allUploads = updatedUploads

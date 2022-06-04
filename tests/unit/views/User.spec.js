@@ -11,12 +11,14 @@ describe('User.vue', () => {
   beforeEach(() => {
     store = new Vuex.Store({
       state: {
-        configuration: {
-          roles: [{ name: 'admin' }, { name: 'reporter' }]
+        users: {
+          configuration: {
+            roles: [{ name: 'admin' }, { name: 'reporter' }]
+          }
+        },
+        agencies: {
+          agencies: [{ name: 'A1' }, { name: 'A2' }]
         }
-      },
-      getters: {
-        agencies: () => [{ name: 'A1' }, { name: 'A2' }]
       }
     })
   })

@@ -10,12 +10,15 @@ describe('Agencies.vue', () => {
   it('renders project list', () => {
     const store = new Vuex.Store({
       state: {
-        // TODO(mbroussard): update for namespaced
-        allUploads: [],
-        agencies: [
-          { id: 1, code: '001', name: 'Agency 1' },
-          { id: 2, code: '002', name: 'Agency 2' }
-        ]
+        uploads: {
+          allUploads: []
+        },
+        agencies: {
+          agencies: [
+            { id: 1, code: '001', name: 'Agency 1' },
+            { id: 2, code: '002', name: 'Agency 2' }
+          ]
+        }
       }
     })
     const wrapper = mount(Agencies, {

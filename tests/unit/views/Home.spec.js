@@ -10,16 +10,18 @@ describe('Home.vue', () => {
   it('renders', () => {
     const store = new Vuex.Store({
       state: {
-        // TODO(mbroussard): fixup this test to look like namespaced version
-        viewPeriodID: 0,
-        configuration: {
-          templates: [{ name: 'Agency' }]
+        reportingPeriods: {
+          viewPeriodID: 0
+        },
+        users: {
+          configuration: {
+            templates: [{ name: 'Agency' }]
+          }
         }
       },
       getters: {
-        user: () => ({ email: 'admin@example.com', role: 'admin' }),
-        // TODO(mbroussard): update tests to look like namespaced version
-        periodNames: () => ['September, 2020', 'December, 2020']
+        'users/loggedInUser': () => ({ email: 'admin@example.com', role: 'admin' }),
+        'reportingPeriods/periodNames': () => ['September, 2020', 'December, 2020']
       }
     })
     const wrapper = mount(Home, {

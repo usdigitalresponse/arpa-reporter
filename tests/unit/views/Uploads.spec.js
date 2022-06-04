@@ -10,15 +10,19 @@ describe('Uploads.vue', () => {
   it('renders', () => {
     const store = new Vuex.Store({
       state: {
-        agencies: [],
-        // TODO(mbroussard): update for namespaced
-        allUploads: []
+        agencies: {
+          agencies: []
+        },
+        uploads: {
+          allUploads: []
+        },
+        reportingPeriods: {
+          viewPeriodID: null
+        }
       },
       getters: {
-        // TODO(mbroussard): update tests to look like namespaced version
-        periodNames: () => ['September, 2020', 'December, 2020'],
-        // TODO(mbroussard): update tests to look like namespaced version
-        agencyName: () => () => 'Test Agency'
+        'reportingPeriods/periodNames': () => ['September, 2020', 'December, 2020'],
+        'agencies/agencyName': () => () => 'Test Agency'
       }
     })
 

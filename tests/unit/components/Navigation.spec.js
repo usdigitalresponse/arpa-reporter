@@ -10,15 +10,20 @@ describe('Navigation.vue', () => {
   let store
   beforeEach(() => {
     store = new Vuex.Store({
+      state: {
+        users: {
+          user: ({ email: 'user@example.com', role: 'admin' })
+        },
+        alerts: {
+          alerts: {}
+        }
+      },
       getters: {
-        // TODO(mbroussard): update tests to look like namespaced version
-        periodNames: () => ['September, 2020', 'December, 2020'],
-        viewPeriod: () => ({ id: 1 }),
-        user: () => ({ email: 'user@example.com', role: 'admin' }),
-        // TODO(mbroussard): update tests to look like namespaced version
-        applicationTitle: () => 'ARPA Reporter',
-        // TODO(mbroussard): update tests to look like namespaced version
-        agencyName: () => id => `Agency ${id}`
+        'reportingPeriods/periodNames': () => ['September, 2020', 'December, 2020'],
+        'reportingPeriods/viewPeriod': () => ({ id: 1 }),
+        'users/loggedInUser': state => state.users.user,
+        'applicationSettings/applicationTitle': () => 'ARPA Reporter',
+        'agencies/agencyName': () => id => `Agency ${id}`
       }
     })
   })

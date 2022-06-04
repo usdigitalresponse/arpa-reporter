@@ -173,7 +173,7 @@ export default {
       return Number(this.$route.params.id)
     },
     isRecentlyUploaded: function () {
-      return this.uploadId === this.$store.state.recentUploadId
+      return this.uploadId === this.$store.state.uploads.recentUploadId
     },
     validatedLiClass: function () {
       if (!this.upload) return {}
@@ -263,7 +263,7 @@ export default {
     initialValidation: async function () {
       if (!this.isRecentlyUploaded) return
 
-      this.$store.commit('setRecentUploadId', null)
+      this.$store.commit('uploads/setRecentUploadId', null)
       this.validateUpload()
     },
     onLoad: async function () {

@@ -11,6 +11,7 @@ describe('Uploads.vue', () => {
     const store = new Vuex.Store({
       state: {
         agencies: [],
+        // TODO(mbroussard): update for namespaced
         allUploads: []
       },
       getters: {

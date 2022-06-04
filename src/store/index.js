@@ -8,7 +8,8 @@ import users from './users'
 import applicationSettings from './application_settings'
 import reportingPeriods from './reporting_periods'
 import agencies from './agencies'
-import { getJson, post, put } from './ajax'
+import uploads from './uploads'
+import { post, put } from './ajax'
 
 export * from './ajax'
 
@@ -23,19 +24,14 @@ export default new Vuex.Store({
     users,
     applicationSettings,
     reportingPeriods,
-    agencies
+    agencies,
+    uploads
   },
   state: {
     subrecipients: [],
-
-    recentUploadId: null,
-    allUploads: [],
     alerts: {}
   },
   mutations: {
-    setRecentUploadId (state, uploadId) {
-      state.recentUploadId = uploadId
-    },
     setSubrecipients (state, subrecipients) {
       state.subrecipients = Object.freeze(subrecipients)
     },
@@ -47,9 +43,6 @@ export default new Vuex.Store({
         .map(s => (subrecipient.id === s.id ? subrecipient : s))
         .sortBy('name')
         .value()
-    },
-    updateAllUploads (state, updatedUploads) {
-      state.allUploads = updatedUploads
     },
     addAlert (state, alert) {
       Vue.set(state.alerts, randomId(), alert)
@@ -72,16 +65,6 @@ export default new Vuex.Store({
       return put(`/api/subrecipients/${subrecipient.id}`, subrecipient).then(() => {
         commit('updateSubrecipient', subrecipient)
       })
-    },
-    async updateUploads ({ commit, state }) {
-      const params = new URLSearchParams({ period_id: state.reportingPeriods.viewPeriodID })
-      const result = await getJson('/api/uploads?' + params.toString())
-
-      if (result.error) {
-        commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
-      } else {
-        commit('updateAllUploads', result.uploads)
-      }
     }
   }
 })

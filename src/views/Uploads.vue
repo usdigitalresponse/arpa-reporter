@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     uploads: function () {
-      return this.$store.state.allUploads
+      return this.$store.state.uploads.allUploads
     },
     agencies: function () {
       return this.$store.state.agencies.agencies
@@ -174,11 +174,11 @@ export default {
   },
   watch: {
     periodId: async function () {
-      this.$store.dispatch('updateUploads')
+      this.$store.dispatch('uploads/updateUploads')
     }
   },
   mounted: async function () {
-    this.$store.dispatch('updateUploads')
+    this.$store.dispatch('uploads/updateUploads')
     this.$store.dispatch('agencies/updateAgencies')
   },
   components: {

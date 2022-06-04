@@ -84,7 +84,7 @@ export default {
           const upload = result.upload
           if (!upload) throw new Error('Upload failed to return an upload ID')
 
-          this.$store.commit('setRecentUploadId', upload.id)
+          this.$store.commit('uploads/setRecentUploadId', upload.id)
           this.$router.push({ path: `/uploads/${upload.id}` })
         } else {
           const err = result.error || `${resp.statusText} (${resp.status})`

@@ -10,6 +10,7 @@ describe('Agencies.vue', () => {
   it('renders project list', () => {
     const store = new Vuex.Store({
       state: {
+        // TODO(mbroussard): update for namespaced
         allUploads: [],
         agencies: [
           { id: 1, code: '001', name: 'Agency 1' },

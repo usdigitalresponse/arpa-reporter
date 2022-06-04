@@ -21,7 +21,7 @@ export default {
       const result = await getJson('/api/uploads?' + params.toString())
 
       if (result.error) {
-        commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' }, { root: true })
+        commit('alerts/addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' }, { root: true })
       } else {
         commit('updateAllUploads', result.uploads)
       }

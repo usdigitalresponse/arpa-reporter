@@ -212,7 +212,7 @@ export default {
           `/api/reporting_periods/${this.periodId}/revalidate?commit=${this.commit}`)
 
         if (result.errors) {
-          this.$store.commit('addAlert', {
+          this.$store.commit('alerts/addAlert', {
             text: 'Error re-validating uploads',
             level: 'err'
           })
@@ -221,7 +221,7 @@ export default {
         }
       } catch (error) {
         // we got an error from the backend, but the backend didn't send reasons
-        this.$store.commit('addAlert', {
+        this.$store.commit('alerts/addAlert', {
           text: `revalidate Error: ${error.message}`,
           level: 'err'
         })

@@ -234,7 +234,7 @@ export default {
 
       const result = await getJson(`/api/uploads/${this.uploadId}`)
       if (result.error) {
-        this.$store.commit('addAlert', {
+        this.$store.commit('alerts/addAlert', {
           text: `loadUpload Error (${result.status}): ${result.error}`,
           level: 'err'
         })
@@ -251,7 +251,7 @@ export default {
 
       const result = await getJson(`/api/uploads/${this.uploadId}/series`)
       if (result.error) {
-        this.$store.commit('addAlert', {
+        this.$store.commit('alerts/addAlert', {
           text: `loadSeries Error (${result.status}): ${result.error}`,
           level: 'err'
         })

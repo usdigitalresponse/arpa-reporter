@@ -9,15 +9,12 @@ import applicationSettings from './application_settings'
 import reportingPeriods from './reporting_periods'
 import agencies from './agencies'
 import uploads from './uploads'
+import alerts from './alerts'
 import { post, put } from './ajax'
 
 export * from './ajax'
 
 Vue.use(Vuex)
-
-function randomId () {
-  return Math.random().toString(16).substr(2, 10)
-}
 
 export default new Vuex.Store({
   modules: {
@@ -25,13 +22,15 @@ export default new Vuex.Store({
     applicationSettings,
     reportingPeriods,
     agencies,
-    uploads
+    uploads,
+    alerts
   },
   state: {
-    subrecipients: [],
-    alerts: {}
+    subrecipients: []
   },
   mutations: {
+    // NOTE(mbroussard): leaving subrecipient stuff here for now instead of moving to a separate module
+    // since there is an open PR that removes + replaces UI that depends on this
     setSubrecipients (state, subrecipients) {
       state.subrecipients = Object.freeze(subrecipients)
     },
@@ -43,12 +42,6 @@ export default new Vuex.Store({
         .map(s => (subrecipient.id === s.id ? subrecipient : s))
         .sortBy('name')
         .value()
-    },
-    addAlert (state, alert) {
-      Vue.set(state.alerts, randomId(), alert)
-    },
-    dismissAlert (state, alertId) {
-      Vue.delete(state.alerts, alertId)
     }
   },
   actions: {

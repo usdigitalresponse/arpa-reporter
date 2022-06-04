@@ -36,7 +36,7 @@ export default {
     async updateAgencies ({ commit, state }) {
       const result = await getJson('/api/agencies')
       if (result.error) {
-        commit('addAlert', { text: `updateAgencies Error: ${result.error} (${result.text})`, level: 'err' }, { root: true })
+        commit('alerts/addAlert', { text: `updateAgencies Error: ${result.error} (${result.text})`, level: 'err' }, { root: true })
       } else {
         commit('setAgencies', result.agencies)
       }

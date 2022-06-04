@@ -124,7 +124,7 @@ export default {
       return this.$store.getters['applicationSettings/applicationTitle']
     },
     alerts: function () {
-      return this.$store.state.alerts
+      return this.$store.state.alerts.alerts
     }
   },
   watch: {
@@ -132,7 +132,7 @@ export default {
   methods: {
     titleize,
     dismissAlert (alertId) {
-      this.$store.commit('dismissAlert', alertId)
+      this.$store.commit('alerts/dismissAlert', alertId)
     },
     logout (e) {
       e.preventDefault()

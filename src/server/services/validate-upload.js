@@ -119,7 +119,7 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
     for (const [key, rule] of Object.entries(rules)) {
       if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
         errors.push(new ValidationError(
-          `Recipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
+          `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
           but upload specifies '${recipient[key]}'`,
           { col: rule.columnName }
         ))
@@ -177,7 +177,7 @@ async function validateSubrecipients ({ upload, records, rules, trns }) {
       }
     } catch (e) {
       errors.push(new ValidationError(
-        `unexpected error validating recipient: ${e}`,
+        `unexpected error validating subrecipient: ${e}`,
         { tab: 'subrecipient', row: 13 + rowIdx }
       ))
     }

@@ -36,7 +36,7 @@
       <div class="form-group row" v-for="(rule, key) in rules" :key="key">
         <label :for="key" class="col-sm-2 col-form-label">{{ rule.humanColName }}</label>
         <div class="col-sm-10">
-          <select v-if="rule.listVals.length > 0" :id="key" v-model="record[key]" :readonly="isReadOnly(key)">
+          <select v-if="rule.listVals.length > 0" :id="key" v-model="record[key]" :readonly="isReadOnly(key)" class="form-control">
             <option :value="null"></option>
             <option v-for="opt in rule.listVals" :key="opt" :value="opt">{{ opt }}</option>
           </select>

@@ -538,7 +538,9 @@ async function generateProjectBaseline (records) {
         case '2.37':
         case '3.3':
         case '3.4':
-        case '3.5': {
+        case '3.5':
+        case '7.1':
+        case '7.2': {
           return [
             null, // first col is blank
             record.type, // FIXME: transform from sheet tab to export format

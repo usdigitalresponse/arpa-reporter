@@ -1,112 +1,119 @@
 <template>
-  <div class="user">
-    <h1>User</h1>
-    <div v-if="loading">
-      Loading..
+  <div>
+    <h2>User</h2>
+
+    <div v-if="user === null" class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
     </div>
+
     <div v-else>
-      <RecordForm
-        type="Users"
-        :columns="fields"
-        :record="editUser"
-        :id="editUser.id"
-        :isNew="isNew"
-        :onSave="onSave"
-        :onCancel="onCancel"
-        :onDone="onDone"
-        :errorMessage="errorMessage"
-      />
+      <div class="form-group row" v-if="!isNew">
+        <div class="col-sm-2">
+          Created:
+        </div>
+        <div class="col-sm-10">
+          {{ user.created_at }}
+        </div>
+      </div>
+
+      <StandardForm :initialRecord="user" :cols="cols" @save="onSave" @reset="onReset" />
     </div>
   </div>
 </template>
 
 <script>
-import RecordForm from '../components/RecordForm'
-import _ from 'lodash'
+import StandardForm from '../components/StandardForm'
+import { getJson, post } from '../store'
+
 export default {
   name: 'User',
-  components: {
-    RecordForm
-  },
-  data () {
-    let id = 0
-    if (this.$route && this.$route.params && this.$route.params.id) {
-      id = parseInt(this.$route.params.id)
-    }
+  data: function () {
     return {
-      id,
-      isNew: !id,
-      editUser: this.findUser(id),
-      errorMessage: null
+      user: null,
+      roles: []
     }
   },
   computed: {
-    loading: function () {
-      return this.id !== 0 && !this.editUser
+    userId: function () {
+      return this.$route.params.id
     },
-    fields: function () {
+    isNew: function () {
+      return this.userId === 'new'
+    },
+    cols: function () {
       return [
-        { name: 'email', required: true },
-        { name: 'name' },
-        { name: 'role', required: true, allowedValues: this.roles },
-        { name: 'agency_id', allowedValues: this.agencies }
+        { label: 'ID', field: 'id', readonly: true },
+        { label: 'Email', field: 'email', required: true },
+        { label: 'Name', field: 'name', required: true },
+        { label: 'Role', field: 'role', selectItems: this.roleItems },
+        { label: 'Agency', field: 'agency_id', selectItems: this.agencyItems }
       ]
     },
-    agencies: function () {
-      return [{ value: 0, name: 'None' }].concat(
-        _.map(this.$store.state.agencies, a => {
-          return { value: a.id, name: a.name }
-        })
-      )
+    roleItems: function () {
+      return this.roles.map(r => ({ label: r.name, value: r.name }))
     },
-    roles: function () {
-      return _.map(this.$store.state.configuration.roles, r => {
-        return { value: r.name, name: r.name }
-      })
-    }
-  },
-  watch: {
-    '$store.state.configuration.users': function () {
-      this.editUser = this.findUser(this.id)
+    agencyItems: function () {
+      return [{ value: null, name: '' }].concat(
+        this.$store.state.agencies.map(a => ({ label: a.name, value: a.id }))
+      )
     }
   },
   methods: {
-    findUser (id) {
-      const user = _.find(this.$store.state.configuration.users, { id }) || {}
-      return { ...user }
-    },
-    getAgencies () {
-      this.agencyIds = [
-        { value: 'None', name: 'None' },
-        ..._.map(this.$store.state.agencies, 'id')
-      ]
-    },
-    onSave (user) {
-      const updatedUser = {
-        ...this.editUser,
-        ...user
+    loadUser: async function () {
+      this.user = null
+
+      const result = await getJson('/api/users')
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadUsers Error (${result.status}): ${result.error}`,
+          level: 'err'
+        })
+      } else {
+        this.roles = result.roles
+        if (this.isNew) {
+          this.user = {}
+        } else {
+          this.user = result.users.find(u => u.id === Number(this.userId))
+        }
       }
-      if (!updatedUser.agency_id) {
-        delete updatedUser.agency_id
-      }
-      return this.$store
-        .dispatch(this.isNew ? 'createUser' : 'updateUser', updatedUser)
-        .then(() => this.onDone())
-        .catch(e => (this.errorMessage = e.message))
     },
-    onCancel () {
-      return this.onDone()
+    onSave: async function (user) {
+      this.user = null
+
+      try {
+        const result = await post('/api/users', { user })
+        if (result.error) throw new Error(result.error)
+
+        this.user = result.user
+        this.$store.commit('addAlert', {
+          text: `User ${user.email} successfully updated`,
+          level: 'ok'
+        })
+      } catch (err) {
+        this.user = user
+        this.$store.commit('addAlert', {
+          text: `Error updating user ${user.email}: ${err.message}`,
+          level: 'err'
+        })
+      }
+    },
+    onReset () {
+      this.loadUser()
     },
     onDone () {
       return this.$router.push('/users')
     }
+  },
+  watch: {
+    userId: function () {
+      this.loadUser()
+    }
+  },
+  mounted: async function () {
+    this.loadUser()
+  },
+  components: {
+    StandardForm
   }
 }
 </script>
-
-<style scoped>
-.user {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

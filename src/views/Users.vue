@@ -2,9 +2,9 @@
   <div>
     <h2>Users</h2>
     <div class="mb-4">
-      <router-link to="/new_user" class="btn btn-primary"
-        >Create New User</router-link
-      >
+      <router-link to="/users/new" class="btn btn-primary">
+        Create New User
+      </router-link>
     </div>
 
     <vue-good-table
@@ -86,9 +86,6 @@ export default {
     }
   },
   methods: {
-    agencyName (id) {
-      return this.$store.getters.agencyName(id)
-    },
     loadUsers: async function (evt) {
       const result = await getJson('/api/users')
       if (result.error) {

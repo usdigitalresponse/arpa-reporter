@@ -108,12 +108,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/new_user',
-    name: 'NewUser',
-    component: User,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/users/:id',
     name: 'User',
     component: User,

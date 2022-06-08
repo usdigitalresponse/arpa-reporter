@@ -50,7 +50,6 @@ export default {
       this.isLoading = false
     },
     setLoadingState () {
-      console.log('setLoadingState()')
       this.isLoading = true
     }
   }

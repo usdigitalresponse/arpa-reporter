@@ -7,7 +7,7 @@
 /* eslint camelcase: 0 */
 
 const path = require('path')
-const { mkdir, writeFile, readFile } = require('fs/promises')
+const { mkdir, writeFile } = require('fs/promises')
 
 const express = require('express')
 const router = express.Router()
@@ -18,9 +18,10 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
 const reportingPeriods = require('../db/reporting-periods')
-const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
+const { UPLOAD_DIR } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { user: getUser } = require('../db/users')
+const { templateForPeriod } = require('../services/get-template')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
@@ -166,35 +167,23 @@ router.post(
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id
-  const reportingPeriod = await reportingPeriods.get(periodId)
-  const templateName = reportingPeriod.reporting_template || EMPTY_TEMPLATE_NAME
 
-  let data = null
   try {
-    data = await readFile(path.join(SERVER_DATA_DIR, templateName))
+    const { filename, data } = await templateForPeriod(periodId)
+
+    res.header(
+      'Content-Disposition',
+      `attachment; filename="${filename}"`
+    )
+    res.header('Content-Type', 'application/octet-stream')
+    res.end(data)
   } catch (err) {
     if (err.code === 'ENOENT') {
-      try {
-        data = await readFile(path.join(UPLOAD_DIR, templateName))
-      } catch (err2) {
-        if (err2.code === 'ENOENT') {
-          res.status(404).json({ error: `Could not find template file ${templateName}` })
-          return
-        } else {
-          res.status(500).json({ error: err2.message })
-        }
-      }
+      res.status(404).json({ error: 'Could not find template file' })
     } else {
       res.status(500).json({ error: err.message })
     }
   }
-
-  res.header(
-    'Content-Disposition',
-    `attachment; filename="${templateName}"`
-  )
-  res.header('Content-Type', 'application/octet-stream')
-  res.end(Buffer.from(data, 'binary'))
 })
 
 router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {

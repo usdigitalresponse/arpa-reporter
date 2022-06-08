@@ -42,8 +42,6 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
 
     res.status(200).json({ upload, error: null })
   } catch (e) {
-    console.dir(e)
-
     res.status(e instanceof ValidationError ? 400 : 500).json({ error: e.message, upload: null })
   }
 })
@@ -147,7 +145,7 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     })
   } catch (e) {
     trns.rollback()
-    res.status(500).json({ error: e })
+    res.status(500).json({ error: e.message })
   }
 })
 

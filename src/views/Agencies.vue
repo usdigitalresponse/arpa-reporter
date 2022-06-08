@@ -23,7 +23,7 @@
             <td>{{ agency.code }}</td>
             <td>{{ agency.name }}</td>
             <td>
-              <router-link :to="`/agencies/${agency.id}`" class="btn btn-primary">
+              <router-link :to="`/agencies/${agency.id}`" class="btn btn-sm btn-secondary">
                 Edit
               </router-link>
             </td>

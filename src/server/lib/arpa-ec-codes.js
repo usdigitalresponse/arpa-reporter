@@ -1,5 +1,3 @@
-/* eslint quote-props: 0 */
-
 const ecCodes = {
   '1.1': 'COVID-19 Vaccination',
   '1.2': 'COVID-19 Testing',

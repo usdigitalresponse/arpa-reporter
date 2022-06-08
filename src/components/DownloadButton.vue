@@ -27,6 +27,12 @@ export default {
     disabled: Boolean
   },
   mounted () {
+    // Browsers don't report feedback when a link with the download attribute
+    // has been resolved.  Instead of doing something heavy-handed to work
+    // around this, we just assume that loading has resolved once the window
+    // regains focus.
+    // see also:
+    // https://stackoverflow.com/questions/1106377/detect-when-a-browser-receives-a-file-download
     window.addEventListener('focus', this.clearLoadingState)
   },
   destroyed () {

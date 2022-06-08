@@ -30,7 +30,7 @@ export default {
     window.addEventListener('focus', this.clearLoadingState)
   },
   destroyed () {
-    window.addEventListener('focus', this.clearLoadingState)
+    window.removeEventListener('focus', this.clearLoadingState)
   },
   data () {
     return {

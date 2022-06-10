@@ -6,11 +6,9 @@ const router = express.Router()
 const { applicationSettings } = require('../db/settings')
 const { requireUser } = require('../access-helpers')
 
-router.get('/', requireUser, function (req, res) {
-  const tenantId = req.session.user.tenant_id;
-  applicationSettings(tenantId).then(application_settings =>
-    res.json({ application_settings })
-  )
+router.get('/', async function (req, res) {
+  const application_settings = await applicationSettings(req.session.user.tenant_id)
+  res.json({ application_settings })
 })
 
 module.exports = router

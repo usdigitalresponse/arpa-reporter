@@ -3,13 +3,32 @@ const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
-const { log } = require('../lib/log')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
+
+const EC_CODE_REGEX = /^(\d.\d\d?)/
+
+/**
+ * Extract the Detailed Expenditure Category code from a record.
+ *
+ * @returns {string} The detailed EC code in format "#.##".
+ */
+function getDetailedEcCode (record) {
+  const { subcategory } = record
+
+  const match = EC_CODE_REGEX.exec(subcategory)
+  return match?.[1]
+}
 
 function isNotNull (value) {
   // `== null` matches null AND undefined
   return value != null
+}
+
+function isProjectRecord (record) {
+  return [
+    'ec1', 'ec2', 'ec3', 'ec4', 'ec5', 'ec7'
+  ].includes(record.type)
 }
 
 async function generateReportName (tenantId, periodId) {
@@ -28,150 +47,536 @@ async function generateReportName (tenantId, periodId) {
 }
 
 async function generateProject18 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '1.8':
+        case '2.29':
+        case '2.30':
+        case '2.31':
+        case '2.32':
+        case '2.33': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Small_Businesses_Served__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject19 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '1.9':
+        case '2.34': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_Non_Profits_Served__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject2128 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.1':
+        case '2.2':
+        case '2.3':
+        case '2.4':
+        case '2.5':
+        case '2.6':
+        case '2.7':
+        case '2.8': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Individuals_Served__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject214 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.14':
+        case '2.24':
+        case '2.25':
+        case '2.26':
+        case '2.27': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.School_ID_or_District_ID__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject236 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.36': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Industry_Experienced_8_Percent_Loss__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject31 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '3.1': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Payroll_Public_Health_Safety__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject32 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '3.2': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_of_FTEs_Rehired__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject4142 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '4.1':
+        case '4.2': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Sectors_Critical_to_Health_Well_Being__c,
+            record.content.Workers_Served__c,
+            record.content.Premium_Pay_Narrative__c,
+            record.content.Number_of_Workers_K_12__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject51518 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '5.1':
+        case '5.2':
+        case '5.3':
+        case '5.4':
+        case '5.5':
+        case '5.6':
+        case '5.7':
+        case '5.8':
+        case '5.9':
+        case '5.10':
+        case '5.11':
+        case '5.12':
+        case '5.13':
+        case '5.14':
+        case '5.15':
+        case '5.16':
+        case '5.17':
+        case '5.18': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Proj_Actual_Construction_Start_Date__c,
+            record.content.Initiation_of_Operations_Date__c,
+            record.content.Location__c,
+            record.content.Location_Detail__c,
+            record.content.National_Pollutant_Discharge_Number__c,
+            record.content.Public_Water_System_PWS_ID_number__c,
+            record.content.Median_Household_Income_Service_Area__c,
+            record.content.Lowest_Quintile_Income__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProject519521 (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '5.19':
+        case '5.20':
+        case '5.21': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__c,
+            record.content.Proj_Actual_Construction_Start_Date__c,
+            record.content.Initiation_of_Operations_Date__c,
+            record.content.Is_project_designed_to_meet_100_mbps__c,
+            record.content.Project_not_met_100_mbps_explanation__c,
+            record.content.Is_project_designed_to_exceed_100_mbps__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
 }
 
 async function generateProjectBaseline (records) {
-  return records.map(record => {
-    log('record.type', record.type)
-    switch (record.type) {
-      case 'ec 1 - public health': {
-        return [
-          null, // first col is blank
-          '1-Public Health',
-          record.subcategory,
-          record.content.Name,
-          record.content.Project_Identification_Number__c,
-          record.content.Completion_Status__c,
-          record.content.Adopted_Budget__c,
-          record.content.Total_Obligations__c,
-          record.content.Total_Expenditures__c,
-          record.content.Current_Period_Obligations__c,
-          record.content.Current_Period_Expenditures__c,
-          record.content.Does_Project_Include_Capital_Expenditure__c,
-          record.content.Total_Cost_Capital_Expenditure__c,
-          record.content.Type_of_Capital_Expenditure__c,
-          record.content.Type_of_Capital_Expenditure_Other__c,
-          record.content.Capital_Expenditure_Justification__c,
-          record.content.Project_Description__c,
-          record.content.Program_Income_Earned__c,
-          record.content.Program_Income_Expended__cs,
-          record.content.Primary_Project_Demographics__c,
-          record.content.Primary_Project_Demographics_Explanation__c,
-          record.content.Secondary_Project_Demographics__c,
-          record.content.Secondary_Proj_Demographics_Explanation__c,
-          record.content.Tertiary_Project_Demographics__c,
-          record.content.Tertiary_Proj_Demographics_Explanation__c,
-          record.content.Structure_Objectives_of_Asst_Programs__c,
-          record.content.Recipient_Approach_Description__c
-        ]
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '1.1':
+        case '1.2':
+        case '1.3':
+        case '1.4':
+        case '1.5':
+        case '1.6':
+        case '1.7':
+        case '1.10':
+        case '1.11':
+        case '1.12':
+        case '1.13':
+        case '1.14':
+        case '2.9':
+        case '2.10':
+        case '2.11':
+        case '2.12':
+        case '2.13':
+        case '2.15':
+        case '2.16':
+        case '2.17':
+        case '2.18':
+        case '2.19':
+        case '2.20':
+        case '2.21':
+        case '2.22':
+        case '2.23':
+        case '2.28':
+        case '2.35':
+        case '2.37':
+        case '3.3':
+        case '3.4':
+        case '3.5':
+        case '7.1':
+        case '7.2': {
+          return [
+            null, // first col is blank
+            record.type, // FIXME: transform from sheet tab to export format
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Adopted_Budget__c,
+            record.content.Total_Obligations__c,
+            record.content.Total_Expenditures__c,
+            record.content.Current_Period_Obligations__c,
+            record.content.Current_Period_Expenditures__c,
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            record.content.Total_Cost_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            record.content.Program_Income_Earned__c,
+            record.content.Program_Income_Expended__cs,
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c
+          ]
+        }
+        default:
+          return null
       }
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+    })
+    .filter(isNotNull)
 }
 
 async function generateExpendituresGT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      case 'expenditures > 50000': {
+      case 'expenditures50k': {
         return [
           null, // first col is blank
           record.content.Sub_Award_Lookup__c,
@@ -209,7 +614,7 @@ async function generatePaymentsIndividualsLT50000 (records) {
 async function generateSubaward (records) {
   return records.map(record => {
     switch (record.type) {
-      case 'awards > 50000': {
+      case 'awards50k': {
         return [
           null, // first col is blank
           record.content.Recipient_UEI__c,

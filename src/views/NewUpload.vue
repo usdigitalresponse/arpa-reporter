@@ -16,7 +16,7 @@
       >
         <div class="form-group">
           <input
-            class="form-control"
+            class="form-control-file"
             type="file"
             id="spreadsheet"
             name="spreadsheet"

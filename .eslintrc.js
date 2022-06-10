@@ -15,7 +15,8 @@ module.exports = {
   },
 
   rules: {
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'quote-props': [2, 'consistent-as-needed']
   },
 
   overrides: [
@@ -27,8 +28,24 @@ module.exports = {
       env: {
         mocha: true
       }
+    },
+    {
+      files: [
+        'src/server/**/*.js'
+      ],
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        project: ['./tsconfig.json']
+      },
+      rules: {
+        '@typescript-eslint/no-floating-promises': 'error',
+        // void keyword useful for explicitly ignoring a promise
+        'no-void': 'off'
+      }
     }
   ],
+
+  plugins: ['@typescript-eslint'],
 
   parserOptions: {
     parser: 'babel-eslint'

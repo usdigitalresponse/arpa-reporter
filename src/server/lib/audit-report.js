@@ -57,11 +57,11 @@ async function generateReport (tenantId) {
   let sheets
   try {
     sheets = {
-      contracts: await contracts,
-      grants: await grants,
-      loans: await loans,
-      transfers: await transfers,
-      direct: await direct,
+      'contracts': await contracts,
+      'grants': await grants,
+      'loans': await loans,
+      'transfers': await transfers,
+      'direct': await direct,
       'aggregate awards < 50000': await aa,
       'aggregate payments individual': await ap,
       'project summaries': await ps
@@ -591,7 +591,7 @@ async function createProjectSummarySheet (tenantId, nPeriods) {
     const rowData = consolidateProjects(sqlRows)
     log(`${rowData.length} consolidated rows`)
     await addColumnTitles(sheet, nPeriods)
-    addDataRows(sheet, rowData, nPeriods)
+    await addDataRows(sheet, rowData, nPeriods)
   } catch (err) {
     return err
   }

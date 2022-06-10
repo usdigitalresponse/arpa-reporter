@@ -13,7 +13,6 @@ const makeUploadArgs = fixtureFile => {
 }
 
 const resetUploadsAndDb = async () => {
-  // await knex('subrecipients').truncate()
   await knex('validation_messages').del()
   await knex('uploads').del()
 }

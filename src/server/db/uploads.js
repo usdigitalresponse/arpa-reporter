@@ -6,45 +6,33 @@ const {
 } = require('./settings')
 const {agencyById} = require('./agencies');
 
-async function listUploads ({ periodId, tenantId, agencyId = null, onlyValidated = false }, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in listUploads');
-  }
-  if (!periodId) {
-    periodId = await getCurrentReportingPeriodID(tenantId, trns)
-  }
-
-  let query = trns('uploads')
+function baseQuery (trns) {
+  return trns('uploads')
     .leftJoin('users', 'uploads.user_id', 'users.id')
     .leftJoin('agencies', 'uploads.agency_id', 'agencies.id')
     .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
-    .where({ reporting_period_id: periodId, tenant_id: tenantId })
-
-  if (agencyId) {
-    query = query.andWhere('uploads.agency_id', agencyId)
-  }
-
-  if (onlyValidated) {
-    query = query.andWhere('uploads.validated_at IS NOT NULL')
-  }
-
-  return query.orderBy('uploads.created_at', 'desc')
 }
 
-async function uploadsForAgency (agency_id, period_id, trns = knex) {
-  const agency = agencyById(agency_id, trns);
-  if (!agency) {
-    throw new Error('invalid agency in uploadsForAgency');
+async function uploadsInPeriod (tenantId, periodId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in uploadsInPeriod');
+  }
+  if (periodId === undefined) {
+    periodId = await getCurrentReportingPeriodID(tenantId, trns)
   }
 
-  if (!period_id) {
-    period_id = await getCurrentReportingPeriodID(agency.tenant_id, trns)
-  }
+  return baseQuery(trns)
+    .where('reporting_period_id', periodId)
+    .where('uploads.tenant_id', tenantId)
+    .orderBy('uploads.created_at', 'desc')
+}
 
-  return trns('uploads')
-    .select('*')
-    .where({ reporting_period_id: period_id })
-    .andWhere('agency_id', agency_id)
+async function uploadsInSeries (upload, trns = knex) {
+  return baseQuery(trns)
+    .where('reporting_period_id', upload.reporting_period_id)
+    .andWhere('uploads.agency_id', upload.agency_id)
+    .andWhere('uploads.tenant_id', upload.tenant_id)
+    .andWhere('uploads.ec_code', upload.ec_code)
     .orderBy('created_at', 'desc')
 }
 
@@ -176,8 +164,8 @@ module.exports = {
   getUploadSummaries,
   createUpload,
   getUpload,
-  listUploads,
-  uploadsForAgency,
+  uploadsInPeriod,
+  uploadsInSeries,
   setAgencyId,
   setEcCode,
   markValidated,

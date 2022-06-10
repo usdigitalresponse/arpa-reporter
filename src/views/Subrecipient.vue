@@ -1,93 +1,145 @@
 <template>
   <div>
-    <h1>Subrecipient</h1>
-    <div v-if="loading">
-      Loading..
+    <h2>Subrecipient {{ recipientId }}</h2>
+
+    <div v-if="!recipient" class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
     </div>
+
     <div v-else>
-      <RecordForm
-        type="Subrecipients"
-        :columns="fields"
-        :record="editSubrecipient"
-        :id="editSubrecipient.id"
-        :isNew="isNew"
-        :onSave="onSave"
-        :onCancel="onCancel"
-        :onDone="onDone"
-        :errorMessage="errorMessage"
-      />
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Created:
+        </div>
+        <div class="col-sm-10">
+          In
+          <router-link :to="`/uploads/${recipient.upload_id}`">
+            Upload {{ recipient.upload_id }}
+          </router-link>
+          on {{ humanDate(recipient.created_at) }}
+          by {{ recipient.created_by }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Updated:
+        </div>
+        <div class="col-sm-10">
+          <span v-if="!recipient.updated_at">Never manually updated</span>
+          <span v-else>
+            By {{ recipient.updated_by_email }} on {{ humanDate(recipient.updated_at) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row" v-for="(rule, key) in rules" :key="key">
+        <label :for="key" class="col-sm-2 col-form-label">{{ rule.humanColName }}</label>
+        <div class="col-sm-10">
+          <select v-if="rule.listVals.length > 0" :id="key" v-model="record[key]" :readonly="isReadOnly(key)" class="form-control">
+            <option :value="null"></option>
+            <option v-for="opt in rule.listVals" :key="opt" :value="opt">{{ opt }}</option>
+          </select>
+
+          <input v-else type="text" class="form-control" :id="key" v-model="record[key]" :readonly="isReadOnly(key)">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <button class="btn btn-primary" v-on:click="updateRecipient" :disabled="saving">Save</button>
+        </div>
+
+        <div class="col-sm-2">
+          <button class="btn btn-secondary" v-on:click="setRecord">Reset</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import RecordForm from '../components/RecordForm'
-import _ from 'lodash'
+import moment from 'moment'
+import { getJson, post } from '../store'
+
 export default {
   name: 'Subrecipient',
-  components: {
-    RecordForm
-  },
   data: function () {
-    let id = 0
-    if (this.$route && this.$route.params && this.$route.params.id) {
-      id = parseInt(this.$route.params.id)
-    }
     return {
-      id,
-      isNew: !id,
-      editSubrecipient: this.findSubrecipient(id),
-      errorMessage: null
+      recipient: null,
+      rules: [],
+      record: {},
+      saving: false
     }
   },
   computed: {
-    loading: function () {
-      return this.id !== 0 && _.isEmpty(this.editSubrecipient)
+    recipientId: function () {
+      return Number(this.$route.params.id)
     },
-    fields: function () {
-      return [
-        { name: 'identification_number', required: true },
-        { name: 'legal_name', required: true },
-        { name: 'duns_number' },
-        { name: 'address_line_1' },
-        { name: 'address_line_2' },
-        { name: 'address_line_3' },
-        { name: 'city_name' },
-        { name: 'state_code' },
-        { name: 'zip' },
-        { name: 'country_name' },
-        { name: 'organization_type' }
-      ]
-    }
-  },
-  watch: {
-    '$store.state.subrecipients': function () {
-      this.editSubrecipient = this.findSubrecipient(this.id)
+    createdAtStr: function () {
+      return this.recipient && moment(this.recipient.created_at).local().format('MMM Do YYYY, h:mm:ss A')
     }
   },
   methods: {
-    findSubrecipient (id) {
-      return _.find(this.$store.state.subrecipients, { id }) || {}
-    },
-    onSave (subrecipient) {
-      const updatedSubrecipient = {
-        ...this.editSubrecipient,
-        ...subrecipient
+    loadRecipient: async function () {
+      this.recipient = null
+
+      const result = await getJson(`/api/subrecipients/${this.recipientId}`)
+      if (result.error) {
+        this.$store.commit('addAlert', {
+          text: `loadRecipient Error (${result.status}): ${result.error}`,
+          level: 'err'
+        })
+      } else {
+        this.recipient = result.recipient
+        this.rules = result.rules
+        this.setRecord()
       }
-      return this.$store
-        .dispatch(
-          this.isNew ? 'createSubrecipient' : 'updateSubrecipient',
-          updatedSubrecipient
-        )
-        .then(() => this.onDone())
-        .catch(e => (this.errorMessage = e.message))
     },
-    onCancel () {
-      this.onDone()
+    updateRecipient: async function () {
+      this.saving = true
+
+      try {
+        const record = JSON.stringify(Object.fromEntries(
+          Object.entries(this.record).filter(([key, val]) => val !== null)
+        ))
+
+        const result = await post(`/api/subrecipients/${this.recipientId}`, { record })
+        if (result.error) throw new Error(result.error)
+
+        this.$store.commit('addAlert', {
+          text: `Recipient ${this.recipientId} successfully updated`,
+          level: 'ok'
+        })
+      } catch (err) {
+        this.$store.commit('addAlert', {
+          text: `Error updating recipient ${this.recipientId}: ${err.message}`,
+          level: 'err'
+        })
+      }
+
+      this.saving = false
+      this.loadRecipient()
     },
-    onDone () {
-      this.$router.push('/subrecipients')
+    setRecord: function () {
+      this.record = this.recipient ? JSON.parse(this.recipient.record) : {}
+    },
+    isReadOnly: function (key) {
+      return key === 'Unique_Entity_Identifier__c' || key === 'EIN__c'
+    },
+    humanDate: function (date) {
+      return date && moment(date).local().format('MMM Do YYYY, h:mm:ss A')
     }
+  },
+  mounted: async function () {
+    this.loadRecipient()
+  },
+  watch: {
+    recipientId: function (to, from) {
+      this.loadRecipient()
+    }
+  },
+  components: {
   }
 }
 </script>

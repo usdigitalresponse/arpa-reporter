@@ -8,14 +8,17 @@ const { log } = require('../lib/log')
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
 
-const DATA_SHEETS = [
-  'EC 1 - Public Health',
-  'EC 2 - Negative Economic Impact',
-  'Awards > 50000',
-  'Expenditures > 50000'
-]
-
-const normalizeSheetName = sheetName => sheetName.trim().toLowerCase()
+const DATA_SHEET_TYPES = {
+  'EC 1 - Public Health': 'ec1',
+  'EC 2 - Negative Economic Impact': 'ec2',
+  'EC 3 - Public Sector Capacity': 'ec3',
+  'EC 4 - Premium Pay': 'ec4',
+  'EC 5 - Infrastructure': 'ec5',
+  'EC 7 - Admin': 'ec7',
+  'Subrecipient': 'subrecipient',
+  'Awards > 50000': 'awards50k',
+  'Expenditures > 50000': 'expenditures50k'
+}
 
 function extractRecords (buffer) {
   log('extractRecords()')
@@ -23,7 +26,7 @@ function extractRecords (buffer) {
   const workbook = XLSX.read(buffer, {
     cellDates: true,
     type: 'buffer',
-    sheets: [CERTIFICATION_SHEET, COVER_SHEET, ...DATA_SHEETS]
+    sheets: [CERTIFICATION_SHEET, COVER_SHEET, ...Object.keys(DATA_SHEET_TYPES)]
   })
 
   // parse certification and cover as special cases
@@ -37,8 +40,8 @@ function extractRecords (buffer) {
   ]
 
   // parse data sheets
-  for (const sheetName of DATA_SHEETS) {
-    const type = normalizeSheetName(sheetName)
+  for (const sheetName of Object.keys(DATA_SHEET_TYPES)) {
+    const type = DATA_SHEET_TYPES[sheetName]
     const sheet = workbook.Sheets[sheetName]
 
     // entire sheet
@@ -96,5 +99,6 @@ async function recordsForReportingPeriod (tenantId, periodId) {
 
 module.exports = {
   recordsForReportingPeriod,
-  recordsForUpload
+  recordsForUpload,
+  DATA_SHEET_TYPES
 }

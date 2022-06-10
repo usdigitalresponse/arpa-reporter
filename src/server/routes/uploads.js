@@ -11,7 +11,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
 const reportingPeriods = require('../db/reporting-periods')
-const { uploadsForAgency, validForReportingPeriod, getUpload, listUploads } = require('../db/uploads')
+const { validForReportingPeriod, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
 const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
@@ -19,14 +19,9 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const user = req.session.user
-  const tenantId = user.tenant_id
+  const tenantId = req.session.user.tenant_id;
   const periodId = await reportingPeriods.getID(tenantId, req.query.period_id)
-
-  const agencyId = user.agency_id || (req.query.for_agency ?? null)
-  const onlyValidated = req.query.only_validated ?? null
-
-  const uploads = await listUploads({ periodId, agencyId, tenantId, onlyValidated })
+  const uploads = await uploadsInPeriod(tenantId, periodId)
   return res.json({ uploads })
 })
 
@@ -45,8 +40,6 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
 
     res.status(200).json({ upload, error: null })
   } catch (e) {
-    console.dir(e)
-
     res.status(e instanceof ValidationError ? 400 : 500).json({ error: e.message, upload: null })
   }
 })
@@ -75,14 +68,14 @@ router.get('/:id/series', requireUser, async (req, res) => {
   }
 
   let series
-  if (upload.agency_id) {
-    series = await uploadsForAgency(upload.agency_id, upload.reporting_period_id)
+  if (upload.agency_id && upload.ec_code) {
+    series = await uploadsInSeries(upload)
   } else {
     series = [upload]
   }
 
   const allValid = await validForReportingPeriod(upload.tenant_id, upload.reporting_period_id)
-  const currentValid = allValid.find(upl => upl.agency_id === upload.agency_id)
+  const currentValid = allValid.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
 
   res.json({
     upload,
@@ -150,7 +143,7 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     })
   } catch (e) {
     trns.rollback()
-    res.status(500).json({ error: e })
+    res.status(500).json({ error: e.message })
   }
 })
 

@@ -98,7 +98,6 @@ export default new Vuex.Store({
     applicationSettings: {},
     configuration: {},
     agencies: [],
-    subrecipients: [],
     reportingPeriods: [],
     allReportingPeriods: [],
     messages: [],
@@ -120,9 +119,6 @@ export default new Vuex.Store({
     },
     setAgencies (state, agencies) {
       state.agencies = agencies
-    },
-    setSubrecipients (state, subrecipients) {
-      state.subrecipients = Object.freeze(subrecipients)
     },
     setReportingPeriods (state, reportingPeriods) {
       state.reportingPeriods = reportingPeriods
@@ -146,15 +142,6 @@ export default new Vuex.Store({
       state.configuration.users = _.chain(state.configuration.users)
         .map(u => (user.id === u.id ? user : u))
         .sortBy('email')
-        .value()
-    },
-    addSubrecipient (state, subrecipient) {
-      state.subrecipients = _.sortBy([...state.subrecipients, subrecipient], 'name')
-    },
-    updateSubrecipient (state, subrecipient) {
-      state.subrecipients = _.chain(state.subrecipients)
-        .map(s => (subrecipient.id === s.id ? subrecipient : s))
-        .sortBy('name')
         .value()
     },
     addAgency (state, agency) {
@@ -214,7 +201,6 @@ export default new Vuex.Store({
       }
       doFetch('configuration')
       doFetch('reporting_periods')
-      doFetch('subrecipients')
     },
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
@@ -252,20 +238,6 @@ export default new Vuex.Store({
           }
           return response
         })
-    },
-    createSubrecipient ({ commit }, subrecipient) {
-      return post('/api/subrecipients', subrecipient).then(response => {
-        const s = {
-          ...subrecipient,
-          ...response.subrecipient
-        }
-        commit('addSubrecipient', s)
-      })
-    },
-    updateSubrecipient ({ commit }, subrecipient) {
-      return put(`/api/subrecipients/${subrecipient.id}`, subrecipient).then(() => {
-        commit('updateSubrecipient', subrecipient)
-      })
     },
     createAgency ({ commit }, agency) {
       return post('/api/agencies', agency).then(response => {

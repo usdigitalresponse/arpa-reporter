@@ -43,7 +43,7 @@
             </span>
           </td>
           <td>
-            <a v-if="!p.certified_at" :href="`/reporting_periods/${p.id}`">Edit</a>
+            <a v-if="!p.certified_at" :href="`/reporting_periods/${p.id}`" class="btn btn-sm btn-secondary">Edit</a>
           </td>
         </tr>
       </tbody>

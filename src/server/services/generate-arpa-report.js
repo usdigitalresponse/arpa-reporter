@@ -657,10 +657,10 @@ async function generateSubRecipient (records) {
 
 async function generateReport (tenantId, periodId) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId');
+    throw new Error('must specify tenantId')
   }
   if (periodId === undefined) {
-    throw new Error('must specify periodId');
+    throw new Error('must specify periodId')
   }
   const records = await recordsForReportingPeriod(tenantId, periodId)
 

@@ -19,7 +19,7 @@ module.exports = {
 
 async function getAwardData (tenantId, type, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getAwardData');
+    throw new Error('must specify tenantId in getAwardData')
   }
 
   const qTypes = {
@@ -54,7 +54,7 @@ async function getAwardData (tenantId, type, trns = knex) {
     }
   }
   if (type === undefined || !(type in qTypes)) {
-    throw new Error('must specify type in getAwardData');
+    throw new Error('must specify type in getAwardData')
   }
   const q = qTypes[type]
 
@@ -88,13 +88,13 @@ async function getAwardData (tenantId, type, trns = knex) {
       u.reporting_period_id
     ;`
 
-  const result = await trns.raw(query, {type, tenantId})
+  const result = await trns.raw(query, { type, tenantId })
   return result.rows
 }
 
 async function getAggregateAwardData (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getAggregateAwardData');
+    throw new Error('must specify tenantId in getAggregateAwardData')
   }
 
   const result = await trns.raw(`
@@ -117,14 +117,14 @@ async function getAggregateAwardData (tenantId, trns = knex) {
       p.code,
       d.content->>'funding type'
     ;`,
-    {tenantId}
+  { tenantId }
   )
   return result.rows
 }
 
 async function getAggregatePaymentData (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getAggregatePaymentData');
+    throw new Error('must specify tenantId in getAggregatePaymentData')
   }
 
   const result = await trns.raw(`
@@ -144,14 +144,14 @@ async function getAggregatePaymentData (tenantId, trns = knex) {
     order by
       p.code
     ;`,
-    {tenantId}
+  { tenantId }
   )
   return result.rows
 }
 
 async function getProjectSummaryData (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getProjectSummaryData');
+    throw new Error('must specify tenantId in getProjectSummaryData')
   }
 
   const result = await trns.raw(`
@@ -200,7 +200,7 @@ async function getProjectSummaryData (tenantId, trns = knex) {
       obligation_date,
       reporting_period_id
     ;`,
-    {tenantId}
+  { tenantId }
   )
   return result.rows
 }

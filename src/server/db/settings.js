@@ -1,7 +1,7 @@
 const knex = require('./connection')
 
 // tenantId -> currentReportingPeriodID
-let currentReportingPeriodIDCache = {};
+const currentReportingPeriodIDCache = {}
 
 // setCurrentReportingPeriod()
 function setCurrentReportingPeriod (tenantId, id, trns = knex) {
@@ -14,7 +14,7 @@ function setCurrentReportingPeriod (tenantId, id, trns = knex) {
 // update application_settings set current_reporting_period_id=1;
 async function getCurrentReportingPeriodID (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId');
+    throw new Error('must specify tenantId')
   }
 
   if (currentReportingPeriodIDCache[tenantId] !== undefined) {
@@ -74,7 +74,7 @@ function applicationSettings (tenantId) {
  */
 async function currentReportingPeriodSettings (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId');
+    throw new Error('must specify tenantId')
   }
 
   let rv

@@ -5,9 +5,9 @@ function requireUser (req, res, next) {
     res.sendStatus(403)
   } else {
     userAndRole(req.signedCookies.userId).then(user => {
-      req.session = {...req.session, user};
-      next();
-    });
+      req.session = { ...req.session, user }
+      next()
+    })
   }
 }
 
@@ -20,7 +20,7 @@ function requireAdminUser (req, res, next) {
       if (user.role !== 'admin') {
         res.sendStatus(403)
       } else {
-        req.session = {...req.session, user};
+        req.session = { ...req.session, user }
         next()
       }
     })

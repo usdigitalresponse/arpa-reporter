@@ -4,7 +4,7 @@ const assert = require('assert')
 
 // Default tenant ID
 // TODO(mbroussard): add multitenant-specific tests
-const tenantId = 0;
+const tenantId = 0
 
 describe('application settings db', function () {
   describe('currentReportingPeriodSettings', function () {

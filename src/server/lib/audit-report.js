@@ -35,7 +35,7 @@ module.exports = { generate: generateReport }
     */
 async function generateReport (tenantId) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId');
+    throw new Error('must specify tenantId')
   }
 
   endDates = await reportingPeriods.getEndDates(tenantId)

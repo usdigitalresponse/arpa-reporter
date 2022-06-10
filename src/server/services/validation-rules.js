@@ -95,10 +95,10 @@ async function rulesForUpload (upload) {
 
 async function rulesForPeriod (tenantId, periodId) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in rulesForPeriod');
+    throw new Error('must specify tenantId in rulesForPeriod')
   }
   if (periodId === undefined) {
-    throw new Error('must specify periodId in rulesForPeriod');
+    throw new Error('must specify periodId in rulesForPeriod')
   }
 
   return extractRules(

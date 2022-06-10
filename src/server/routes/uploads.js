@@ -19,7 +19,7 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const tenantId = req.session.user.tenant_id;
+  const tenantId = req.session.user.tenant_id
   const periodId = await reportingPeriods.getID(tenantId, req.query.period_id)
   const uploads = await uploadsInPeriod(tenantId, periodId)
   return res.json({ uploads })
@@ -61,7 +61,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
-  if (!upload || upload.tenant_id != req.session.user.tenant_id) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return

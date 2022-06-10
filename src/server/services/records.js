@@ -84,10 +84,10 @@ async function recordsForUpload (upload) {
 
 async function recordsForReportingPeriod (tenantId, periodId) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in recordsForReportingPeriod');
+    throw new Error('must specify tenantId in recordsForReportingPeriod')
   }
   if (periodId === undefined) {
-    throw new Error('must specify periodId in recordsForReportingPeriod');
+    throw new Error('must specify periodId in recordsForReportingPeriod')
   }
 
   const uploads = await validForReportingPeriod(tenantId, periodId)

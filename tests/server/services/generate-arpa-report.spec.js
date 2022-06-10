@@ -4,7 +4,7 @@ const arpa = require('../../../src/server/services/generate-arpa-report')
 
 // Default tenant ID
 // TODO(mbroussard): add multitenant-specific tests
-const tenantId = 0;
+const tenantId = 0
 
 describe('arpa report generation', function () {
   it('generates a report', async function () {

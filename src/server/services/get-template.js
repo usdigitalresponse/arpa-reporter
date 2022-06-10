@@ -41,10 +41,10 @@ async function loadTemplate (templateName) {
 
 async function templateForPeriod (tenantId, periodId) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in templateForPeriod');
+    throw new Error('must specify tenantId in templateForPeriod')
   }
   if (periodId === undefined) {
-    throw new Error('must specify periodId in templateForPeriod');
+    throw new Error('must specify periodId in templateForPeriod')
   }
 
   const reportingPeriod = await reportingPeriods.get(tenantId, periodId)

@@ -27,7 +27,7 @@ const assert = require('assert')
 
 // Default tenant ID
 // TODO(mbroussard): Multitenant-specific tests
-const tenantId = 0;
+const tenantId = 0
 
 describe('db/reporting-periods.js', function () {
   describe('getAll', function () {

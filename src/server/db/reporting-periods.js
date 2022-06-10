@@ -60,7 +60,7 @@ async function getAll (tenantId, trns = knex) {
   */
 async function getReportingPeriod (tenantId, period_id, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getReportingPeriod');
+    throw new Error('must specify tenantId in getReportingPeriod')
   }
 
   if (period_id && Number(period_id)) {
@@ -176,7 +176,7 @@ async function getEndDates (tenantId, trns = knex) {
   */
 async function createReportingPeriod (reportingPeriod, trns = knex) {
   if (reportingPeriod.tenant_id === undefined) {
-    throw new Error('createReportingPeriod caller must specify tenantId');
+    throw new Error('createReportingPeriod caller must specify tenantId')
   }
 
   return trns

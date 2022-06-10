@@ -3,7 +3,7 @@ const knex = require('./connection')
 
 function agencies (tenantId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId to list agencies');
+    throw new Error('must specify tenantId to list agencies')
   }
 
   return trns('agencies')
@@ -21,10 +21,10 @@ function agencyById (id, trns = knex) {
 
 function agencyByCode (tenantId, code, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in agencyByCode');
+    throw new Error('must specify tenantId in agencyByCode')
   }
   if (code === undefined) {
-    throw new Error('must specify code in agencyByCode');
+    throw new Error('must specify code in agencyByCode')
   }
 
   return trns('agencies')
@@ -34,7 +34,7 @@ function agencyByCode (tenantId, code, trns = knex) {
 
 function createAgency (agency, trns = knex) {
   if (agency.tenant_id === undefined) {
-    throw new Error('must specify tenantId to create new agency');
+    throw new Error('must specify tenantId to create new agency')
   }
 
   return trns

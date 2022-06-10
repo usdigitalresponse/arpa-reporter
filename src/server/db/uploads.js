@@ -4,7 +4,6 @@ const knex = require('./connection')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
-const {agencyById} = require('./agencies');
 
 function baseQuery (trns) {
   return trns('uploads')
@@ -15,7 +14,7 @@ function baseQuery (trns) {
 
 async function uploadsInPeriod (tenantId, periodId, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in uploadsInPeriod');
+    throw new Error('must specify tenantId in uploadsInPeriod')
   }
   if (periodId === undefined) {
     periodId = await getCurrentReportingPeriodID(tenantId, trns)
@@ -48,10 +47,10 @@ function getUpload (id, trns = knex) {
 
 function validForReportingPeriod (tenantId, period_id, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('tenant must be specified in validForReportingPeriod');
+    throw new Error('tenant must be specified in validForReportingPeriod')
   }
   if (period_id === undefined) {
-    throw new Error('period_id must be specified in validForReportingPeriod');
+    throw new Error('period_id must be specified in validForReportingPeriod')
   }
 
   return trns.with('agency_max_val', trns.raw(`
@@ -62,7 +61,7 @@ function validForReportingPeriod (tenantId, period_id, trns = knex) {
       validated_at IS NOT NULL
       AND tenant_id = :tenantId
     GROUP BY agency_id, ec_code
-  `, {tenantId}))
+  `, { tenantId }))
     .select('uploads.*')
     .from('uploads')
     .where('tenant_id', tenantId)
@@ -88,12 +87,12 @@ function getUploadSummaries (tenantId, period_id, trns = knex) {
   // console.log(`period_id is ${period_id}`)
   return trns('uploads')
     .select('*')
-    .where({'reporting_period_id': period_id, tenant_id: tenantId})
+    .where({ reporting_period_id: period_id, tenant_id: tenantId })
 }
 
 async function createUpload (upload, trns = knex) {
   if (upload.tenant_id === undefined) {
-    throw new Error('must specify tenant when creating upload');
+    throw new Error('must specify tenant when creating upload')
   }
 
   const inserted = await trns('uploads')
@@ -118,7 +117,7 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
 
 async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
   if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getPeriodUploadIDs');
+    throw new Error('must specify tenantId in getPeriodUploadIDs')
   }
 
   if (!period_id) {

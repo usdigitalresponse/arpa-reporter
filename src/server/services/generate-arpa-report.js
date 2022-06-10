@@ -8,6 +8,9 @@ const { recordsForReportingPeriod } = require('./records')
 
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
+// dropdown value used to differentiate payments under 50k
+const PAYMENTS_TO_INDIVIDUALS = 'Payments to Individuuals'
+
 /**
  * Extract the Detailed Expenditure Category code from a record.
  *
@@ -604,7 +607,17 @@ async function generateExpendituresLT50000 (records) {
 async function generatePaymentsIndividualsLT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      // TODO: Handle matching records
+      case 'Aggregate Awards < 50000':
+        if (record.content.Sub_Award_Type_Aggregates_SLFRF__c !== PAYMENTS_TO_INDIVIDUALS) {
+          return null
+        }
+
+        return [
+          null, // first col is blank
+          record.content.Project_Identification_Number__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c
+        ]
       default:
         return null
     }

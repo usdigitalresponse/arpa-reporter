@@ -17,6 +17,9 @@ async function createRecipient (recipient, trns = knex) {
   if (!(recipient.uei || recipient.tin)) {
     throw new Error('recipient row must include a `uei` or a `tin` field')
   }
+  if (recipient.tenant_id === undefined) {
+    throw new Error('must specify tenantId when creating subrecipient')
+  }
 
   return trns('arpa_subrecipients')
     .insert(recipient)
@@ -47,8 +50,12 @@ async function getRecipient (id, trns = knex) {
     .then(rows => rows[0])
 }
 
-async function findRecipient (uei = null, tin = null, trns = knex) {
-  const query = baseQuery(trns)
+async function findRecipient (tenantId, uei = null, tin = null, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in findRecipient')
+  }
+
+  const query = baseQuery(trns).where('arpa_subrecipients.tenant_id', tenantId)
 
   if (uei) {
     query.where('arpa_subrecipients.uei', uei)
@@ -61,8 +68,11 @@ async function findRecipient (uei = null, tin = null, trns = knex) {
   return query.then(rows => rows[0])
 }
 
-async function listRecipients (trns = knex) {
-  return baseQuery(trns)
+async function listRecipients (tenantId, trns = knex) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in listRecipients')
+  }
+  return baseQuery(trns).where('arpa_subrecipients.tenant_id', tenantId)
 }
 
 module.exports = {

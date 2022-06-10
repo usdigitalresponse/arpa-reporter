@@ -98,7 +98,7 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
   // does the row already exist?
   let existing = null
   if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
-    existing = await findRecipient(recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
+    existing = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
   } else {
     errors.push(new ValidationError(
       'At least one of UEI or TIN must be set, but both are missing',
@@ -150,7 +150,8 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
           uei: recipient.Unique_Entity_Identifier__c,
           tin: recipient.EIN__c,
           record: recipient,
-          upload_id: upload.id
+          upload_id: upload.id,
+          tenant_id: upload.tenant_id
         }
         await createRecipient(dbRow, trns)
       }

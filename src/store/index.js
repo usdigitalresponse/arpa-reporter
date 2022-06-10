@@ -206,7 +206,7 @@ export default new Vuex.Store({
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
     },
     loadApplicationSettings ({ commit }) {
-      fetch('/api/application_settings')
+      fetch('/api/application_settings', { credentials: 'include' })
         .then(r => r.json())
         .then(data => {
           commit('setApplicationSettings', data.application_settings)

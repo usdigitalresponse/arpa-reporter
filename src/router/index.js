@@ -60,12 +60,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/new_agency',
-    name: 'NewAgency',
-    component: Agency,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/agencies/:id',
     name: 'Agency',
     component: Agency,

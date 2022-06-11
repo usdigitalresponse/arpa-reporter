@@ -84,11 +84,20 @@ export default {
         const result = await post('/api/users', { user })
         if (result.error) throw new Error(result.error)
 
-        this.user = result.user
+        const text = this.isNew
+          ? `User ${result.user.id} successfully created`
+          : `User ${result.user.email} successfully updated`
+
         this.$store.commit('addAlert', {
-          text: `User ${user.email} successfully updated`,
+          text,
           level: 'ok'
         })
+
+        if (this.isNew) {
+          return this.$router.push(`/users/${result.user.id}`)
+        } else {
+          this.user = result.user
+        }
       } catch (err) {
         this.user = user
         this.$store.commit('addAlert', {
@@ -99,9 +108,6 @@ export default {
     },
     onReset () {
       this.loadUser()
-    },
-    onDone () {
-      return this.$router.push('/users')
     }
   },
   watch: {

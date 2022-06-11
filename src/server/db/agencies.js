@@ -1,21 +1,24 @@
 
 const knex = require('./connection')
 
-function agencies (trns = knex) {
+function baseQuery (trns) {
   return trns('agencies')
     .select('*')
+}
+
+function agencies (trns = knex) {
+  return baseQuery(trns)
     .orderBy('name')
 }
 
 function agencyById (id, trns = knex) {
-  return trns('agencies')
-    .select('*')
+  return baseQuery(trns)
     .where('id', id)
     .then(r => r[0])
 }
 
 function agencyByCode (code, trns = knex) {
-  return trns('agencies')
+  return baseQuery(trns)
     .select('*')
     .where({ code })
 }
@@ -24,13 +27,8 @@ function createAgency (agency, trns = knex) {
   return trns
     .insert(agency)
     .into('agencies')
-    .returning(['id'])
-    .then(response => {
-      return {
-        ...agency,
-        id: response[0].id
-      }
-    })
+    .returning('*')
+    .then(r => r[0])
 }
 
 function updateAgency (agency, trns = knex) {
@@ -40,6 +38,8 @@ function updateAgency (agency, trns = knex) {
       code: agency.code,
       name: agency.name
     })
+    .returning('*')
+    .then(r => r[0])
 }
 
 module.exports = {

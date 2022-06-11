@@ -1,79 +1,93 @@
 <template>
   <div>
-    <h1>Agency</h1>
-    <div v-if="loading">
-      Loading..
+    <h2>Agency</h2>
+
+    <div v-if="agency === null" class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
     </div>
+
     <div v-else>
-      <RecordForm
-        type="Agency"
-        :columns="fields"
-        :record="editAgency"
-        :id="editAgency.id"
-        :isNew="isNew"
-        :onSave="onSave"
-        :onCancel="onCancel"
-        :onDone="onDone"
-        :errorMessage="errorMessage"
-      />
+      <div class="form-group row" v-if="!isNew">
+        <div class="col-sm-2">
+          Created:
+        </div>
+        <div class="col-sm-10">
+          {{ agency.created_at }} by {{ agency.created_by }}
+        </div>
+      </div>
+
+      <StandardForm :initialRecord="agency" :cols="cols" @save="onSave" @reset="onReset" />
     </div>
   </div>
 </template>
 
 <script>
-import RecordForm from '../components/RecordForm'
-import _ from 'lodash'
+import StandardForm from '../components/StandardForm'
+
+import { post } from '../store'
+
 export default {
   name: 'Agency',
-  components: {
-    RecordForm
-  },
-  data: function () {
-    let id = 0
-    if (this.$route && this.$route.params && this.$route.params.id) {
-      id = parseInt(this.$route.params.id)
-    }
-    return {
-      id,
-      isNew: !id,
-      editAgency: this.findAgency(id),
-      errorMessage: null
-    }
-  },
   computed: {
-    loading: function () {
-      return this.id !== 0 && !this.editAgency
+    agencyId: function () {
+      return this.$route.params.id
     },
-    fields: function () {
-      return [{ name: 'code' }, { name: 'name' }]
-    }
-  },
-  watch: {
-    '$store.state.agencies': function () {
-      this.editAgency = this.findAgency(this.id)
+    isNew: function () {
+      return this.agencyId === 'new'
+    },
+    agency: function () {
+      if (this.isNew) return {}
+      const fromStore = this.$store.state.agencies.find(a => a.id === Number(this.agencyId))
+      return fromStore || null
+    },
+    cols: function () {
+      return [
+        { label: 'ID', field: 'id', readonly: true },
+        { label: 'Agency Code', field: 'code', required: true },
+        { label: 'Agency Name', field: 'name', required: true }
+      ]
     }
   },
   methods: {
-    findAgency (id) {
-      const agency = _.find(this.$store.state.agencies, { id }) || {}
-      return { ...agency }
-    },
-    onSave (agency) {
-      const updatedAgency = {
-        ...this.editAgency,
-        ...agency
+    onSave: async function (updatedAgency) {
+      try {
+        const result = await post('/api/agencies', { agency: updatedAgency })
+        if (result.error) throw new Error(result.error)
+
+        const text = this.isNew
+          ? `Agency ${updatedAgency.code} successfully created`
+          : `Agency ${this.agencyId} successfully updated`
+
+        this.$store.commit('addAlert', {
+          text,
+          level: 'ok'
+        })
+
+        this.$store.dispatch('updateAgencies')
+        if (this.isNew) {
+          return this.$router.push(`/agencies/${result.agency.id}`)
+        }
+      } catch (e) {
+        this.$store.commit('addAlert', {
+          text: `Error saving agency: ${e.message}`,
+          level: 'err'
+        })
       }
-      return this.$store
-        .dispatch(this.isNew ? 'createAgency' : 'updateAgency', updatedAgency)
-        .then(() => this.onDone())
-        .catch(e => (this.errorMessage = e.message))
     },
-    onCancel () {
-      this.onDone()
-    },
-    onDone () {
-      this.$router.push('/agencies')
+    onReset () {
+      this.$store.dispatch('updateAgencies')
     }
+  },
+  watch: {
+    agencyId: function () {
+      this.onReset()
+    }
+  },
+  mounted: async function () {
+    this.onReset()
+  },
+  components: {
+    StandardForm
   }
 }
 </script>

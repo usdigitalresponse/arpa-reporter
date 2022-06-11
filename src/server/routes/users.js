@@ -45,8 +45,6 @@ router.post('/', requireAdminUser, async function (req, res, next) {
   const user = req.body.user
   user.email = user.email.toLowerCase().trim()
 
-  console.dir(user)
-
   try {
     await validateUser(user)
   } catch (e) {

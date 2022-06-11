@@ -132,15 +132,6 @@ export default new Vuex.Store({
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
     },
-    addAgency (state, agency) {
-      state.agencies = _.sortBy([...state.agencies, agency], 'name')
-    },
-    updateAgency (state, agency) {
-      state.agencies = _.chain(state.agencies)
-        .map(a => (agency.id === a.id ? agency : a))
-        .sortBy('name')
-        .value()
-    },
     addMessage (state, message) {
       state.messages = [...state.messages, message]
     },
@@ -224,16 +215,6 @@ export default new Vuex.Store({
           }
           return response
         })
-    },
-    createAgency ({ commit }, agency) {
-      return post('/api/agencies', agency).then(response => {
-        commit('addAgency', response.agency)
-      })
-    },
-    updateAgency ({ commit }, agency) {
-      return put(`/api/agencies/${agency.id}`, agency).then(() => {
-        commit('updateAgency', agency)
-      })
     },
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)

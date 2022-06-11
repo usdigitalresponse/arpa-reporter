@@ -23,7 +23,7 @@
 
 <script>
 import StandardForm from '../components/StandardForm'
-import { getJson, post } from '../store'
+import { post } from '../store'
 
 export default {
   name: 'User',
@@ -69,16 +69,8 @@ export default {
       }
 
       this.user = null
-
-      const result = await getJson('/api/users')
-      if (result.error) {
-        this.$store.commit('addAlert', {
-          text: `loadUsers Error (${result.status}): ${result.error}`,
-          level: 'err'
-        })
-      } else {
-        this.user = result.users.find(u => u.id === Number(this.userId))
-      }
+      await this.$store.dispatch('updateUsersRoles')
+      this.user = this.$store.state.users.find(u => u.id === Number(this.userId))
     },
     onSave: async function (user) {
       this.user = null
@@ -99,7 +91,7 @@ export default {
         if (this.isNew) {
           return this.$router.push(`/users/${result.user.id}`)
         } else {
-          this.user = result.user
+          this.loadUser()
         }
       } catch (err) {
         this.user = user

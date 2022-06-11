@@ -11,7 +11,6 @@ const { mkdir, writeFile } = require('fs/promises')
 
 const express = require('express')
 const router = express.Router()
-const moment = require('moment')
 
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
@@ -26,18 +25,8 @@ const { templateForPeriod } = require('../services/get-template')
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const allPeriods = await reportingPeriods.getAll()
-  const reporting_periods = []
-
-  const now = moment()
-
-  allPeriods.forEach(period => {
-    if (moment(period.start_date) <= now) {
-      reporting_periods[period.id - 1] = period
-    }
-  })
-
-  return res.json({ reporting_periods, all_reporting_periods: allPeriods })
+  const periods = await reportingPeriods.getAll()
+  return res.json({ reportingPeriods: periods })
 })
 
 router.get('/summaries/', requireUser, async function (req, res) {
@@ -60,11 +49,7 @@ router.post('/close/', requireAdminUser, async (req, res) => {
   })
 })
 
-function validateReportingPeriod (req, res, next) {
-  next()
-}
-
-router.post('/', requireAdminUser, validateReportingPeriod, function (req, res, next) {
+router.post('/', requireAdminUser, function (req, res, next) {
   console.log('POST /reporting_periods', req.body)
   const {
     name,
@@ -87,7 +72,7 @@ router.post('/', requireAdminUser, validateReportingPeriod, function (req, res, 
     })
 })
 
-router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
+router.put('/:id', requireAdminUser, async function (
   req,
   res,
   next

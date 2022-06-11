@@ -100,7 +100,6 @@ export default new Vuex.Store({
     users: [],
     agencies: [],
     reportingPeriods: [],
-    messages: [],
     viewPeriodID: null,
 
     recentUploadId: null,
@@ -135,9 +134,6 @@ export default new Vuex.Store({
       if (!state.viewPeriodID) {
         state.viewPeiodID = applicationSettings.current_reporting_period_id
       }
-    },
-    addMessage (state, message) {
-      state.messages = [...state.messages, message]
     },
     setViewPeriodID (state, period_id) {
       state.viewPeriodID = period_id

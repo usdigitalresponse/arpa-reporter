@@ -20,7 +20,7 @@
 
         <input
           v-else
-          type="text"
+          :type="col.inputType || 'text'"
           class="form-control"
           :id="col.field"
           v-model="record[col.field]"
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'StandardForm',
   props: {
@@ -58,6 +60,7 @@ export default {
       field: 'person_name',
       readonly: false,
       required: true,
+      inputType: 'text',
       selectItems: [
         label: 'None', value: null,
         label: 'Bob', value: 'Robert'
@@ -68,11 +71,25 @@ export default {
   data: function () {
     return {
       wasValidated: false,
-      record: Object.fromEntries(this.cols.map(col => [col.field, this.initialRecord[col.field]])),
-      errors: Object.fromEntries(this.cols.map(col => [col.field, []]))
+      errors: Object.fromEntries(this.cols.map(col => [col.field, []])),
+      record: Object.fromEntries(this.cols.map(col => {
+        let initValue = this.initialRecord[col.field]
+
+        if (col.inputType === 'date') initValue = this.dateValue(initValue)
+
+        return [col.field, initValue]
+      }))
     }
   },
   methods: {
+    dateValue: function (val) {
+      const date = moment(val)
+      if (date.isValid()) {
+        return date.format('YYYY-MM-DD')
+      } else {
+        return null
+      }
+    },
     classesForField: function (field) {
       const col = this.cols.find(col => col.field === field)
       if (col.readonly) return {}

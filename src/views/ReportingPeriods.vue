@@ -3,7 +3,7 @@
     <h2>Reporting Periods</h2>
 
     <div class="mb-4">
-      <router-link to="/new_reporting_period" class="btn btn-primary"
+      <router-link to="/reporting_periods/new" class="btn btn-primary"
         >Create New Reporting Period</router-link
       >
     </div>

@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <StandardForm :initialRecord="agency" :cols="cols" @save="onSave" @reset="onReset" />
+      <StandardForm :initialRecord="agency" :cols="cols" @save="onSave" @reset="onReset" :key="formKey" />
     </div>
   </div>
 </template>
@@ -28,6 +28,11 @@ import { post } from '../store'
 
 export default {
   name: 'Agency',
+  data: function () {
+    return {
+      formKey: Date.now()
+    }
+  },
   computed: {
     agencyId: function () {
       return this.$route.params.id
@@ -75,7 +80,7 @@ export default {
       }
     },
     onReset () {
-      this.$store.dispatch('updateAgencies')
+      this.formKey = Date.now()
     }
   },
   watch: {
@@ -84,7 +89,7 @@ export default {
     }
   },
   mounted: async function () {
-    this.onReset()
+    this.$store.dispatch('updateAgencies')
   },
   components: {
     StandardForm

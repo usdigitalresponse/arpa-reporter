@@ -132,19 +132,13 @@ export default new Vuex.Store({
     setApplicationSettings (state, applicationSettings) {
       state.applicationSettings = applicationSettings
       if (!state.viewPeriodID) {
-        state.viewPeiodID = applicationSettings.current_reporting_period_id
+        state.viewPeriodID = applicationSettings.current_reporting_period_id
       }
     },
     setViewPeriodID (state, period_id) {
       state.viewPeriodID = period_id
     },
-    updateReportingPeriod (state, reportingPeriod) {
-      state.reportingPeriods = _.chain(state.reportingPeriods)
-        .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
-        .sortBy('start_date')
-        .value()
-    },
-    updateAllUploads (state, updatedUploads) {
+    setAllUploads (state, updatedUploads) {
       state.allUploads = updatedUploads
     },
     addAlert (state, alert) {
@@ -167,18 +161,16 @@ export default new Vuex.Store({
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
     },
-    createTemplate ({ commit }, { reportingPeriodId, formData }) {
+    createTemplate ({ commit, dispatch }, { reportingPeriodId, formData }) {
       return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
         .then(r => {
           if (!r.ok) { throw new Error(`createTemplate: ${r.statusText} (${r.status})`) }
           return r.json()
         })
         .then(response => {
-          if (response.success && response.reportingPeriod) {
-            commit('updateReportingPeriod', response.reportingPeriod)
-            fetch('/api/application_settings', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setApplicationSettings', data.application_settings))
+          if (response.success) {
+            dispatch('updateReportingPeriods')
+            dispatch('updateApplicationSettings')
           }
           return response
         })
@@ -186,36 +178,15 @@ export default new Vuex.Store({
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
     },
-    closeReportingPeriod ({ commit }, period_id) {
+    closeReportingPeriod ({ commit, dispatch }, period_id) {
       return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })
         .then(r => {
           if (r.ok) {
-            fetch('/api/reporting_periods', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setReportingPeriods', data.reporting_periods))
-            fetch('/api/application_settings', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setApplicationSettings', data.application_settings))
+            dispatch('updateReportingPeriods')
+            dispatch('updateApplicationSettings')
           }
           return r
         })
-    },
-    createReportingPeriod ({ commit }, reportingPeriod) {
-      return post('/api/reporting_periods', reportingPeriod).then(response => {
-        const r = {
-          ...reportingPeriod,
-          ...response.reportingPeriod
-        }
-        r.start_date = moment(r.start_date).format()
-        r.end_date = moment(r.end_date).format()
-      })
-    },
-    updateReportingPeriod ({ commit }, reportingPeriod) {
-      reportingPeriod.start_date = moment(reportingPeriod.start_date).format()
-      reportingPeriod.end_date = moment(reportingPeriod.end_date).format()
-      return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
-        commit('updateReportingPeriod', reportingPeriod)
-      })
     },
 
     async updateUploads ({ commit, state }) {
@@ -225,7 +196,7 @@ export default new Vuex.Store({
       if (result.error) {
         commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
       } else {
-        commit('updateAllUploads', result.uploads)
+        commit('setAllUploads', result.uploads)
       }
     },
     async updateAgencies ({ commit, state }) {

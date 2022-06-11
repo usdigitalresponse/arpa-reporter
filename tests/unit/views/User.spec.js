@@ -6,30 +6,38 @@ import Vuex from 'vuex'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const mocks = {
+  $route: {
+    path: '/users/new',
+    params: {
+      id: 'new'
+    }
+  }
+}
+
 describe('User.vue', () => {
   let store
+
   beforeEach(() => {
     store = new Vuex.Store({
       state: {
-        configuration: {
-          roles: [{ name: 'admin' }, { name: 'reporter' }]
-        }
+        agencies: [{ name: 'A1' }, { name: 'A2' }]
       },
       getters: {
-        agencies: () => [{ name: 'A1' }, { name: 'A2' }]
+        roles: () => [{ name: 'admin' }]
+      },
+      mutations: {
+        addAlert: () => null
       }
     })
   })
-  it('renders new user form', () => {
-    const wrapper = mount(User, { store, localVue })
-    const r = wrapper.find('button.btn-primary')
-    expect(r.text()).to.include('Create User')
-  })
-  it('requires a non blank email', async () => {
-    const wrapper = mount(User, { store, localVue })
-    await wrapper.find('button').trigger('click')
-    setTimeout(() => {
-      expect(wrapper.find('.alert').text()).to.equal('Email is required')
-    }, 0) // not sure why this is necessary
+  it('renders new user form', async () => {
+    const wrapper = mount(User, { store, localVue, mocks })
+    const loading = wrapper.find('div[role="status"]')
+    expect(loading.text()).to.include('Loading')
+
+    await wrapper.setData({ user: {} })
+    const form = wrapper.findComponent({ name: 'StandardForm' })
+    expect(form.exists()).to.equal(true)
   })
 })

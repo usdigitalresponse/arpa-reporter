@@ -192,14 +192,6 @@ export default new Vuex.Store({
           commit('setViewPeriodID', data.application_settings.current_reporting_period_id)
         })
     },
-    createUser ({ commit }, user) {
-      return post('/api/users', user).then(response => {
-      })
-    },
-    updateUser ({ commit }, user) {
-      return put(`/api/users/${user.id}`, user).then(() => {
-      })
-    },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {
       return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
         .then(r => {
@@ -310,6 +302,9 @@ export default new Vuex.Store({
     viewPeriodIsCurrent: state => {
       return Number(state.viewPeriodID) ===
         Number(state.applicationSettings.current_reporting_period_id)
+    },
+    roles: state => {
+      return state.configuration.roles
     }
   }
 })

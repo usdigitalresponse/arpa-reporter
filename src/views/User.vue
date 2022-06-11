@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <StandardForm :initialRecord="user" :cols="cols" @save="onSave" @reset="onReset" />
+      <StandardForm :initialRecord="user" :cols="cols" @save="onSave" @reset="onReset" :key="formKey" />
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
   data: function () {
     return {
       user: null,
-      roles: []
+      formKey: Date.now()
     }
   },
   computed: {
@@ -45,9 +45,12 @@ export default {
         { label: 'ID', field: 'id', readonly: true },
         { label: 'Email', field: 'email', required: true },
         { label: 'Name', field: 'name', required: true },
-        { label: 'Role', field: 'role', selectItems: this.roleItems },
+        { label: 'Role', field: 'role', selectItems: this.roleItems, required: true },
         { label: 'Agency', field: 'agency_id', selectItems: this.agencyItems }
       ]
+    },
+    roles: function () {
+      return this.$store.getters.roles || []
     },
     roleItems: function () {
       return this.roles.map(r => ({ label: r.name, value: r.name }))
@@ -60,6 +63,11 @@ export default {
   },
   methods: {
     loadUser: async function () {
+      if (this.isNew) {
+        this.user = {}
+        return
+      }
+
       this.user = null
 
       const result = await getJson('/api/users')
@@ -69,12 +77,7 @@ export default {
           level: 'err'
         })
       } else {
-        this.roles = result.roles
-        if (this.isNew) {
-          this.user = {}
-        } else {
-          this.user = result.users.find(u => u.id === Number(this.userId))
-        }
+        this.user = result.users.find(u => u.id === Number(this.userId))
       }
     },
     onSave: async function (user) {
@@ -107,7 +110,7 @@ export default {
       }
     },
     onReset () {
-      this.loadUser()
+      this.formKey = Date.now()
     }
   },
   watch: {

@@ -57,13 +57,10 @@ export default {
       label: 'Person name',
       field: 'person_name',
       readonly: false,
+      required: true,
       selectItems: [
         label: 'None', value: null,
         label: 'Bob', value: 'Robert'
-      ],
-      validations: [
-        {
-        }
       ]
     } */
     disabled: Boolean

@@ -5,8 +5,8 @@
         <DownloadButton :href="downloadUrl()" class="btn btn-primary btn-block">Download Treasury Report</DownloadButton>
       </div>
 
-      <div class="col" v-if="isAdmin && false">
-        <a href="/api/audit_report" class="btn btn-info btn-block">Download Audit Report</a>
+      <div class="col" v-if="isAdmin">
+        <DownloadButton href="/api/audit_report" class="btn btn-info btn-block">Download Audit Report</DownloadButton>
       </div>
 
       <div class="col">

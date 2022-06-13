@@ -13,10 +13,10 @@ const COLUMN = {
   EC_TCE: 'Total Cumulative Expenditures (EC tabs)',
   EC_CPO: 'Current Period Obligations (EC tabs)',
   EC_CPE: 'Current Period Expenditures (EC tabs)',
-  E50K_OBLIGATION: 'Subaward amounts (Subaward >50k)',
+  E50K_OBLIGATION: 'Subaward Obligations (Subaward >50k)',
   E50K_TEA: 'Total Expenditure Amount (Expenditures >50k)',
-  E_CPO: 'Current Period Obligations (Expenditures <50k)',
-  E_CPE: 'Current Period Expenditures (Expenditures <50k)'
+  E_CPO: 'Current Period Obligations (Aggregate Awards <50k)',
+  E_CPE: 'Current Period Expenditures (Aggregate Awards <50k)'
 }
 
 async function generate () {
@@ -56,8 +56,8 @@ async function createObligationSheet (periodId) {
 
       const emptyRow = {
         'Reporting Period': period.name,
-        'Upload': upload.filename,
         'Period End Date': new Date(period.end_date),
+        'Upload': upload.filename,
         [COLUMN.EC_BUDGET]: 0,
         [COLUMN.EC_TCO]: 0,
         [COLUMN.EC_TCE]: 0,

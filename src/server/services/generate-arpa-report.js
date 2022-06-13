@@ -618,7 +618,7 @@ async function generateExpendituresLT50000 (records) {
 async function generatePaymentsIndividualsLT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      case 'Aggregate Awards < 50000':
+      case 'awards':
         if (record.content.Sub_Award_Type_Aggregates_SLFRF__c !== PAYMENTS_TO_INDIVIDUALS) {
           return null
         }

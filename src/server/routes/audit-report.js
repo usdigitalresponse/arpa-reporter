@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 const { requireUser } = require('../access-helpers')
-const { generate } = require('../lib/audit-report.old')
+const { generate } = require('../lib/audit-report')
 
 router.get('/', requireUser, async function (req, res) {
   console.log('/api/audit-report GET')

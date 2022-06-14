@@ -41,11 +41,10 @@ function getUpload (id, trns = knex) {
 }
 
 function validForReportingPeriod (period_id, trns = knex) {
-  return trns.with('agency_max_val', trns.raw(
-    'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id, ec_code'
-  ))
-    .select('uploads.*')
-    .from('uploads')
+  return baseQuery(trns)
+    .with('agency_max_val', trns.raw(
+      'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id, ec_code'
+    ))
     .innerJoin('agency_max_val', function () {
       this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
         .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')

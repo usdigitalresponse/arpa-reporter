@@ -17,7 +17,8 @@ const DATA_SHEET_TYPES = {
   'EC 7 - Admin': 'ec7',
   'Subrecipient': 'subrecipient',
   'Awards > 50000': 'awards50k',
-  'Expenditures > 50000': 'expenditures50k'
+  'Expenditures > 50000': 'expenditures50k',
+  'Aggregate Awards < 50000': 'awards'
 }
 
 function extractRecords (buffer) {

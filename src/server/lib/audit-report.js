@@ -1,4 +1,4 @@
-const { format } = require('date-fns')
+const moment = require('moment')
 const XLSX = require('xlsx')
 
 const { get, getAll } = require('../db/reporting-periods')
@@ -32,7 +32,7 @@ async function generate () {
   XLSX.utils.book_append_sheet(workbook, sheet, 'Obligations & Expenditures')
 
   return {
-    filename: `audit report ${format(new Date(), 'yy-MM-dd')}.xlsx`,
+    filename: `audit report ${moment(new Date()).format('yy-MM-dd')}.xlsx`,
     outputWorkBook: XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' })
   }
 }

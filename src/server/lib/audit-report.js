@@ -5,7 +5,7 @@ const { get, getAll } = require('../db/reporting-periods')
 const { getCurrentReportingPeriodID } = require('../db/settings')
 const { recordsForUpload } = require('../services/records')
 const { log } = require('../lib/log')
-const { validForReportingPeriod } = require('../db/uploads')
+const { usedForTreasuryExport } = require('../db/uploads')
 
 const COLUMN = {
   EC_BUDGET: 'Adopted Budget (EC tabs)',
@@ -49,7 +49,7 @@ async function createObligationSheet (periodId) {
 
   // collect aggregate obligations and expenditures by upload
   const rows = await Promise.all(reportingPeriods.map(async period => {
-    const uploads = await validForReportingPeriod(period.id)
+    const uploads = await usedForTreasuryExport(period.id)
 
     return await Promise.all(uploads.map(async upload => {
       const records = await recordsForUpload(upload)

@@ -2,7 +2,7 @@ const XLSX = require('xlsx')
 const { merge } = require('lodash')
 
 const { bufferForUpload } = require('./persist-upload')
-const { validForReportingPeriod } = require('../db/uploads')
+const { usedForTreasuryExport } = require('../db/uploads')
 const { log } = require('../lib/log')
 
 const CERTIFICATION_SHEET = 'Certification'
@@ -84,7 +84,7 @@ async function recordsForUpload (upload) {
 }
 
 async function recordsForReportingPeriod (periodId) {
-  const uploads = await validForReportingPeriod(periodId)
+  const uploads = await usedForTreasuryExport(periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))
   )

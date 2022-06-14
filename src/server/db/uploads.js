@@ -40,7 +40,7 @@ function getUpload (id, trns = knex) {
     .then(r => r[0])
 }
 
-function validForReportingPeriod (period_id, trns = knex) {
+function usedForTreasuryExport (period_id, trns = knex) {
   return baseQuery(trns)
     .with('agency_max_val', trns.raw(
       'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL GROUP BY agency_id, ec_code'
@@ -142,5 +142,5 @@ module.exports = {
   setEcCode,
   markValidated,
   markNotValidated,
-  validForReportingPeriod
+  usedForTreasuryExport
 }

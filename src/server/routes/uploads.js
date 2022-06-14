@@ -12,7 +12,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 const knex = require('../db/connection')
 const { user: getUser } = require('../db/users')
 const reportingPeriods = require('../db/reporting-periods')
-const { validForReportingPeriod, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
+const { usedForTreasuryExport, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
 const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
@@ -76,13 +76,13 @@ router.get('/:id/series', requireUser, async (req, res) => {
     series = [upload]
   }
 
-  const allValid = await validForReportingPeriod(upload.reporting_period_id)
-  const currentValid = allValid.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
+  const allExported = await usedForTreasuryExport(upload.reporting_period_id)
+  const seriesExported = allExported.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
 
   res.json({
     upload,
     series,
-    currently_valid: currentValid
+    seriesExported
   })
 })
 

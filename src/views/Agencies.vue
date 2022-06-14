@@ -3,7 +3,7 @@
     <h2>Agencies</h2>
 
     <div class="mb-4">
-      <router-link to="/new_agency" class="btn btn-primary">
+      <router-link to="/agencies/new" class="btn btn-primary">
         Create New Agency
       </router-link>
     </div>

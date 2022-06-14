@@ -4,22 +4,16 @@ const knex = require('./connection')
 
 function users (trns = knex) {
   return trns('users')
-    .select('*')
+    .leftJoin('agencies', 'users.agency_id', 'agencies.id')
+    .select('users.*', 'agencies.name AS agency_name', 'agencies.code AS agency_code')
     .orderBy('email')
 }
 
 function createUser (user, trns = knex) {
-  return trns
+  return trns('users')
     .insert(user)
-    .into('users')
-    .returning(['id', 'created_at'])
-    .then(response => {
-      return {
-        ...user,
-        id: response[0].id,
-        created_at: response[0].created_at
-      }
-    })
+    .returning('*')
+    .then(rows => rows[0])
 }
 
 function updateUser (user, trns = knex) {
@@ -31,6 +25,8 @@ function updateUser (user, trns = knex) {
       role: user.role,
       agency_id: user.agency_id
     })
+    .returning('*')
+    .then(rows => rows[0])
 }
 
 function user (id, trns = knex) {

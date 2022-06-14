@@ -60,12 +60,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/new_agency',
-    name: 'NewAgency',
-    component: Agency,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/agencies/:id',
     name: 'Agency',
     component: Agency,
@@ -105,12 +99,6 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: Users,
-    meta: { requiresLogin: true }
-  },
-  {
-    path: '/new_user',
-    name: 'NewUser',
-    component: User,
     meta: { requiresLogin: true }
   },
   {

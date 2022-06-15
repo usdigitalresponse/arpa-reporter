@@ -132,27 +132,6 @@ export default new Vuex.Store({
         state.viewPeriodID = applicationSettings.current_reporting_period_id
       }
     },
-    addUser (state, user) {
-      state.configuration.users = _.sortBy(
-        [...state.configuration.users, user],
-        'email'
-      )
-    },
-    updateUser (state, user) {
-      state.configuration.users = _.chain(state.configuration.users)
-        .map(u => (user.id === u.id ? user : u))
-        .sortBy('email')
-        .value()
-    },
-    addAgency (state, agency) {
-      state.agencies = _.sortBy([...state.agencies, agency], 'name')
-    },
-    updateAgency (state, agency) {
-      state.agencies = _.chain(state.agencies)
-        .map(a => (agency.id === a.id ? agency : a))
-        .sortBy('name')
-        .value()
-    },
     addMessage (state, message) {
       state.messages = [...state.messages, message]
     },
@@ -213,16 +192,6 @@ export default new Vuex.Store({
           commit('setViewPeriodID', data.application_settings.current_reporting_period_id)
         })
     },
-    createUser ({ commit }, user) {
-      return post('/api/users', user).then(response => {
-        commit('addUser', response.user)
-      })
-    },
-    updateUser ({ commit }, user) {
-      return put(`/api/users/${user.id}`, user).then(() => {
-        commit('updateUser', user)
-      })
-    },
     createTemplate ({ commit }, { reportingPeriodId, formData }) {
       return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
         .then(r => {
@@ -238,16 +207,6 @@ export default new Vuex.Store({
           }
           return response
         })
-    },
-    createAgency ({ commit }, agency) {
-      return post('/api/agencies', agency).then(response => {
-        commit('addAgency', response.agency)
-      })
-    },
-    updateAgency ({ commit }, agency) {
-      return put(`/api/agencies/${agency.id}`, agency).then(() => {
-        commit('updateAgency', agency)
-      })
     },
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
@@ -343,6 +302,9 @@ export default new Vuex.Store({
     viewPeriodIsCurrent: state => {
       return Number(state.viewPeriodID) ===
         Number(state.applicationSettings.current_reporting_period_id)
+    },
+    roles: state => {
+      return state.configuration.roles
     }
   }
 })

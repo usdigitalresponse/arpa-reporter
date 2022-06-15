@@ -10,10 +10,7 @@ describe('Home.vue', () => {
   it('renders', () => {
     const store = new Vuex.Store({
       state: {
-        viewPeriodID: 0,
-        configuration: {
-          templates: [{ name: 'Agency' }]
-        }
+        viewPeriodID: 0
       },
       getters: {
         user: () => ({ email: 'admin@example.com', role: 'admin' }),

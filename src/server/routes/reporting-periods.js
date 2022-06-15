@@ -21,6 +21,7 @@ const reportingPeriods = require('../db/reporting-periods')
 const { UPLOAD_DIR } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { templateForPeriod } = require('../services/get-template')
+const { validForReportingPeriod } = require('../db/uploads')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
@@ -183,6 +184,18 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
     } else {
       res.status(500).json({ error: err.message })
     }
+  }
+})
+
+router.get('/:id/exported_uploads', requireUser, async (req, res, next) => {
+  const periodId = req.params.id
+  const tenantId = req.session.user.tenant_id
+
+  try {
+    const exportedUploads = await validForReportingPeriod(tenantId, periodId)
+    return res.json({ exportedUploads })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 })
 

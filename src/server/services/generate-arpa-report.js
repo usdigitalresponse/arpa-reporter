@@ -3,10 +3,14 @@ const AdmZip = require('adm-zip')
 const XLSX = require('xlsx')
 
 const { applicationSettings } = require('../db/settings')
+const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 
 const EC_CODE_REGEX = /^(\d.\d\d?)/
+
+// dropdown value used to differentiate payments under 50k
+const PAYMENTS_TO_INDIVIDUALS = 'Payments to Individuuals'
 
 /**
  * Extract the Detailed Expenditure Category code from a record.
@@ -594,7 +598,18 @@ async function generateExpendituresGT50000 (records) {
 async function generateExpendituresLT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      // TODO: Handle matching records
+      case 'awards':
+        if (record.content.Sub_Award_Type_Aggregates_SLFRF__c === PAYMENTS_TO_INDIVIDUALS) {
+          return null
+        }
+
+        return [
+          null, // first col is blank
+          record.content.Project_Identification_Number__c,
+          record.content.Sub_Award_Type_Aggregates_SLFRF__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c
+        ]
       default:
         return null
     }
@@ -604,7 +619,17 @@ async function generateExpendituresLT50000 (records) {
 async function generatePaymentsIndividualsLT50000 (records) {
   return records.map(record => {
     switch (record.type) {
-      // TODO: Handle matching records
+      case 'awards':
+        if (record.content.Sub_Award_Type_Aggregates_SLFRF__c !== PAYMENTS_TO_INDIVIDUALS) {
+          return null
+        }
+
+        return [
+          null, // first col is blank
+          record.content.Project_Identification_Number__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c,
+          record.content.Quarterly_Obligation_Amt_Aggregates__c
+        ]
       default:
         return null
     }
@@ -645,14 +670,41 @@ async function generateSubaward (records) {
   }).filter(isNotNull)
 }
 
-async function generateSubRecipient (records) {
-  return records.map(record => {
-    switch (record.type) {
-      // TODO: Handle matching records
-      default:
-        return null
-    }
-  }).filter(isNotNull)
+async function generateSubRecipient (records, periodId) {
+  const subrecipients = await listRecipientsForReportingPeriod(periodId)
+
+  return subrecipients.map(subrecipient => {
+    const record = JSON.parse(subrecipient.record)
+    return [
+      null, // first col is blank
+      record.Unique_Entity_Identifier__c,
+      record.EIN__c,
+      record.Name,
+      record.Entity_Type_2__c,
+      record.POC_Email_Address__c,
+      record.Address__c,
+      record.Address_2__c,
+      record.Address_3__c,
+      record.City__c,
+      record.State_Abbreviated__c,
+      record.Zip__c,
+      record.Zip_4__c,
+      record.Registered_in_Sam_gov__c,
+      record.Federal_Funds_80_or_More_of_Revenue__c,
+      record.Derives_25_Million_or_More_from_Federal__c,
+      record.Total_Compensation_for_Officers_Public__c,
+      record.Officer_Name__c,
+      record.Officer_Total_Comp__c,
+      record.Officer_2_Name__c,
+      record.Officer_2_Total_Comp__c,
+      record.Officer_3_Name__c,
+      record.Officer_3_Total_Comp__c,
+      record.Officer_4_Name__c,
+      record.Officer_4_Total_Comp__c,
+      record.Officer_5_Name__c,
+      record.Officer_5_Total_Comp__c
+    ]
+  })
 }
 
 async function generateReport (tenantId, periodId) {
@@ -697,7 +749,7 @@ async function generateReport (tenantId, periodId) {
 
   // compute the CSV data for each file, and write it into the zip container
   const csvPromises = csvObjects.map(async ({ name, func }) => {
-    const csvData = await func(records)
+    const csvData = await func(records, periodId)
 
     if (!Array.isArray(csvData)) {
       console.dir({ name, func })

@@ -4,73 +4,59 @@ const { requireAdminUser, requireUser } = require('../access-helpers')
 const router = express.Router()
 const {
   agencies,
-  agencyById: getAgency,
   createAgency,
-  updateAgency
+  updateAgency,
+  agencyById
 } = require('../db/agencies')
 
 router.get('/', requireUser, function (req, res) {
   agencies(req.session.user.tenant_id).then(agencies => res.json({ agencies }))
 })
 
-async function validateAgency (req, res, next) {
-  const { name, code } = req.body
-  if (!name) {
-    res.status(400).send('Agency requires a name')
-    return
+async function validateAgency (agency) {
+  if (!agency.name) {
+    throw new Error('Agency requires a name')
   }
-  if (!code) {
-    res.status(400).send('Agency requires a code')
-    return
+  if (!agency.code) {
+    throw new Error('Agency requires a code')
   }
-  next()
 }
 
-router.post('/', requireAdminUser, validateAgency, function (req, res, next) {
-  console.log('POST /agencies', req.body)
-  const { code, name } = req.body
-  const agency = {
-    code,
-    name,
-    tenant_id: req.session.user.tenant_id
-  }
-  createAgency(agency)
-    .then(result => res.json({ agency: result }))
-    .catch(e => {
-      if (e.message.match(/violates unique constraint/)) {
-        res.status(400).send('Agency with that code already exists')
-      } else {
-        next(e)
-      }
-    })
-})
+router.post('/', requireAdminUser, async function (req, res, next) {
+  const agencyInfo = req.body.agency
+  console.dir(agencyInfo)
 
-router.put('/:id', requireAdminUser, validateAgency, async function (
-  req,
-  res,
-  next
-) {
-  console.log('PUT /agencies/:id', req.body)
-  let agency = await getAgency(req.params.id)
-  if (!agency || agency.tenant_id !== req.session.user.tenant_id) {
-    res.status(400).send('Agency not found')
+  try {
+    await validateAgency(agencyInfo)
+  } catch (e) {
+    res.status(400).json({ error: e.message })
     return
   }
-  const { code, name } = req.body
-  agency = {
-    ...agency,
-    code,
-    name
-  }
-  updateAgency(agency)
-    .then(result => res.json({ agency: result }))
-    .catch(e => {
-      if (e.message.match(/violates unique constraint/)) {
-        res.status(400).send('Agency with that code already exists')
-      } else {
-        next(e)
+
+  try {
+    if (agencyInfo.id) {
+      const existingAgency = await agencyById(agencyInfo.id)
+      if (!existingAgency || existingAgency.tenant_id !== req.session.user.tenant_id) {
+        res.status(404).json({ error: 'invalid agency' })
+        return
       }
-    })
+
+      const agency = await updateAgency(agencyInfo)
+      res.json({ agency })
+    } else {
+      const agency = await createAgency({
+        ...agencyInfo,
+        tenant_id: req.session.user.tenant_id
+      })
+      res.json({ agency })
+    }
+  } catch (e) {
+    if (e.message.match(/violates unique constraint/)) {
+      res.status(400).json({ error: 'Agency with that code already exists' })
+    } else {
+      res.status(500).json({ error: e.message })
+    }
+  }
 })
 
 module.exports = router

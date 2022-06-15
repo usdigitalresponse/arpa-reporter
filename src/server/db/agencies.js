@@ -1,20 +1,23 @@
 
 const knex = require('./connection')
 
+function baseQuery (trns) {
+  return trns('agencies')
+    .select('*')
+}
+
 function agencies (tenantId, trns = knex) {
   if (tenantId === undefined) {
     throw new Error('must specify tenantId to list agencies')
   }
 
-  return trns('agencies')
-    .select('*')
+  return baseQuery(trns)
     .where('tenant_id', tenantId)
     .orderBy('name')
 }
 
 function agencyById (id, trns = knex) {
-  return trns('agencies')
-    .select('*')
+  return baseQuery(trns)
     .where('id', id)
     .then(r => r[0])
 }
@@ -27,7 +30,7 @@ function agencyByCode (tenantId, code, trns = knex) {
     throw new Error('must specify code in agencyByCode')
   }
 
-  return trns('agencies')
+  return baseQuery(trns)
     .select('*')
     .where({ tenant_id: tenantId, code })
 }
@@ -40,13 +43,8 @@ function createAgency (agency, trns = knex) {
   return trns
     .insert(agency)
     .into('agencies')
-    .returning(['id'])
-    .then(response => {
-      return {
-        ...agency,
-        id: response[0].id
-      }
-    })
+    .returning('*')
+    .then(r => r[0])
 }
 
 function updateAgency (agency, trns = knex) {
@@ -56,6 +54,8 @@ function updateAgency (agency, trns = knex) {
       code: agency.code,
       name: agency.name
     })
+    .returning('*')
+    .then(r => r[0])
 }
 
 module.exports = {

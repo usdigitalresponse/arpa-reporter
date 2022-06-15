@@ -75,10 +75,15 @@ async function listRecipients (tenantId, trns = knex) {
   return baseQuery(trns).where('arpa_subrecipients.tenant_id', tenantId)
 }
 
+async function listRecipientsForReportingPeriod (periodId, trns = knex) {
+  return baseQuery(trns).where('reporting_period_id', periodId)
+}
+
 module.exports = {
   createRecipient,
   getRecipient,
   findRecipient,
   updateRecipient,
-  listRecipients
+  listRecipients,
+  listRecipientsForReportingPeriod
 }

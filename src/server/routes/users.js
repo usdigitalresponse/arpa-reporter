@@ -2,93 +2,84 @@
 
 const express = require('express')
 const router = express.Router()
-const { requireAdminUser } = require('../access-helpers')
-const { createUser, user: getUser, updateUser } = require('../db/users')
+const { requireUser, requireAdminUser } = require('../access-helpers')
+const { createUser, users: listUsers, updateUser, user: getUser } = require('../db/users')
 const { agencyById } = require('../db/agencies')
 const { sendWelcomeEmail } = require('../lib/email')
 const _ = require('lodash-checkit')
 
-async function validateUser (req, res, next) {
-  const { email, role, agency_id } = req.body
+async function validateUser (user, creator) {
+  const { email, role, agency_id } = user
   if (!email) {
-    res.status(400).send('User email is required')
-    return
+    throw new Error('User email is required')
   }
   if (!_.isEmail(email)) {
-    res.status(400).send('Invalid email address')
-    return
+    throw new Error('Invalid email address')
   }
   if (!role) {
-    res.status(400).send('Role required')
-    return
+    throw new Error('Role required')
   }
+
   if (agency_id) {
     const agency = await agencyById(agency_id)
-    if (!agency) {
-      res.status(400).send('Invalid agency')
-      return
+    if (!agency || agency.tenant_id !== creator.tenant_id) {
+      throw new Error('Invalid agency')
     }
   } else if (role !== 'admin') {
-    res.status(400).send('Reporter role requires agency')
-    return
+    throw new Error('Reporter role requires agency')
   }
-  next()
+
+  return null
 }
 
-router.post('/', requireAdminUser, validateUser, async function (
-  req,
-  res,
-  next
-) {
-  console.log('POST /users', req.body)
-  const { email, name, role, agency_id } = req.body
-  const user = {
-    email: email.toLowerCase().trim(),
-    role,
-    name,
-    agency_id,
-    tenant_id: req.session.user.tenant_id
-  }
-  createUser(user)
-    .then(result => res.json({ user: result }))
-    .then(() => sendWelcomeEmail(user.email, req.headers.origin))
-    .catch(e => {
-      if (e.message.match(/violates unique constraint/)) {
-        res.status(400).send('User with that email already exists')
-      } else {
-        next(e)
-      }
-    })
+router.get('/', requireUser, async function (req, res, next) {
+  const allUsers = await listUsers(req.session.user.tenant_id)
+  const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
+
+  const users = (curUser.role === 'admin') ? allUsers : [curUser]
+  res.json({ users })
 })
 
-router.put('/:id', requireAdminUser, validateUser, async function (
-  req,
-  res,
-  next
-) {
-  console.log('PUT /users/:id', req.body)
-  let user = await getUser(req.params.id)
-  if (!user || user.tenant_id !== req.session.user.tenant_id) {
-    res.status(400).send('User not found')
+router.post('/', requireAdminUser, async function (req, res, next) {
+  const creator = req.session.user
+  const user = req.body.user
+  user.email = user.email.toLowerCase().trim()
+
+  try {
+    await validateUser(user, creator)
+  } catch (e) {
+    res.status(400).json({ error: e.message })
     return
   }
-  const { email, name, role, agency_id } = req.body
-  user = {
-    ...user,
-    email: email.toLowerCase().trim(),
-    name,
-    role,
-    agency_id
-  }
-  updateUser(user)
-    .then(result => res.json({ user: result }))
-    .catch(e => {
-      if (e.message.match(/violates unique constraint/)) {
-        res.status(400).send('User with that email already exists')
-      } else {
-        next(e)
+
+  try {
+    if (user.id) {
+      const existingUser = await getUser(user.id)
+      if (!existingUser || existingUser.tenant_id !== creator.tenant_id) {
+        res.status(404).json({ error: 'invalid user' })
+        return
       }
-    })
+
+      const updatedUser = await updateUser(user)
+      res.json({ user: updatedUser })
+    } else {
+      const updatedUser = await createUser({
+        ...user,
+        tenant_id: creator.tenant_id
+      })
+      res.json({ user: updatedUser })
+
+      void sendWelcomeEmail(updatedUser.email, req.headers.origin)
+    }
+  } catch (e) {
+    console.dir(e)
+
+    if (e.message.match(/violates unique constraint/)) {
+      res.status(400).json({ error: 'User with that email already exists' })
+    } else {
+      next(e)
+    }
+  }
 })
 
 module.exports = router

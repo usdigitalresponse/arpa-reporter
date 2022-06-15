@@ -33,33 +33,15 @@
         </div>
       </div>
 
-      <div class="form-group row" v-for="(rule, key) in rules" :key="key">
-        <label :for="key" class="col-sm-2 col-form-label">{{ rule.humanColName }}</label>
-        <div class="col-sm-10">
-          <select v-if="rule.listVals.length > 0" :id="key" v-model="record[key]" :readonly="isReadOnly(key)" class="form-control">
-            <option :value="null"></option>
-            <option v-for="opt in rule.listVals" :key="opt" :value="opt">{{ opt }}</option>
-          </select>
-
-          <input v-else type="text" class="form-control" :id="key" v-model="record[key]" :readonly="isReadOnly(key)">
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <div class="col-sm-2">
-          <button class="btn btn-primary" v-on:click="updateRecipient" :disabled="saving">Save</button>
-        </div>
-
-        <div class="col-sm-2">
-          <button class="btn btn-secondary" v-on:click="setRecord">Reset</button>
-        </div>
-      </div>
+      <StandardForm :initialRecord="JSON.parse(recipient.record)" :cols="cols" @save="updateRecipient" @reset="loadRecipient" />
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+
+import StandardForm from '../components/StandardForm'
 import { getJson, post } from '../store'
 
 export default {
@@ -68,7 +50,6 @@ export default {
     return {
       recipient: null,
       rules: [],
-      record: {},
       saving: false
     }
   },
@@ -78,6 +59,21 @@ export default {
     },
     createdAtStr: function () {
       return this.recipient && moment(this.recipient.created_at).local().format('MMM Do YYYY, h:mm:ss A')
+    },
+    cols: function () {
+      return Object.values(this.rules).map(rule => {
+        const selectItems = [{ label: '', value: null }].concat(
+          rule.listVals.map(val => ({ label: val, value: val }))
+        )
+
+        return {
+          label: rule.humanColName,
+          field: rule.key,
+          readonly: rule.key === 'Unique_Entity_Identifier__c' || rule.key === 'EIN__c',
+          required: rule.required,
+          selectItems: rule.listVals.length ? selectItems : null
+        }
+      })
     }
   },
   methods: {
@@ -93,17 +89,24 @@ export default {
       } else {
         this.recipient = result.recipient
         this.rules = result.rules
-        this.setRecord()
       }
     },
-    updateRecipient: async function () {
+    updateRecipient: async function (updatedRecipient) {
       this.saving = true
 
-      try {
-        const record = JSON.stringify(Object.fromEntries(
-          Object.entries(this.record).filter(([key, val]) => val !== null)
-        ))
+      // omit all undefined fields
+      // this is due to the way we parse the record initially, where these are also omitted
+      const filteredRecipient = Object.fromEntries(
+        Object.entries(updatedRecipient)
+          .filter(([key, val]) => val !== null && val !== undefined)
+      )
 
+      // invariant is also enforced serv-erside
+      filteredRecipient.Unique_Entity_Identifier__c = this.recipient.uei
+      filteredRecipient.EIN__c = this.recipient.tin
+
+      try {
+        const record = JSON.stringify(filteredRecipient)
         const result = await post(`/api/subrecipients/${this.recipientId}`, { record })
         if (result.error) throw new Error(result.error)
 
@@ -111,6 +114,8 @@ export default {
           text: `Recipient ${this.recipientId} successfully updated`,
           level: 'ok'
         })
+
+        this.loadRecipient()
       } catch (err) {
         this.$store.commit('addAlert', {
           text: `Error updating recipient ${this.recipientId}: ${err.message}`,
@@ -119,10 +124,6 @@ export default {
       }
 
       this.saving = false
-      this.loadRecipient()
-    },
-    setRecord: function () {
-      this.record = this.recipient ? JSON.parse(this.recipient.record) : {}
     },
     isReadOnly: function (key) {
       return key === 'Unique_Entity_Identifier__c' || key === 'EIN__c'
@@ -140,6 +141,7 @@ export default {
     }
   },
   components: {
+    StandardForm
   }
 }
 </script>

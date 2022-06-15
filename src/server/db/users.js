@@ -10,7 +10,7 @@ function users (tenantId, trns = knex) {
   return trns('users')
     .leftJoin('agencies', 'users.agency_id', 'agencies.id')
     .select('users.*', 'agencies.name AS agency_name', 'agencies.code AS agency_code')
-    .where('tenant_id', tenantId)
+    .where('users.tenant_id', tenantId)
     .orderBy('email')
 }
 

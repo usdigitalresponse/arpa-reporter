@@ -2,6 +2,8 @@ const { v4 } = require('uuid')
 
 const knex = require('./connection')
 
+const environment = require('../environment')
+
 function users (trns = knex) {
   return trns('users')
     .leftJoin('agencies', 'users.agency_id', 'agencies.id')
@@ -80,7 +82,7 @@ async function generatePasscode (email, trns = knex) {
   }
   const passcode = v4()
   const used = false
-  const expiryMinutes = parseInt(process.env.LOGIN_EXPIRY_MINUTES) || 30
+  const expiryMinutes = environment.LOGIN_EXPIRY_MINUTES
   const expires = new Date()
   expires.setMinutes(expires.getMinutes() + expiryMinutes)
   await trns('access_tokens').insert({

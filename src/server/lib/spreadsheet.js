@@ -6,8 +6,10 @@
 */
 /* eslint camelcase: 0 */
 
+const environment = require('../environment')
+
 function uploadFilename (filename) {
-  return `${process.env.UPLOAD_DIRECTORY}/${filename}`
+  return `${environment.UPLOAD_DIR}/${filename}`
 }
 
 // cleanString() trims leading and trailing spaces.

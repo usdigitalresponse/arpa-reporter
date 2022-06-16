@@ -7,6 +7,9 @@
 /* eslint camelcase: 0 */
 
 const AWS = require('aws-sdk')
+
+const environment = require('../environment')
+
 const transport = createTransport()
 
 function send (message) {
@@ -14,7 +17,7 @@ function send (message) {
     Destination: {
       ToAddresses: [message.toAddress]
     },
-    Source: process.env.NOTIFICATIONS_EMAIL,
+    Source: environment.NOTIFICATIONS_EMAIL,
     Message: {
       Subject: {
         Charset: 'UTF-8',
@@ -32,7 +35,7 @@ function send (message) {
 }
 
 function createTransport () {
-  if (!process.env.AWS_SECRET_ACCESS_KEY) {
+  if (!environment.AWS_SECRET_ACCESS_KEY) {
     return {
       sendEmail: () => {
         return {
@@ -43,7 +46,7 @@ function createTransport () {
       }
     }
   }
-  return new AWS.SES({ region: process.env.SES_REGION })
+  return new AWS.SES({ region: environment.SES_REGION })
 }
 
 module.exports = { send }

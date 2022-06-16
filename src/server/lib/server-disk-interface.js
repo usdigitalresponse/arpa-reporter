@@ -3,11 +3,10 @@ const fsSync = require('fs')
 const path = require('path')
 const multer = require('multer')
 
+const environment = require('../environment')
+
 class ServerDiskInterface {
-  // constructor(uploadDirectory = process.env.UPLOAD_DIRECTORY) {
-  //   this.uploadDirectory = uploadDirectory;
-  // }
-  constructor (uploadDirectory = process.env.UPLOAD_DIRECTORY) {
+  constructor (uploadDirectory = environment.UPLOAD_DIR) {
     this.uploadDirectory = uploadDirectory
     try {
       if (!fsSync.existsSync(uploadDirectory)) {

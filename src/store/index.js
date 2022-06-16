@@ -164,20 +164,6 @@ export default new Vuex.Store({
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
     },
-    createTemplate ({ commit, dispatch }, { reportingPeriodId, formData }) {
-      return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
-        .then(r => {
-          if (!r.ok) { throw new Error(`createTemplate: ${r.statusText} (${r.status})`) }
-          return r.json()
-        })
-        .then(response => {
-          if (response.success) {
-            dispatch('updateReportingPeriods')
-            dispatch('updateApplicationSettings')
-          }
-          return response
-        })
-    },
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
     },

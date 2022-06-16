@@ -3,7 +3,7 @@
     <h2>Reporting Periods</h2>
 
     <div class="mb-4">
-      <router-link to="/new_reporting_period" class="btn btn-primary"
+      <router-link to="/reporting_periods/new" class="btn btn-primary"
         >Create New Reporting Period</router-link
       >
     </div>
@@ -63,7 +63,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Certify the <b>{{ currentReportingPeriodName }}</b> period?</p>
+                    <p>Certify the <b>{{ currentPeriod.name }}</b> period?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" @click.prevent="handleCertify">Certify</button>
@@ -91,13 +91,10 @@ export default {
       return this.$store.state.user
     },
     reportingPeriods: function () {
-      return _.sortBy(this.$store.state.allReportingPeriods, ['start_date'])
+      return _.sortBy(this.$store.state.reportingPeriods, ['start_date'])
     },
-    currentReportingPeriodName () {
-      return this.$store.getters.currentReportingPeriod.name
-    },
-    currentReportingPeriodId () {
-      return this.$store.getters.currentReportingPeriod.id
+    currentPeriod: function () {
+      return this.$store.getters.currentReportingPeriod
     },
     certifyLabel () {
       return this.certifying ? 'Certifying Reporting Period...' : 'Certify Reporting Period'
@@ -119,7 +116,7 @@ export default {
         el.modal('hide')
         this.certifying = true
         this.errorMessage = null
-        this.$store.dispatch('closeReportingPeriod', this.currentReportingPeriodId)
+        this.$store.dispatch('closeReportingPeriod', this.currentPeriod.id)
           .then((r) => {
             if (!r.ok) {
               r.text().then(errorMessage => {

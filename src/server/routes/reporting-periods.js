@@ -11,7 +11,6 @@ const { mkdir, writeFile } = require('fs/promises')
 
 const express = require('express')
 const router = express.Router()
-const moment = require('moment')
 
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
@@ -27,18 +26,8 @@ const { usedForTreasuryExport } = require('../db/uploads')
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const allPeriods = await reportingPeriods.getAll()
-  const reporting_periods = []
-
-  const now = moment()
-
-  allPeriods.forEach(period => {
-    if (moment(period.start_date) <= now) {
-      reporting_periods[period.id - 1] = period
-    }
-  })
-
-  return res.json({ reporting_periods, all_reporting_periods: allPeriods })
+  const periods = await reportingPeriods.getAll()
+  return res.json({ reportingPeriods: periods })
 })
 
 router.get('/summaries/', requireUser, async function (req, res) {
@@ -61,64 +50,24 @@ router.post('/close/', requireAdminUser, async (req, res) => {
   })
 })
 
-function validateReportingPeriod (req, res, next) {
-  next()
-}
+router.post('/', requireAdminUser, async function (req, res, next) {
+  const updatedPeriod = req.body.reportingPeriod
 
-router.post('/', requireAdminUser, validateReportingPeriod, function (req, res, next) {
-  console.log('POST /reporting_periods', req.body)
-  const {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  } = req.body
-  const reportingPeriod = {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
+  try {
+    if (updatedPeriod.id) {
+      const period = await reportingPeriods.updateReportingPeriod(updatedPeriod)
+      res.json({ reportingPeriod: period })
+    } else {
+      const period = await reportingPeriods.createReportingPeriod(updatedPeriod)
+      res.json({ reportingPeriod: period })
+    }
+  } catch (e) {
+    if (e.message.match(/violates unique constraint/)) {
+      res.status(400).json({ error: 'Period conflicts with an existing one' })
+    } else {
+      res.status(500).json({ error: e.message })
+    }
   }
-  reportingPeriods.createReportingPeriod(reportingPeriod)
-    .then(result => res.json({ reportingPeriod: result }))
-    .catch(e => {
-      next(e)
-    })
-})
-
-router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
-  req,
-  res,
-  next
-) {
-  console.log('PUT /reporting_periods/:id', req.body)
-  let reportingPeriod = await reportingPeriods.get(req.params.id)
-  if (!reportingPeriod) {
-    res.status(404).send('Reporting period not found')
-    return
-  }
-  const {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  } = req.body
-  reportingPeriod = {
-    ...reportingPeriod,
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  }
-  reportingPeriods.updateReportingPeriod(reportingPeriod)
-    .then(result => res.json({ reportingPeriod: result }))
-    .catch(e => {
-      next(e)
-    })
 })
 
 router.post(

@@ -72,12 +72,6 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/new_reporting_period',
-    name: 'NewReportingPeriod',
-    component: ReportingPeriod,
-    meta: { requiresLogin: true }
-  },
-  {
     path: '/reporting_periods/:id',
     name: 'ReportingPeriod',
     component: ReportingPeriod,

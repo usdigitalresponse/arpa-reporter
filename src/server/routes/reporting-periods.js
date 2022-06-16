@@ -6,9 +6,6 @@
 */
 /* eslint camelcase: 0 */
 
-const path = require('path')
-const { mkdir, writeFile } = require('fs/promises')
-
 const express = require('express')
 const router = express.Router()
 
@@ -17,10 +14,9 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
 const reportingPeriods = require('../db/reporting-periods')
-const { UPLOAD_DIR } = require('../environment')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { user: getUser } = require('../db/users')
-const { templateForPeriod } = require('../services/get-template')
+const { savePeriodTemplate, templateForPeriod } = require('../services/get-template')
 const { usedForTreasuryExport } = require('../db/uploads')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
@@ -37,11 +33,15 @@ router.get('/summaries/', requireUser, async function (req, res) {
 router.post('/close/', requireAdminUser, async (req, res) => {
   console.log('POST /reporting_periods/close/')
 
+  const period = await reportingPeriods.getReportingPeriod()
   const user = await getUser(req.signedCookies.userId)
 
+  const trns = await knex.transaction()
   try {
-    await reportingPeriods.close(user)
+    await reportingPeriods.close(user, period, trns)
+    trns.commit()
   } catch (err) {
+    if (!trns.isCompleted()) trns.rollback()
     return res.status(500).send(err.message)
   }
 
@@ -76,44 +76,33 @@ router.post(
   multerUpload.single('template'),
   async (req, res, next) => {
     if (!req.file) {
-      res.status(400).send('File missing')
+      res.status(400).json({ error: 'File missing' })
       return
     }
 
     const periodId = req.params.id
     const reportingPeriod = await reportingPeriods.get(periodId)
     if (!reportingPeriod) {
-      res.status(404).send('Reporting period not found')
+      res.status(404).json({ error: 'Reporting period not found' })
       return
     }
 
-    const { originalname: filename, size, buffer } = req.file
+    const { originalname, size, buffer } = req.file
     console.log(
-      `Uploading filename ${filename} size ${size} for period ${periodId}`)
+      `Uploading filename ${originalname} size ${size} for period ${periodId}`)
 
     try {
-      await mkdir(UPLOAD_DIR, { recursive: true })
-      await writeFile(
-        path.join(UPLOAD_DIR, filename),
-        buffer,
-        { flag: 'wx' }
-      )
+      await savePeriodTemplate(periodId, originalname, buffer)
     } catch (e) {
-      res.json({
+      res.status(500).json({
         success: false,
-        errorMessage: e.code === 'EEXIST'
-          ? `The file ${filename} already exists. `
-          : e.message
+        errorMessage: e.message
       })
       return
     }
 
-    reportingPeriod.reporting_template = filename
-    return reportingPeriods.updateReportingPeriod(reportingPeriod)
-      .then(() => res.json({ success: true, reportingPeriod }))
-      .catch(e => next(e))
-  }
-)
+    res.json({ success: true })
+  })
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id

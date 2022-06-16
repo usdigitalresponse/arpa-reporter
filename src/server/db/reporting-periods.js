@@ -18,7 +18,6 @@
    reporting_template             | text                     |
 */
 const knex = require('./connection')
-const { log } = require('../lib/log')
 const { cleanString } = require('../lib/spreadsheet')
 
 const {
@@ -29,8 +28,6 @@ const {
 module.exports = {
   get: getReportingPeriod,
   close: closeReportingPeriod,
-  getEndDates: getEndDates,
-  getFirstStartDate: getFirstReportingPeriodStartDate,
 
   getID: getPeriodID,
   isCurrent,
@@ -40,44 +37,38 @@ module.exports = {
   updateReportingPeriod
 }
 
-/*  getAll() returns all the records from the reporting_periods table
-  */
-async function getAll (trns = knex) {
+function baseQuery (trns) {
   return trns('reporting_periods')
-    .select('*')
-    .orderBy('end_date', 'desc')
+    .select(
+      'reporting_periods.*',
+      'users.email AS certified_by_email'
+    )
+    .leftJoin('users', 'reporting_periods.certified_by', 'users.id')
+}
+
+async function getAll (trns = knex) {
+  return baseQuery(trns).orderBy('end_date', 'desc')
 }
 
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
 async function getReportingPeriod (period_id, trns = knex) {
   if (period_id && Number(period_id)) {
-    return trns('reporting_periods')
-      .select('*')
-      .where('id', period_id)
+    return baseQuery(trns)
+      .where('reporting_periods.id', period_id)
       .then(r => r[0])
   } else if (period_id === undefined) {
-    return trns('application_settings')
-      .leftJoin('reporting_periods', 'application_settings.current_reporting_period_id', '=', 'reporting_periods.id')
-      .select('reporting_periods.*')
+    return baseQuery(trns)
+      .innerJoin('application_settings', 'reporting_periods.id', 'application_settings.current_reporting_period_id')
       .then(r => r[0])
   } else {
     return null
   }
 }
 
-/* getFirstReportingPeriodStartDate() returns earliest start date
-  */
-async function getFirstReportingPeriodStartDate (trns = knex) {
-  return trns('reporting_periods')
-    .min('start_date')
-    .then(r => r[0].min)
-}
-
-async function isClosed (period_id) {
-  return getReportingPeriod(period_id)
+async function isClosed (periodId) {
+  return getReportingPeriod(periodId)
     .then(period => {
-      log(`period ${period_id} certified: ${Boolean(period.certified_at)}`)
       return Boolean(period.certified_at)
     })
 }
@@ -101,28 +92,30 @@ async function isCurrent (periodID) {
   return false
 }
 
-/* closeReportingPeriod()
-  */
 async function closeReportingPeriod (user, period, trns = knex) {
-  const reporting_period_id = await getCurrentReportingPeriodID()
+  const currentPeriodID = await getCurrentReportingPeriodID()
 
-  period = period || reporting_period_id
-  if (period !== reporting_period_id) {
+  if (period.id !== currentPeriodID) {
     throw new Error(
-      `The current reporting period (${reporting_period_id}) is not period ${period}`
+      `Cannot close period ${period.name} -- it is not the current reporting period`
     )
   }
 
-  if (await isClosed(reporting_period_id)) {
+  if (period.certified_at) {
     throw new Error(
-      `Reporting period ${reporting_period_id} is already closed`
+      `Reporting period ${period.id} is already closed`
     )
-  } else if (reporting_period_id > 1) {
-    if (!(await isClosed(reporting_period_id - 1))) {
-      throw new Error(
-        `Prior reporting period ${reporting_period_id - 1} is not closed`
-      )
-    }
+  }
+
+  const prior = await trns('reporting_periods')
+    .where('start_date', '<', period.start_date)
+    .orderBy('start_date', 'desc')
+    .limit(1)
+    .then(rows => rows[0])
+  if (prior && !prior.certified_at) {
+    throw new Error(
+      `Prior reporting period (${prior.name}) is not closed`
+    )
   }
 
   console.log(`closing period ${period}`)
@@ -136,27 +129,21 @@ async function closeReportingPeriod (user, period, trns = knex) {
   // }
 
   await trns('reporting_periods')
-    .where({ id: reporting_period_id })
+    .where({ id: period.id })
     .update({
-      certified_at: new Date().toISOString(),
-      certified_by: user
+      certified_at: knex.fn.now(),
+      certified_by: user.id
     })
 
-  await setCurrentReportingPeriod(reporting_period_id + 1)
+  const next = await trns('reporting_periods')
+    .where('start_date', '>', period.start_date)
+    .orderBy('start_date', 'asc')
+    .limit(1)
+    .then(rows => rows[0])
 
-  return null
+  await setCurrentReportingPeriod(next.id)
 }
 
-/*  getEndDates()
-  */
-async function getEndDates (trns = knex) {
-  return await trns('reporting_periods')
-    .select('end_date')
-    .orderBy('id')
-}
-
-/*  createReportingPeriod()
-  */
 async function createReportingPeriod (reportingPeriod, trns = knex) {
   return trns
     .insert(reportingPeriod)
@@ -170,8 +157,6 @@ async function createReportingPeriod (reportingPeriod, trns = knex) {
     })
 }
 
-/*  updateReportingPeriod()
-  */
 function updateReportingPeriod (reportingPeriod, trns = knex) {
   return trns('reporting_periods')
     .where('id', reportingPeriod.id)
@@ -179,7 +164,7 @@ function updateReportingPeriod (reportingPeriod, trns = knex) {
       name: cleanString(reportingPeriod.name),
       start_date: reportingPeriod.start_date,
       end_date: reportingPeriod.end_date,
-      reporting_template: reportingPeriod.reporting_template
+      template_filename: reportingPeriod.template_filename
     })
 }
 

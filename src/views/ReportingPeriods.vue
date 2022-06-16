@@ -25,7 +25,7 @@
           <td>{{ p.name }}</td>
           <td>{{ formatDate(p.start_date) }}</td>
           <td>{{ formatDate(p.end_date) }}</td>
-          <td>{{ p.reporting_template }}</td>
+          <td>{{ p.template_filename }}</td>
           <td>
             <a v-if="!p.certified_at" :href="`/new_template/${p.id}`">Upload Template</a>
           </td>
@@ -39,7 +39,7 @@
               >{{ certifyLabel }}</button>
             </span>
             <span v-else-if="p.certified_at">
-              {{ formatDate(p.certified_at) }}
+              {{ formatDate(p.certified_at) }} by {{ p.certified_by_email }}
             </span>
           </td>
           <td>

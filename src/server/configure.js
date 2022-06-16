@@ -9,8 +9,10 @@ const { resolve } = require('path')
 const publicPath = resolve(__dirname, '../../dist')
 const staticConf = { maxAge: '1y', etag: false }
 
-module.exports = app => {
-  app.use(morgan('common'))
+module.exports = (app, options = {}) => {
+  if (!options.disableRequestLogging) {
+    app.use(morgan('common'))
+  }
   app.use(bodyParser.json())
   app.use(cookieParser(process.env.COOKIE_SECRET))
 

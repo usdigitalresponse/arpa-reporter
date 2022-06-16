@@ -13,16 +13,9 @@
    name                           | text                     |
    start_date                     | date                     |
    end_date                       | date                     |
-   period_of_performance_end_date | date                     |
    certified_at                   | timestamp with time zone |
    certified_by                   | text                     |
    reporting_template             | text                     |
-   validation_rule_tags           | text[]                   |
-   open_date                      | date                     |
-   close_date                     | date                     |
-   review_period_start_date       | date                     |
-   review_period_end_date         | date                     |
-   final_report_file              | text                     |
 */
 const knex = require('./connection')
 const { log } = require('../lib/log')
@@ -186,8 +179,6 @@ function updateReportingPeriod (reportingPeriod, trns = knex) {
       name: cleanString(reportingPeriod.name),
       start_date: reportingPeriod.start_date,
       end_date: reportingPeriod.end_date,
-      period_of_performance_end_date: reportingPeriod.period_of_performance_end_date,
-      crf_end_date: reportingPeriod.crf_end_date,
       reporting_template: reportingPeriod.reporting_template
     })
 }

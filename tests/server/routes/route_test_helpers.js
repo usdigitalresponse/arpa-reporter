@@ -3,10 +3,32 @@ const path = require('path')
 
 const express = require('express')
 const supertest = require('supertest')
+const { sign: signCookie } = require('cookie-signature')
 
 const configureAPI = requireSrc(path.resolve(__dirname, '../configure'))
+const { knex } = require('../mocha_init')
 
-const makeTestServer = () => {
+async function getSessionCookie (userIdOrEmail) {
+  if (typeof userIdOrEmail === 'string') {
+    const email = userIdOrEmail
+    const user = await knex('users')
+      .select('*')
+      .where('email', email)
+      .then(rows => rows[0])
+    if (!user) {
+      throw new Error('withSessionCookie got nonexistent email')
+    }
+    userIdOrEmail = user.id
+  }
+
+  const userId = userIdOrEmail
+
+  // NOTE: the structure of this cookie value comes from Express itself, see implementation of
+  // Response.cookie() and the cookie-parser middleware
+  return `userId=s:${signCookie(String(userId), process.env.COOKIE_SECRET)}`
+}
+
+function makeTestServer () {
   const app = express()
   configureAPI(app, {
     // The normal request logging from Morgan just clutters Mocha's test runner output
@@ -36,4 +58,4 @@ const makeTestServer = () => {
   })
 }
 
-module.exports = { makeTestServer }
+module.exports = { makeTestServer, getSessionCookie }

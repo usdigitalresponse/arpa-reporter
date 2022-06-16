@@ -26,7 +26,6 @@ const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
   const periods = await reportingPeriods.getAll()
-  console.dir(periods[0])
   return res.json({ reportingPeriods: periods })
 })
 

@@ -131,6 +131,7 @@ export default new Vuex.Store({
     },
     setApplicationSettings (state, applicationSettings) {
       state.applicationSettings = applicationSettings
+      // note: cannot commit setViewPeriodID from another mutation
       if (!state.viewPeriodID) {
         state.viewPeriodID = applicationSettings.current_reporting_period_id
       }
@@ -236,7 +237,6 @@ export default new Vuex.Store({
         commit('addAlert', { text, level: 'err' })
       } else {
         commit('setApplicationSettings', result.application_settings)
-        commit('setViewPeriodID', result.application_settings.current_reporting_period_id)
       }
     }
   },

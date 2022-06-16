@@ -153,10 +153,12 @@ export default new Vuex.Store({
       commit('setUser', user)
 
       // to ensure consistent application state, lets block rendering until these complete
-      await dispatch('updateApplicationSettings')
-      await dispatch('updateReportingPeriods')
-      await dispatch('updateAgencies')
-      await dispatch('updateUsersRoles')
+      await Promise.all([
+        dispatch('updateApplicationSettings'),
+        dispatch('updateReportingPeriods'),
+        dispatch('updateAgencies'),
+        dispatch('updateUsersRoles')
+      ])
     },
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))

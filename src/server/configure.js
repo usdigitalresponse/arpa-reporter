@@ -21,7 +21,6 @@ module.exports = app => {
     require('./routes/application_settings')
   )
   app.use('/api/exports', require('./routes/exports'))
-  app.use('/api/files', require('./routes/files'))
   app.use('/api/subrecipients', require('./routes/subrecipients'))
   app.use('/api/reporting_periods', require('./routes/reporting-periods'))
   app.use('/api/sessions', require('./routes/sessions'))

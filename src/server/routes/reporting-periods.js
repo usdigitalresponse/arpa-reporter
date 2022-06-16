@@ -31,9 +31,7 @@ router.get('/summaries/', requireUser, async function (req, res) {
 })
 
 router.post('/close/', requireAdminUser, async (req, res) => {
-  console.log('POST /reporting_periods/close/')
-
-  const period = await reportingPeriods.getReportingPeriod()
+  const period = await reportingPeriods.get()
   const user = await getUser(req.signedCookies.userId)
 
   const trns = await knex.transaction()
@@ -42,7 +40,7 @@ router.post('/close/', requireAdminUser, async (req, res) => {
     trns.commit()
   } catch (err) {
     if (!trns.isCompleted()) trns.rollback()
-    return res.status(500).send(err.message)
+    return res.status(500).json({ error: err.message })
   }
 
   res.json({

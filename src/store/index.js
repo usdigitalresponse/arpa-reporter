@@ -167,16 +167,6 @@ export default new Vuex.Store({
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
     },
-    closeReportingPeriod ({ commit, dispatch }, period_id) {
-      return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })
-        .then(r => {
-          if (r.ok) {
-            dispatch('updateReportingPeriods')
-            dispatch('updateApplicationSettings')
-          }
-          return r
-        })
-    },
 
     async updateUploads ({ commit, state }) {
       const params = new URLSearchParams({ period_id: state.viewPeriodID })

@@ -49,28 +49,24 @@
       </tbody>
     </table>
 
-    <div class="mt-3 alert alert-danger" v-if="errorMessage">
-      {{ errorMessage }}
-    </div>
-
-    <div class="modal modal-fade" tabindex="-1" role="dialog" id="certify-reporting-period">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Certify Reporting Period</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Certify the <b>{{ currentPeriod.name }}</b> period?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @click.prevent="handleCertify">Certify</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="certify-reporting-period">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Certify Reporting Period</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ref="closeModal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Certify the <b>{{ currentPeriod.name }}</b> period?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="handleCertify">Certify</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -78,12 +74,12 @@
 <script>
 const moment = require('moment')
 const _ = require('lodash')
+
 export default {
   name: 'ReportingPeriods',
   data: function () {
     return {
-      certifying: false,
-      errorMessage: null
+      certifying: false
     }
   },
   computed: {
@@ -110,22 +106,30 @@ export default {
     reportPeriodUrl: function (p) {
       return `/reporting_periods/${p.id}`
     },
-    handleCertify: function () {
-      const el = window.$('#certify-reporting-period')
-      if (el) {
-        el.modal('hide')
-        this.certifying = true
-        this.errorMessage = null
-        this.$store.dispatch('closeReportingPeriod', this.currentPeriod.id)
-          .then((r) => {
-            if (!r.ok) {
-              r.text().then(errorMessage => {
-                this.errorMessage = errorMessage
-              })
-            }
-            this.certifying = false
-          })
+    handleCertify: async function () {
+      this.certifying = true
+      this.$refs.closeModal.click()
+
+      try {
+        const resp = await fetch('/api/reporting_periods/close', { method: 'POST' })
+        const result = resp.headers.get('Content-Type').includes('json')
+          ? await resp.json()
+          : { error: await resp.text() }
+
+        if (resp.ok) {
+          this.$store.dispatch('updateReportingPeriods')
+          this.$store.dispatch('updateApplicationSettings')
+        } else {
+          throw new Error(result.error)
+        }
+      } catch (e) {
+        this.$store.commit('addAlert', {
+          text: `Error certifying reporting period: ${e.message}`,
+          level: 'err'
+        })
       }
+
+      this.certifying = false
     },
     formatDate (d) {
       return moment(d).utc().format('MM/DD/YYYY')

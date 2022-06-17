@@ -50,7 +50,7 @@ async function persistUpload ({ filename, user, buffer }) {
   return upload
 }
 
-function bufferForUpload (upload) {
+async function bufferForUpload (upload) {
   return readFile(uploadFSName(upload))
 }
 

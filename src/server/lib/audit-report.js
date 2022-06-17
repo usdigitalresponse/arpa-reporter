@@ -6,6 +6,7 @@ const { getCurrentReportingPeriodID } = require('../db/settings')
 const { recordsForReportingPeriod } = require('../services/records')
 const { log } = require('../lib/log')
 const { usedForTreasuryExport } = require('../db/uploads')
+const { WEBSITE_DOMAIN } = require('../environment')
 const { requiredArgument } = require('../lib/preconditions')
 
 const COLUMN = {
@@ -68,7 +69,9 @@ async function createObligationSheet (tenantId, periodId) {
         const emptyRow = {
           'Reporting Period': period.name,
           'Period End Date': new Date(period.end_date),
-          'Upload': upload.filename,
+          'Upload': {
+            f: `=HYPERLINK("${WEBSITE_DOMAIN}/uploads/${upload.id}","${upload.filename}")`
+          },
           [COLUMN.EC_BUDGET]: 0,
           [COLUMN.EC_TCO]: 0,
           [COLUMN.EC_TCE]: 0,

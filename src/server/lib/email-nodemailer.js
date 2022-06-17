@@ -11,11 +11,14 @@
 /* eslint camelcase: 0 */
 
 const nodemailer = require('nodemailer')
+
+const environment = require('../environment')
+
 const transport = createTransport()
 
 async function send (message) {
   const params = {
-    from: process.env.NOTIFICATIONS_EMAIL, // sender address
+    from: environment.NOTIFICATIONS_EMAIL, // sender address
     to: message.toAddress, // list of receivers e.g. 'a@aa.com, b@bb.com'
     subject: message.subject,
     // text: 'Hello world?', // plain text body
@@ -28,7 +31,7 @@ async function send (message) {
   SMTP transport
   */
 function createTransport () {
-  if (!process.env.NODEMAILER_HOST) {
+  if (!environment.NODEMAILER_HOST) {
     return {
       sendMail: () => {
         throw new Error(
@@ -38,12 +41,12 @@ function createTransport () {
     }
   }
   return nodemailer.createTransport({
-    host: process.env.NODEMAILER_HOST, // e.g. 'smtp.ethereal.email'
-    port: process.env.NODEMAILER_PORT, // e.g. 465
+    host: environment.NODEMAILER_HOST, // e.g. 'smtp.ethereal.email'
+    port: environment.NODEMAILER_PORT, // e.g. 465
     secure: true, // true for 465, false for other ports
     auth: {
-      user: process.env.NOTIFICATIONS_EMAIL,
-      pass: process.env.NOTIFICATIONS_EMAIL_PW
+      user: environment.NOTIFICATIONS_EMAIL,
+      pass: environment.NOTIFICATIONS_EMAIL_PW
     }
   })
 }

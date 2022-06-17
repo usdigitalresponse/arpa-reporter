@@ -10,7 +10,6 @@ INITIAL_AGENCY_EMAILS="michael+agency@stanford.cc"
 SAM_API_KEY=
 
 DATA_DIR="./uploads"
-UPLOAD_DIRECTORY="./uploads"
 
 # Need a .env file with these filled in
 AWS_ACCESS_KEY_ID=""

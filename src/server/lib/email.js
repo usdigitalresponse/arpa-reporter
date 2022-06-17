@@ -6,12 +6,14 @@
 */
 /* eslint camelcase: 0 */
 
-const transport = process.env.AWS_ACCESS_KEY_ID
+const environment = require('../environment')
+
+const transport = environment.AWS_ACCESS_KEY_ID
   ? require('./email-aws')
   : require('./email-nodemailer')
 
 function sendPasscode (toAddress, passcode, httpOrigin) {
-  const expiryMinutes = parseInt(process.env.LOGIN_EXPIRY_MINUTES) || 30
+  const expiryMinutes = parseInt(environment.LOGIN_EXPIRY_MINUTES) || 30
   return transport.send({
     toAddress: toAddress,
     subject: 'ARPA Reporter Access Link', // Subject line

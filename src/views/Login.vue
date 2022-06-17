@@ -1,7 +1,6 @@
 <template>
-  <div class="login">
-    <h1>ARPA Reporter</h1>
-    <h4>Login</h4>
+  <div class="my-3">
+    <h2>ARPA Reporter Login</h2>
     <form @submit="login">
       <div class="form-group">
         <input
@@ -77,13 +76,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.login {
-  width: 90%;
-  margin: 44px auto;
-}
-h4 {
-  margin: 100px 0 20px 0;
-}
-</style>

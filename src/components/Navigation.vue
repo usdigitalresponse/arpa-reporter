@@ -6,9 +6,9 @@
         <span v-if="agencyName"> : {{ agencyName }}</span>
       </a>
 
-      <span class="navbar-text">Reporting Period Ending:</span>
+      <span class="navbar-text" v-if="viewPeriod">Reporting Period Ending:</span>
 
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="collapse navbar-collapse" id="navbarNavDropdown" v-if="viewPeriod">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item dropdown active">
             <a

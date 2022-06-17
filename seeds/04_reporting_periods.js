@@ -31,17 +31,11 @@ exports.seed = async function (knex) {
   const finalStart = moment('2026-10-01')
   while (!start.isAfter(finalStart)) {
     const end = start.clone().add(2, 'months').endOf('month')
-    const open = end.clone().add(1, 'days')
-
-    // according to treasury, final reporting period closes end of march, not end of january
-    const close = start.isSame(finalStart) ? moment('2027-03-31') : open.clone().endOf('month')
 
     periods.push({
       name: `Quarterly ${periods.length + 1}`,
       start_date: mstr(start),
-      end_date: mstr(end),
-      open_date: mstr(open),
-      close_date: mstr(close)
+      end_date: mstr(end)
     })
 
     start.add(3, 'months')

@@ -3,9 +3,9 @@ const settings = requireSrc(__filename)
 const assert = require('assert')
 
 describe('application settings db', function () {
-  describe('currentReportingPeriodSettings', function () {
+  describe('applicationSettings', function () {
     it('Returns the current reporting period & title', async () => {
-      const result = await settings.currentReportingPeriodSettings()
+      const result = await settings.applicationSettings()
 
       assert.equal(result.current_reporting_period_id, 1)
       assert.equal(result.title, 'Rhode Island')
@@ -16,7 +16,7 @@ describe('application settings db', function () {
     let savedReportingPeriod
 
     beforeEach('save current period', async function () {
-      const curr = await settings.currentReportingPeriodSettings()
+      const curr = await settings.applicationSettings()
       savedReportingPeriod = curr.current_reporting_period_id
     })
 
@@ -27,7 +27,7 @@ describe('application settings db', function () {
     it('Changes the current reporting period', async () => {
       await settings.setCurrentReportingPeriod(2)
 
-      const result = await settings.currentReportingPeriodSettings()
+      const result = await settings.applicationSettings()
       assert.equal(result.current_reporting_period_id, 2)
     })
   })

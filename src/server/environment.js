@@ -8,6 +8,7 @@ const POSTGRES_URL = process.env.POSTGRES_URL
 
 const DATA_DIR = resolve(process.env.DATA_DIR)
 const UPLOAD_DIR = join(DATA_DIR, 'uploads')
+const PERIOD_TEMPLATES_DIR = join(UPLOAD_DIR, 'period_templates')
 
 const SRC_DIR = resolve(join(__dirname, '..'))
 const SERVER_DATA_DIR = join(SRC_DIR, 'server', 'data')
@@ -35,6 +36,7 @@ const SES_REGION = process.env.SES_REGION
 module.exports = {
   DATA_DIR,
   UPLOAD_DIR,
+  PERIOD_TEMPLATES_DIR,
   SRC_DIR,
   SERVER_DATA_DIR,
   EMPTY_TEMPLATE_NAME,

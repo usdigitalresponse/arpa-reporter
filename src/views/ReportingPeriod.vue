@@ -39,8 +39,7 @@ export default {
         { field: 'name', label: 'Period Name', required: true },
         { field: 'start_date', label: 'Reporting Period Start Date', required: true, inputType: 'date' },
         { field: 'end_date', label: 'Reporting Period End Date', required: true, inputType: 'date' },
-        { field: 'open_date', label: 'Opens', readonly: true, inputType: 'date' },
-        { field: 'close_date', label: 'Closes', readonly: true, inputType: 'date' }
+        { field: 'template_filename', label: 'Upload Template Name', readonly: true }
       ]
     }
   },

@@ -1,11 +1,16 @@
 <template>
-  <div class="upload">
-    <h1>Upload Template</h1>
+  <div>
+    <h2>Upload Period Template</h2>
+
+    <p>
+      This upload will be used as the template for period <em>{{ reportingPeriod.name }}</em>
+    </p>
+
     <form
       method="post"
       encType="multipart/form-data"
       ref="form"
-      @submit.prevent="uploadFile"
+      @submit.prevent="uploadTemplate"
     >
       <div class="form-group">
         <input
@@ -22,25 +27,22 @@
           class="btn btn-primary"
           type="submit"
           :disabled="uploadDisabled"
-          @click.prevent="uploadFile"
+          @click.prevent="uploadTemplate"
         >
           {{ uploadButtonLabel }}
         </button>
         <a class="ml-3" href="#" @click="cancelUpload">Cancel</a>
       </div>
     </form>
-    <div class="mt-3 alert alert-danger" v-if="message">{{ message }}</div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash'
 export default {
   name: 'NewTemplate',
   data: function () {
     return {
       reportingPeriodId: this.$route.params.id,
-      message: null,
       files: null,
       uploading: false,
       uploadedFilename: null
@@ -52,40 +54,54 @@ export default {
     },
     uploadDisabled: function () {
       return this.files === null || this.uploading
+    },
+    reportingPeriod: function () {
+      return this.$store.state.reportingPeriods.find(p => p.id === Number(this.reportingPeriodId))
     }
   },
   methods: {
     changeFiles () {
       this.files = this.$refs.files.files
     },
-    uploadFile: async function () {
-      const file = _.get(this.$refs, 'files.files[0]')
-      const form = _.get(this.$refs, 'form')
-      if (file) {
-        this.uploadedFilename = file.name
-        this.uploading = true
-        this.message = null
-        this.errors = []
-        const formData = new FormData()
-        formData.append('template', file)
-        try {
-          const params = {
-            formData,
-            reportingPeriodId: this.reportingPeriodId
-          }
-          const r = await this.$store.dispatch('createTemplate', params)
-          this.uploading = false
-          form.reset()
-          if (r.errorMessage) {
-            this.message = r.errorMessage
-          } else {
-            this.$router.push({ path: '/reporting_periods' })
-          }
-        } catch (e) {
-          this.message = e.errorMessage
-          this.uploading = false
-        }
+    uploadTemplate: async function () {
+      const file = this.files[0]
+
+      if (!file) {
+        this.$refs.files.focus()
+        return
       }
+
+      this.uploading = true
+
+      const url = `/api/reporting_periods/${this.reportingPeriodId}/template`
+      const formData = new FormData()
+      formData.append('template', file)
+
+      try {
+        const resp = await fetch(url, { method: 'POST', body: formData })
+        const result = (await resp.json()) || { error: (await resp.body) }
+
+        if (resp.ok) {
+          this.$store.commit('addAlert', {
+            text: `Uploaded new template for period ${this.reportingPeriodId}`,
+            level: 'ok'
+          })
+
+          this.$store.dispatch('updateReportingPeriods')
+          this.$store.dispatch('updateApplicationSettings')
+          this.$router.push({ path: '/reporting_periods' })
+        } else {
+          const err = result.error || `${resp.statusText} (${resp.status})`
+          throw new Error(`Upload failed: ${err}`)
+        }
+      } catch (e) {
+        this.$store.commit('addAlert', {
+          text: `uploadTemplate Error: ${e.message}`,
+          level: 'err'
+        })
+      }
+
+      this.uploading = false
     },
     cancelUpload (e) {
       e.preventDefault()
@@ -94,10 +110,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.upload {
-  width: 90%;
-  margin: 0 auto;
-}
-</style>

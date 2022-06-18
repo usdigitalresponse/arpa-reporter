@@ -24,12 +24,20 @@ async function generate () {
   log(`generate(${periodId})`)
 
   // generate sheets
-  const obligations = await createObligationSheet(periodId)
+  const [
+    obligations,
+    projectSummaries
+  ] = await Promise.all([
+    createObligationSheet(periodId),
+    createProjectSummaries(periodId)
+  ])
 
   // compose workbook
-  const sheet = XLSX.utils.json_to_sheet(obligations, { dateNF: 'MM/DD/YYYY' })
+  const sheet1 = XLSX.utils.json_to_sheet(obligations, { dateNF: 'MM/DD/YYYY' })
+  const sheet2 = XLSX.utils.json_to_sheet(projectSummaries, { dateNF: 'MM/DD/YYYY' })
   const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, sheet, 'Obligations & Expenditures')
+  XLSX.utils.book_append_sheet(workbook, sheet1, 'Obligations & Expenditures')
+  XLSX.utils.book_append_sheet(workbook, sheet2, 'Project Summaries')
 
   return {
     filename: `audit report ${moment().format('yy-MM-DD')}.xlsx`,
@@ -127,6 +135,33 @@ async function createObligationSheet (periodId) {
   )
 
   return rows.flat()
+}
+
+async function createProjectSummaries (periodId) {
+  const records = await recordsForReportingPeriod(periodId)
+
+  const rows = []
+
+  records.forEach(record => {
+    switch (record.type) {
+      case 'ec1':
+      case 'ec2':
+      case 'ec3':
+      case 'ec4':
+      case 'ec5':
+      case 'ec7':
+        rows.push({
+          'Project ID': record.content.Project_Identification_Number__c,
+          'Upload': record.upload.filename // TODO: link to upload in arpa reporter
+          // TODO: consider also mapping project IDs to export templates?
+        })
+        break
+      default:
+        break
+    }
+  })
+
+  return rows
 }
 
 module.exports = {

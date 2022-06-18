@@ -5,7 +5,7 @@ const { mkdir, writeFile, readFile } = require('fs/promises')
 
 const xlsx = require('xlsx')
 
-const reportingPeriods = require('../db/reporting-periods')
+const { getReportingPeriod } = require('../db/reporting-periods')
 const { createUpload } = require('../db/uploads')
 const { UPLOAD_DIR } = require('../environment')
 const ValidationError = require('../lib/validation-error')
@@ -24,7 +24,7 @@ async function persistUpload ({ filename, user, buffer }) {
   }
 
   // get the current reporting period
-  const reportingPeriod = await reportingPeriods.get()
+  const reportingPeriod = await getReportingPeriod()
 
   // create an upload
   const uploadRow = {

@@ -26,13 +26,12 @@ const {
 } = require('./settings')
 
 module.exports = {
-  get: getReportingPeriod,
-  close: closeReportingPeriod,
-
-  getID: getPeriodID,
-  isCurrent,
-  isClosed,
-  getAll,
+  getReportingPeriod,
+  closeReportingPeriod,
+  getReportingPeriodID,
+  isReportingPeriodCurrent,
+  isReportingPeriodClosed,
+  getAllReportingPeriods,
   createReportingPeriod,
   updateReportingPeriod
 }
@@ -46,7 +45,7 @@ function baseQuery (trns) {
     .leftJoin('users', 'reporting_periods.certified_by', 'users.id')
 }
 
-async function getAll (trns = knex) {
+async function getAllReportingPeriods (trns = knex) {
   return baseQuery(trns).orderBy('end_date', 'desc')
 }
 
@@ -66,7 +65,7 @@ async function getReportingPeriod (period_id, trns = knex) {
   }
 }
 
-async function isClosed (periodId) {
+async function isReportingPeriodClosed (periodId) {
   return getReportingPeriod(periodId)
     .then(period => {
       return Boolean(period.certified_at)
@@ -76,14 +75,14 @@ async function isClosed (periodId) {
 /*  getPeriodID() returns the argument unchanged unless it is falsy, in which
   case it returns the current reporting period ID.
   */
-async function getPeriodID (periodID) {
+async function getReportingPeriodID (periodID) {
   return Number(periodID) || getCurrentReportingPeriodID()
 }
 
 /*  isCurrent() returns the current reporting period ID if the argument is
     falsy, or if it matches the current reporting period ID
   */
-async function isCurrent (periodID) {
+async function isReportingPeriodCurrent (periodID) {
   const currentID = await getCurrentReportingPeriodID()
 
   if (!periodID || (Number(periodID) === Number(currentID))) {

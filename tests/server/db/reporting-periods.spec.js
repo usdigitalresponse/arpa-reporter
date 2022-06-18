@@ -22,13 +22,13 @@
 
 */
 
-const reportingPeriods = requireSrc(__filename)
+const { getAllReportingPeriods, getReportingPeriod } = requireSrc(__filename)
 const assert = require('assert')
 
 describe('db/reporting-periods.js', function () {
   describe('getAll', function () {
     it('Returns a list of reporting periods', async function () {
-      const result = await reportingPeriods.getAll()
+      const result = await getAllReportingPeriods()
       assert.equal(result.length, 21)
     })
   })
@@ -36,21 +36,21 @@ describe('db/reporting-periods.js', function () {
   describe('get', function () {
     describe('when a specific id is passed', function () {
       it('Returns that reporting period', async function () {
-        const result = await reportingPeriods.get(2)
+        const result = await getReportingPeriod(2)
         assert.equal(result.id, 2)
       })
     })
 
     describe('when an invalid id is passed', function () {
       it('returns null', async function () {
-        assert.equal((await reportingPeriods.get('')), null)
-        assert.equal((await reportingPeriods.get(null)), null)
-        assert.equal((await reportingPeriods.get(12356)), null)
+        assert.equal((await getReportingPeriod('')), null)
+        assert.equal((await getReportingPeriod(null)), null)
+        assert.equal((await getReportingPeriod(12356)), null)
       })
     })
 
     it('returns the current reporting period', async function () {
-      const result = await reportingPeriods.get()
+      const result = await getReportingPeriod()
       assert.equal(result.id, 1)
       assert.equal(result.title, undefined)
     })

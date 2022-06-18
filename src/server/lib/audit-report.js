@@ -32,7 +32,7 @@ async function generate () {
   XLSX.utils.book_append_sheet(workbook, sheet, 'Obligations & Expenditures')
 
   return {
-    filename: `audit report ${moment(new Date()).format('yy-MM-dd')}.xlsx`,
+    filename: `audit report ${moment().format('yy-MM-DD')}.xlsx`,
     outputWorkBook: XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' })
   }
 }

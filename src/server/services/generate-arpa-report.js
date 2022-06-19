@@ -587,7 +587,7 @@ async function generateExpendituresGT50000 (records) {
           record.content.Sub_Award_Lookup__c,
           record.content.Expenditure_Start__c,
           record.content.Expenditure_End__c,
-          record.content.Expenditure_Amount__c
+          currency(record.content.Expenditure_Amount__c)
         ]
       }
       default:

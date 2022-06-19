@@ -648,7 +648,7 @@ async function generateSubaward (records) {
           record.content.Project_Identification_Number__c,
           record.content.Award_No__c,
           record.content.Award_Type__c,
-          record.content.Award_Amount__c,
+          currency(record.content.Award_Amount__c),
           record.content.Award_Date__c,
           record.content.Primary_Sector__c,
           record.content.If_Other__c,
@@ -659,8 +659,8 @@ async function generateSubaward (records) {
           record.content.Place_of_Performance_Address_3__c,
           record.content.Place_of_Performance_City__c,
           record.content.State_Abbreviated__c,
-          String(record.content.Place_of_Performance_Zip__c).padStart(5, '0'), // required
-          record.content.Place_of_Performance_Zip_4__c && String(record.content.Place_of_Performance_Zip_4__c).padStart(4, '0'), // optional
+          zip(record.content.Place_of_Performance_Zip__c),
+          zip4(record.content.Place_of_Performance_Zip_4__c, true),
           record.content.Purpose_of_Funds__c,
           record.content.Description__c
         ]

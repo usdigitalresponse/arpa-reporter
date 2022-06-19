@@ -628,8 +628,8 @@ async function generatePaymentsIndividualsLT50000 (records) {
         return [
           null, // first col is blank
           record.content.Project_Identification_Number__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c),
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c)
         ]
       default:
         return null

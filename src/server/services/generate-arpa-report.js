@@ -6,6 +6,7 @@ const { applicationSettings } = require('../db/settings')
 const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
+const { currency, zip, zip4 } = require('../lib/format')
 
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
@@ -687,22 +688,22 @@ async function generateSubRecipient (records, periodId) {
       record.Address_3__c,
       record.City__c,
       record.State_Abbreviated__c,
-      record.Zip__c,
-      record.Zip_4__c,
+      zip(record.Zip__c, true),
+      zip4(record.Zip_4__c, true),
       record.Registered_in_Sam_gov__c,
       record.Federal_Funds_80_or_More_of_Revenue__c,
       record.Derives_25_Million_or_More_from_Federal__c,
-      record.Total_Compensation_for_Officers_Public__c,
+      currency(record.Total_Compensation_for_Officers_Public__c, true),
       record.Officer_Name__c,
-      record.Officer_Total_Comp__c,
+      currency(record.Officer_Total_Comp__c, true),
       record.Officer_2_Name__c,
-      record.Officer_2_Total_Comp__c,
+      currency(record.Officer_2_Total_Comp__c, true),
       record.Officer_3_Name__c,
-      record.Officer_3_Total_Comp__c,
+      currency(record.Officer_3_Total_Comp__c, true),
       record.Officer_4_Name__c,
-      record.Officer_4_Total_Comp__c,
+      currency(record.Officer_4_Total_Comp__c, true),
       record.Officer_5_Name__c,
-      record.Officer_5_Total_Comp__c
+      currency(record.Officer_5_Total_Comp__c, true)
     ]
   })
 }

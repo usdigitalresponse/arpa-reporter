@@ -5,7 +5,7 @@
     </div>
 
     <div class="row">
-      <h4 v-if="errors.length > 0" class="col text-danger">Validation Errors</h4>
+      <h4 v-if="errors.length > 0" class="col text-danger">Validation Results</h4>
     </div>
 
     <div v-if="errors.length > 0" class="row">
@@ -14,7 +14,8 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Error</th>
+              <th>Level</th>
+              <th>Message</th>
               <th>Tab</th>
               <th>Row</th>
               <th>Col</th>
@@ -22,7 +23,10 @@
           </thead>
           <tbody>
             <tr :key="n" v-for="(error, n) in errors">
-              <td>{{ n }}</td>
+              <td>{{ n + 1 }}</td>
+              <td :class="{ 'table-danger': error.severity === 'err', 'table-warning': error.severity !== 'err' }">
+                {{ error.severity === 'err' ? 'Error' : 'Warning' }}
+              </td>
               <td>{{ error.message }}</td>
               <td>{{ titleize(error.tab) }}</td>
               <td>{{ error.row }}</td>

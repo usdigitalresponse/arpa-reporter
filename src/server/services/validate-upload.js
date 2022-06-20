@@ -104,7 +104,7 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
   } else {
     errors.push(new ValidationError(
       'At least one of UEI or TIN must be set, but both are missing',
-      { col: 'C, D' }
+      { col: 'C, D', severity: 'err' }
     ))
   }
 
@@ -123,7 +123,7 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
         errors.push(new ValidationError(
           `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
           but upload specifies '${recipient[key]}'`,
-          { col: rule.columnName }
+          { col: rule.columnName, severity: 'warn' }
         ))
       }
     }
@@ -137,7 +137,7 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
         if (!recipient[key]) {
           errors.push(new ValidationError(
             `Value is required for ${key}`,
-            { col: rule.columnName }
+            { col: rule.columnName, severity: 'err' }
           ))
         }
       }
@@ -217,13 +217,18 @@ async function validateUpload (upload, user, trns) {
     }
   }
 
-  // if we successfully validated for the first time, let's mark it!
+  // flat list without any nulls, including errors and warnings
   const flatErrors = errors.flat().filter(x => x)
-  if (flatErrors.length === 0 && !upload.validated_at) {
+
+  // fatal errors determine if the upload fails validation
+  const fatal = flatErrors.filter(x => x.severity === 'err')
+
+  // if we successfully validated for the first time, let's mark it!
+  if (fatal.length === 0 && !upload.validated_at) {
     await markValidated(upload.id, user.id, trns)
 
   // if it was valid before but is no longer valid, clear it
-  } else if (flatErrors.length > 1 && upload.validated_at) {
+  } else if (fatal.length > 0 && upload.validated_at) {
     await markNotValidated(upload.id, trns)
   }
 

@@ -1,6 +1,6 @@
 
 class ValidationError extends Error {
-  constructor (message, { severity = 1, tab = null, row = null, col = null } = {}) {
+  constructor (message, { severity = 'err', tab = null, row = null, col = null } = {}) {
     super(message)
     this.severity = severity
     this.tab = tab

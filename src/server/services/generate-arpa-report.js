@@ -438,14 +438,14 @@ async function generateProject51518 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Proj_Actual_Construction_Start_Date__c,
             record.content.Initiation_of_Operations_Date__c,
             record.content.Location__c,
@@ -453,7 +453,7 @@ async function generateProject51518 (records) {
             record.content.National_Pollutant_Discharge_Number__c,
             record.content.Public_Water_System_PWS_ID_number__c,
             record.content.Median_Household_Income_Service_Area__c,
-            record.content.Lowest_Quintile_Income__c
+            currency(record.content.Lowest_Quintile_Income__c, true)
           ]
         }
         default:

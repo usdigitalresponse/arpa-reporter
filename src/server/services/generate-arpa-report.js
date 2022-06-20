@@ -8,6 +8,7 @@ const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 const { currency, ec, zip, zip4 } = require('../lib/format')
 
+const BOM = '\ufeff' // UTF-8 byte order mark
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
 // dropdown value used to differentiate payments under 50k
@@ -761,7 +762,7 @@ async function generateReport (periodId) {
 
     const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
     const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
-    const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
+    const buffer = Buffer.from(BOM + csvString, 'utf8')
     zip.addFile(name + '.csv', buffer)
   })
 

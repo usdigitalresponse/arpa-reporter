@@ -31,9 +31,10 @@ async function validateAgencyId ({ upload, records, trns }) {
     )
   }
 
-  // set agency id on the upload, for disambiguation
+  // always set agency id if possible; we omit passing the transaction in this
+  // case, so that the agency id gets set even if the upload fails to validate
   if (matchingAgency.id !== upload.agency_id) {
-    await setAgencyId(upload.id, matchingAgency.id, trns)
+    await setAgencyId(upload.id, matchingAgency.id)
   }
 }
 
@@ -53,9 +54,10 @@ async function validateEcCode ({ upload, records, trns }) {
     )
   }
 
-  // set EC code on the upload, for disambiguation
+  // always set EC code if possible; we omit passing the transaction in this
+  // case, so that the code gets set even if the upload fails to validate
   if (code !== upload.ec_code) {
-    await setEcCode(upload.id, code, trns)
+    await setEcCode(upload.id, code)
   }
 }
 

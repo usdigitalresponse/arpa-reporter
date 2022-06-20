@@ -17,9 +17,7 @@ exports.seed = async function (knex) {
     {
       name: 'Quarterly 1',
       start_date: '2021-03-03',
-      end_date: '2021-12-31',
-      open_date: '2022-01-01',
-      close_date: '2022-01-31'
+      end_date: '2021-12-31'
     }
   ]
 
@@ -40,13 +38,6 @@ exports.seed = async function (knex) {
 
     start.add(3, 'months')
   }
-
-  // not sure what these fields are used for; these might be unnecessary
-  periods.forEach(period => {
-    period.period_of_performance_end_date = period.end_date
-    period.review_period_start_date = mstr(moment(period.open_date).add(2, 'weeks'))
-    period.review_period_end_date = period.close_date
-  })
 
   await knex('reporting_periods').insert(periods)
 }

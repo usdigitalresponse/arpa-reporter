@@ -29,7 +29,6 @@ module.exports = {
   getReportingPeriod,
   closeReportingPeriod,
   getReportingPeriodID,
-  isReportingPeriodCurrent,
   getAllReportingPeriods,
   createReportingPeriod,
   updateReportingPeriod
@@ -69,18 +68,6 @@ async function getReportingPeriod (period_id, trns = knex) {
   */
 async function getReportingPeriodID (periodID) {
   return Number(periodID) || getCurrentReportingPeriodID()
-}
-
-/*  isCurrent() returns the current reporting period ID if the argument is
-    falsy, or if it matches the current reporting period ID
-  */
-async function isReportingPeriodCurrent (periodID) {
-  const currentID = await getCurrentReportingPeriodID()
-
-  if (!periodID || (Number(periodID) === Number(currentID))) {
-    return currentID
-  }
-  return false
 }
 
 async function closeReportingPeriod (user, period, trns = knex) {

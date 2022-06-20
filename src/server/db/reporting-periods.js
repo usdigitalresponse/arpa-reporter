@@ -92,7 +92,7 @@ async function isReportingPeriodCurrent (periodID) {
 }
 
 async function closeReportingPeriod (user, period, trns = knex) {
-  const currentPeriodID = await getCurrentReportingPeriodID()
+  const currentPeriodID = await getCurrentReportingPeriodID(trns)
 
   if (period.id !== currentPeriodID) {
     throw new Error(
@@ -140,7 +140,7 @@ async function closeReportingPeriod (user, period, trns = knex) {
     .limit(1)
     .then(rows => rows[0])
 
-  await setCurrentReportingPeriod(next.id)
+  await setCurrentReportingPeriod(next.id, trns)
 }
 
 async function createReportingPeriod (reportingPeriod, trns = knex) {

@@ -6,7 +6,9 @@ const { applicationSettings } = require('../db/settings')
 const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
+const { currency, ec, zip, zip4 } = require('../lib/format')
 
+const BOM = '\ufeff' // UTF-8 byte order mark
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
 // dropdown value used to differentiate payments under 50k
@@ -64,24 +66,24 @@ async function generateProject18 (records) {
         case '2.33': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -110,24 +112,24 @@ async function generateProject19 (records) {
         case '2.34': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -162,24 +164,24 @@ async function generateProject2128 (records) {
         case '2.8': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -211,24 +213,24 @@ async function generateProject214 (records) {
         case '2.27': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -256,24 +258,24 @@ async function generateProject236 (records) {
         case '2.36': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
             record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Total_Obligations__c, true),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -301,24 +303,24 @@ async function generateProject31 (records) {
         case '3.1': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
             record.content.Payroll_Public_Health_Safety__c
@@ -340,24 +342,24 @@ async function generateProject32 (records) {
         case '3.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
             record.content.Number_of_FTEs_Rehired__c
@@ -380,19 +382,19 @@ async function generateProject4142 (records) {
         case '4.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Sectors_Critical_to_Health_Well_Being__c,
             record.content.Workers_Served__c,
             record.content.Premium_Pay_Narrative__c,
@@ -432,19 +434,19 @@ async function generateProject51518 (records) {
         case '5.18': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Proj_Actual_Construction_Start_Date__c,
             record.content.Initiation_of_Operations_Date__c,
             record.content.Location__c,
@@ -452,7 +454,7 @@ async function generateProject51518 (records) {
             record.content.National_Pollutant_Discharge_Number__c,
             record.content.Public_Water_System_PWS_ID_number__c,
             record.content.Median_Household_Income_Service_Area__c,
-            record.content.Lowest_Quintile_Income__c
+            currency(record.content.Lowest_Quintile_Income__c, true)
           ]
         }
         default:
@@ -473,19 +475,19 @@ async function generateProject519521 (records) {
         case '5.21': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Proj_Actual_Construction_Start_Date__c,
             record.content.Initiation_of_Operations_Date__c,
             record.content.Is_project_designed_to_meet_100_mbps__c,
@@ -542,24 +544,24 @@ async function generateProjectBaseline (records) {
         case '7.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            record.content.Total_Obligations__c,
-            record.content.Total_Expenditures__c,
-            record.content.Current_Period_Obligations__c,
-            record.content.Current_Period_Expenditures__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Current_Period_Obligations__c),
+            currency(record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
-            record.content.Total_Cost_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
             record.content.Type_of_Capital_Expenditure_Other__c,
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
-            record.content.Program_Income_Earned__c,
-            record.content.Program_Income_Expended__cs,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__cs, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -586,7 +588,7 @@ async function generateExpendituresGT50000 (records) {
           record.content.Sub_Award_Lookup__c,
           record.content.Expenditure_Start__c,
           record.content.Expenditure_End__c,
-          record.content.Expenditure_Amount__c
+          currency(record.content.Expenditure_Amount__c)
         ]
       }
       default:
@@ -607,8 +609,8 @@ async function generateExpendituresLT50000 (records) {
           null, // first col is blank
           record.content.Project_Identification_Number__c,
           record.content.Sub_Award_Type_Aggregates_SLFRF__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c),
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c)
         ]
       default:
         return null
@@ -627,8 +629,8 @@ async function generatePaymentsIndividualsLT50000 (records) {
         return [
           null, // first col is blank
           record.content.Project_Identification_Number__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c,
-          record.content.Quarterly_Obligation_Amt_Aggregates__c
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c),
+          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c)
         ]
       default:
         return null
@@ -647,7 +649,7 @@ async function generateSubaward (records) {
           record.content.Project_Identification_Number__c,
           record.content.Award_No__c,
           record.content.Award_Type__c,
-          record.content.Award_Amount__c,
+          currency(record.content.Award_Amount__c),
           record.content.Award_Date__c,
           record.content.Primary_Sector__c,
           record.content.If_Other__c,
@@ -658,8 +660,8 @@ async function generateSubaward (records) {
           record.content.Place_of_Performance_Address_3__c,
           record.content.Place_of_Performance_City__c,
           record.content.State_Abbreviated__c,
-          String(record.content.Place_of_Performance_Zip__c).padStart(5, '0'), // required
-          record.content.Place_of_Performance_Zip_4__c && String(record.content.Place_of_Performance_Zip_4__c).padStart(4, '0'), // optional
+          zip(record.content.Place_of_Performance_Zip__c),
+          zip4(record.content.Place_of_Performance_Zip_4__c, true),
           record.content.Purpose_of_Funds__c,
           record.content.Description__c
         ]
@@ -687,22 +689,22 @@ async function generateSubRecipient (records, periodId) {
       record.Address_3__c,
       record.City__c,
       record.State_Abbreviated__c,
-      record.Zip__c,
-      record.Zip_4__c,
+      zip(record.Zip__c, true),
+      zip4(record.Zip_4__c, true),
       record.Registered_in_Sam_gov__c,
       record.Federal_Funds_80_or_More_of_Revenue__c,
       record.Derives_25_Million_or_More_from_Federal__c,
-      record.Total_Compensation_for_Officers_Public__c,
+      currency(record.Total_Compensation_for_Officers_Public__c, true),
       record.Officer_Name__c,
-      record.Officer_Total_Comp__c,
+      currency(record.Officer_Total_Comp__c, true),
       record.Officer_2_Name__c,
-      record.Officer_2_Total_Comp__c,
+      currency(record.Officer_2_Total_Comp__c, true),
       record.Officer_3_Name__c,
-      record.Officer_3_Total_Comp__c,
+      currency(record.Officer_3_Total_Comp__c, true),
       record.Officer_4_Name__c,
-      record.Officer_4_Total_Comp__c,
+      currency(record.Officer_4_Total_Comp__c, true),
       record.Officer_5_Name__c,
-      record.Officer_5_Total_Comp__c
+      currency(record.Officer_5_Total_Comp__c, true)
     ]
   })
 }
@@ -760,7 +762,7 @@ async function generateReport (periodId) {
 
     const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
     const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
-    const buffer = Buffer.from('\ufeff' + csvString, 'utf8')
+    const buffer = Buffer.from(BOM + csvString, 'utf8')
     zip.addFile(name + '.csv', buffer)
   })
 

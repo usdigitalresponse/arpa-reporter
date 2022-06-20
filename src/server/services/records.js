@@ -21,9 +21,10 @@ const DATA_SHEET_TYPES = {
   'Aggregate Awards < 50000': 'awards'
 }
 
-function extractRecords (buffer) {
-  log('extractRecords()')
+async function recordsForUpload (upload) {
+  log('recordsForUpload()')
 
+  const buffer = await bufferForUpload(upload)
   const workbook = XLSX.read(buffer, {
     cellDates: true,
     type: 'buffer',
@@ -36,8 +37,8 @@ function extractRecords (buffer) {
   const subcategory = cover['Detailed Expenditure Category']
 
   const records = [
-    { type: 'certification', content: certification },
-    { type: 'cover', content: cover }
+    { type: 'certification', upload, content: certification },
+    { type: 'cover', upload, content: cover }
   ]
 
   // parse data sheets
@@ -72,15 +73,11 @@ function extractRecords (buffer) {
 
     // each row in the input sheet becomes a unique record
     for (const row of rows) {
-      records.push({ type, subcategory, content: row })
+      records.push({ type, subcategory, upload, content: row })
     }
   }
 
   return records
-}
-
-async function recordsForUpload (upload) {
-  return extractRecords(await bufferForUpload(upload))
 }
 
 async function recordsForReportingPeriod (periodId) {

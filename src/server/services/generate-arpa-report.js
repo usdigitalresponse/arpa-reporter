@@ -6,7 +6,7 @@ const { applicationSettings } = require('../db/settings')
 const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
-const { currency, zip, zip4 } = require('../lib/format')
+const { currency, ec, zip, zip4 } = require('../lib/format')
 
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
@@ -65,7 +65,7 @@ async function generateProject18 (records) {
         case '2.33': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -111,7 +111,7 @@ async function generateProject19 (records) {
         case '2.34': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -163,7 +163,7 @@ async function generateProject2128 (records) {
         case '2.8': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -212,7 +212,7 @@ async function generateProject214 (records) {
         case '2.27': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -257,7 +257,7 @@ async function generateProject236 (records) {
         case '2.36': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -302,7 +302,7 @@ async function generateProject31 (records) {
         case '3.1': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -341,7 +341,7 @@ async function generateProject32 (records) {
         case '3.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -381,7 +381,7 @@ async function generateProject4142 (records) {
         case '4.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -433,7 +433,7 @@ async function generateProject51518 (records) {
         case '5.18': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -474,7 +474,7 @@ async function generateProject519521 (records) {
         case '5.21': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,
@@ -543,7 +543,7 @@ async function generateProjectBaseline (records) {
         case '7.2': {
           return [
             null, // first col is blank
-            record.type, // FIXME: transform from sheet tab to export format
+            ec(record.type),
             record.subcategory,
             record.content.Name,
             record.content.Project_Identification_Number__c,

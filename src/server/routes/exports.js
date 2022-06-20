@@ -1,5 +1,3 @@
-/* eslint camelcase: 0 */
-
 const express = require('express')
 const router = express.Router()
 const _ = require('lodash')
@@ -35,5 +33,3 @@ router.get('/', requireUser, async function (req, res) {
 })
 
 module.exports = router
-
-/*                                  *  *  *                                   */

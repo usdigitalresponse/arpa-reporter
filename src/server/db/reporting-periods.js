@@ -30,7 +30,6 @@ module.exports = {
   closeReportingPeriod,
   getReportingPeriodID,
   isReportingPeriodCurrent,
-  isReportingPeriodClosed,
   getAllReportingPeriods,
   createReportingPeriod,
   updateReportingPeriod
@@ -63,13 +62,6 @@ async function getReportingPeriod (period_id, trns = knex) {
   } else {
     return null
   }
-}
-
-async function isReportingPeriodClosed (periodId) {
-  return getReportingPeriod(periodId)
-    .then(period => {
-      return Boolean(period.certified_at)
-    })
 }
 
 /*  getPeriodID() returns the argument unchanged unless it is falsy, in which

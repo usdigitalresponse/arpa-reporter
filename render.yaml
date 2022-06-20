@@ -27,7 +27,7 @@ services:
         sync: false
       - key: POSTGRES_URL
         fromDatabase: # automatically derive this value from db service
-          name: arpa_reporter_db
+          name: arpa-reporter-db
           property: connectionString
       - key: SES_REGION
         value: us-east-1

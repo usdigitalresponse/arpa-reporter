@@ -1,7 +1,7 @@
 
 const moment = require('moment')
 
-const { get: getReportingPeriod } = require('../db/reporting-periods')
+const { getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
 const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')

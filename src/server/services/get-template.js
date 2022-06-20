@@ -4,7 +4,7 @@ const { mkdir, readFile, writeFile } = require('fs/promises')
 const xlsx = require('xlsx')
 const { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, PERIOD_TEMPLATES_DIR } = require('../environment')
 
-const reportingPeriods = require('../db/reporting-periods')
+const { getReportingPeriod, updateReportingPeriod } = require('../db/reporting-periods')
 
 // cache treasury templates in memory after first load
 const treasuryTemplates = new Map()
@@ -23,7 +23,7 @@ function periodTemplatePath (reportingPeriod) {
 }
 
 async function savePeriodTemplate (periodId, fileName, buffer) {
-  const reportingPeriod = await reportingPeriods.get(periodId)
+  const reportingPeriod = await getReportingPeriod(periodId)
 
   await mkdir(PERIOD_TEMPLATES_DIR, { recursive: true })
   await writeFile(
@@ -33,7 +33,7 @@ async function savePeriodTemplate (periodId, fileName, buffer) {
   )
 
   reportingPeriod.template_filename = fileName
-  await reportingPeriods.updateReportingPeriod(reportingPeriod)
+  await updateReportingPeriod(reportingPeriod)
 }
 
 async function getTemplate (templateName) {
@@ -62,7 +62,7 @@ async function loadTemplate (templateName) {
 }
 
 async function templateForPeriod (periodId) {
-  const reportingPeriod = await reportingPeriods.get(periodId)
+  const reportingPeriod = await getReportingPeriod(periodId)
 
   if (reportingPeriod.template_filename) {
     const filename = reportingPeriod.template_filename

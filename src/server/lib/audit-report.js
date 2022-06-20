@@ -1,7 +1,7 @@
 const moment = require('moment')
 const XLSX = require('xlsx')
 
-const { get, getAll } = require('../db/reporting-periods')
+const { getReportingPeriod, getAllReportingPeriods } = require('../db/reporting-periods')
 const { getCurrentReportingPeriodID } = require('../db/settings')
 const { recordsForUpload } = require('../services/records')
 const { log } = require('../lib/log')
@@ -39,8 +39,8 @@ async function generate () {
 
 async function createObligationSheet (periodId) {
   // select active reporting periods and sort by date
-  const currentReportingPeriod = await get(periodId)
-  const allReportingPeriods = await getAll()
+  const currentReportingPeriod = await getReportingPeriod(periodId)
+  const allReportingPeriods = await getAllReportingPeriods()
   const reportingPeriods = allReportingPeriods.filter(
     (period) =>
       new Date(period.end_date) <= new Date(currentReportingPeriod.end_date)

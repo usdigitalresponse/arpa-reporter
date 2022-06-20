@@ -6,13 +6,13 @@ const _ = require('lodash')
 
 const { requireUser } = require('../access-helpers')
 const arpa = require('../services/generate-arpa-report')
-const reportingPeriods = require('../db/reporting-periods')
+const { getReportingPeriodID, isReportingPeriodCurrent } = require('../db/reporting-periods')
 
 router.get('/', requireUser, async function (req, res) {
-  const periodId = await reportingPeriods.getID(req.query.period_id)
+  const periodId = await getReportingPeriodID(req.query.period_id)
 
   let generator
-  if (await reportingPeriods.isCurrent(periodId)) {
+  if (await isReportingPeriodCurrent(periodId)) {
     console.log(`periodId ${periodId} is current`)
     generator = arpa.generateReport
   } else {

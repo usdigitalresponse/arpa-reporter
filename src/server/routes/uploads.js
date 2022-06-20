@@ -11,7 +11,7 @@ const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
 const { user: getUser } = require('../db/users')
-const reportingPeriods = require('../db/reporting-periods')
+const { getReportingPeriodID } = require('../db/reporting-periods')
 const { usedForTreasuryExport, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
 const { recordsForUpload } = require('../services/records')
@@ -20,7 +20,7 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const periodId = await reportingPeriods.getID(req.query.period_id)
+  const periodId = await getReportingPeriodID(req.query.period_id)
   const uploads = await uploadsInPeriod(periodId)
   return res.json({ uploads })
 })

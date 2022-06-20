@@ -13,30 +13,35 @@ const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
-const reportingPeriods = require('../db/reporting-periods')
+const {
+  closeReportingPeriod,
+  createReportingPeriod,
+  getAllReportingPeriods,
+  getReportingPeriod,
+  updateReportingPeriod
+} = require('../db/reporting-periods')
 const { requireUser, requireAdminUser } = require('../access-helpers')
 const { user: getUser } = require('../db/users')
-const { savePeriodTemplate, templateForPeriod } = require('../services/get-template')
+const {
+  savePeriodTemplate,
+  templateForPeriod
+} = require('../services/get-template')
 const { usedForTreasuryExport } = require('../db/uploads')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const periods = await reportingPeriods.getAll()
+  const periods = await getAllReportingPeriods()
   return res.json({ reportingPeriods: periods })
 })
 
-router.get('/summaries/', requireUser, async function (req, res) {
-  return reportingPeriods.getPeriodSummaries().then(summaries => res.json({ summaries }))
-})
-
 router.post('/close/', requireAdminUser, async (req, res) => {
-  const period = await reportingPeriods.get()
+  const period = await getReportingPeriod()
   const user = await getUser(req.signedCookies.userId)
 
   const trns = await knex.transaction()
   try {
-    await reportingPeriods.close(user, period, trns)
+    await closeReportingPeriod(user, period, trns)
     trns.commit()
   } catch (err) {
     if (!trns.isCompleted()) trns.rollback()
@@ -53,10 +58,10 @@ router.post('/', requireAdminUser, async function (req, res, next) {
 
   try {
     if (updatedPeriod.id) {
-      const period = await reportingPeriods.updateReportingPeriod(updatedPeriod)
+      const period = await updateReportingPeriod(updatedPeriod)
       res.json({ reportingPeriod: period })
     } else {
-      const period = await reportingPeriods.createReportingPeriod(updatedPeriod)
+      const period = await createReportingPeriod(updatedPeriod)
       res.json({ reportingPeriod: period })
     }
   } catch (e) {
@@ -79,7 +84,7 @@ router.post(
     }
 
     const periodId = req.params.id
-    const reportingPeriod = await reportingPeriods.get(periodId)
+    const reportingPeriod = await getReportingPeriod(periodId)
     if (!reportingPeriod) {
       res.status(404).json({ error: 'Reporting period not found' })
       return
@@ -87,7 +92,8 @@ router.post(
 
     const { originalname, size, buffer } = req.file
     console.log(
-      `Uploading filename ${originalname} size ${size} for period ${periodId}`)
+      `Uploading filename ${originalname} size ${size} for period ${periodId}`
+    )
 
     try {
       await savePeriodTemplate(periodId, originalname, buffer)
@@ -100,7 +106,8 @@ router.post(
     }
 
     res.json({ success: true })
-  })
+  }
+)
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id
@@ -108,10 +115,7 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
   try {
     const { filename, data } = await templateForPeriod(periodId)
 
-    res.header(
-      'Content-Disposition',
-      `attachment; filename="${filename}"`
-    )
+    res.header('Content-Disposition', `attachment; filename="${filename}"`)
     res.header('Content-Type', 'application/octet-stream')
     res.end(data)
   } catch (err) {
@@ -139,7 +143,7 @@ router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const commit = req.query.commit || false
 
   const user = await getUser(req.signedCookies.userId)
-  const reportingPeriod = await reportingPeriods.get(periodId)
+  const reportingPeriod = await getReportingPeriod(periodId)
   if (!reportingPeriod) {
     res.sendStatus(404)
     res.end()

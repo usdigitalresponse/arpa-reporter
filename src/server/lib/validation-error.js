@@ -1,4 +1,7 @@
 
+/**
+ * severity: "err" | "warn"
+ */
 class ValidationError extends Error {
   constructor (message, { severity = 'err', tab = null, row = null, col = null } = {}) {
     super(message)

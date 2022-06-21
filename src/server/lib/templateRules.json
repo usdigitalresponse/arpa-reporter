@@ -883,6 +883,7 @@
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
+      "columnName": "BA",
       "humanColName": "Number of students participating in evidence-based tutoring programs"
     },
     "Children_Served_by_Childcare_and_Early_Learning_Services_c": {
@@ -891,6 +892,7 @@
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
+      "columnName": "BB",
       "humanColName": "Number of children served by childcare and early learning services (pre-school/pre-K/ages 3-5)"
     },
     "Families_Served_by_Home_Visiting_c": {
@@ -899,6 +901,7 @@
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
+      "columnName": "BC",
       "humanColName": "Number of families served by home visiting"
     }
   },

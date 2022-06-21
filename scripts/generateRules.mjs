@@ -23,7 +23,8 @@ function makeColNames () {
   }
 
   const secondSet = upcaseLetters.map(letter => 'A' + letter)
-  return [...upcaseLetters, ...secondSet]
+  const thirdSet = upcaseLetters.map(letter => 'B' + letter)
+  return [...upcaseLetters, ...secondSet, ...thirdSet]
 }
 
 function parseListVal (lvStr) {

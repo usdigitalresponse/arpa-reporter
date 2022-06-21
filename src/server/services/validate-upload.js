@@ -87,15 +87,8 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   return errors
 }
 
-async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
+async function validateSubrecipientRecord ({ upload, record: recipient, typeRules: rules, recordErrors, trns }) {
   const errors = []
-
-  // start by trimming any whitespace
-  for (const key of Object.keys(rules)) {
-    if (recipient[key] && (typeof recipient[key]) === 'string') {
-      recipient[key] = recipient[key].trim()
-    }
-  }
 
   // does the row already exist?
   let existing = null
@@ -128,60 +121,113 @@ async function validateSubrecipientRecord ({ upload, recipient, rules, trns }) {
       }
     }
 
-  // validate that the record is valid before inserting
-  } else {
-    // check all the rules
-    for (const [key, rule] of Object.entries(rules)) {
-      // make sure required keys are present
-      if (rule.required) {
-        if (!recipient[key]) {
-          errors.push(new ValidationError(
-            `Value is required for ${key}`,
-            { col: rule.columnName, severity: 'err' }
-          ))
-        }
+  // if it's now, and it's passed validation, then insert it
+  } else if (recordErrors.length === 0) {
+    if (existing?.upload_id === upload.id) {
+      await updateRecipient(existing.id, { record: recipient }, trns)
+    } else {
+      const dbRow = {
+        uei: recipient.Unique_Entity_Identifier__c,
+        tin: recipient.EIN__c,
+        record: recipient,
+        upload_id: upload.id
       }
-    }
-
-    // if it's valid, we can insert it into the db
-    if (errors.length === 0) {
-      if (existing?.upload_id === upload.id) {
-        await updateRecipient(existing.id, { record: recipient }, trns)
-      } else {
-        const dbRow = {
-          uei: recipient.Unique_Entity_Identifier__c,
-          tin: recipient.EIN__c,
-          record: recipient,
-          upload_id: upload.id
-        }
-        await createRecipient(dbRow, trns)
-      }
+      await createRecipient(dbRow, trns)
     }
   }
 
   return errors
 }
 
-async function validateSubrecipients ({ upload, records, rules, trns }) {
+async function validateRecord ({ upload, record, typeRules: rules, trns }) {
+  // start by trimming any whitespace
+  for (const key of Object.keys(rules)) {
+    if (record[key] && (typeof record[key]) === 'string') {
+      record[key] = record[key].trim()
+    }
+  }
+
+  // placeholder for rule errors we're going to find
   const errors = []
 
-  // validate each, and save the errors
-  const recipients = records.filter(rec => rec.type === 'subrecipient').map(r => r.content)
-
-  for (const [rowIdx, recipient] of recipients.entries()) {
-    try {
-      for (const error of await validateSubrecipientRecord({
-        upload, recipient, rules: rules.subrecipient, trns
-      })) {
-        error.tab = 'subrecipient'
-        error.row = 13 + rowIdx // TODO: how do we know the data starts at row 13?
-        errors.push(error)
+  // check all the rules
+  for (const [key, rule] of Object.entries(rules)) {
+    // if there's something in the field, make sure it meets requirements
+    if (record[key]) {
+      // make sure pick value is one of pick list values
+      if (rule.listVals.length > 0 && rule.listVals.indexOf(record[key]) < 0) {
+        errors.push(new ValidationError(
+          `Value for ${key} must be one of ${rule.listVals.length} options in the input template`,
+          { col: rule.columnName, severity: 'err' }
+        ))
       }
-    } catch (e) {
-      errors.push(new ValidationError(
-        `unexpected error validating subrecipient: ${e}`,
-        { tab: 'subrecipient', row: 13 + rowIdx }
-      ))
+
+      // make sure max length is not too long
+      if (rule.maxLength && String(record[key]).length > rule.maxLength) {
+        errors.push(new ValidationError(
+          `Value for ${key} cannot be longer than ${rule.maxLength} (currently, ${String(record[key]).length})`,
+          { col: rule.columnName, severity: 'err' }
+        ))
+      }
+
+    // if the field is unset, is that okay?
+    } else {
+      // make sure required keys are present
+      if (rule.required === true) {
+        errors.push(new ValidationError(
+          `Value is required for ${key}`,
+          { col: rule.columnName, severity: 'err' }
+        ))
+      }
+    }
+  }
+
+  // return all the found errors
+  return errors
+}
+
+async function validateRules ({ upload, records, rules, trns }) {
+  const errors = []
+
+  // go through every rule type we have
+  for (const [type, typeRules] of Object.entries(rules)) {
+    // find records of the given rule type
+    const tRecords = records.filter(rec => rec.type === type).map(r => r.content)
+
+    // for each of those records, generate a list of rule violations
+    for (const [recordIdx, record] of tRecords.entries()) {
+      let recordErrors
+      try {
+        recordErrors = await validateRecord({ upload, record, typeRules, trns })
+      } catch (e) {
+        recordErrors = [(
+          new ValidationError(`unexpected error validating record: ${e.message}`)
+        )]
+      }
+
+      // special sub-recipient validation
+      try {
+        if (type === 'subrecipient') {
+          recordErrors = [
+            ...recordErrors,
+            ...(await validateSubrecipientRecord({ upload, record, typeRules, recordErrors, trns }))
+          ]
+        }
+      } catch (e) {
+        recordErrors = [
+          ...recordErrors,
+          new ValidationError(`unexpectedError validating subrecipient: ${e.message}`)
+        ]
+      }
+
+      // each rule violation gets assigned a row in a sheet; they already set their column
+      recordErrors.forEach(error => {
+        error.tab = type
+        error.row = 13 + recordIdx // TODO: how do we know the data starts at row 13?
+
+        // save each rule violation in the overall list
+        errors.push(error)
+      })
     }
   }
 
@@ -205,7 +251,7 @@ async function validateUpload (upload, user, trns) {
     validateAgencyId,
     validateEcCode,
     validateReportingPeriod,
-    validateSubrecipients
+    validateRules
   ]
 
   // run validations, one by one

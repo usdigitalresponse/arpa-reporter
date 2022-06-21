@@ -1,0 +1,2516 @@
+{
+  "ec1": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative \r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative \r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Program Income Expended"
+    },
+    "Primary_Project_Demographics__c": {
+      "key": "Primary_Project_Demographics__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "N",
+      "humanColName": "Project Demographic Distribution - Primary Populations Served"
+    },
+    "Primary_Project_Demographics_Explanation__c": {
+      "key": "Primary_Project_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Primary Project Demographic Explanation"
+    },
+    "Secondary_Project_Demographics__c": {
+      "key": "Secondary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "P",
+      "humanColName": "Project Demographic Distribution - Additional Populations Served"
+    },
+    "Secondary_Proj_Demographics_Explanation__c": {
+      "key": "Secondary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Secondary Project Demographic Explanation"
+    },
+    "Tertiary_Project_Demographics__c": {
+      "key": "Tertiary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "R",
+      "humanColName": "Project Demographic Distribution - Additional Populations Served"
+    },
+    "Tertiary_Proj_Demographics_Explanation__c": {
+      "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "S",
+      "humanColName": "Tertiary Project Demographic Explanation"
+    },
+    "Structure_Objectives_of_Asst_Programs__c": {
+      "key": "Structure_Objectives_of_Asst_Programs__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "T",
+      "humanColName": "Structure and objectives of assistance program"
+    },
+    "Recipient_Approach_Description__c": {
+      "key": "Recipient_Approach_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "U",
+      "humanColName": "Recipients approach"
+    },
+    "Spending_Allocated_Toward_Evidence_Based_Interventions": {
+      "key": "Spending_Allocated_Toward_Evidence_Based_Interventions",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "Identify the dollar amount of the total project spending that is allocated towards evidence-based interventions"
+    },
+    "Whether_program_evaluation_is_being_conducted": {
+      "key": "Whether_program_evaluation_is_being_conducted",
+      "required": true,
+      "dataType": "Picklist",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "W",
+      "humanColName": "Is a program evaluation of the project being conducted?"
+    },
+    "Small_Businesses_Served__c": {
+      "key": "Small_Businesses_Served__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "X",
+      "humanColName": "Number of Small Businesses Served "
+    },
+    "Number_Non_Profits_Served__c": {
+      "key": "Number_Non_Profits_Served__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "Y",
+      "humanColName": "Non-Profits Served"
+    },
+    "Does_Project_Include_Capital_Expenditure__c": {
+      "key": "Does_Project_Include_Capital_Expenditure__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "Z",
+      "humanColName": "Does this project include a capital expenditure?"
+    },
+    "Total_Cost_Capital_Expenditure__c": {
+      "key": "Total_Cost_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "AA",
+      "humanColName": "If yes, what is the total expected capital expenditure?"
+    },
+    "Type_of_Capital_Expenditure__c": {
+      "key": "Type_of_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Acquisition of equipment for COVID-19 prevention and treatment",
+        "Adaptations to congregate living facilities",
+        "Affordable housing, supportive housing, or recovery housing",
+        "Behavioral health facilities and equipment",
+        "Childcare, daycare and early learning facilities",
+        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 vaccination sites",
+        "Devices and equipment that assist households in accessing the internet",
+        "Emergency operations centers and acquisition of emergency response equipment",
+        "Food banks and other facilities",
+        "Improvements to existing facilities",
+        "Installation and improvement of ventilation systems",
+        "Job and workforce training centers",
+        "Medical equipment and facilities",
+        "Medical facilities generally dedicated to COVID-19 treatment and mitigation",
+        "Mitigation measures in small businesses, nonprofits and impacted industries",
+        "Parks, green spaces, recreational facilities, sidewalks",
+        "Public health data systems",
+        "Rehabilitations, renovation, remediation, cleanup, or conversions",
+        "Schools and other educational facilities",
+        "Technology and equipment to allow law enforcement",
+        "Technology and tools",
+        "Technology infrastructure to adapt government operations",
+        "Temporary medical facilities and other measures",
+        "Transitional shelters",
+        "Other (please specify)"
+      ],
+      "columnName": "AB",
+      "humanColName": "Capital Expenditure Type"
+    },
+    "Type_of_Capital_Expenditure_Other__c": {
+      "key": "Type_of_Capital_Expenditure_Other__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "AC",
+      "humanColName": "Other Capital Expenditure Explanation"
+    },
+    "Capital_Expenditure_Justification__c": {
+      "key": "Capital_Expenditure_Justification__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "AD",
+      "humanColName": "Capital Expenditure Narrative"
+    },
+    "(manual entry)": {
+      "key": "(manual entry)",
+      "required": false,
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AR",
+      "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. "
+    },
+    "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
+      "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AS",
+      "humanColName": "Number of workers enrolled in sectoral job training programs"
+    },
+    "Workers_Completing_Sectoral_Job_Training_Programs_c": {
+      "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AT",
+      "humanColName": "Number of workers completing sectoral job training programs "
+    },
+    "People_Participating_in_Summer_Youth_Employment_Programs_c": {
+      "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AU",
+      "humanColName": "Number of people participating in summer youth employment programs"
+    }
+  },
+  "ec2": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 150,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative\r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative\r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Program Income Expended"
+    },
+    "Primary_Project_Demographics__c": {
+      "key": "Primary_Project_Demographics__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "N",
+      "humanColName": "Project Demographic Distribution - Primary Populations Served"
+    },
+    "Primary_Project_Demographics_Explanation__c": {
+      "key": "Primary_Project_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Primary Project Demographic Explanation"
+    },
+    "Secondary_Project_Demographics__c": {
+      "key": "Secondary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "P",
+      "humanColName": "Project Demographic Distribution - Secondary Populations Served"
+    },
+    "Secondary_Proj_Demographics_Explanation__c": {
+      "key": "Secondary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Secondary Project Demographic Explanation"
+    },
+    "Tertiary_Project_Demographics__c": {
+      "key": "Tertiary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "R",
+      "humanColName": "Project Demographic Distribution - Tertiary Populations Served"
+    },
+    "Tertiary_Proj_Demographics_Explanation__c": {
+      "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "S",
+      "humanColName": "Tertiary Project Demographic Explanation"
+    },
+    "Structure_Objectives_of_Asst_Programs__c": {
+      "key": "Structure_Objectives_of_Asst_Programs__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "T",
+      "humanColName": "Brief description of structure and objectives of assistance program(s), including public health or negative economic impact experienced."
+    },
+    "Recipient_Approach_Description__c": {
+      "key": "Recipient_Approach_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "U",
+      "humanColName": "Brief description of how a recipient’s response is related and reasonably and proportional  to a public health or negative economic impact of COVID-19."
+    },
+    "Individuals_Served__c": {
+      "key": "Individuals_Served__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "Number of households served"
+    },
+    "Spending_Allocated_Toward_Evidence_Based_Interventions": {
+      "key": "Spending_Allocated_Toward_Evidence_Based_Interventions",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "W",
+      "humanColName": "The dollar amount of the total project spending that is allocated towards evidence-based interventions"
+    },
+    "Whether_program_evaluation_is_being_conducted": {
+      "key": "Whether_program_evaluation_is_being_conducted",
+      "required": true,
+      "dataType": "Picklist",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "X",
+      "humanColName": "Indicate if a program evaluation of the project is being conducted "
+    },
+    "Small_Businesses_Served__c": {
+      "key": "Small_Businesses_Served__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "Y",
+      "humanColName": "Number of small businesses served (by program if recipient establishes multiple separate \r\nsmall businesses assistance programs) "
+    },
+    "Number_Non_Profits_Served__c": {
+      "key": "Number_Non_Profits_Served__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "Z",
+      "humanColName": "Number of Non-Profits served (by program if recipient establishes multiple separate non-\r\nprofit assistance programs) "
+    },
+    "School_ID_or_District_ID__c": {
+      "key": "School_ID_or_District_ID__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 750,
+      "listVals": [],
+      "columnName": "AA",
+      "humanColName": "NCES School ID or NCES District ID"
+    },
+    "Industry_Experienced_8_Percent_Loss__c": {
+      "key": "Industry_Experienced_8_Percent_Loss__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "AB",
+      "humanColName": "Industry other than tourism Narrative"
+    },
+    "Does_Project_Include_Capital_Expenditure__c": {
+      "key": "Does_Project_Include_Capital_Expenditure__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AC",
+      "humanColName": "Does this project include a capital expenditure?"
+    },
+    "Total_Cost_Capital_Expenditure__c": {
+      "key": "Total_Cost_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "AD",
+      "humanColName": "If yes, what is the total expected capital expenditure?"
+    },
+    "Type_of_Capital_Expenditure__c": {
+      "key": "Type_of_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Acquisition of equipment for COVID-19 prevention and treatment",
+        "Adaptations to congregate living facilities",
+        "Affordable housing, supportive housing, or recovery housing",
+        "Behavioral health facilities and equipment",
+        "Childcare, daycare and early learning facilities",
+        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 vaccination sites",
+        "Devices and equipment that assist households in accessing the internet",
+        "Emergency operations centers and acquisition of emergency response equipment",
+        "Food banks and other facilities",
+        "Improvements to existing facilities",
+        "Installation and improvement of ventilation systems",
+        "Job and workforce training centers",
+        "Medical equipment and facilities",
+        "Medical facilities generally dedicated to COVID-19 treatment and mitigation",
+        "Mitigation measures in small businesses, nonprofits and impacted industries",
+        "Parks, green spaces, recreational facilities, sidewalks",
+        "Public health data systems",
+        "Rehabilitations, renovation, remediation, cleanup, or conversions",
+        "Schools and other educational facilities",
+        "Technology and equipment to allow law enforcement",
+        "Technology and tools",
+        "Technology infrastructure to adapt government operations",
+        "Temporary medical facilities and other measures",
+        "Transitional shelters",
+        "Other (please specify)"
+      ],
+      "columnName": "AE",
+      "humanColName": "Capital Expenditure Type"
+    },
+    "Type_of_Capital_Expenditure_Other__c": {
+      "key": "Type_of_Capital_Expenditure_Other__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "AF",
+      "humanColName": "Other Capital Expenditure Explanation"
+    },
+    "Capital_Expenditure_Justification__c": {
+      "key": "Capital_Expenditure_Justification__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "AG",
+      "humanColName": "Capital Expenditure Narrative"
+    },
+    "(manual entry)": {
+      "key": "(manual entry)",
+      "required": false,
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AU",
+      "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. "
+    },
+    "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
+      "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AV",
+      "humanColName": "Number of workers enrolled in sectoral job training programs"
+    },
+    "Workers_Completing_Sectoral_Job_Training_Programs_c": {
+      "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AW",
+      "humanColName": "Number of workers completing sectoral job training programs "
+    },
+    "People_Participating_in_Summer_Youth_Employment_Programs_c": {
+      "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AX",
+      "humanColName": "Number of people participating in summer youth employment programs"
+    },
+    "Households_Receiving_Eviction_Prevention_Services_c": {
+      "key": "Households_Receiving_Eviction_Prevention_Services_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AY",
+      "humanColName": "Number of Households receiving eviction prevention services (including legal representation)"
+    },
+    "Affordable_Housing_Units_Preserved_or_Developed_c": {
+      "key": "Affordable_Housing_Units_Preserved_or_Developed_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AZ",
+      "humanColName": "Number of affordable housing units preserved or developed"
+    },
+    "Students_Participating_in_Evidence_Based_Tutoring_Programs_c": {
+      "key": "Students_Participating_in_Evidence_Based_Tutoring_Programs_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "humanColName": "Number of students participating in evidence-based tutoring programs"
+    },
+    "Children_Served_by_Childcare_and_Early_Learning_Services_c": {
+      "key": "Children_Served_by_Childcare_and_Early_Learning_Services_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "humanColName": "Number of children served by childcare and early learning services (pre-school/pre-K/ages 3-5)"
+    },
+    "Families_Served_by_Home_Visiting_c": {
+      "key": "Families_Served_by_Home_Visiting_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "humanColName": "Number of families served by home visiting"
+    }
+  },
+  "ec3": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 150,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative\r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative\r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Program Income Expended"
+    },
+    "Structure_Objectives_of_Asst_Programs__c": {
+      "key": "Structure_Objectives_of_Asst_Programs__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "N",
+      "humanColName": "Brief description of structure and objectives of assistance program(s), including public health or negative economic impact experienced."
+    },
+    "Recipient_Approach_Description__c": {
+      "key": "Recipient_Approach_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Brief description of how a recipient’s response is related and reasonably and proportional  to a public health or negative economic impact of COVID-19."
+    },
+    "Payroll_Public_Health_Safety__c": {
+      "key": "Payroll_Public_Health_Safety__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 6,
+      "listVals": [],
+      "columnName": "P",
+      "humanColName": "Number of government FTEs responding to COVID-19 supported under this authority"
+    },
+    "Number_of_FTEs_Rehired__c": {
+      "key": "Number_of_FTEs_Rehired__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 6,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Number of FTEs rehired by governments under this authority"
+    },
+    "Does_Project_Include_Capital_Expenditure__c": {
+      "key": "Does_Project_Include_Capital_Expenditure__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "R",
+      "humanColName": "Does this project include a capital expenditure?"
+    },
+    "Total_Cost_Capital_Expenditure__c": {
+      "key": "Total_Cost_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "S",
+      "humanColName": "If yes, what is the total expected capital expenditure?"
+    },
+    "Type_of_Capital_Expenditure__c": {
+      "key": "Type_of_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Acquisition of equipment for COVID-19 prevention and treatment",
+        "Adaptations to congregate living facilities",
+        "Affordable housing, supportive housing, or recovery housing",
+        "Behavioral health facilities and equipment",
+        "Childcare, daycare and early learning facilities",
+        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 vaccination sites",
+        "Devices and equipment that assist households in accessing the internet",
+        "Emergency operations centers and acquisition of emergency response equipment",
+        "Food banks and other facilities",
+        "Improvements to existing facilities",
+        "Installation and improvement of ventilation systems",
+        "Job and workforce training centers",
+        "Medical equipment and facilities",
+        "Medical facilities generally dedicated to COVID-19 treatment and mitigation",
+        "Mitigation measures in small businesses, nonprofits and impacted industries",
+        "Parks, green spaces, recreational facilities, sidewalks",
+        "Public health data systems",
+        "Rehabilitations, renovation, remediation, cleanup, or conversions",
+        "Schools and other educational facilities",
+        "Technology and equipment to allow law enforcement",
+        "Technology and tools",
+        "Technology infrastructure to adapt government operations",
+        "Temporary medical facilities and other measures",
+        "Transitional shelters",
+        "Other (please specify)"
+      ],
+      "columnName": "T",
+      "humanColName": "Capital Expenditure Type"
+    },
+    "Type_of_Capital_Expenditure_Other__c": {
+      "key": "Type_of_Capital_Expenditure_Other__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "U",
+      "humanColName": "Other Capital Expenditure Explanation"
+    },
+    "Capital_Expenditure_Justification__c": {
+      "key": "Capital_Expenditure_Justification__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "Capital Expenditure Narrative"
+    },
+    "(manual entry)": {
+      "key": "(manual entry)",
+      "required": false,
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AJ",
+      "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. "
+    }
+  },
+  "ec4": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative \r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative \r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Program Income Expended"
+    },
+    "Sectors_Critical_to_Health_Well_Being__c": {
+      "key": "Sectors_Critical_to_Health_Well_Being__c",
+      "required": true,
+      "dataType": "Multi-Select",
+      "maxLength": 1500,
+      "listVals": [
+        "Any work performed by an employee of a State, local, or Tribal government;",
+        "Behavioral health work;",
+        "Biomedical Research;",
+        "Dental care work;",
+        "Educational work, school nutrition work, and other work required to operate a school facility;",
+        "Elections work;",
+        "Emergency response;",
+        "Family or childcare;",
+        "Grocery stores, restaurants, food production, and food delivery",
+        "Health care;",
+        "Home- and community-based health care or assistance with activities of daily living;",
+        "Laundry work;",
+        "Maintenance work;",
+        "Medical testing and diagnostics;",
+        "Pharmacy;",
+        "Public health work;",
+        "Sanitation, disinfection, and cleaning work;",
+        "Social services work;",
+        "Solid waste or hazardous materials management, response, and cleanup work;",
+        "Transportation and warehousing;",
+        "Vital services to Tribes;",
+        "Work at hotel and commercial lodging facilities that are used for COVID-19 mitigation and containment;",
+        "Work in a mortuary;",
+        "Work in critical clinical research, development, and testing necessary for COVID-19 response.",
+        "Work requiring physical interaction with patients;",
+        "Other (AND manual entry box)"
+      ],
+      "columnName": "N",
+      "humanColName": "Sectors Designated as Essential Critical Infrastructure"
+    },
+    "Workers_Served__c": {
+      "key": "Workers_Served__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 7,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Number of workers to be served"
+    },
+    "Premium_Pay_Narrative__c": {
+      "key": "Premium_Pay_Narrative__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 3000,
+      "listVals": [],
+      "columnName": "P",
+      "humanColName": "Premium Pay Narrative"
+    },
+    "Number_of_Workers_K_12__c": {
+      "key": "Number_of_Workers_K_12__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Number of workers to be served with premium pay in K-12 schools "
+    }
+  },
+  "ec5": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative \r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative \r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Program Income Expended"
+    },
+    "Proj_Actual_Construction_Start_Date__c": {
+      "key": "Proj_Actual_Construction_Start_Date__c",
+      "required": false,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "N",
+      "humanColName": "Projected/actual construction start date"
+    },
+    "Initiation_of_Operations_Date__c": {
+      "key": "Initiation_of_Operations_Date__c",
+      "required": false,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Projected/actual initiation of operations date"
+    },
+    "Location__c": {
+      "key": "Location__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Latitude/longitude (WGS84 or NAD83 geographic coordinate system)",
+        "Address",
+        "Address Range",
+        "Road Segment"
+      ],
+      "columnName": "P",
+      "humanColName": "Location Type"
+    },
+    "Location_Detail__c": {
+      "key": "Location_Detail__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Location Details"
+    },
+    "(manual entry)": {
+      "key": "(manual entry)",
+      "required": false,
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AE",
+      "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. "
+    },
+    "National_Pollutant_Discharge_Number__c": {
+      "key": "National_Pollutant_Discharge_Number__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 50,
+      "listVals": [],
+      "columnName": "AF",
+      "humanColName": "National Pollutant Discharge Elimination System (NPDES)"
+    },
+    "Public_Water_System_PWS_ID_number__c": {
+      "key": "Public_Water_System_PWS_ID_number__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 50,
+      "listVals": [],
+      "columnName": "AG",
+      "humanColName": "Public Water System (PWS) ID number   "
+    },
+    "Is_project_designed_to_meet_100_mbps__c": {
+      "key": "Is_project_designed_to_meet_100_mbps__c",
+      "required": false,
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AH",
+      "humanColName": "Confirm that the project is designed to, upon completion, reliably meet or exceed symmetrical 100 Mbps download and upload speeds."
+    },
+    "Project_not_met_100_mbps_explanation__c": {
+      "key": "Project_not_met_100_mbps_explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "AI",
+      "humanColName": "If the project is not designed to reliably meet or exceed symmetrical 100 Mbps download and upload speeds, explain why not"
+    },
+    "Is_project_designed_to_exceed_100_mbps__c": {
+      "key": "Is_project_designed_to_exceed_100_mbps__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AJ",
+      "humanColName": "Confirm that the project is designed to, upon completion, meet or exceed symmetrical 100 Mbps download speed and between at least 20 Mbps and 100 Mbps upload speed, and be scalable to a minimum of 100 Mbps download speed and 100 Mbps upload speed"
+    },
+    "Median_Household_Income_Service_Area__c": {
+      "key": "Median_Household_Income_Service_Area__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "AK",
+      "humanColName": "Median Household Income of service area "
+    },
+    "Lowest_Quintile_Income__c": {
+      "key": "Lowest_Quintile_Income__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AL",
+      "humanColName": "Lowest Quintile Income of the service area "
+    },
+    "Project_Technology_Type_c": {
+      "key": "Project_Technology_Type_c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Fiber",
+        "Coaxial Cable",
+        "Terrestrial Fixed Wireless",
+        "Other (specify)"
+      ],
+      "columnName": "AN",
+      "humanColName": "Project Technology Type(s) (Planned/Actual)"
+    },
+    "Project_Technology_Type_Other_c": {
+      "key": "Project_Technology_Type_Other_c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "AO",
+      "humanColName": "Project Technology Type - Explanation"
+    },
+    "Total_Miles_of_Fiber_Deployed_c": {
+      "key": "Total_Miles_of_Fiber_Deployed_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AP",
+      "humanColName": "Total Miles of Fiber Deployed (Planned/Actual)"
+    },
+    "Total_Number_of_Funded_Locations_Served_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AQ",
+      "humanColName": "Total Number of Funded Locations Served (Planned/Actual)"
+    },
+    "Total_Number_of_Funded_Locations_25/3_c": {
+      "key": "Total_Number_of_Funded_Locations_25/3_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AR",
+      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving 25/3 Mbps or below)"
+    },
+    "Total_Number_of_Funded_Locations_Served_25/3_100/20_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_25/3_100/20_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AS",
+      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving between 25/3 Mbps and 100/20 Mbps)"
+    },
+    "Total_Number_of_Funded_Locations_Served_100/100_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_100/100_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AT",
+      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/100 Mbps)"
+    },
+    "Total_Number_of_Funded_Locations_Served_100/20_100/100_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_100/20_100/100_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AU",
+      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/20 Mbps and scalable to minimum 100/100 Mbps)"
+    },
+    "Total_Number_of_Funded_Locations_Served_Residential_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Residential_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AV",
+      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Residential - Total Housing Units)"
+    },
+    "Total_Number_of_Funded_Locations_Served_Business_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Business_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AW",
+      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Business)"
+    },
+    "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AX",
+      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Community Anchor Institution)"
+    },
+    "Speed_Tiers_Offered_c": {
+      "key": "Speed_Tiers_Offered_c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AY",
+      "humanColName": "Speed Tiers Offered, corresponding non-promotional prices, including associated fees, and data allowance for each speed tier of broadband service"
+    }
+  },
+  "ec7": {
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project Name"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Project Identification Number\r\n(Assigned by recipient)"
+    },
+    "Completion_Status__c": {
+      "key": "Completion_Status__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Not started",
+        "Completed less than 50%",
+        "Completed 50% or more",
+        "Completed"
+      ],
+      "columnName": "E",
+      "humanColName": "Status of Completion"
+    },
+    "Adopted_Budget__c": {
+      "key": "Adopted_Budget__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Adopted Budget"
+    },
+    "Total_Obligations__c": {
+      "key": "Total_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Total Cumulative \r\nObligations"
+    },
+    "Total_Expenditures__c": {
+      "key": "Total_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Total Cumulative \r\nExpenditures"
+    },
+    "Current_Period_Obligations__c": {
+      "key": "Current_Period_Obligations__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Current Period Obligations"
+    },
+    "Current_Period_Expenditures__c": {
+      "key": "Current_Period_Expenditures__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Current Period Expenditures"
+    },
+    "Does_Project_Include_Capital_Expenditure__c": {
+      "key": "Does_Project_Include_Capital_Expenditure__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "K",
+      "humanColName": "Does this project include a capital expenditure?"
+    },
+    "Total_Cost_Capital_Expenditure__c": {
+      "key": "Total_Cost_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "If yes, what is the total expected capital expenditure?"
+    },
+    "Type_of_Capital_Expenditure__c": {
+      "key": "Type_of_Capital_Expenditure__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Acquisition of equipment for COVID-19 prevention and treatment",
+        "Adaptations to congregate living facilities",
+        "Affordable housing, supportive housing, or recovery housing",
+        "Behavioral health facilities and equipment",
+        "Childcare, daycare and early learning facilities",
+        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 vaccination sites",
+        "Devices and equipment that assist households in accessing the internet",
+        "Emergency operations centers and acquisition of emergency response equipment",
+        "Food banks and other facilities",
+        "Improvements to existing facilities",
+        "Installation and improvement of ventilation systems",
+        "Job and workforce training centers",
+        "Medical equipment and facilities",
+        "Medical facilities generally dedicated to COVID-19 treatment and mitigation",
+        "Mitigation measures in small businesses, nonprofits and impacted industries",
+        "Parks, green spaces, recreational facilities, sidewalks",
+        "Public health data systems",
+        "Rehabilitations, renovation, remediation, cleanup, or conversions",
+        "Schools and other educational facilities",
+        "Technology and equipment to allow law enforcement",
+        "Technology and tools",
+        "Technology infrastructure to adapt government operations",
+        "Temporary medical facilities and other measures",
+        "Transitional shelters",
+        "Other (please specify)"
+      ],
+      "columnName": "M",
+      "humanColName": "Capital Expenditure Type"
+    },
+    "Type_of_Capital_Expenditure_Other__c": {
+      "key": "Type_of_Capital_Expenditure_Other__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "N",
+      "humanColName": "Other Capital Expenditure Explanation"
+    },
+    "Capital_Expenditure_Justification__c": {
+      "key": "Capital_Expenditure_Justification__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Capital Expenditure Narrative"
+    },
+    "Project_Description__c": {
+      "key": "Project_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 1500,
+      "listVals": [],
+      "columnName": "P",
+      "humanColName": "Project Description"
+    },
+    "Program_Income_Earned__c": {
+      "key": "Program_Income_Earned__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Program Income Earned"
+    },
+    "Program_Income_Expended__c": {
+      "key": "Program_Income_Expended__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "R",
+      "humanColName": "Program Income Expended"
+    },
+    "Primary_Project_Demographics__c": {
+      "key": "Primary_Project_Demographics__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "S",
+      "humanColName": "Project Demographic Distribution - Primary Populations Served"
+    },
+    "Primary_Project_Demographics_Explanation__c": {
+      "key": "Primary_Project_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "T",
+      "humanColName": "Primary Project Demographic Explanation"
+    },
+    "Secondary_Project_Demographics__c": {
+      "key": "Secondary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "U",
+      "humanColName": "Project Demographic Distribution - Secondary Populations Served"
+    },
+    "Secondary_Proj_Demographics_Explanation__c": {
+      "key": "Secondary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "Secondary Project Demographic Explanation"
+    },
+    "Tertiary_Project_Demographics__c": {
+      "key": "Tertiary_Project_Demographics__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "11 Imp Classes of NPs designated as negatively economically impacted",
+        "12 Imp Travel tourism or hospitality sectors",
+        "13 Imp Industry outside the travel tourism or hospitality sectors specify",
+        "14 Dis Imp Low income HHs and populations",
+        "15 Dis Imp HHs and populations residing in Qualified Census Tracts",
+        "16 Dis Imp HHs that qualify for certain federal programs",
+        "17 Dis Imp HHs receiving services provided by Tribal governments",
+        "18 Dis Imp HHs residing in the U.S. territories or receiving services",
+        "19 Dis Imp For services to address educational disparities Title I eligible",
+        "20 Dis Imp Other HHs or populations that experienced a disproportionate",
+        "21 Dis Imp SBs operating in Qualified Census Tracts",
+        "22 Dis Imp SBs operated by Tribal governments or on Tribal lands",
+        "23 Dis Imp SBs operating in the U.S. territories",
+        "24 Dis Imp Other SBs Dis Imp by the pandemic specify",
+        "25 Dis Imp NPs operating in Qualified Census Tracts",
+        "26 Dis Imp NPs operated by Tribal governments or on Tribal lands",
+        "27 Dis Imp NPs operating in the U.S. territories",
+        "28 Dis Imp Other NPs Dis Imp by the pandemic specify"
+      ],
+      "columnName": "W",
+      "humanColName": "Project Demographic Distribution - Tertiary Populations Served"
+    },
+    "Tertiary_Proj_Demographics_Explanation__c": {
+      "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "X",
+      "humanColName": "Tertiary Project Demographic Explanation"
+    },
+    "Structure_Objectives_of_Asst_Programs__c": {
+      "key": "Structure_Objectives_of_Asst_Programs__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "Y",
+      "humanColName": "Structure and objectives of assistance program"
+    },
+    "Recipient_Approach_Description__c": {
+      "key": "Recipient_Approach_Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "Z",
+      "humanColName": "Recipients approach"
+    }
+  },
+  "subrecipient": {
+    "Unique_Entity_Identifier__c": {
+      "key": "Unique_Entity_Identifier__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 12,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Sub-Recipient UEI"
+    },
+    "EIN__c": {
+      "key": "EIN__c",
+      "required": false,
+      "dataType": "Numeric",
+      "maxLength": 9,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Subrecipient TIN"
+    },
+    "Name": {
+      "key": "Name",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "E",
+      "humanColName": "Legal Name"
+    },
+    "Entity_Type__c": {
+      "key": "Entity_Type__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Subrecipient",
+        "Contractor",
+        "Beneficiary"
+      ],
+      "columnName": "F",
+      "humanColName": "Entity Type"
+    },
+    "POC_Email_Address__c": {
+      "key": "POC_Email_Address__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 40,
+      "listVals": [],
+      "columnName": "G",
+      "humanColName": "Point of Contact Email Address"
+    },
+    "Address__c": {
+      "key": "Address__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "Address Line 1"
+    },
+    "Address_2__c": {
+      "key": "Address_2__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "Address Line 2"
+    },
+    "Address_3__c": {
+      "key": "Address_3__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "J",
+      "humanColName": "Address Line 3"
+    },
+    "City__c": {
+      "key": "City__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 100,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "City Name"
+    },
+    "State_Abbreviated__c": {
+      "key": "State_Abbreviated__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "2 Letter State abbr."
+      ],
+      "columnName": "L",
+      "humanColName": "State Code"
+    },
+    "Zip__c": {
+      "key": "Zip__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 5,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Zip"
+    },
+    "Zip_4__c": {
+      "key": "Zip_4__c",
+      "required": false,
+      "dataType": "Numeric",
+      "maxLength": 4,
+      "listVals": [],
+      "columnName": "N",
+      "humanColName": "Zip4"
+    },
+    "Registered_in_Sam_gov__c": {
+      "key": "Registered_in_Sam_gov__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "O",
+      "humanColName": "Recipient SAM.gov Registration?"
+    },
+    "Federal_Funds_80_or_More_of_Revenue__c": {
+      "key": "Federal_Funds_80_or_More_of_Revenue__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "P",
+      "humanColName": "In its preceding fiscal year, did recipient receive 80% or more of its annual gross revenue from federal funds?"
+    },
+    "Derives_25_Million_or_More_from_Federal__c": {
+      "key": "Derives_25_Million_or_More_from_Federal__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "Q",
+      "humanColName": "In the preceding fiscal year, did recipient receive $25 million or more of its annual gross revenue from federal funds?"
+    },
+    "Total_Compensation_for_Officers_Public__c": {
+      "key": "Total_Compensation_for_Officers_Public__c",
+      "required": false,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "R",
+      "humanColName": "Is the \"total compensation\" for the organization's five highest paid officers publicly listed or otherwise listed in SAM.gov?"
+    },
+    "Officer_Name__c": {
+      "key": "Officer_Name__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "S",
+      "humanColName": "Executive Name (1)"
+    },
+    "Officer_Total_Comp__c": {
+      "key": "Officer_Total_Comp__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "T",
+      "humanColName": "Total Compensation Executive (1)"
+    },
+    "Officer_2_Name__c": {
+      "key": "Officer_2_Name__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "U",
+      "humanColName": "Executive Name (2)"
+    },
+    "Officer_2_Total_Comp__c": {
+      "key": "Officer_2_Total_Comp__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "Total Compensation Executive (2)"
+    },
+    "Officer_3_Name__c": {
+      "key": "Officer_3_Name__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "W",
+      "humanColName": "Executive Name (3)"
+    },
+    "Officer_3_Total_Comp__c": {
+      "key": "Officer_3_Total_Comp__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "X",
+      "humanColName": "Total Compensation Executive (3)"
+    },
+    "Officer_4_Name__c": {
+      "key": "Officer_4_Name__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "Y",
+      "humanColName": "Executive Name (4)"
+    },
+    "Officer_4_Total_Comp__c": {
+      "key": "Officer_4_Total_Comp__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "Z",
+      "humanColName": "Total Compensation Executive (4)"
+    },
+    "Officer_5_Name__c": {
+      "key": "Officer_5_Name__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 80,
+      "listVals": [],
+      "columnName": "AA",
+      "humanColName": "Executive Name (5)"
+    },
+    "Officer_5_Total_Comp__c": {
+      "key": "Officer_5_Total_Comp__c",
+      "required": false,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "AB",
+      "humanColName": "Total Compensation Executive (5)"
+    }
+  },
+  "awards50k": {
+    "Recipient_UEI__c": {
+      "key": "Recipient_UEI__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 12,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Subrecipient UEI"
+    },
+    "Recipient_EIN__c": {
+      "key": "Recipient_EIN__c",
+      "required": false,
+      "dataType": "Numeric",
+      "maxLength": 9,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Subrecipient TIN"
+    },
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "E",
+      "humanColName": "Project ID"
+    },
+    "Award_No__c": {
+      "key": "Award_No__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "SubAward Number (unique identifier)"
+    },
+    "Award_Type__c": {
+      "key": "Award_Type__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": 30,
+      "listVals": [
+        "Contract: Purchase Order",
+        "Contract: Delivery Order",
+        "Contract: Blanket Purchase Agreement",
+        "Contract: Definitive Contract",
+        "Grant: Lump Sum Payment(s)",
+        "Grant: Reimbursable",
+        "Direct Payment",
+        "Transfer: Lump Sum Payment(s)",
+        "Transfer: Reimbursable",
+        "Loan - maturity prior to 12/31/26 with planned forgiveness",
+        "Loan - maturity prior to 12/31/26 without planned forgiveness",
+        "Loan - maturity past 12/31/26 with planned forgiveness",
+        "Loan - maturity past 12/31/26 without planned forgiveness"
+      ],
+      "columnName": "G",
+      "humanColName": "SubAward Type"
+    },
+    "Award_Amount__c": {
+      "key": "Award_Amount__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "H",
+      "humanColName": "SubAward Amount (Obligation)"
+    },
+    "Award_Date__c": {
+      "key": "Award_Date__c",
+      "required": true,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "I",
+      "humanColName": "SubAward Award Date"
+    },
+    "Primary_Sector__c": {
+      "key": "Primary_Sector__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": 30,
+      "listVals": [
+        "any work performed by an employee of a State local or Tribal government",
+        "behavioral health work",
+        "biomedical research",
+        "dental care work",
+        "educational work school nutrition work and other work required to operate a school facility",
+        "elections work",
+        "emergency response",
+        "family or child care",
+        "grocery stores restaurants food production and food delivery",
+        "health care",
+        "home- and community-based health care or assistance with activities of daily living",
+        "laundry work",
+        "maintenance work",
+        "medical testing and diagnostics",
+        "pharmacy",
+        "public health work",
+        "sanitation disinfection and cleaning work",
+        "social services work",
+        "solid waste or hazardous materials management response and cleanup work",
+        "transportation and warehousing",
+        "vital services to Tribes",
+        "work at hotel and commercial lodging facilities that are used for COVID-19 mitigation and containment",
+        "work in a mortuary",
+        "work in critical clinical research development and testing necessary for COVID-19 response",
+        "work requiring physical interaction with patients ",
+        "Other"
+      ],
+      "columnName": "J",
+      "humanColName": "Primary Sector"
+    },
+    "If_Other__c": {
+      "key": "If_Other__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 100,
+      "listVals": [],
+      "columnName": "K",
+      "humanColName": "If Other"
+    },
+    "Purpose_of_Funds__c": {
+      "key": "Purpose_of_Funds__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 3000,
+      "listVals": [],
+      "columnName": "L",
+      "humanColName": "Purpose of funds"
+    },
+    "Period_of_Performance_Start__c": {
+      "key": "Period_of_Performance_Start__c",
+      "required": true,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "M",
+      "humanColName": "Period of Performance Start Date "
+    },
+    "Period_of_Performance_End__c": {
+      "key": "Period_of_Performance_End__c",
+      "required": true,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "N",
+      "humanColName": "Period of Performance End Date "
+    },
+    "Place_of_Performance_Address_1__c": {
+      "key": "Place_of_Performance_Address_1__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 120,
+      "listVals": [],
+      "columnName": "O",
+      "humanColName": "Primary Place of Performance Address Line 1 "
+    },
+    "Place_of_Performance_Address_2__c": {
+      "key": "Place_of_Performance_Address_2__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 120,
+      "listVals": [],
+      "columnName": "P",
+      "humanColName": "Primary Place of Performance Address Line 2"
+    },
+    "Place_of_Performance_Address_3__c": {
+      "key": "Place_of_Performance_Address_3__c",
+      "required": false,
+      "dataType": "String",
+      "maxLength": 120,
+      "listVals": [],
+      "columnName": "Q",
+      "humanColName": "Primary Place of Performance Address Line 3"
+    },
+    "Place_of_Performance_City__c": {
+      "key": "Place_of_Performance_City__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 40,
+      "listVals": [],
+      "columnName": "R",
+      "humanColName": "Primary Place of Performance City Name "
+    },
+    "State_Abbreviated__c": {
+      "key": "State_Abbreviated__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": 2,
+      "listVals": [
+        "AL, AK, AS, AZ, AR, CA, CO, CT, DE, DC, FM, FL, GA, GU, HI, ID, IL, IN, IA, KS, KY, LA, ME, MH, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, MP, OH, OK, OR, PW, PA, PR, RI, SC, SD, TN, TX, UT, VT, VI, VA, WA, WV, WI, WY"
+      ],
+      "columnName": "S",
+      "humanColName": "Primary Place of Performance State Code "
+    },
+    "Place_of_Performance_Zip__c": {
+      "key": "Place_of_Performance_Zip__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 5,
+      "listVals": [],
+      "columnName": "T",
+      "humanColName": "Primary Place of Performance Zip"
+    },
+    "Place_of_Performance_Zip_4__c": {
+      "key": "Place_of_Performance_Zip_4__c",
+      "required": false,
+      "dataType": "Numeric",
+      "maxLength": 4,
+      "listVals": [],
+      "columnName": "U",
+      "humanColName": "Place of Performance Zip4"
+    },
+    "Description__c": {
+      "key": "Description__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 750,
+      "listVals": [],
+      "columnName": "V",
+      "humanColName": "SubAward Description"
+    }
+  },
+  "expenditures50k": {
+    "Sub_Award_Lookup__c": {
+      "key": "Sub_Award_Lookup__c",
+      "required": true,
+      "dataType": "String",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "SubAward Number (unique identifier)"
+    },
+    "Expenditure_Start__c": {
+      "key": "Expenditure_Start__c",
+      "required": true,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "D",
+      "humanColName": "Expenditure Start Date"
+    },
+    "Expenditure_End__c": {
+      "key": "Expenditure_End__c",
+      "required": true,
+      "dataType": "Date",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "E",
+      "humanColName": "Expenditure End Date"
+    },
+    "Expenditure_Amount__c": {
+      "key": "Expenditure_Amount__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Total Expenditure Amount"
+    }
+  },
+  "awards": {
+    "Project_Identification_Number__c": {
+      "key": "Project_Identification_Number__c",
+      "required": true,
+      "dataType": "Numeric",
+      "maxLength": 20,
+      "listVals": [],
+      "columnName": "C",
+      "humanColName": "Project ID"
+    },
+    "Sub_Award_Type_Aggregates_SLFRF__c": {
+      "key": "Sub_Award_Type_Aggregates_SLFRF__c",
+      "required": true,
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Aggregate of Contracts Awarded",
+        "Aggregate of Grants Awarded",
+        "Aggregate of Loans Issued",
+        "Aggregate of Transfers",
+        "Aggregate of Direct Payments",
+        "Payments to Individuals"
+      ],
+      "columnName": "D",
+      "humanColName": "Aggregate Sub Award Type"
+    },
+    "Quarterly_Obligation_Amt_Aggregates__c": {
+      "key": "Quarterly_Obligation_Amt_Aggregates__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "E",
+      "humanColName": "Current Quarter Obligation"
+    },
+    "Quarterly_Expenditure_Amt_Aggregates__c": {
+      "key": "Quarterly_Expenditure_Amt_Aggregates__c",
+      "required": true,
+      "dataType": "Currency",
+      "maxLength": null,
+      "listVals": [],
+      "columnName": "F",
+      "humanColName": "Current Quarter Expenditure/Payments"
+    }
+  }
+}

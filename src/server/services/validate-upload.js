@@ -58,6 +58,7 @@ async function validateEcCode ({ upload, records, trns }) {
   // case, so that the code gets set even if the upload fails to validate
   if (code !== upload.ec_code) {
     await setEcCode(upload.id, code)
+    upload.ec_code = code
   }
 }
 
@@ -152,6 +153,11 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
 
   // check all the rules
   for (const [key, rule] of Object.entries(rules)) {
+    // if the rule only applies on different EC codes, skip it
+    if (rule.ecCodes && (!upload.ec_code || rule.ecCodes.indexOf(upload.ec_code) < 0)) {
+      continue
+    }
+
     // if there's something in the field, make sure it meets requirements
     if (record[key]) {
       // make sure pick value is one of pick list values

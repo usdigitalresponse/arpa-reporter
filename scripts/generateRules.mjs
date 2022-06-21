@@ -47,12 +47,22 @@ function parseRequired (rqStr) {
   return rqStr
 }
 
-async function extractRules (buffer) {
-  const workbook = XLSX.read(buffer, {
-    type: 'buffer',
-    sheets: Object.keys(DATA_SHEET_TYPES)
-  })
+// for the given type and column, return all the EC codes where that column is shown/used
+function filterEcCodes (logic, type, columnName) {
+  const logicCodes = logic.filter(log => log.type === type)
+  if (logicCodes.length === 0) return false
 
+  const ecCodes = []
+  for (const logic of logicCodes) {
+    if (logic.columnNames[columnName]) {
+      ecCodes.push(logic.ecCode)
+    }
+  }
+
+  return ecCodes
+}
+
+async function extractRules (workbook, logic) {
   const rules = {}
 
   for (const sheetName of Object.keys(DATA_SHEET_TYPES)) {
@@ -96,7 +106,8 @@ async function extractRules (buffer) {
         maxLength: maxLengths[colIdx],
         listVals: listVals[colIdx],
         columnName: COLNAMES[colIdx],
-        humanColName: humanColNames[colIdx]
+        humanColName: humanColNames[colIdx],
+        ecCodes: filterEcCodes(logic, type, COLNAMES[colIdx])
       }
 
       sheetRules[key] = rule
@@ -108,14 +119,8 @@ async function extractRules (buffer) {
   return rules
 }
 
-async function extractDropdowns (buffer) {
-  const sheetName = 'Dropdowns'
-  const workbook = XLSX.read(buffer, {
-    type: 'buffer',
-    sheets: [sheetName]
-  })
-
-  const sheet = workbook.Sheets[sheetName]
+async function extractDropdowns (workbook) {
+  const sheet = workbook.Sheets.Dropdowns
 
   // entire sheet
   const sheetRange = XLSX.utils.decode_range(sheet['!ref'])
@@ -144,23 +149,71 @@ async function extractDropdowns (buffer) {
   return dropdowns
 }
 
+async function extractLogic (workbook) {
+  const sheet = workbook.Sheets.Logic
+
+  // entire sheet
+  const sheetRange = XLSX.utils.decode_range(sheet['!ref'])
+
+  // range A2:
+  const headerRange = merge({}, sheetRange, {
+    s: { c: 0, r: 1 }
+  })
+
+  const rows = XLSX.utils.sheet_to_json(sheet, {
+    range: XLSX.utils.encode_range(headerRange)
+  })
+
+  const sheetNames = Object.fromEntries(workbook.SheetNames.entries())
+  const logic = rows.map(row => {
+    // parse EC code
+    const codeString = row['Detail Expenditure']
+    const codeParts = codeString.split('-')
+    const ecCode = codeParts[0]
+    const ecCodeDesc = codeParts.slice(1, codeParts.length).join('-')
+
+    // type that this logic rule applies to
+    const sheetName = sheetNames[row.Sheet - 1]
+    const type = DATA_SHEET_TYPES[sheetName]
+
+    // which columns are relevant given the ec code?
+    const columnNames = Object.fromEntries(
+      COLNAMES.map(columnName => [columnName, Boolean(row[columnName])])
+    )
+
+    return {
+      type,
+      ecCode,
+      ecCodeDesc,
+      columnNames
+    }
+  })
+
+  return logic
+}
+
+async function saveTo (destFilename, data) {
+  const destPath = path.join(SRC_DIR, 'server', 'lib', destFilename)
+  const strData = JSON.stringify(data, null, 2)
+
+  log(`writing to ${destFilename}`)
+  return writeFile(destPath, strData)
+}
+
 const run = async () => {
   log(`extracting rules from ${EMPTY_TEMPLATE_NAME}...`)
 
+  // read the workbook
   const buffer = await readFile(path.join(SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME))
-  const rules = await extractRules(buffer)
-  const rulesStr = JSON.stringify(rules, null, 2)
+  const workbook = XLSX.read(buffer, { type: 'buffer' })
 
-  const rulesFilename = path.join(SRC_DIR, 'server', 'lib', 'templateRules.json')
-  log(`writing extracted rules to ${rulesFilename}`)
-  await writeFile(rulesFilename, rulesStr)
+  const logic = await extractLogic(workbook)
 
-  const dd = await extractDropdowns(buffer)
-  const ddStr = JSON.stringify(dd, null, 2)
+  const rules = await extractRules(workbook, logic)
+  await saveTo('templateRules.json', rules)
 
-  const ddFilename = path.join(SRC_DIR, 'server', 'lib', 'templateDropdowns.json')
-  log(`writing extracted rules to ${ddFilename}`)
-  await writeFile(ddFilename, ddStr)
+  const dropdowns = await extractDropdowns(workbook)
+  await saveTo('templateDropdowns.json', dropdowns)
 }
 
 run()

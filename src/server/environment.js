@@ -1,3 +1,7 @@
+/**
+ * Environment variables. Please keep declaration in this file in sync with:
+ * /render.yaml
+ */
 require('dotenv').config()
 
 const { join, resolve } = require('path')

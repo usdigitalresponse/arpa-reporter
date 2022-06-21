@@ -14,6 +14,8 @@ services:
       name: DataDir
       mountPath: /var/data
       sizeGB: 10
+    # Environment variables. Please keep declaration in this file in sync with:
+    # /src/server/environment.js
     envVars:
       - key: AWS_ACCESS_KEY_ID
         sync: false # placeholder for a value to be added in the dashboard

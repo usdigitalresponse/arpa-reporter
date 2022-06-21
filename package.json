@@ -22,7 +22,8 @@
     "test:server-aws-ses": "./tests/server-nodemailer/mocha_wrapper.sh",
     "lint": "vue-cli-service lint",
     "prod": "NODE_ENV=production node src/server",
-    "initRender": "./scripts/initRender.mjs"
+    "initRender": "./scripts/initRender.mjs",
+    "generateRules": "./scripts/generateRules.mjs"
   },
   "dependencies": {
     "adm-zip": "0.5.9",

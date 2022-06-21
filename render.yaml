@@ -11,8 +11,8 @@ services:
     startCommand: yarn run prod
     healthCheckPath: /api/health
     disk:
-      name: Uploads
-      mountPath: /var/data/uploads
+      name: DataDir
+      mountPath: /var/data
       sizeGB: 10
     envVars:
       - key: AWS_ACCESS_KEY_ID

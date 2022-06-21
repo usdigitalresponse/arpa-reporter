@@ -40,6 +40,12 @@ function parseListVal (lvStr) {
   return lines
 }
 
+function parseRequired (rqStr) {
+  if (rqStr === 'Required') return true
+  if (rqStr === 'Optional') return false
+  return rqStr
+}
+
 async function extractRules (buffer) {
   const workbook = XLSX.read(buffer, {
     type: 'buffer',
@@ -67,7 +73,7 @@ async function extractRules (buffer) {
     })
 
     const colKeys = rows[2]
-    const required = rows[3].map(req => req === 'Required')
+    const required = rows[3].map(str => parseRequired(str))
     const listVals = rows[5].map(str => parseListVal(str))
     const dataTypes = rows[6]
     const maxLengths = rows[7].map(ml => Number(ml))

@@ -144,7 +144,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -191,7 +191,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -238,7 +238,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -316,7 +316,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -325,7 +325,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -361,7 +361,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
       "listVals": [],
@@ -370,7 +370,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
       "listVals": [],
@@ -379,7 +379,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
-      "required": false,
+      "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
@@ -561,7 +561,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -608,7 +608,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -655,7 +655,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -760,7 +760,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -769,7 +769,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -805,7 +805,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
       "listVals": [],
@@ -814,7 +814,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
       "listVals": [],
@@ -823,7 +823,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
-      "required": false,
+      "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
@@ -1057,7 +1057,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -1066,7 +1066,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -1102,7 +1102,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
       "listVals": [],
@@ -1111,7 +1111,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
       "listVals": [],
@@ -1120,7 +1120,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
-      "required": false,
+      "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
@@ -1406,7 +1406,7 @@
     },
     "Proj_Actual_Construction_Start_Date__c": {
       "key": "Proj_Actual_Construction_Start_Date__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Date",
       "maxLength": null,
       "listVals": [],
@@ -1415,7 +1415,7 @@
     },
     "Initiation_of_Operations_Date__c": {
       "key": "Initiation_of_Operations_Date__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Date",
       "maxLength": null,
       "listVals": [],
@@ -1424,7 +1424,7 @@
     },
     "Location__c": {
       "key": "Location__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -1438,7 +1438,7 @@
     },
     "Location_Detail__c": {
       "key": "Location_Detail__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
       "listVals": [],
@@ -1447,7 +1447,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
-      "required": false,
+      "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
@@ -1458,7 +1458,7 @@
     },
     "National_Pollutant_Discharge_Number__c": {
       "key": "National_Pollutant_Discharge_Number__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 50,
       "listVals": [],
@@ -1467,7 +1467,7 @@
     },
     "Public_Water_System_PWS_ID_number__c": {
       "key": "Public_Water_System_PWS_ID_number__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 50,
       "listVals": [],
@@ -1476,7 +1476,7 @@
     },
     "Is_project_designed_to_meet_100_mbps__c": {
       "key": "Is_project_designed_to_meet_100_mbps__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
@@ -1487,7 +1487,7 @@
     },
     "Project_not_met_100_mbps_explanation__c": {
       "key": "Project_not_met_100_mbps_explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
       "listVals": [],
@@ -1496,7 +1496,7 @@
     },
     "Is_project_designed_to_exceed_100_mbps__c": {
       "key": "Is_project_designed_to_exceed_100_mbps__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -1508,7 +1508,7 @@
     },
     "Median_Household_Income_Service_Area__c": {
       "key": "Median_Household_Income_Service_Area__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -1517,7 +1517,7 @@
     },
     "Lowest_Quintile_Income__c": {
       "key": "Lowest_Quintile_Income__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [
@@ -1543,7 +1543,7 @@
     },
     "Project_Technology_Type_Other_c": {
       "key": "Project_Technology_Type_Other_c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -1733,7 +1733,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -1742,7 +1742,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -1778,7 +1778,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
       "listVals": [],
@@ -1787,7 +1787,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
       "listVals": [],
@@ -1851,7 +1851,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -1888,7 +1888,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -1925,7 +1925,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
@@ -2080,7 +2080,7 @@
     },
     "Federal_Funds_80_or_More_of_Revenue__c": {
       "key": "Federal_Funds_80_or_More_of_Revenue__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -2092,7 +2092,7 @@
     },
     "Derives_25_Million_or_More_from_Federal__c": {
       "key": "Derives_25_Million_or_More_from_Federal__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -2104,7 +2104,7 @@
     },
     "Total_Compensation_for_Officers_Public__c": {
       "key": "Total_Compensation_for_Officers_Public__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
@@ -2116,7 +2116,7 @@
     },
     "Officer_Name__c": {
       "key": "Officer_Name__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
       "listVals": [],
@@ -2125,7 +2125,7 @@
     },
     "Officer_Total_Comp__c": {
       "key": "Officer_Total_Comp__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -2134,7 +2134,7 @@
     },
     "Officer_2_Name__c": {
       "key": "Officer_2_Name__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
       "listVals": [],
@@ -2143,7 +2143,7 @@
     },
     "Officer_2_Total_Comp__c": {
       "key": "Officer_2_Total_Comp__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -2152,7 +2152,7 @@
     },
     "Officer_3_Name__c": {
       "key": "Officer_3_Name__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
       "listVals": [],
@@ -2161,7 +2161,7 @@
     },
     "Officer_3_Total_Comp__c": {
       "key": "Officer_3_Total_Comp__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -2170,7 +2170,7 @@
     },
     "Officer_4_Name__c": {
       "key": "Officer_4_Name__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
       "listVals": [],
@@ -2179,7 +2179,7 @@
     },
     "Officer_4_Total_Comp__c": {
       "key": "Officer_4_Total_Comp__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -2188,7 +2188,7 @@
     },
     "Officer_5_Name__c": {
       "key": "Officer_5_Name__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
       "listVals": [],
@@ -2197,7 +2197,7 @@
     },
     "Officer_5_Total_Comp__c": {
       "key": "Officer_5_Total_Comp__c",
-      "required": false,
+      "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
       "listVals": [],
@@ -2321,7 +2321,7 @@
     },
     "If_Other__c": {
       "key": "If_Other__c",
-      "required": false,
+      "required": "**only required if Primary Sector is Other",
       "dataType": "String",
       "maxLength": 100,
       "listVals": [],
@@ -2330,7 +2330,7 @@
     },
     "Purpose_of_Funds__c": {
       "key": "Purpose_of_Funds__c",
-      "required": false,
+      "required": "TBD",
       "dataType": "String",
       "maxLength": 3000,
       "listVals": [],

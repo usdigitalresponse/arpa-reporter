@@ -7,7 +7,7 @@ const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
 const { recordsForUpload } = require('./records')
-const { rulesForUpload } = require('./validation-rules')
+const { getRules } = require('./validation-rules')
 const { ecCodes } = require('../lib/arpa-ec-codes')
 
 const ValidationError = require('../lib/validation-error')
@@ -198,7 +198,7 @@ async function validateUpload (upload, user, trns) {
   const records = await recordsForUpload(upload)
 
   // grab the rules
-  const rules = await rulesForUpload(upload)
+  const rules = await getRules()
 
   // list of all of our validations
   const validations = [

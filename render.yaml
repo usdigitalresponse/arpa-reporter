@@ -1,0 +1,43 @@
+# Describe the services required to run the ARPA reporter on Render
+
+services:
+  # web server
+  - type: web
+    name: arpa-reporter-web
+    env: node
+    region: ohio
+    branch: main
+    buildCommand: yarn install && yarn build
+    startCommand: yarn run prod
+    healthCheckPath: /api/health
+    disk:
+      name: DataDir
+      mountPath: /var/data
+      sizeGB: 10
+    # Environment variables. Please keep declaration in this file in sync with:
+    # /src/server/environment.js
+    envVars:
+      - key: AWS_ACCESS_KEY_ID
+        sync: false # placeholder for a value to be added in the dashboard
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: COOKIE_SECRET
+        generateValue: true # will generate a base64-encoded 256-bit secret
+      - key: DATA_DIR
+        value: /var/data
+      - key: NOTIFICATIONS_EMAIL
+        sync: false
+      - key: POSTGRES_URL
+        fromDatabase: # automatically derive this value from db service
+          name: arpa-reporter-db
+          property: connectionString
+      - key: SES_REGION
+        value: us-east-1
+
+databases:
+  # postgres db
+  - name: arpa-reporter-db
+    region: ohio
+    databaseName: arpa_reporter_db
+    user: arpa_reporter_db_user
+

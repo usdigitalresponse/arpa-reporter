@@ -6,47 +6,45 @@
 */
 /* eslint camelcase: 0 */
 
-const path = require('path')
-const { mkdir, writeFile } = require('fs/promises')
-
 const express = require('express')
 const router = express.Router()
-const moment = require('moment')
 
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
-const reportingPeriods = require('../db/reporting-periods')
-const { UPLOAD_DIR } = require('../environment')
+const {
+  closeReportingPeriod,
+  createReportingPeriod,
+  getAllReportingPeriods,
+  getReportingPeriod,
+  updateReportingPeriod
+} = require('../db/reporting-periods')
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { templateForPeriod } = require('../services/get-template')
-const { validForReportingPeriod } = require('../db/uploads')
+const {
+  savePeriodTemplate,
+  templateForPeriod
+} = require('../services/get-template')
+const { usedForTreasuryExport } = require('../db/uploads')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const allPeriods = await reportingPeriods.getAll(req.session.user.tenant_id)
-
-  const now = moment()
-  const reporting_periods = allPeriods.filter(period => moment(period.start_date) <= now)
-  reporting_periods.sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
-
-  return res.json({ reporting_periods, all_reporting_periods: allPeriods })
-})
-
-router.get('/summaries/', requireUser, async function (req, res) {
-  // TODO(mbroussard): this method doesn't seem to exist?
-  return reportingPeriods.getPeriodSummaries().then(summaries => res.json({ summaries }))
+  const periods = await getAllReportingPeriods(req.session.user.tenant_id)
+  return res.json({ reportingPeriods: periods })
 })
 
 router.post('/close/', requireAdminUser, async (req, res) => {
-  console.log('POST /reporting_periods/close/')
+  const period = await getReportingPeriod(req.session.user.tenant_id)
+  const user = req.session.user
 
+  const trns = await knex.transaction()
   try {
-    await reportingPeriods.close(req.session.user)
+    await closeReportingPeriod(user, period, trns)
+    trns.commit()
   } catch (err) {
-    return res.status(500).send(err.message)
+    if (!trns.isCompleted()) trns.rollback()
+    return res.status(500).json({ error: err.message })
   }
 
   res.json({
@@ -54,65 +52,33 @@ router.post('/close/', requireAdminUser, async (req, res) => {
   })
 })
 
-function validateReportingPeriod (req, res, next) {
-  next()
-}
+router.post('/', requireAdminUser, async function (req, res, next) {
+  const updatedPeriod = req.body.reportingPeriod
 
-router.post('/', requireAdminUser, validateReportingPeriod, function (req, res, next) {
-  console.log('POST /reporting_periods', req.body)
-  const {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  } = req.body
-  const reportingPeriod = {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date,
-    tenant_id: req.session.user.tenant_id
-  }
-  reportingPeriods.createReportingPeriod(reportingPeriod)
-    .then(result => res.json({ reportingPeriod: result }))
-    .catch(e => {
-      next(e)
-    })
-})
+  try {
+    if (updatedPeriod.id) {
+      const existing = await getReportingPeriod(req.session.user.tenant_id, updatedPeriod.id)
+      if (!existing) {
+        res.status(404).json({ error: 'invalid reporting period id' })
+        return
+      }
 
-router.put('/:id', requireAdminUser, validateReportingPeriod, async function (
-  req,
-  res,
-  next
-) {
-  console.log('PUT /reporting_periods/:id', req.body)
-  let reportingPeriod = await reportingPeriods.get(req.session.user.tenant_id, req.params.id)
-  if (!reportingPeriod) {
-    res.status(404).send('Reporting period not found')
-    return
+      const period = await updateReportingPeriod(updatedPeriod)
+      res.json({ reportingPeriod: period })
+    } else {
+      const period = await createReportingPeriod({
+        ...updatedPeriod,
+        tenant_id: req.session.user.tenant_id
+      })
+      res.json({ reportingPeriod: period })
+    }
+  } catch (e) {
+    if (e.message.match(/violates unique constraint/)) {
+      res.status(400).json({ error: 'Period conflicts with an existing one' })
+    } else {
+      res.status(500).json({ error: e.message })
+    }
   }
-  const {
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  } = req.body
-  reportingPeriod = {
-    ...reportingPeriod,
-    name,
-    start_date,
-    end_date,
-    period_of_performance_end_date,
-    crf_end_date
-  }
-  reportingPeriods.updateReportingPeriod(reportingPeriod)
-    .then(result => res.json({ reportingPeriod: result }))
-    .catch(e => {
-      next(e)
-    })
 })
 
 router.post(
@@ -121,42 +87,34 @@ router.post(
   multerUpload.single('template'),
   async (req, res, next) => {
     if (!req.file) {
-      res.status(400).send('File missing')
+      res.status(400).json({ error: 'File missing' })
       return
     }
 
+    const tenantId = req.session.user.tenant_id
     const periodId = req.params.id
-    const reportingPeriod = await reportingPeriods.get(req.session.user.tenant_id, periodId)
+    const reportingPeriod = await getReportingPeriod(tenantId, periodId)
     if (!reportingPeriod) {
-      res.status(404).send('Reporting period not found')
+      res.status(404).json({ error: 'Reporting period not found' })
       return
     }
 
-    const { originalname: filename, size, buffer } = req.file
+    const { originalname, size, buffer } = req.file
     console.log(
-      `Uploading filename ${filename} size ${size} for period ${periodId}`)
+      `Uploading filename ${originalname} size ${size} for period ${periodId}`
+    )
 
     try {
-      await mkdir(UPLOAD_DIR, { recursive: true })
-      await writeFile(
-        path.join(UPLOAD_DIR, filename),
-        buffer,
-        { flag: 'wx' }
-      )
+      await savePeriodTemplate(tenantId, periodId, originalname, buffer)
     } catch (e) {
-      res.json({
+      res.status(500).json({
         success: false,
-        errorMessage: e.code === 'EEXIST'
-          ? `The file ${filename} already exists. `
-          : e.message
+        errorMessage: e.message
       })
       return
     }
 
-    reportingPeriod.reporting_template = filename
-    return reportingPeriods.updateReportingPeriod(reportingPeriod)
-      .then(() => res.json({ success: true, reportingPeriod }))
-      .catch(e => next(e))
+    res.json({ success: true })
   }
 )
 
@@ -167,10 +125,7 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
   try {
     const { filename, data } = await templateForPeriod(tenantId, periodId)
 
-    res.header(
-      'Content-Disposition',
-      `attachment; filename="${filename}"`
-    )
+    res.header('Content-Disposition', `attachment; filename="${filename}"`)
     res.header('Content-Type', 'application/octet-stream')
     res.end(data)
   } catch (err) {
@@ -187,7 +142,7 @@ router.get('/:id/exported_uploads', requireUser, async (req, res, next) => {
   const tenantId = req.session.user.tenant_id
 
   try {
-    const exportedUploads = await validForReportingPeriod(tenantId, periodId)
+    const exportedUploads = await usedForTreasuryExport(tenantId, periodId)
     return res.json({ exportedUploads })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -199,7 +154,7 @@ router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const commit = req.query.commit || false
 
   const user = req.session.user
-  const reportingPeriod = await reportingPeriods.get(user.tenant_id, periodId)
+  const reportingPeriod = await getReportingPeriod(user.tenant_id, periodId)
   if (!reportingPeriod) {
     res.sendStatus(404)
     res.end()

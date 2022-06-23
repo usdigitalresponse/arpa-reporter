@@ -27,6 +27,9 @@ fi
 
 echo Using database $dbname
 
+mkdir -p $DATA_DIR
+rm -rf $DATA_DIR/*
+
 set -x
 if [ $DEVDBNAME == $dbname ]
 then

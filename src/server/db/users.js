@@ -2,6 +2,8 @@ const { v4 } = require('uuid')
 
 const knex = require('./connection')
 
+const environment = require('../environment')
+
 function users (tenantId, trns = knex) {
   if (tenantId === undefined) {
     throw new Error('must specify tenantId when querying user list')
@@ -62,6 +64,7 @@ function userAndRole (id, trns = knex) {
     .then(r => r[0])
 }
 
+// NOTE(mbroussard): roles are currently global and shared across all tenants.
 function roles (trns = knex) {
   return trns('roles')
     .select('*')
@@ -91,7 +94,7 @@ async function generatePasscode (email, trns = knex) {
   }
   const passcode = v4()
   const used = false
-  const expiryMinutes = parseInt(process.env.LOGIN_EXPIRY_MINUTES) || 30
+  const expiryMinutes = environment.LOGIN_EXPIRY_MINUTES
   const expires = new Date()
   expires.setMinutes(expires.getMinutes() + expiryMinutes)
   await trns('access_tokens').insert({

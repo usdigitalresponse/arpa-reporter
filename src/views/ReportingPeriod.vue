@@ -1,115 +1,80 @@
 <template>
   <div>
-    <h1>Reporting Period</h1>
-    <div v-if="loading">
-      Loading..
+    <h2>Reporting Period</h2>
+
+    <div v-if="reportingPeriod === null" class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
     </div>
+
     <div v-else>
-      <RecordForm
-        type="Reporting Period"
-        :columns="fields"
-        :record="editReportingPeriod"
-        :id="editReportingPeriod.id"
-        :isNew="isNew"
-        :onSave="onSave"
-        :onCancel="onCancel"
-        :onDone="onDone"
-        :errorMessage="errorMessage"
-      />
+      <StandardForm :initialRecord="reportingPeriod" :cols="cols" @save="onSave" @reset="onReset" :key="formKey" />
     </div>
   </div>
 </template>
 
 <script>
-import RecordForm from '../components/RecordForm'
-import moment from 'moment'
-import _ from 'lodash'
+import StandardForm from '../components/StandardForm'
+
+import { post } from '../store'
+
 export default {
   name: 'ReportingPeriod',
-  components: {
-    RecordForm
-  },
-  data: function () {
-    let id = 0
-    if (this.$route && this.$route.params && this.$route.params.id) {
-      id = parseInt(this.$route.params.id)
-    }
-    return {
-      id,
-      isNew: !id,
-      editReportingPeriod: this.findReportingPeriod(id),
-      errorMessage: null
-    }
-  },
+  data: () => ({ formKey: Date.now() }),
   computed: {
-    loading: function () {
-      return this.id !== 0 && !this.editReportingPeriod
+    reportingPeriodId: function () {
+      return this.$route.params.id
     },
-    fields: function () {
+    isNew: function () {
+      return this.reportingPeriodId === 'new'
+    },
+    reportingPeriod: function () {
+      if (this.isNew) return {}
+      const fromStore = this.$store.state.reportingPeriods
+        .find(p => p.id === Number(this.reportingPeriodId))
+      return fromStore || null
+    },
+    cols: function () {
       return [
-        { name: 'name', required: true },
-        { name: 'start_date', label: 'Reporting Period Start Date', required: true, date: true },
-        { name: 'end_date', label: 'Reporting Period End Date', required: true, date: true },
-        { name: 'period_of_performance_end_date', required: true, date: true },
-        { name: 'crf_end_date', label: 'CRF End Date', required: true, date: true }
+        { field: 'id', label: 'ID', readonly: true },
+        { field: 'name', label: 'Period Name', required: true },
+        { field: 'start_date', label: 'Reporting Period Start Date', required: true, inputType: 'date' },
+        { field: 'end_date', label: 'Reporting Period End Date', required: true, inputType: 'date' },
+        { field: 'template_filename', label: 'Upload Template Name', readonly: true }
       ]
-    },
-    dateFields: function () {
-      return this.fields.filter(f => f.date).map(f => f.name)
-    }
-  },
-  watch: {
-    '$store.state.reportingPeriods': function () {
-      this.editReportingPeriod = this.findReportingPeriod(this.id)
     }
   },
   methods: {
-    findReportingPeriod (id) {
-      const r = _.find(this.$store.state.allReportingPeriods, { id })
-      if (r) {
-        const result = { ...r }
-        this.dateFields.forEach(f => {
-          result[f] = this.formatDate(result[f])
+    onSave: async function (updatedPeriod) {
+      try {
+        const result = await post('/api/reporting_periods', { reportingPeriod: updatedPeriod })
+        if (result.error) throw new Error(result.error)
+
+        const text = this.isNew
+          ? `Period ${updatedPeriod.name} successfully created`
+          : `Period ${updatedPeriod.name} successfully updated`
+
+        this.$store.commit('addAlert', {
+          text,
+          level: 'ok'
         })
-        return result
-      }
-      return {}
-    },
-    onSave (reportingPeriod) {
-      const updatedReportingPeriod = {
-        ...this.editReportingPeriod,
-        ...reportingPeriod
-      }
-      // convert everything back to sortable format
-      this.dateFields.forEach(f => {
-        const v = updatedReportingPeriod[f]
-        if (v) {
-          updatedReportingPeriod[f] = moment(v).utc().format('YYYY-MM-DD')
+
+        this.$store.dispatch('updateReportingPeriods')
+        if (this.isNew) {
+          return this.$router.push(`/reporting_periods/${result.reportingPeriod.id}`)
         }
-      })
-      return this.$store
-        .dispatch(
-          this.isNew ? 'createReportingPeriod' : 'updateReportingPeriod',
-          updatedReportingPeriod
-        )
-        .then(() => this.onDone())
-        .catch(e => (this.errorMessage = e.message))
-    },
-    onCancel () {
-      this.onDone()
-    },
-    onDone () {
-      this.$router.push('/reporting_periods')
-    },
-    formatDate (d) {
-      if (d) {
-        const dt = moment(d)
-        if (dt.isValid()) {
-          return dt.utc().format('MM/DD/YYYY')
-        }
+      } catch (e) {
+        this.$store.commit('addAlert', {
+          text: `Error saving reporting period: ${e.message}`,
+          level: 'err'
+        })
       }
-      return ''
+    },
+    onReset () {
+      this.formKey = Date.now()
     }
+  },
+  components: {
+    StandardForm
   }
 }
 </script>

@@ -24,7 +24,6 @@ async function validateAgency (agency) {
 
 router.post('/', requireAdminUser, async function (req, res, next) {
   const agencyInfo = req.body.agency
-  console.dir(agencyInfo)
 
   try {
     await validateAgency(agencyInfo)

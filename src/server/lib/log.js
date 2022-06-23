@@ -3,7 +3,7 @@ const { VERBOSE } = require('../environment')
 /**
  * An alias for console.dir.
  *
- * This function is a no-op if process.env.VERBOSE is not set.
+ * This function is a no-op if environment.VERBOSE is not set.
  *
  * @param {...*} messages
  */
@@ -15,7 +15,7 @@ if (VERBOSE) {
 /**
  * An alias for console.log.
  *
- * This function is a no-op if process.env.VERBOSE is not set.
+ * This function is a no-op if environment.VERBOSE is not set.
  *
  * @param {...*} messages
  */

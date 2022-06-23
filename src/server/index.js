@@ -5,11 +5,14 @@ const express = require('express')
 require('express-async-errors')
 
 const configureAPI = require('./configure')
+const environment = require('./environment')
 
-const { PORT = 3000 } = process.env
-console.log(`Database is ${process.env.POSTGRES_URL}`)
+console.log(`Database is ${environment.POSTGRES_URL}`)
 
 const app = express()
 configureAPI(app)
 
-app.listen(PORT, () => console.log(`App running on port ${PORT}!`))
+app.listen(
+  environment.PORT,
+  () => console.log(`App running on port ${environment.PORT}!`)
+)

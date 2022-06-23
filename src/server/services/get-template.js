@@ -1,17 +1,52 @@
 const path = require('path')
-const { readFile } = require('fs/promises')
+const { mkdir, readFile, writeFile } = require('fs/promises')
 
 const xlsx = require('xlsx')
-const { SERVER_DATA_DIR, UPLOAD_DIR, EMPTY_TEMPLATE_NAME } = require('../environment')
+const { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, PERIOD_TEMPLATES_DIR } = require('../environment')
 
-const reportingPeriods = require('../db/reporting-periods')
+const { getReportingPeriod, updateReportingPeriod } = require('../db/reporting-periods')
 
 // cache treasury templates in memory after first load
 const treasuryTemplates = new Map()
 
 module.exports = {
   getTemplate,
-  templateForPeriod
+  templateForPeriod,
+  savePeriodTemplate
+}
+
+function periodTemplatePath (reportingPeriod) {
+  return path.join(
+    PERIOD_TEMPLATES_DIR,
+    `${reportingPeriod.id}.template`
+  )
+}
+
+async function savePeriodTemplate (tenantId, periodId, fileName, buffer) {
+  if (tenantId === undefined) {
+    throw new Error('must specify tenantId in savePeriodTemplate')
+  }
+  if (periodId === undefined) {
+    throw new Error('must specify periodId in savePeriodTemplate')
+  }
+  if (fileName === undefined) {
+    throw new Error('must specify fileName in savePeriodTemplate')
+  }
+  if (buffer === undefined) {
+    throw new Error('must specify buffer in savePeriodTemplate')
+  }
+
+  const reportingPeriod = await getReportingPeriod(tenantId, periodId)
+
+  await mkdir(PERIOD_TEMPLATES_DIR, { recursive: true })
+  await writeFile(
+    periodTemplatePath(reportingPeriod),
+    buffer,
+    { flag: 'w' }
+  )
+
+  reportingPeriod.template_filename = fileName
+  await updateReportingPeriod(reportingPeriod)
 }
 
 async function getTemplate (templateName) {
@@ -47,18 +82,15 @@ async function templateForPeriod (tenantId, periodId) {
     throw new Error('must specify periodId in templateForPeriod')
   }
 
-  const reportingPeriod = await reportingPeriods.get(tenantId, periodId)
-  const templateName = (reportingPeriod && reportingPeriod.reporting_template) || EMPTY_TEMPLATE_NAME
+  const reportingPeriod = await getReportingPeriod(tenantId, periodId)
 
-  try {
-    const data = await readFile(path.join(SERVER_DATA_DIR, templateName))
-    return { filename: templateName, data }
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      const data = await readFile(path.join(UPLOAD_DIR, templateName))
-      return { filename: templateName, data }
-    } else {
-      throw err
-    }
+  if (reportingPeriod.template_filename) {
+    const filename = reportingPeriod.template_filename
+    const data = await readFile(periodTemplatePath(reportingPeriod))
+    return { filename, data }
+  } else {
+    const filename = EMPTY_TEMPLATE_NAME
+    const data = await readFile(path.join(SERVER_DATA_DIR, filename))
+    return { filename, data }
   }
 }

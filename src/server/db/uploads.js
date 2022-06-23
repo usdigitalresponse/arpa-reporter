@@ -45,25 +45,29 @@ function getUpload (id, trns = knex) {
     .then(r => r[0])
 }
 
-function validForReportingPeriod (tenantId, period_id, trns = knex) {
+function usedForTreasuryExport (tenantId, periodId, trns = knex) {
   if (tenantId === undefined) {
     throw new Error('tenant must be specified in validForReportingPeriod')
   }
-  if (period_id === undefined) {
-    throw new Error('period_id must be specified in validForReportingPeriod')
+  if (periodId === undefined) {
+    throw new Error('periodId must be specified in validForReportingPeriod')
   }
 
   return baseQuery(trns)
     .with('agency_max_val', trns.raw(
-      'SELECT agency_id, ec_code, MAX(created_at) AS most_recent FROM uploads WHERE validated_at IS NOT NULL AND tenant_id = :tenantId GROUP BY agency_id, ec_code',
+      'SELECT agency_id, ec_code, reporting_period_id, MAX(created_at) AS most_recent ' +
+      'FROM uploads WHERE validated_at IS NOT NULL ' +
+      'AND tenant_id = :tenantId ' +
+      'GROUP BY agency_id, ec_code, reporting_period_id',
       { tenantId }
     ))
-    .where('uploads.reporting_period_id', period_id)
+    .where('uploads.reporting_period_id', periodId)
     .where('uploads.tenant_id', tenantId)
     .innerJoin('agency_max_val', function () {
       this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
         .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
         .andOn('uploads.ec_code', '=', 'agency_max_val.ec_code')
+        .andOn('uploads.reporting_period_id', '=', 'agency_max_val.reporting_period_id')
     })
 }
 
@@ -164,5 +168,5 @@ module.exports = {
   setEcCode,
   markValidated,
   markNotValidated,
-  validForReportingPeriod
+  usedForTreasuryExport
 }

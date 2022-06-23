@@ -6,9 +6,9 @@
         <span v-if="agencyName"> : {{ agencyName }}</span>
       </a>
 
-      <span class="navbar-text">Reporting Period Ending:</span>
+      <span class="navbar-text" v-if="viewPeriod">Reporting Period Ending:</span>
 
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div class="collapse navbar-collapse" id="navbarNavDropdown" v-if="viewPeriod">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item dropdown active">
             <a
@@ -25,11 +25,11 @@
             <div class="dropdown-menu" aria-labelledby="periodDropdown">
               <a
                 class="dropdown-item"
-                v-for="(name, key) in periodNames"
-                :key="name"
+                v-for="period in viewablePeriods"
+                :key="period.id"
                 >
-                <div @click="() => setViewPeriodID(key+1)">
-                  {{ name }}
+                <div @click="() => setViewPeriodID(period.id)">
+                  {{ period.name }}
                 </div>
               </a>
             </div>
@@ -114,8 +114,8 @@ export default {
     loggedIn: function () {
       return this.$store.state.user !== null
     },
-    periodNames: function () {
-      return this.$store.getters.periodNames
+    viewablePeriods: function () {
+      return this.$store.getters.viewableReportingPeriods
     },
     viewPeriod: function () {
       return this.$store.getters.viewPeriod

@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { createUser, users: listUsers, updateUser, user: getUser } = require('../db/users')
+const { createUser, users: listUsers, updateUser, roles: listRoles, user: getUser } = require('../db/users')
 const { agencyById } = require('../db/agencies')
 const { sendWelcomeEmail } = require('../lib/email')
 const _ = require('lodash-checkit')
@@ -37,7 +37,8 @@ router.get('/', requireUser, async function (req, res, next) {
   const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
 
   const users = (curUser.role === 'admin') ? allUsers : [curUser]
-  res.json({ users })
+  const roles = await listRoles()
+  res.json({ users, roles })
 })
 
 router.post('/', requireAdminUser, async function (req, res, next) {

@@ -5,7 +5,7 @@
     </div>
 
     <div class="row">
-      <h4 v-if="errors.length > 0" class="col text-danger">Validation Errors</h4>
+      <h4 v-if="errors.length > 0" class="col text-danger">Validation Results</h4>
     </div>
 
     <div v-if="errors.length > 0" class="row">
@@ -14,7 +14,8 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Error</th>
+              <th>Level</th>
+              <th>Message</th>
               <th>Tab</th>
               <th>Row</th>
               <th>Col</th>
@@ -22,7 +23,10 @@
           </thead>
           <tbody>
             <tr :key="n" v-for="(error, n) in errors">
-              <td>{{ n }}</td>
+              <td>{{ n + 1 }}</td>
+              <td :class="{ 'table-danger': error.severity === 'err', 'table-warning': error.severity !== 'err' }">
+                {{ error.severity === 'err' ? 'Error' : 'Warning' }}
+              </td>
               <td>{{ error.message }}</td>
               <td>{{ titleize(error.tab) }}</td>
               <td>{{ error.row }}</td>
@@ -94,13 +98,13 @@
           in period {{ upload.reporting_period_id }}
         </h4>
 
-        <template v-if="seriesValid">
-          <p v-if="seriesValid.id === upload.id">
+        <template v-if="seriesExported">
+          <p v-if="seriesExported.id === upload.id">
             The currently-displayed upload will be used for Treasury reporting.
           </p>
           <p v-else>
             Upload
-            <router-link :to="`/uploads/${seriesValid.id}`">{{ seriesValid.id }}</router-link>
+            <router-link :to="`/uploads/${seriesExported.id}`">{{ seriesExported.id }}</router-link>
             will be used for Treasury reporting.
           </p>
         </template>
@@ -127,7 +131,7 @@
             <tr
               v-for="sUpload in series"
               :key="sUpload.id"
-              :class="{ 'table-success': seriesValid && seriesValid.id == sUpload.id }">
+              :class="{ 'table-success': seriesExported && seriesExported.id == sUpload.id }">
               <template v-if="sUpload.id === upload.id">
                 <td>{{ upload.id }}</td>
                 <td colspan="2">This upload</td>
@@ -169,7 +173,7 @@ export default {
       upload: null,
       errors: [],
       series: [],
-      seriesValid: null,
+      seriesExported: null,
       alert: null,
       validating: false
     }
@@ -253,7 +257,7 @@ export default {
     },
     loadSeries: async function () {
       this.series = []
-      this.seriesValid = null
+      this.seriesExported = null
 
       const result = await getJson(`/api/uploads/${this.uploadId}/series`)
       if (result.error) {
@@ -263,7 +267,7 @@ export default {
         })
       } else {
         this.series = result.series
-        this.seriesValid = result.currently_valid
+        this.seriesExported = result.seriesExported
       }
     },
     initialValidation: async function () {

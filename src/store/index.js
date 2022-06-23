@@ -96,11 +96,10 @@ export default new Vuex.Store({
   state: {
     user: null,
     applicationSettings: {},
-    configuration: {},
+    roles: [],
+    users: [],
     agencies: [],
     reportingPeriods: [],
-    allReportingPeriods: [],
-    messages: [],
     viewPeriodID: null,
 
     recentUploadId: null,
@@ -114,44 +113,33 @@ export default new Vuex.Store({
     setUser (state, user) {
       state.user = user
     },
-    setConfiguration (state, configuration) {
-      state.configuration = configuration
-    },
     setAgencies (state, agencies) {
       state.agencies = agencies
+    },
+    setRoles (state, roles) {
+      state.roles = roles
+    },
+    setUsers (state, users) {
+      state.users = users
+      if (state.user) {
+        const updatedUser = users.find(u => u.id === state.user.id)
+        state.user = updatedUser
+      }
     },
     setReportingPeriods (state, reportingPeriods) {
       state.reportingPeriods = reportingPeriods
     },
-    setAllReportingPeriods (state, allReportingPeriods) {
-      state.allReportingPeriods = allReportingPeriods
-    },
     setApplicationSettings (state, applicationSettings) {
       state.applicationSettings = applicationSettings
+      // note: cannot commit setViewPeriodID from another mutation
       if (!state.viewPeriodID) {
         state.viewPeriodID = applicationSettings.current_reporting_period_id
       }
     },
-    addMessage (state, message) {
-      state.messages = [...state.messages, message]
-    },
     setViewPeriodID (state, period_id) {
       state.viewPeriodID = period_id
     },
-    addReportingPeriod (state, reportingPeriod) {
-      state.allReportingPeriods = _.sortBy([...state.allReportingPeriods, reportingPeriod], 'start_date')
-    },
-    updateReportingPeriod (state, reportingPeriod) {
-      state.reportingPeriods = _.chain(state.reportingPeriods)
-        .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
-        .sortBy('start_date')
-        .value()
-      state.allReportingPeriods = _.chain(state.allReportingPeriods)
-        .map(r => (reportingPeriod.id === r.id ? reportingPeriod : r))
-        .sortBy('start_date')
-        .value()
-    },
-    updateAllUploads (state, updatedUploads) {
+    setAllUploads (state, updatedUploads) {
       state.allUploads = updatedUploads
     },
     addAlert (state, alert) {
@@ -162,86 +150,22 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login ({ commit, dispatch }, user) {
+    login: async function ({ commit, dispatch }, user) {
       commit('setUser', user)
-      dispatch('loadApplicationSettings')
-      dispatch('updateAgencies')
 
-      const doFetch = attr => {
-        fetch(`/api/${attr}`, { credentials: 'include' })
-          .then(r => r.json())
-          .then(data => {
-            const mutation = _.camelCase(`set_${attr}`)
-            commit(mutation, data[attr])
-            if (attr === 'reporting_periods') { // yuck
-              commit('setAllReportingPeriods', data.all_reporting_periods)
-            }
-          })
-      }
-      doFetch('configuration')
-      doFetch('reporting_periods')
+      // to ensure consistent application state, lets block rendering until these complete
+      await Promise.all([
+        dispatch('updateApplicationSettings'),
+        dispatch('updateReportingPeriods'),
+        dispatch('updateAgencies'),
+        dispatch('updateUsersRoles')
+      ])
     },
     logout ({ commit }) {
       fetch('/api/sessions/logout').then(() => commit('setUser', null))
     },
-    loadApplicationSettings ({ commit }) {
-      fetch('/api/application_settings', { credentials: 'include' })
-        .then(r => r.json())
-        .then(data => {
-          commit('setApplicationSettings', data.application_settings)
-          commit('setViewPeriodID', data.application_settings.current_reporting_period_id)
-        })
-    },
-    createTemplate ({ commit }, { reportingPeriodId, formData }) {
-      return postForm(`/api/reporting_periods/${reportingPeriodId}/template`, formData)
-        .then(r => {
-          if (!r.ok) { throw new Error(`createTemplate: ${r.statusText} (${r.status})`) }
-          return r.json()
-        })
-        .then(response => {
-          if (response.success && response.reportingPeriod) {
-            commit('updateReportingPeriod', response.reportingPeriod)
-            fetch('/api/application_settings', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setApplicationSettings', data.application_settings))
-          }
-          return response
-        })
-    },
     setViewPeriodID ({ commit }, period_id) {
       commit('setViewPeriodID', period_id)
-    },
-    closeReportingPeriod ({ commit }, period_id) {
-      return fetch('/api/reporting_periods/close', { credentials: 'include', method: 'POST' })
-        .then(r => {
-          if (r.ok) {
-            fetch('/api/reporting_periods', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setReportingPeriods', data.reporting_periods))
-            fetch('/api/application_settings', { credentials: 'include' })
-              .then(r => r.json())
-              .then(data => commit('setApplicationSettings', data.application_settings))
-          }
-          return r
-        })
-    },
-    createReportingPeriod ({ commit }, reportingPeriod) {
-      return post('/api/reporting_periods', reportingPeriod).then(response => {
-        const r = {
-          ...reportingPeriod,
-          ...response.reportingPeriod
-        }
-        r.start_date = moment(r.start_date).format()
-        r.end_date = moment(r.end_date).format()
-        commit('addReportingPeriod', r)
-      })
-    },
-    updateReportingPeriod ({ commit }, reportingPeriod) {
-      reportingPeriod.start_date = moment(reportingPeriod.start_date).format()
-      reportingPeriod.end_date = moment(reportingPeriod.end_date).format()
-      return put(`/api/reporting_periods/${reportingPeriod.id}`, reportingPeriod).then(() => {
-        commit('updateReportingPeriod', reportingPeriod)
-      })
     },
 
     async updateUploads ({ commit, state }) {
@@ -251,7 +175,7 @@ export default new Vuex.Store({
       if (result.error) {
         commit('addAlert', { text: `updateUploads Error: ${result.error} (${result.text})`, level: 'err' })
       } else {
-        commit('updateAllUploads', result.uploads)
+        commit('setAllUploads', result.uploads)
       }
     },
     async updateAgencies ({ commit, state }) {
@@ -260,6 +184,35 @@ export default new Vuex.Store({
         commit('addAlert', { text: `updateAgencies Error: ${result.error} (${result.text})`, level: 'err' })
       } else {
         commit('setAgencies', result.agencies)
+      }
+    },
+    async updateReportingPeriods ({ commit, state }) {
+      const result = await getJson('/api/reporting_periods')
+      if (result.error) {
+        commit(
+          'addAlert',
+          { text: `updateReportingPeriods Error: ${result.error} (${result.text})`, level: 'err' }
+        )
+      } else {
+        commit('setReportingPeriods', result.reportingPeriods)
+      }
+    },
+    async updateUsersRoles ({ commit, state }) {
+      const result = await getJson('/api/users')
+      if (result.error) {
+        commit('addAlert', { text: `updateUsersRoles Error: ${result.error} (${result.text})`, level: 'err' })
+      } else {
+        commit('setRoles', result.roles)
+        commit('setUsers', result.users)
+      }
+    },
+    async updateApplicationSettings ({ commit }) {
+      const result = await getJson('/api/application_settings')
+      if (result.error) {
+        const text = `updateApplicationSettings Error: ${result.error} (${result.text})`
+        commit('addAlert', { text, level: 'err' })
+      } else {
+        commit('setApplicationSettings', result.application_settings)
       }
     }
   },
@@ -279,32 +232,27 @@ export default new Vuex.Store({
       const title = _.get(state, 'applicationSettings.title', '')
       return title || 'ARPA Reporter'
     },
-    currentReportingPeriod: state => {
-      const id = state.applicationSettings.current_reporting_period_id
-      if (!id) {
-        return null
-      }
-      return _.find(state.reportingPeriods, { id })
-    },
-    viewPeriod: state => {
-      const id = Number(state.viewPeriodID ||
-      state.applicationSettings.current_reporting_period_id
-      )
-
-      return _.find(state.reportingPeriods, { id }) || { id: 0, name: '' }
-    },
     currentPeriodID: state => {
       return Number(state.applicationSettings.current_reporting_period_id)
     },
     viewPeriodID: state => {
       return Number(state.viewPeriodID)
     },
-    viewPeriodIsCurrent: state => {
-      return Number(state.viewPeriodID) ===
-        Number(state.applicationSettings.current_reporting_period_id)
+    viewPeriodIsCurrent: (state, getters) => {
+      return getters.viewPeriodID === getters.currentPeriodID
+    },
+    currentReportingPeriod: (state, getters) => {
+      return state.reportingPeriods.find(period => period.id === getters.currentPeriodID)
+    },
+    viewPeriod: (state, getters) => {
+      return state.reportingPeriods.find(period => period.id === getters.viewPeriodID)
+    },
+    viewableReportingPeriods: state => {
+      const now = moment()
+      return state.reportingPeriods.filter(period => moment(period.start_date) <= now)
     },
     roles: state => {
-      return state.configuration.roles
+      return state.roles
     }
   }
 })

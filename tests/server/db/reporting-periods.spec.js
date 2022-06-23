@@ -22,7 +22,7 @@
 
 */
 
-const reportingPeriods = requireSrc(__filename)
+const { getAllReportingPeriods, getReportingPeriod } = requireSrc(__filename)
 const assert = require('assert')
 
 // Default tenant ID
@@ -32,7 +32,7 @@ const tenantId = 0
 describe('db/reporting-periods.js', function () {
   describe('getAll', function () {
     it('Returns a list of reporting periods', async function () {
-      const result = await reportingPeriods.getAll(tenantId)
+      const result = await getAllReportingPeriods(tenantId)
       assert.equal(result.length, 21)
     })
   })
@@ -40,21 +40,21 @@ describe('db/reporting-periods.js', function () {
   describe('get', function () {
     describe('when a specific id is passed', function () {
       it('Returns that reporting period', async function () {
-        const result = await reportingPeriods.get(tenantId, 2)
+        const result = await getReportingPeriod(tenantId, 2)
         assert.equal(result.id, 2)
       })
     })
 
     describe('when an invalid id is passed', function () {
       it('returns null', async function () {
-        assert.equal((await reportingPeriods.get(tenantId, '')), null)
-        assert.equal((await reportingPeriods.get(tenantId, null)), null)
-        assert.equal((await reportingPeriods.get(tenantId, 12356)), null)
+        assert.equal((await getReportingPeriod(tenantId, '')), null)
+        assert.equal((await getReportingPeriod(tenantId, null)), null)
+        assert.equal((await getReportingPeriod(tenantId, 12356)), null)
       })
     })
 
     it('returns the current reporting period', async function () {
-      const result = await reportingPeriods.get(tenantId)
+      const result = await getReportingPeriod(tenantId)
       assert.equal(result.id, 1)
       assert.equal(result.title, undefined)
     })

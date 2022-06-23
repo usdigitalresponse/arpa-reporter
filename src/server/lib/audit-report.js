@@ -21,19 +21,25 @@ const COLUMN = {
   E_CPE: 'Current Period Expenditures (Aggregate Awards <50k)'
 }
 
-async function generate (tenantId) {
+function getUploadLink (domain, id, filename) {
+  return { f: `=HYPERLINK("${domain}/uploads/${id}","${filename}")` }
+}
+
+async function generate (tenantId, requestHost) {
   requiredArgument(tenantId, 'must specify tenantId in auditReport.generate')
 
-  const periodId = await getCurrentReportingPeriodID(tenantId)
+  const periodId = await getCurrentReportingPeriodID()
   log(`generate(${periodId})`)
+
+  const domain = WEBSITE_DOMAIN ?? requestHost
 
   // generate sheets
   const [
     obligations,
     projectSummaries
   ] = await Promise.all([
-    createObligationSheet(tenantId, periodId),
-    createProjectSummaries(tenantId, periodId)
+    createObligationSheet(tenantId, periodId, domain),
+    createProjectSummaries(tenantId, periodId, domain)
   ])
 
   // compose workbook
@@ -49,7 +55,7 @@ async function generate (tenantId) {
   }
 }
 
-async function createObligationSheet (tenantId, periodId) {
+async function createObligationSheet (tenantId, periodId, domain) {
   // select active reporting periods and sort by date
   const currentReportingPeriod = await getReportingPeriod(tenantId, periodId)
   const allReportingPeriods = await getAllReportingPeriods(tenantId)
@@ -69,9 +75,7 @@ async function createObligationSheet (tenantId, periodId) {
         const emptyRow = {
           'Reporting Period': period.name,
           'Period End Date': new Date(period.end_date),
-          'Upload': {
-            f: `=HYPERLINK("${WEBSITE_DOMAIN}/uploads/${upload.id}","${upload.filename}")`
-          },
+          'Upload': getUploadLink(domain, upload.id, upload.filename),
           [COLUMN.EC_BUDGET]: 0,
           [COLUMN.EC_TCO]: 0,
           [COLUMN.EC_TCE]: 0,
@@ -143,8 +147,8 @@ async function createObligationSheet (tenantId, periodId) {
   return rows.flat()
 }
 
-async function createProjectSummaries (tenantId, periodId) {
-  const records = await recordsForReportingPeriod(tenantId, periodId)
+async function createProjectSummaries (tenantId, periodId, domain) {
+  const records = await recordsForReportingPeriod(periodId)
 
   const rows = []
 
@@ -158,7 +162,7 @@ async function createProjectSummaries (tenantId, periodId) {
       case 'ec7':
         rows.push({
           'Project ID': record.content.Project_Identification_Number__c,
-          'Upload': record.upload.filename // TODO: link to upload in arpa reporter
+          'Upload': getUploadLink(domain, record.upload.id, record.upload.filename)
           // TODO: consider also mapping project IDs to export templates?
         })
         break

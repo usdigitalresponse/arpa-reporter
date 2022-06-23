@@ -249,7 +249,10 @@ export default new Vuex.Store({
     },
     viewableReportingPeriods: state => {
       const now = moment()
-      return state.reportingPeriods.filter(period => moment(period.start_date) <= now)
+      const viewable = state.reportingPeriods
+        .filter(period => moment(period.start_date) <= now)
+        .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
+      return viewable
     },
     roles: state => {
       return state.roles

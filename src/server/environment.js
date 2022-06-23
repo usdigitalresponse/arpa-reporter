@@ -27,7 +27,6 @@ const IS_DEV = NODE_ENV === 'development'
 const LOGIN_EXPIRY_MINUTES = parseInt(process.env.LOGIN_EXPIRY_MINUTES) || 30
 
 const PORT = parseInt(process.env.PORT) || 3000
-const API_DOMAIN = process.env.API_DOMAIN
 const WEBSITE_DOMAIN = process.env.WEBSITE_DOMAIN
 
 const NOTIFICATIONS_EMAIL = process.env.NOTIFICATIONS_EMAIL
@@ -53,7 +52,6 @@ module.exports = {
   IS_DEV,
   LOGIN_EXPIRY_MINUTES,
   PORT,
-  API_DOMAIN,
   WEBSITE_DOMAIN,
   NOTIFICATIONS_EMAIL,
   NOTIFICATIONS_EMAIL_PW,

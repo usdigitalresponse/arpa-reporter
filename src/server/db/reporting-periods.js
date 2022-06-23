@@ -60,11 +60,12 @@ async function getReportingPeriod (tenantId, period_id = undefined, trns = knex)
 
   if (period_id && Number(period_id)) {
     return baseQuery(trns)
-      .where('application_settings.tenant_id', tenantId)
+      .where('reporting_periods.tenant_id', tenantId)
       .where('reporting_periods.id', period_id)
       .then(r => r[0])
   } else if (period_id === undefined) {
     return baseQuery(trns)
+      .where('reporting_periods.tenant_id', tenantId)
       .where('application_settings.tenant_id', tenantId)
       .innerJoin('application_settings', 'reporting_periods.id', 'application_settings.current_reporting_period_id')
       .then(r => r[0])

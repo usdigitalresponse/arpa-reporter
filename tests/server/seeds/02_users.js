@@ -37,12 +37,12 @@ exports.seed = async function (knex) {
   // TODO(mbroussard): why does this exist if this seed is only used for tests?
   await knex('users').insert(
     adminList.map(email => {
-      return { email, name: email, role: 'admin' }
+      return { email, name: email, role: 'admin', tenant_id: 0 }
     })
   )
   await knex('users').insert(
     agencyUserList.map(email => {
-      return { email, name: email, role: 'reporter' }
+      return { email, name: email, role: 'reporter', tenant_id: 0 }
     })
   )
 }

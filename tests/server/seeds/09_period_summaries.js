@@ -9,7 +9,8 @@ exports.seed = async function (knex) {
       award_number: '3568971',
       reporting_period_id: 1,
       current_obligation: 50000.00,
-      current_expenditure: 0.00
+      current_expenditure: 0.00,
+      tenant_id: 0
     },
     {
       project_code: '075',
@@ -17,7 +18,8 @@ exports.seed = async function (knex) {
       award_number: '1551:44008',
       reporting_period_id: 1,
       current_obligation: 100000000.00,
-      current_expenditure: 0.00
+      current_expenditure: 0.00,
+      tenant_id: 0
     },
     {
       project_code: '075',
@@ -25,7 +27,8 @@ exports.seed = async function (knex) {
       award_number: '1234',
       reporting_period_id: 1,
       current_obligation: 10000000.00,
-      current_expenditure: 0.00
+      current_expenditure: 0.00,
+      tenant_id: 0
     },
     {
       project_code: '075',
@@ -33,7 +36,8 @@ exports.seed = async function (knex) {
       award_number: '2706353',
       reporting_period_id: 1,
       current_obligation: 2000000.00,
-      current_expenditure: 0.00
+      current_expenditure: 0.00,
+      tenant_id: 0
     },
     {
       project_code: '075',
@@ -41,7 +45,8 @@ exports.seed = async function (knex) {
       award_number: '3675313',
       reporting_period_id: 1,
       current_obligation: 100000.00,
-      current_expenditure: 0.00
+      current_expenditure: 0.00,
+      tenant_id: 0
     }
   ])
 }

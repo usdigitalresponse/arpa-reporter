@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col">
         <p>
-          Reporting period {{ periodId }} has {{ uploads.length }} uploads.
+          Reporting period {{ periodName }} has {{ uploads.length }} uploads.
           {{ validUploads.length }} of these are currently valid.
         </p>
       </div>
@@ -200,6 +200,9 @@ export default {
     },
     periodId: function () {
       return this.$store.state.viewPeriodID
+    },
+    periodName: function () {
+      return this.$store.getters.viewPeriod.name
     }
   },
   methods: {

@@ -38,7 +38,7 @@ exports.seed = async function (knex) {
   const tenantIds = [0, 1]
   const periodsToInsert = tenantIds.map(
     tenantId => periods.map(
-      period => ({...period, tenant_id: tenantId})
+      period => ({ ...period, tenant_id: tenantId })
     )
   ).flat()
 

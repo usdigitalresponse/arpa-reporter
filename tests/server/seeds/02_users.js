@@ -17,7 +17,7 @@ const unitTestUsers = [
     name: 'Unit Test User 2',
     role: 'reporter',
     tenant_id: 1
-  },
+  }
 ]
 
 exports.seed = async function (knex) {

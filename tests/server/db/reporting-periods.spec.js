@@ -46,7 +46,7 @@ describe('db/reporting-periods.js', function () {
       assert.equal(a.length, 21)
       assert.equal(b.length, 21)
 
-      const allIds = _.chain([a, b]).flatten().map('id').uniq().value();
+      const allIds = _.chain([a, b]).flatten().map('id').uniq().value()
       assert.equal(allIds.length, 42)
     })
   })

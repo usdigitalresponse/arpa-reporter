@@ -44,6 +44,8 @@ async function generateReportName (tenantId, periodId) {
   const filename = [
     state.replace(/ /g, '-'),
     'Period',
+    // TODO: in multitenant world, should this use a filename-safe version of period.name instead of
+    // periodId?
     periodId,
     'ARPA-Treasury-Report-generated',
     now.format('YYYY-MM-DDTHH:mm:ss')

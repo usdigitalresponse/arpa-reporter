@@ -20,10 +20,8 @@ describe('/api/sessions', () => {
       .expect({ message: 'No session' })
   })
   it('shows logged in', async () => {
-    const x = server
+    await server
       .get('/api/sessions')
-
-    await x
       .set('Cookie', adminCookie)
       .expect(200)
       .expect(res => {

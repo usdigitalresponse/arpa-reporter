@@ -11,7 +11,13 @@ const unitTestUsers = [
     name: 'Unit Test Admin 1',
     role: 'admin',
     tenant_id: 0
-  }
+  },
+  {
+    email: 'mbroussard+unit-test-user2@usdigitalresponse.org',
+    name: 'Unit Test User 2',
+    role: 'reporter',
+    tenant_id: 1
+  },
 ]
 
 exports.seed = async function (knex) {

@@ -3,7 +3,7 @@ const srcRules = require('../lib/templateRules.json')
 const srcDropdowns = require('../lib/templateDropdowns.json')
 
 function generateRules () {
-  const rules = JSON.parse(JSON.stringify(srcRules))
+  const rules = srcRules
 
   // subrecipient EIN is actually a length-10 string
   rules.subrecipient.EIN__c.dataType = 'String'

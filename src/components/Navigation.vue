@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid" style="width: 90%">
-    <nav class="row navbar navbar-expand navbar-light bg-light" v-if="loggedIn">
+    <nav class="row navbar navbar-expand navbar-light bg-light">
       <a class="navbar-brand" href="#">
         {{ applicationTitle }}
         <span v-if="agencyName"> : {{ agencyName }}</span>
@@ -121,6 +121,8 @@ export default {
       return this.$store.getters.viewPeriod
     },
     applicationTitle: function () {
+      // NOTE(mbroussard): this getter will always default to "ARPA Reporter" in logged out view since we don't
+      // have application_settings yet
       return this.$store.getters.applicationTitle
     },
     alerts: function () {

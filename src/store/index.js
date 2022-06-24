@@ -230,6 +230,8 @@ export default new Vuex.Store({
     },
     applicationTitle: state => {
       const title = _.get(state, 'applicationSettings.title', '')
+      // NOTE(mbroussard): this fallback is important for logged out navbar since we don't have
+      // application_settings yet on the login page
       return title || 'ARPA Reporter'
     },
     currentPeriodID: state => {

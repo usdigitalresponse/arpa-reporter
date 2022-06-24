@@ -6,7 +6,7 @@ const { requireUser } = require('../access-helpers')
 
 const { user: getUser } = require('../db/users')
 const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-subrecipients')
-const { rulesForPeriod } = require('../services/validation-rules')
+const { getRules } = require('../services/validation-rules')
 
 router.get('/', requireUser, async function (req, res) {
   const recipients = await listRecipients()
@@ -23,7 +23,7 @@ router.get('/:id', requireUser, async (req, res) => {
     return
   }
 
-  const rules = await rulesForPeriod(recipient.reporting_period_id)
+  const rules = getRules()
   res.json({ recipient, rules: rules.subrecipient })
 })
 

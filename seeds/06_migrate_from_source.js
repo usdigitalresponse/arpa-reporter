@@ -1,6 +1,11 @@
 require('dotenv').config()
 
-exports.seed = async function (knex) {
+// NOTE(mbroussard): unclear to me if this seed will be used again, but I'm updating it to minimally
+// support tenantId so that it doesn't fail if we remove the default value on tenantId column. It
+// assumes the source DB is all one tenant and ignores tenantIds in the source. Everything gets the
+// same tenantId in the destination DB.
+
+exports.seed = async function (knex, destinationTenantId = 0) {
   if (!process.env.POSTGRES_SOURCE_URL) {
     console.log('POSTGRES_SOURCE_URL is not specified, so nothing to do')
     return
@@ -8,7 +13,7 @@ exports.seed = async function (knex) {
 
   const sourcedb = require('knex')(process.env.POSTGRES_SOURCE_URL)
   const sourceAgencies = await sourcedb('agencies').select()
-  const existingAgencies = await knex('agencies').select()
+  const existingAgencies = await knex('agencies').select().where('tenant_id', destinationTenantId)
 
   // figure out which to insert
   const newAgencies = []
@@ -16,7 +21,7 @@ exports.seed = async function (knex) {
     const matching = existingAgencies.filter(existing => (existing.code === source.code))
     if (matching.length !== 1) {
       newAgencies.push(
-        { name: source.name, code: source.code }
+        { name: source.name, code: source.code, tenant_id: destinationTenantId }
       )
     }
   })
@@ -29,7 +34,7 @@ exports.seed = async function (knex) {
   }
 
   // build mapping from agency id at the source to agency id in the current db
-  const curAgencies = await knex('agencies').select()
+  const curAgencies = await knex('agencies').select().where('tenant_id', destinationTenantId)
   const sourceToCur = {}
   sourceAgencies.forEach(source => {
     const matching = curAgencies.filter(cur => (cur.code === source.code))[0]
@@ -46,11 +51,19 @@ exports.seed = async function (knex) {
   const newUsers = []
   sourceUsers.forEach(source => {
     const matching = existingUsers.filter(existing => (existing.email === source.email))
-    if (matching.length !== 1) {
+    if (matching.length === 0) {
       const agencyId = source.agency_id ? sourceToCur[source.agency_id] : null
       newUsers.push(
-        { email: source.email, name: source.name, role: source.role, tags: source.tags, agency_id: agencyId }
+        { email: source.email, name: source.name, role: source.role, tags: source.tags, agency_id: agencyId, tenant_id: destinationTenantId }
       )
+    } else if (matching.length === 1) {
+      // Sanity check: existing user we match to should be in same tenant; we don't do this filter
+      // at SQL level because users must have globally unique (across tenants) email addresses
+      if (matching[0].tenant_id !== destinationTenantId) {
+        throw new Error(`User ${source.email} already exists in tenant ${matching[0].tenant_id}, but specified destinationTenantId=${destinationTenantId}`)
+      }
+    } else {
+      throw new Error('should be impossible: multiple existing users with same email')
     }
   })
 

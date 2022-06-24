@@ -70,7 +70,7 @@ export default {
           label: rule.humanColName,
           field: rule.key,
           readonly: rule.key === 'Unique_Entity_Identifier__c' || rule.key === 'EIN__c',
-          required: rule.required,
+          required: rule.required === true,
           selectItems: rule.listVals.length ? selectItems : null
         }
       })

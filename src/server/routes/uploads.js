@@ -10,7 +10,6 @@ const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
 const knex = require('../db/connection')
-const { user: getUser } = require('../db/users')
 const { getReportingPeriodID } = require('../db/reporting-periods')
 const { usedForTreasuryExport, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
@@ -20,8 +19,9 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const periodId = await getReportingPeriodID(req.query.period_id)
-  const uploads = await uploadsInPeriod(periodId)
+  const tenantId = req.session.user.tenant_id
+  const periodId = await getReportingPeriodID(tenantId, req.query.period_id)
+  const uploads = await uploadsInPeriod(tenantId, periodId)
   return res.json({ uploads })
 })
 
@@ -31,11 +31,9 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
     console.log('Filename:', req.file.originalname, 'size:', req.file.size)
   }
 
-  const user = await getUser(req.signedCookies.userId)
-
   try {
     const upload = await persistUpload({
-      user,
+      user: req.session.user,
       filename: req.file.originalname,
       buffer: req.file.buffer
     })
@@ -50,7 +48,7 @@ router.get('/:id', requireUser, async (req, res) => {
   const id = Number(req.params.id)
 
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -63,7 +61,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -76,7 +74,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
     series = [upload]
   }
 
-  const allExported = await usedForTreasuryExport(upload.reporting_period_id)
+  const allExported = await usedForTreasuryExport(upload.tenant_id, upload.reporting_period_id)
   const seriesExported = allExported.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
 
   res.json({
@@ -90,7 +88,7 @@ router.get('/:id/records', requireUser, async (req, res) => {
   const { id } = req.params
 
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -107,7 +105,7 @@ router.get('/:id/download', requireUser, async (req, res) => {
   const { id } = req.params
   const upload = await getUpload(id)
 
-  if (!upload) {
+  if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
@@ -126,9 +124,9 @@ router.get('/:id/download', requireUser, async (req, res) => {
 router.post('/:id/validate', requireUser, async (req, res) => {
   const { id } = req.params
 
-  const user = await getUser(req.signedCookies.userId)
+  const user = req.session.user
   const upload = await getUpload(id)
-  if (!upload) {
+  if (!upload || upload.tenant_id !== user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return

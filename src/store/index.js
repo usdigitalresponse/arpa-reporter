@@ -230,6 +230,8 @@ export default new Vuex.Store({
     },
     applicationTitle: state => {
       const title = _.get(state, 'applicationSettings.title', '')
+      // NOTE(mbroussard): this fallback is important for logged out navbar since we don't have
+      // application_settings yet on the login page
       return title || 'ARPA Reporter'
     },
     currentPeriodID: state => {
@@ -249,7 +251,10 @@ export default new Vuex.Store({
     },
     viewableReportingPeriods: state => {
       const now = moment()
-      return state.reportingPeriods.filter(period => moment(period.start_date) <= now)
+      const viewable = state.reportingPeriods
+        .filter(period => moment(period.start_date) <= now)
+        .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
+      return viewable
     },
     roles: state => {
       return state.roles

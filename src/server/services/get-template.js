@@ -5,6 +5,7 @@ const xlsx = require('xlsx')
 const { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, PERIOD_TEMPLATES_DIR } = require('../environment')
 
 const { getReportingPeriod, updateReportingPeriod } = require('../db/reporting-periods')
+const { requiredArgument } = require('../lib/preconditions')
 
 // cache treasury templates in memory after first load
 const treasuryTemplates = new Map()
@@ -22,8 +23,13 @@ function periodTemplatePath (reportingPeriod) {
   )
 }
 
-async function savePeriodTemplate (periodId, fileName, buffer) {
-  const reportingPeriod = await getReportingPeriod(periodId)
+async function savePeriodTemplate (tenantId, periodId, fileName, buffer) {
+  requiredArgument(tenantId, 'must specify tenantId in savePeriodTemplate')
+  requiredArgument(periodId, 'must specify periodId in savePeriodTemplate')
+  requiredArgument(fileName, 'must specify fileName in savePeriodTemplate')
+  requiredArgument(buffer, 'must specify buffer in savePeriodTemplate')
+
+  const reportingPeriod = await getReportingPeriod(tenantId, periodId)
 
   await mkdir(PERIOD_TEMPLATES_DIR, { recursive: true })
   await writeFile(
@@ -61,8 +67,11 @@ async function loadTemplate (templateName) {
   return xlsx.utils.sheet_to_json(worksheet, { header: 1, blankrows: false })
 }
 
-async function templateForPeriod (periodId) {
-  const reportingPeriod = await getReportingPeriod(periodId)
+async function templateForPeriod (tenantId, periodId) {
+  requiredArgument(tenantId, 'must specify tenantId in templateForPeriod')
+  requiredArgument(periodId, 'must specify periodId in templateForPeriod')
+
+  const reportingPeriod = await getReportingPeriod(tenantId, periodId)
 
   if (reportingPeriod.template_filename) {
     const filename = reportingPeriod.template_filename

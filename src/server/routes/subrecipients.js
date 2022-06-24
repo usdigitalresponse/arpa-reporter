@@ -4,12 +4,11 @@ const express = require('express')
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
 
-const { user: getUser } = require('../db/users')
 const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-subrecipients')
-const { rulesForPeriod } = require('../services/validation-rules')
+const { getRules } = require('../services/validation-rules')
 
 router.get('/', requireUser, async function (req, res) {
-  const recipients = await listRecipients()
+  const recipients = await listRecipients(req.session.user.tenant_id)
   return res.json({ recipients })
 })
 
@@ -17,22 +16,22 @@ router.get('/:id', requireUser, async (req, res) => {
   const id = Number(req.params.id)
 
   const recipient = await getRecipient(id)
-  if (!recipient) {
+  if (!recipient || recipient.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return
   }
 
-  const rules = await rulesForPeriod(recipient.reporting_period_id)
+  const rules = getRules()
   res.json({ recipient, rules: rules.subrecipient })
 })
 
 router.post('/:id', requireUser, async (req, res) => {
   const id = Number(req.params.id)
-  const user = await getUser(req.signedCookies.userId)
+  const user = req.session.user
 
   const recipient = await getRecipient(id)
-  if (!recipient) {
+  if (!recipient || recipient.tenant_id !== req.session.user.tenant_id) {
     res.sendStatus(404)
     res.end()
     return

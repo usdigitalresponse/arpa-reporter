@@ -4,6 +4,7 @@ const { merge } = require('lodash')
 const { bufferForUpload } = require('./persist-upload')
 const { usedForTreasuryExport } = require('../db/uploads')
 const { log } = require('../lib/log')
+const { requiredArgument } = require('../lib/preconditions')
 
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
@@ -80,8 +81,11 @@ async function recordsForUpload (upload) {
   return records
 }
 
-async function recordsForReportingPeriod (periodId) {
-  const uploads = await usedForTreasuryExport(periodId)
+async function recordsForReportingPeriod (tenantId, periodId) {
+  requiredArgument(tenantId, 'must specify tenantId in recordsForReportingPeriod')
+  requiredArgument(periodId, 'must specify periodId in recordsForReportingPeriod')
+
+  const uploads = await usedForTreasuryExport(tenantId, periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))
   )

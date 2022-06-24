@@ -1,17 +1,22 @@
 const { v4 } = require('uuid')
 
 const knex = require('./connection')
-
+const { requiredArgument } = require('../lib/preconditions')
 const environment = require('../environment')
 
-function users (trns = knex) {
+function users (tenantId, trns = knex) {
+  requiredArgument(tenantId, 'must specify tenantId when querying user list')
+
   return trns('users')
     .leftJoin('agencies', 'users.agency_id', 'agencies.id')
     .select('users.*', 'agencies.name AS agency_name', 'agencies.code AS agency_code')
+    .where('users.tenant_id', tenantId)
     .orderBy('email')
 }
 
 function createUser (user, trns = knex) {
+  requiredArgument(user.tenant_id, "can't create user without specifying tenant_id")
+
   return trns('users')
     .insert(user)
     .returning('*')
@@ -26,6 +31,7 @@ function updateUser (user, trns = knex) {
       name: user.name,
       role: user.role,
       agency_id: user.agency_id
+      // tenant_id is immutable
     })
     .returning('*')
     .then(rows => rows[0])
@@ -47,12 +53,14 @@ function userAndRole (id, trns = knex) {
       'users.role',
       'users.agency_id',
       'users.tags',
+      'users.tenant_id',
       'roles.rules'
     )
     .where('users.id', id)
     .then(r => r[0])
 }
 
+// NOTE(mbroussard): roles are currently global and shared across all tenants.
 function roles (trns = knex) {
   return trns('roles')
     .select('*')

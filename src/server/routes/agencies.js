@@ -5,11 +5,12 @@ const router = express.Router()
 const {
   agencies,
   createAgency,
-  updateAgency
+  updateAgency,
+  agencyById
 } = require('../db/agencies')
 
 router.get('/', requireUser, function (req, res) {
-  agencies().then(agencies => res.json({ agencies }))
+  agencies(req.session.user.tenant_id).then(agencies => res.json({ agencies }))
 })
 
 async function validateAgency (agency) {
@@ -33,10 +34,19 @@ router.post('/', requireAdminUser, async function (req, res, next) {
 
   try {
     if (agencyInfo.id) {
+      const existingAgency = await agencyById(agencyInfo.id)
+      if (!existingAgency || existingAgency.tenant_id !== req.session.user.tenant_id) {
+        res.status(404).json({ error: 'invalid agency' })
+        return
+      }
+
       const agency = await updateAgency(agencyInfo)
       res.json({ agency })
     } else {
-      const agency = await createAgency(agencyInfo)
+      const agency = await createAgency({
+        ...agencyInfo,
+        tenant_id: req.session.user.tenant_id
+      })
       res.json({ agency })
     }
   } catch (e) {

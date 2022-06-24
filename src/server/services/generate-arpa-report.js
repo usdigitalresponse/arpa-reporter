@@ -7,6 +7,7 @@ const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 const { currency, ec, zip, zip4 } = require('../lib/format')
+const { requiredArgument } = require('../lib/preconditions')
 
 const BOM = '\ufeff' // UTF-8 byte order mark
 const EC_CODE_REGEX = /^(\d.\d\d?)/
@@ -37,13 +38,15 @@ function isProjectRecord (record) {
   ].includes(record.type)
 }
 
-async function generateReportName (periodId) {
+async function generateReportName (tenantId, periodId) {
   const now = moment().utc()
-  const { title: state } = await applicationSettings()
+  const { title: state } = await applicationSettings(tenantId)
 
   const filename = [
     state.replace(/ /g, '-'),
     'Period',
+    // TODO: in multitenant world, should this use a filename-safe version of period.name instead of
+    // periodId?
     periodId,
     'ARPA-Treasury-Report-generated',
     now.format('YYYY-MM-DDTHH:mm:ss')
@@ -709,8 +712,10 @@ async function generateSubRecipient (records, periodId) {
   })
 }
 
-async function generateReport (periodId) {
-  const records = await recordsForReportingPeriod(periodId)
+async function generateReport (tenantId, periodId) {
+  requiredArgument(tenantId, 'must specify tenantId')
+  requiredArgument(periodId, 'must specify periodId')
+  const records = await recordsForReportingPeriod(tenantId, periodId)
 
   // generate every csv file for the report
   const csvObjects = [
@@ -766,7 +771,7 @@ async function generateReport (periodId) {
     zip.addFile(name + '.csv', buffer)
   })
 
-  const reportNamePromise = generateReportName(periodId)
+  const reportNamePromise = generateReportName(tenantId, periodId)
 
   const [reportName] = await Promise.all([
     reportNamePromise,

@@ -3,12 +3,12 @@
 const express = require('express')
 const router = express.Router()
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { createUser, users: listUsers, updateUser, roles: listRoles } = require('../db/users')
+const { createUser, users: listUsers, updateUser, roles: listRoles, user: getUser } = require('../db/users')
 const { agencyById } = require('../db/agencies')
 const { sendWelcomeEmail } = require('../lib/email')
 const _ = require('lodash-checkit')
 
-async function validateUser (user) {
+async function validateUser (user, creator) {
   const { email, role, agency_id } = user
   if (!email) {
     throw new Error('User email is required')
@@ -22,7 +22,7 @@ async function validateUser (user) {
 
   if (agency_id) {
     const agency = await agencyById(agency_id)
-    if (!agency) {
+    if (!agency || agency.tenant_id !== creator.tenant_id) {
       throw new Error('Invalid agency')
     }
   } else if (role !== 'admin') {
@@ -33,7 +33,7 @@ async function validateUser (user) {
 }
 
 router.get('/', requireUser, async function (req, res, next) {
-  const allUsers = await listUsers()
+  const allUsers = await listUsers(req.session.user.tenant_id)
   const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
 
   const users = (curUser.role === 'admin') ? allUsers : [curUser]
@@ -42,11 +42,12 @@ router.get('/', requireUser, async function (req, res, next) {
 })
 
 router.post('/', requireAdminUser, async function (req, res, next) {
+  const creator = req.session.user
   const user = req.body.user
   user.email = user.email.toLowerCase().trim()
 
   try {
-    await validateUser(user)
+    await validateUser(user, creator)
   } catch (e) {
     res.status(400).json({ error: e.message })
     return
@@ -54,10 +55,19 @@ router.post('/', requireAdminUser, async function (req, res, next) {
 
   try {
     if (user.id) {
+      const existingUser = await getUser(user.id)
+      if (!existingUser || existingUser.tenant_id !== creator.tenant_id) {
+        res.status(404).json({ error: 'invalid user' })
+        return
+      }
+
       const updatedUser = await updateUser(user)
       res.json({ user: updatedUser })
     } else {
-      const updatedUser = await createUser(user)
+      const updatedUser = await createUser({
+        ...user,
+        tenant_id: creator.tenant_id
+      })
       res.json({ user: updatedUser })
 
       void sendWelcomeEmail(updatedUser.email, req.headers.origin)

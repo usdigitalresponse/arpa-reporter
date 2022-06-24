@@ -21,7 +21,6 @@ const {
   updateReportingPeriod
 } = require('../db/reporting-periods')
 const { requireUser, requireAdminUser } = require('../access-helpers')
-const { user: getUser } = require('../db/users')
 const {
   savePeriodTemplate,
   templateForPeriod
@@ -31,13 +30,13 @@ const { usedForTreasuryExport } = require('../db/uploads')
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
 router.get('/', requireUser, async function (req, res) {
-  const periods = await getAllReportingPeriods()
+  const periods = await getAllReportingPeriods(req.session.user.tenant_id)
   return res.json({ reportingPeriods: periods })
 })
 
 router.post('/close/', requireAdminUser, async (req, res) => {
-  const period = await getReportingPeriod()
-  const user = await getUser(req.signedCookies.userId)
+  const period = await getReportingPeriod(req.session.user.tenant_id)
+  const user = req.session.user
 
   const trns = await knex.transaction()
   try {
@@ -58,10 +57,19 @@ router.post('/', requireAdminUser, async function (req, res, next) {
 
   try {
     if (updatedPeriod.id) {
+      const existing = await getReportingPeriod(req.session.user.tenant_id, updatedPeriod.id)
+      if (!existing) {
+        res.status(404).json({ error: 'invalid reporting period id' })
+        return
+      }
+
       const period = await updateReportingPeriod(updatedPeriod)
       res.json({ reportingPeriod: period })
     } else {
-      const period = await createReportingPeriod(updatedPeriod)
+      const period = await createReportingPeriod({
+        ...updatedPeriod,
+        tenant_id: req.session.user.tenant_id
+      })
       res.json({ reportingPeriod: period })
     }
   } catch (e) {
@@ -83,8 +91,9 @@ router.post(
       return
     }
 
+    const tenantId = req.session.user.tenant_id
     const periodId = req.params.id
-    const reportingPeriod = await getReportingPeriod(periodId)
+    const reportingPeriod = await getReportingPeriod(tenantId, periodId)
     if (!reportingPeriod) {
       res.status(404).json({ error: 'Reporting period not found' })
       return
@@ -96,7 +105,7 @@ router.post(
     )
 
     try {
-      await savePeriodTemplate(periodId, originalname, buffer)
+      await savePeriodTemplate(tenantId, periodId, originalname, buffer)
     } catch (e) {
       res.status(500).json({
         success: false,
@@ -111,9 +120,10 @@ router.post(
 
 router.get('/:id/template', requireUser, async (req, res, next) => {
   const periodId = req.params.id
+  const tenantId = req.session.user.tenant_id
 
   try {
-    const { filename, data } = await templateForPeriod(periodId)
+    const { filename, data } = await templateForPeriod(tenantId, periodId)
 
     res.header('Content-Disposition', `attachment; filename="${filename}"`)
     res.header('Content-Type', 'application/octet-stream')
@@ -129,9 +139,10 @@ router.get('/:id/template', requireUser, async (req, res, next) => {
 
 router.get('/:id/exported_uploads', requireUser, async (req, res, next) => {
   const periodId = req.params.id
+  const tenantId = req.session.user.tenant_id
 
   try {
-    const exportedUploads = await usedForTreasuryExport(periodId)
+    const exportedUploads = await usedForTreasuryExport(tenantId, periodId)
     return res.json({ exportedUploads })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -142,8 +153,8 @@ router.post('/:id/revalidate', requireAdminUser, async (req, res, next) => {
   const periodId = req.params.id
   const commit = req.query.commit || false
 
-  const user = await getUser(req.signedCookies.userId)
-  const reportingPeriod = await getReportingPeriod(periodId)
+  const user = req.session.user
+  const reportingPeriod = await getReportingPeriod(user.tenant_id, periodId)
   if (!reportingPeriod) {
     res.sendStatus(404)
     res.end()

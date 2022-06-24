@@ -4,7 +4,6 @@ const express = require('express')
 const router = express.Router()
 const { requireUser } = require('../access-helpers')
 
-const { user: getUser } = require('../db/users')
 const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 const { getRules } = require('../services/validation-rules')
 
@@ -29,7 +28,7 @@ router.get('/:id', requireUser, async (req, res) => {
 
 router.post('/:id', requireUser, async (req, res) => {
   const id = Number(req.params.id)
-  const user = await getUser(req.signedCookies.userId)
+  const user = req.session.user
 
   const recipient = await getRecipient(id)
   if (!recipient || recipient.tenant_id !== req.session.user.tenant_id) {

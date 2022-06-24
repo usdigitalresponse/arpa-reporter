@@ -1,5 +1,6 @@
 
 const knex = require('./connection')
+const { requiredArgument } = require('../lib/preconditions')
 
 function baseQuery (trns) {
   return trns('agencies')
@@ -7,9 +8,7 @@ function baseQuery (trns) {
 }
 
 function agencies (tenantId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId to list agencies')
-  }
+  requiredArgument(tenantId, 'must specify tenantId to list agencies')
 
   return baseQuery(trns)
     .where('tenant_id', tenantId)
@@ -23,12 +22,8 @@ function agencyById (id, trns = knex) {
 }
 
 function agencyByCode (tenantId, code, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in agencyByCode')
-  }
-  if (code === undefined) {
-    throw new Error('must specify code in agencyByCode')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in agencyByCode')
+  requiredArgument(code, 'must specify code in agencyByCode')
 
   return baseQuery(trns)
     .select('*')
@@ -36,9 +31,7 @@ function agencyByCode (tenantId, code, trns = knex) {
 }
 
 function createAgency (agency, trns = knex) {
-  if (agency.tenant_id === undefined) {
-    throw new Error('must specify tenantId to create new agency')
-  }
+  requiredArgument(agency.tenant_id, 'must specify tenantId to create new agency')
 
   return trns
     .insert(agency)

@@ -6,6 +6,7 @@ const { getCurrentReportingPeriodID } = require('../db/settings')
 const { recordsForReportingPeriod } = require('../services/records')
 const { log } = require('../lib/log')
 const { usedForTreasuryExport } = require('../db/uploads')
+const { requiredArgument } = require('../lib/preconditions')
 
 const COLUMN = {
   EC_BUDGET: 'Adopted Budget (EC tabs)',
@@ -20,9 +21,7 @@ const COLUMN = {
 }
 
 async function generate (tenantId) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in auditReport.generate')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in auditReport.generate')
 
   const periodId = await getCurrentReportingPeriodID(tenantId)
   log(`generate(${periodId})`)

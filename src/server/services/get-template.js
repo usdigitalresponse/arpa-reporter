@@ -5,6 +5,7 @@ const xlsx = require('xlsx')
 const { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, PERIOD_TEMPLATES_DIR } = require('../environment')
 
 const { getReportingPeriod, updateReportingPeriod } = require('../db/reporting-periods')
+const { requiredArgument } = require('../lib/preconditions')
 
 // cache treasury templates in memory after first load
 const treasuryTemplates = new Map()
@@ -23,18 +24,10 @@ function periodTemplatePath (reportingPeriod) {
 }
 
 async function savePeriodTemplate (tenantId, periodId, fileName, buffer) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in savePeriodTemplate')
-  }
-  if (periodId === undefined) {
-    throw new Error('must specify periodId in savePeriodTemplate')
-  }
-  if (fileName === undefined) {
-    throw new Error('must specify fileName in savePeriodTemplate')
-  }
-  if (buffer === undefined) {
-    throw new Error('must specify buffer in savePeriodTemplate')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in savePeriodTemplate')
+  requiredArgument(periodId, 'must specify periodId in savePeriodTemplate')
+  requiredArgument(fileName, 'must specify fileName in savePeriodTemplate')
+  requiredArgument(buffer, 'must specify buffer in savePeriodTemplate')
 
   const reportingPeriod = await getReportingPeriod(tenantId, periodId)
 
@@ -75,12 +68,8 @@ async function loadTemplate (templateName) {
 }
 
 async function templateForPeriod (tenantId, periodId) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in templateForPeriod')
-  }
-  if (periodId === undefined) {
-    throw new Error('must specify periodId in templateForPeriod')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in templateForPeriod')
+  requiredArgument(periodId, 'must specify periodId in templateForPeriod')
 
   const reportingPeriod = await getReportingPeriod(tenantId, periodId)
 

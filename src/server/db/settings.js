@@ -1,12 +1,9 @@
 const knex = require('./connection')
+const { requiredArgument } = require('../lib/preconditions')
 
 function setCurrentReportingPeriod (tenantId, id, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId')
-  }
-  if (id === undefined) {
-    throw new Error('must specify id in setCurrentReportingPeriod')
-  }
+  requiredArgument(tenantId, 'must specify tenantId')
+  requiredArgument(id, 'must specify id in setCurrentReportingPeriod')
 
   return trns('application_settings')
     .where('tenant_id', tenantId)
@@ -14,9 +11,7 @@ function setCurrentReportingPeriod (tenantId, id, trns = knex) {
 }
 
 async function getCurrentReportingPeriodID (tenantId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId')
-  }
+  requiredArgument(tenantId, 'must specify tenantId')
 
   return trns('application_settings')
     .select('*')
@@ -25,9 +20,7 @@ async function getCurrentReportingPeriodID (tenantId, trns = knex) {
 }
 
 async function applicationSettings (tenantId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId')
-  }
+  requiredArgument(tenantId, 'must specify tenantId')
 
   return await trns('application_settings')
     .join(

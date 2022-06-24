@@ -4,6 +4,7 @@ const knex = require('./connection')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
+const { requiredArgument } = require('../lib/preconditions')
 
 function baseQuery (trns) {
   return trns('uploads')
@@ -13,9 +14,7 @@ function baseQuery (trns) {
 }
 
 async function uploadsInPeriod (tenantId, periodId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in uploadsInPeriod')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in uploadsInPeriod')
   if (periodId === undefined) {
     periodId = await getCurrentReportingPeriodID(tenantId, trns)
   }
@@ -46,12 +45,8 @@ function getUpload (id, trns = knex) {
 }
 
 function usedForTreasuryExport (tenantId, periodId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('tenant must be specified in validForReportingPeriod')
-  }
-  if (periodId === undefined) {
-    throw new Error('periodId must be specified in validForReportingPeriod')
-  }
+  requiredArgument(tenantId, 'tenant must be specified in validForReportingPeriod')
+  requiredArgument(periodId, 'periodId must be specified in validForReportingPeriod')
 
   return baseQuery(trns)
     .with('agency_max_val', trns.raw(
@@ -90,9 +85,7 @@ function getUploadSummaries (tenantId, period_id, trns = knex) {
 }
 
 async function createUpload (upload, trns = knex) {
-  if (upload.tenant_id === undefined) {
-    throw new Error('must specify tenant when creating upload')
-  }
+  requiredArgument(upload.tenant_id, 'must specify tenant when creating upload')
 
   const inserted = await trns('uploads')
     .insert(upload)
@@ -115,9 +108,7 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
 }
 
 async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getPeriodUploadIDs')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in getPeriodUploadIDs')
 
   if (!period_id) {
     period_id = await getCurrentReportingPeriodID(tenantId, trns)

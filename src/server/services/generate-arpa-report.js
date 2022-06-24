@@ -7,6 +7,7 @@ const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
 const { currency, ec, zip, zip4 } = require('../lib/format')
+const { requiredArgument } = require('../lib/preconditions')
 
 const BOM = '\ufeff' // UTF-8 byte order mark
 const EC_CODE_REGEX = /^(\d.\d\d?)/
@@ -712,12 +713,8 @@ async function generateSubRecipient (records, periodId) {
 }
 
 async function generateReport (tenantId, periodId) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId')
-  }
-  if (periodId === undefined) {
-    throw new Error('must specify periodId')
-  }
+  requiredArgument(tenantId, 'must specify tenantId')
+  requiredArgument(periodId, 'must specify periodId')
   const records = await recordsForReportingPeriod(tenantId, periodId)
 
   // generate every csv file for the report

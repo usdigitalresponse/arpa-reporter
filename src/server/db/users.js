@@ -1,13 +1,11 @@
 const { v4 } = require('uuid')
 
 const knex = require('./connection')
-
+const { requiredArgument } = require('../lib/preconditions')
 const environment = require('../environment')
 
 function users (tenantId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId when querying user list')
-  }
+  requiredArgument(tenantId, 'must specify tenantId when querying user list')
 
   return trns('users')
     .leftJoin('agencies', 'users.agency_id', 'agencies.id')
@@ -17,9 +15,7 @@ function users (tenantId, trns = knex) {
 }
 
 function createUser (user, trns = knex) {
-  if (user.tenant_id === undefined) {
-    throw new Error("can't create user without specifying tenant_id")
-  }
+  requiredArgument(user.tenant_id, "can't create user without specifying tenant_id")
 
   return trns('users')
     .insert(user)

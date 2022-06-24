@@ -19,6 +19,7 @@
 */
 const knex = require('./connection')
 const { cleanString } = require('../lib/spreadsheet')
+const { requiredArgument } = require('../lib/preconditions')
 
 const {
   getCurrentReportingPeriodID,
@@ -44,9 +45,7 @@ function baseQuery (trns) {
 }
 
 async function getAllReportingPeriods (tenantId, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getAllReportingPeriods')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in getAllReportingPeriods')
 
   return baseQuery(trns).where('reporting_periods.tenant_id', tenantId).orderBy('end_date', 'desc')
 }
@@ -54,9 +53,7 @@ async function getAllReportingPeriods (tenantId, trns = knex) {
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
 async function getReportingPeriod (tenantId, period_id = undefined, trns = knex) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getReportingPeriod')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriod')
 
   if (period_id && Number(period_id)) {
     return baseQuery(trns)
@@ -78,9 +75,7 @@ async function getReportingPeriod (tenantId, period_id = undefined, trns = knex)
   case it returns the current reporting period ID.
   */
 async function getReportingPeriodID (tenantId, periodID) {
-  if (tenantId === undefined) {
-    throw new Error('must specify tenantId in getReportingPeriodID')
-  }
+  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriodID')
 
   return Number(periodID) || getCurrentReportingPeriodID(tenantId)
 }
@@ -145,9 +140,7 @@ async function closeReportingPeriod (user, period, trns = knex) {
 }
 
 async function createReportingPeriod (reportingPeriod, trns = knex) {
-  if (reportingPeriod.tenant_id === undefined) {
-    throw new Error('createReportingPeriod caller must specify tenantId')
-  }
+  requiredArgument(reportingPeriod.tenant_id, 'createReportingPeriod caller must specify tenantId')
 
   return trns
     .insert(reportingPeriod)

@@ -1,6 +1,6 @@
 
 const _ = require('lodash')
-const {TABLES: PREV_MIGRATION_TABLES} = require('./20220519161859_add_tenant_id')
+const { TABLES: PREV_MIGRATION_TABLES } = require('./20220519161859_add_tenant_id')
 
 const TABLES_REMOVED_SINCE_PREV_MIGRATION = [
   'subrecipients' // 20220526001139_kill_subrecipients_table
@@ -17,7 +17,7 @@ const TABLES = _.chain(PREV_MIGRATION_TABLES)
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
+exports.up = function (knex) {
   // This reduce in effect chains each of these calls together and returns the resulting promise
   return TABLES.reduce((schema, tableName) => schema.alterTable(tableName, table => {
     // Calling alter() means you need to re-declare all constraints you want. So not having .defaultTo()
@@ -26,15 +26,15 @@ exports.up = function(knex) {
     // default value written to them during 20220519161859_add_tenant_id migration
     table.integer('tenant_id').notNullable().alter()
   }), knex.schema)
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
+exports.down = function (knex) {
   // This reduce in effect chains each of these calls together and returns the resulting promise
   return TABLES.reduce((schema, tableName) => schema.alterTable(tableName, table => {
     table.integer('tenant_id').notNullable().defaultTo(0).alter()
   }), knex.schema)
-};
+}

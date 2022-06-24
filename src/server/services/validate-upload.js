@@ -23,7 +23,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
+  const matchingAgency = (await agencyByCode(upload.tenant_id, agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -63,7 +63,7 @@ async function validateEcCode ({ upload, records, trns }) {
 }
 
 async function validateReportingPeriod ({ upload, records, trns }) {
-  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
+  const uploadPeriod = await getReportingPeriod(upload.tenant_id, upload.reporting_period_id, trns)
   const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 
@@ -94,7 +94,7 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   // does the row already exist?
   let existing = null
   if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
-    existing = await findRecipient(recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
+    existing = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
   } else {
     errors.push(new ValidationError(
       'At least one of UEI or TIN must be set, but both are missing',
@@ -131,7 +131,8 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
         uei: recipient.Unique_Entity_Identifier__c,
         tin: recipient.EIN__c,
         record: recipient,
-        upload_id: upload.id
+        upload_id: upload.id,
+        tenant_id: upload.tenant_id
       }
       await createRecipient(dbRow, trns)
     }

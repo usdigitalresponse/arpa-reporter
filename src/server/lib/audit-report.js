@@ -6,6 +6,7 @@ const { getCurrentReportingPeriodID } = require('../db/settings')
 const { recordsForReportingPeriod } = require('../services/records')
 const { log } = require('../lib/log')
 const { usedForTreasuryExport } = require('../db/uploads')
+const { requiredArgument } = require('../lib/preconditions')
 
 const COLUMN = {
   EC_BUDGET: 'Adopted Budget (EC tabs)',
@@ -19,8 +20,10 @@ const COLUMN = {
   E_CPE: 'Current Period Expenditures (Aggregate Awards <50k)'
 }
 
-async function generate () {
-  const periodId = await getCurrentReportingPeriodID()
+async function generate (tenantId) {
+  requiredArgument(tenantId, 'must specify tenantId in auditReport.generate')
+
+  const periodId = await getCurrentReportingPeriodID(tenantId)
   log(`generate(${periodId})`)
 
   // generate sheets
@@ -28,8 +31,8 @@ async function generate () {
     obligations,
     projectSummaries
   ] = await Promise.all([
-    createObligationSheet(periodId),
-    createProjectSummaries(periodId)
+    createObligationSheet(tenantId, periodId),
+    createProjectSummaries(tenantId, periodId)
   ])
 
   // compose workbook
@@ -45,10 +48,10 @@ async function generate () {
   }
 }
 
-async function createObligationSheet (periodId) {
+async function createObligationSheet (tenantId, periodId) {
   // select active reporting periods and sort by date
-  const currentReportingPeriod = await getReportingPeriod(periodId)
-  const allReportingPeriods = await getAllReportingPeriods()
+  const currentReportingPeriod = await getReportingPeriod(tenantId, periodId)
+  const allReportingPeriods = await getAllReportingPeriods(tenantId)
   const reportingPeriods = allReportingPeriods.filter(
     period =>
       new Date(period.end_date) <= new Date(currentReportingPeriod.end_date)
@@ -58,8 +61,8 @@ async function createObligationSheet (periodId) {
   // collect aggregate obligations and expenditures by upload
   const rows = await Promise.all(
     reportingPeriods.map(async period => {
-      const uploads = await usedForTreasuryExport(period.id)
-      const records = await recordsForReportingPeriod(period.id)
+      const uploads = await usedForTreasuryExport(tenantId, period.id)
+      const records = await recordsForReportingPeriod(tenantId, period.id)
 
       return await Promise.all(uploads.map(async upload => {
         const emptyRow = {
@@ -137,8 +140,8 @@ async function createObligationSheet (periodId) {
   return rows.flat()
 }
 
-async function createProjectSummaries (periodId) {
-  const records = await recordsForReportingPeriod(periodId)
+async function createProjectSummaries (tenantId, periodId) {
+  const records = await recordsForReportingPeriod(tenantId, periodId)
 
   const rows = []
 

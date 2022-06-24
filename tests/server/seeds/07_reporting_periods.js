@@ -32,5 +32,15 @@ exports.seed = async function (knex) {
     start.add(3, 'months')
   }
 
-  await knex('reporting_periods').insert(periods)
+  // NOTE(mbroussard): We create reporting periods for 2 different tenants for the purpose of unit tests
+  // even though in prod ARPA Reporter-only deployments there will only ever be one; the multitenant
+  // support is intended for an eventual merge into GOST, which already has multiple tenants.
+  const tenantIds = [0, 1]
+  const periodsToInsert = tenantIds.map(
+    tenantId => periods.map(
+      period => ({ ...period, tenant_id: tenantId })
+    )
+  ).flat()
+
+  await knex('reporting_periods').insert(periodsToInsert)
 }

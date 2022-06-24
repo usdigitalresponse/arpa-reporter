@@ -94,7 +94,7 @@ import { titleize } from '../helpers/form-helpers'
 import moment from 'moment'
 
 export default {
-  name: 'Logout',
+  name: 'Navigation',
   components: {
     AlertBox
   },
@@ -121,6 +121,8 @@ export default {
       return this.$store.getters.viewPeriod
     },
     applicationTitle: function () {
+      // NOTE(mbroussard): this getter will always default to "ARPA Reporter" in logged out view since we don't
+      // have application_settings yet
       return this.$store.getters.applicationTitle
     },
     alerts: function () {

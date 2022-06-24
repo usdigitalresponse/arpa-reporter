@@ -19,6 +19,7 @@
 */
 const knex = require('./connection')
 const { cleanString } = require('../lib/spreadsheet')
+const { requiredArgument } = require('../lib/preconditions')
 
 const {
   getCurrentReportingPeriodID,
@@ -43,19 +44,26 @@ function baseQuery (trns) {
     .leftJoin('users', 'reporting_periods.certified_by', 'users.id')
 }
 
-async function getAllReportingPeriods (trns = knex) {
-  return baseQuery(trns).orderBy('end_date', 'desc')
+async function getAllReportingPeriods (tenantId, trns = knex) {
+  requiredArgument(tenantId, 'must specify tenantId in getAllReportingPeriods')
+
+  return baseQuery(trns).where('reporting_periods.tenant_id', tenantId).orderBy('end_date', 'desc')
 }
 
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
-async function getReportingPeriod (period_id, trns = knex) {
+async function getReportingPeriod (tenantId, period_id = undefined, trns = knex) {
+  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriod')
+
   if (period_id && Number(period_id)) {
     return baseQuery(trns)
+      .where('reporting_periods.tenant_id', tenantId)
       .where('reporting_periods.id', period_id)
       .then(r => r[0])
   } else if (period_id === undefined) {
     return baseQuery(trns)
+      .where('reporting_periods.tenant_id', tenantId)
+      .where('application_settings.tenant_id', tenantId)
       .innerJoin('application_settings', 'reporting_periods.id', 'application_settings.current_reporting_period_id')
       .then(r => r[0])
   } else {
@@ -66,12 +74,19 @@ async function getReportingPeriod (period_id, trns = knex) {
 /*  getPeriodID() returns the argument unchanged unless it is falsy, in which
   case it returns the current reporting period ID.
   */
-async function getReportingPeriodID (periodID) {
-  return Number(periodID) || getCurrentReportingPeriodID()
+async function getReportingPeriodID (tenantId, periodID) {
+  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriodID')
+
+  return Number(periodID) || getCurrentReportingPeriodID(tenantId)
 }
 
 async function closeReportingPeriod (user, period, trns = knex) {
-  const currentPeriodID = await getCurrentReportingPeriodID(trns)
+  if (user.tenant_id !== period.tenant_id) {
+    throw new Error('user cannot close reporting period of a different tenant')
+  }
+
+  const tenantId = user.tenant_id
+  const currentPeriodID = await getCurrentReportingPeriodID(tenantId, trns)
 
   if (period.id !== currentPeriodID) {
     throw new Error(
@@ -86,6 +101,7 @@ async function closeReportingPeriod (user, period, trns = knex) {
   }
 
   const prior = await trns('reporting_periods')
+    .where('tenant_id', tenantId)
     .where('start_date', '<', period.start_date)
     .orderBy('start_date', 'desc')
     .limit(1)
@@ -114,15 +130,18 @@ async function closeReportingPeriod (user, period, trns = knex) {
     })
 
   const next = await trns('reporting_periods')
+    .where('tenant_id', tenantId)
     .where('start_date', '>', period.start_date)
     .orderBy('start_date', 'asc')
     .limit(1)
     .then(rows => rows[0])
 
-  await setCurrentReportingPeriod(next.id, trns)
+  await setCurrentReportingPeriod(tenantId, next.id, trns)
 }
 
 async function createReportingPeriod (reportingPeriod, trns = knex) {
+  requiredArgument(reportingPeriod.tenant_id, 'createReportingPeriod caller must specify tenantId')
+
   return trns
     .insert(reportingPeriod)
     .into('reporting_periods')
@@ -143,6 +162,7 @@ function updateReportingPeriod (reportingPeriod, trns = knex) {
       start_date: reportingPeriod.start_date,
       end_date: reportingPeriod.end_date,
       template_filename: reportingPeriod.template_filename
+      // tenant_id is immutable
     })
 }
 

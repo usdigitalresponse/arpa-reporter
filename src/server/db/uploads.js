@@ -4,6 +4,7 @@ const knex = require('./connection')
 const {
   getCurrentReportingPeriodID
 } = require('./settings')
+const { requiredArgument } = require('../lib/preconditions')
 
 function baseQuery (trns) {
   return trns('uploads')
@@ -12,13 +13,15 @@ function baseQuery (trns) {
     .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
 }
 
-async function uploadsInPeriod (periodId, trns = knex) {
-  if (!periodId) {
-    periodId = await getCurrentReportingPeriodID(trns)
+async function uploadsInPeriod (tenantId, periodId, trns = knex) {
+  requiredArgument(tenantId, 'must specify tenantId in uploadsInPeriod')
+  if (periodId === undefined) {
+    periodId = await getCurrentReportingPeriodID(tenantId, trns)
   }
 
   return baseQuery(trns)
     .where('reporting_period_id', periodId)
+    .where('uploads.tenant_id', tenantId)
     .orderBy('uploads.created_at', 'desc')
 }
 
@@ -26,6 +29,7 @@ async function uploadsInSeries (upload, trns = knex) {
   return baseQuery(trns)
     .where('reporting_period_id', upload.reporting_period_id)
     .andWhere('uploads.agency_id', upload.agency_id)
+    .andWhere('uploads.tenant_id', upload.tenant_id)
     .andWhere('uploads.ec_code', upload.ec_code)
     .orderBy('created_at', 'desc')
 }
@@ -40,14 +44,20 @@ function getUpload (id, trns = knex) {
     .then(r => r[0])
 }
 
-function usedForTreasuryExport (periodId, trns = knex) {
+function usedForTreasuryExport (tenantId, periodId, trns = knex) {
+  requiredArgument(tenantId, 'tenant must be specified in validForReportingPeriod')
+  requiredArgument(periodId, 'periodId must be specified in validForReportingPeriod')
+
   return baseQuery(trns)
     .with('agency_max_val', trns.raw(
       'SELECT agency_id, ec_code, reporting_period_id, MAX(created_at) AS most_recent ' +
       'FROM uploads WHERE validated_at IS NOT NULL ' +
-      'GROUP BY agency_id, ec_code, reporting_period_id'
+      'AND tenant_id = :tenantId ' +
+      'GROUP BY agency_id, ec_code, reporting_period_id',
+      { tenantId }
     ))
     .where('uploads.reporting_period_id', periodId)
+    .where('uploads.tenant_id', tenantId)
     .innerJoin('agency_max_val', function () {
       this.on('uploads.created_at', '=', 'agency_max_val.most_recent')
         .andOn('uploads.agency_id', '=', 'agency_max_val.agency_id')
@@ -56,7 +66,7 @@ function usedForTreasuryExport (periodId, trns = knex) {
     })
 }
 
-/*  getUploadSummaries() returns a trns promise containing an array of
+/*  getUploadSummaries() returns a knex promise containing an array of
     records like this:
     {
       id: 1,
@@ -67,14 +77,16 @@ function usedForTreasuryExport (periodId, trns = knex) {
       agency_id: 3,
     }
     */
-function getUploadSummaries (period_id, trns = knex) {
+function getUploadSummaries (tenantId, period_id, trns = knex) {
   // console.log(`period_id is ${period_id}`)
   return trns('uploads')
     .select('*')
-    .where('reporting_period_id', period_id)
+    .where({ reporting_period_id: period_id, tenant_id: tenantId })
 }
 
 async function createUpload (upload, trns = knex) {
+  requiredArgument(upload.tenant_id, 'must specify tenant when creating upload')
+
   const inserted = await trns('uploads')
     .insert(upload)
     .returning('*')
@@ -95,15 +107,17 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
     .update({ ec_code: ecCode })
 }
 
-async function getPeriodUploadIDs (period_id, trns = knex) {
+async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
+  requiredArgument(tenantId, 'must specify tenantId in getPeriodUploadIDs')
+
   if (!period_id) {
-    period_id = await getCurrentReportingPeriodID()
+    period_id = await getCurrentReportingPeriodID(tenantId, trns)
   }
   let rv
   try {
     rv = await trns('uploads')
       .select('id')
-      .where({ reporting_period_id: period_id })
+      .where({ reporting_period_id: period_id, tenant_id: tenantId })
       .then(recs => recs.map(rec => rec.id))
   } catch (err) {
     console.log('trns threw in getPeriodUploadIDs()!')

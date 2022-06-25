@@ -11,7 +11,7 @@ router.get('/', requireUser, async function (req, res) {
 
   let report
   try {
-    report = await generate(req.session.user.tenant_id)
+    report = await generate(req.session.user.tenant_id, req.headers.host)
   } catch (error) {
     return res.status(500).send(error.message)
   }

@@ -162,8 +162,13 @@ async function createProjectSummaries (tenantId, periodId, domain) {
       case 'ec7':
         rows.push({
           'Project ID': record.content.Project_Identification_Number__c,
-          'Upload': getUploadLink(domain, record.upload.id, record.upload.filename)
+          'Upload': getUploadLink(domain, record.upload.id, record.upload.filename),
           // TODO: consider also mapping project IDs to export templates?
+          'Adopted Budget': record.content.Adopted_Budget__c,
+          'Total Cumulative Obligations': record.content.Total_Obligations__c,
+          'Total Cumulative Expenditures': record.content.Total_Expenditures__c,
+          'Current Period Obligations': record.content.Current_Period_Obligations__c,
+          'Current Period Expenditures': record.content.Current_Period_Expenditures__c
         })
         break
       default:

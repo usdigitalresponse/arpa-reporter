@@ -180,7 +180,7 @@ export default {
   },
   computed: {
     uploadId: function () {
-      return Number(this.$route.params.id)
+      return this.$route.params.id
     },
     isRecentlyUploaded: function () {
       return this.uploadId === this.$store.state.recentUploadId

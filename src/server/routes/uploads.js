@@ -45,7 +45,7 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
 })
 
 router.get('/:id', requireUser, async (req, res) => {
-  const id = Number(req.params.id)
+  const id = req.params.id
 
   const upload = await getUpload(id)
   if (!upload || upload.tenant_id !== req.session.user.tenant_id) {

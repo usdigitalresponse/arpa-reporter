@@ -140,9 +140,8 @@ export default {
 
       return [
         {
-          label: '#',
-          field: 'id',
-          type: 'number'
+          label: 'ID',
+          field: 'id'
         },
         {
           label: 'Agency',

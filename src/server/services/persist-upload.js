@@ -11,7 +11,7 @@ const { UPLOAD_DIR } = require('../environment')
 const ValidationError = require('../lib/validation-error')
 
 const uploadFSName = (upload) => {
-  const filename = `upload-id-${upload.id}${path.extname(upload.filename)}`
+  const filename = `${upload.id}${path.extname(upload.filename)}`
   return path.join(UPLOAD_DIR, filename)
 }
 

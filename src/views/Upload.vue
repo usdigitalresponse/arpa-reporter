@@ -38,7 +38,7 @@
     </div>
 
     <div class="row">
-      <h4 class="col">Upload # {{ uploadId }} details:</h4>
+      <h4 class="col">Upload {{ shortUploadId }} details:</h4>
     </div>
 
     <div v-if="upload" class="row">
@@ -161,6 +161,7 @@ import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
 import DownloadIcon from '../components/DownloadIcon'
 import { getJson, post } from '../store'
+import { shortUuid } from '../helpers/short-uuid'
 
 export default {
   name: 'Upload',
@@ -180,7 +181,10 @@ export default {
   },
   computed: {
     uploadId: function () {
-      return Number(this.$route.params.id)
+      return this.$route.params.id
+    },
+    shortUploadId: function () {
+      return shortUuid(this.uploadId)
     },
     isRecentlyUploaded: function () {
       return this.uploadId === this.$store.state.recentUploadId

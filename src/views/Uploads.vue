@@ -41,7 +41,7 @@
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field === 'id'">
           <router-link :to="`/uploads/${props.row.id}`">
-            {{ props.row.id }}
+            {{ shortUuid(props.row.id) }}
           </router-link>
         </span>
 
@@ -68,6 +68,7 @@ import DownloadIcon from '../components/DownloadIcon'
 import DownloadTemplateBtn from '../components/DownloadTemplateBtn'
 
 import { getJson } from '../store'
+import { shortUuid } from '../helpers/short-uuid'
 
 export default {
   name: 'Uploads',
@@ -140,9 +141,8 @@ export default {
 
       return [
         {
-          label: '#',
-          field: 'id',
-          type: 'number'
+          label: 'ID',
+          field: 'id'
         },
         {
           label: 'Agency',
@@ -192,6 +192,7 @@ export default {
       this.$refs.uploadsTable.reset()
       this.$refs.uploadsTable.changeSort([])
     },
+    shortUuid,
     loadExportedUploads: async function (evt) {
       this.exportedUploads = []
       if (!this.onlyExported) return

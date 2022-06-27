@@ -3,7 +3,7 @@
 services:
   # web server
   - type: web
-    name: arpa-reporter-web
+    name: arpa-reporter-connecticut
     env: node
     region: ohio
     branch: main
@@ -29,14 +29,14 @@ services:
         sync: false
       - key: POSTGRES_URL
         fromDatabase: # automatically derive this value from db service
-          name: arpa-reporter-db
+          name: arpa-reporter-connecticut-db
           property: connectionString
       - key: SES_REGION
         value: us-east-1
 
 databases:
   # postgres db
-  - name: arpa-reporter-db
+  - name: arpa-reporter-connecticut-db
     region: ohio
     databaseName: arpa_reporter_db
     user: arpa_reporter_db_user

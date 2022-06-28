@@ -9,7 +9,11 @@ This readme.md page explains how to set up your development environment. Documen
 
 ## Project setup
 
-You will need a Postgres database running on the same machine.
+You'll need a nodejs dev environment.
+The repo includes a `.node-version` file which specifies the correct version.
+You an use [nvm](https://github.com/nvm-sh/nvm) or (recommended) [asdf](https://asdf-vm.com/) with the [nodejs plugin](https://github.com/asdf-vm/asdf-nodejs) to manage that version locally.
+
+You will also need a Postgres database running on the same machine.
 You can run one using the `docker-compose.yml` file in this repo:
 
 ```

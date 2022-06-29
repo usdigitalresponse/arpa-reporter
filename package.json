@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "serve": "concurrently \"npm:dev:*\"",
+    "db:clean": "./scripts/cleandb.sh",
+    "db:init": "yarn db:migrate && yarn knex seed:run",
+    "db:migrate": "yarn knex migrate:latest",
+    "db:reset": "yarn db:clean && yarn db:init",
     "dev:vue": "vue-cli-service serve",
     "dev:express": "NODE_ENV=development nodemon src/server",
     "serve:oh": "POSTGRES_URL=postgres://localhost/ohio DATA_DIR=\"./uploads/oh\" yarn serve",

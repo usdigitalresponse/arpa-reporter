@@ -43,6 +43,13 @@ async function validateEcCode ({ upload, records, trns }) {
   const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
 
+  if (codeString === undefined) {
+    return new ValidationError(
+      'Record is missing EC code',
+      { tab: 'cover', row: 2, col: 4 }
+    )
+  }
+
   const codeParts = codeString.split('-')
   const code = codeParts[0]
   const desc = codeParts.slice(1, codeParts.length).join('-')

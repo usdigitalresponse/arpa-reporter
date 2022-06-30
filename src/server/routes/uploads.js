@@ -143,7 +143,11 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     })
   } catch (e) {
     trns.rollback()
-    res.status(500).json({ error: e.message })
+
+    let msg = e.message
+    if (e.code === 'ENOENT') msg = 'Cannot find upload data; please re-submit this upload'
+
+    res.status(500).json({ error: msg })
   }
 })
 

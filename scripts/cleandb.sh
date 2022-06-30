@@ -12,7 +12,5 @@ postgres_url=${POSTGRES_URL/$dbname}
 
 echo $dbname
 
-psql $postgres_url -c "DROP SCHEMA public CASCADE"
-psql $postgres_url -c "CREATE SCHEMA public"
 psql $postgres_url -c "DROP DATABASE IF EXISTS $dbname"
 psql $postgres_url -c "CREATE DATABASE $dbname"

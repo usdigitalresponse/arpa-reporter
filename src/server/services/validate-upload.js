@@ -19,7 +19,7 @@ async function validateAgencyId ({ upload, records, trns }) {
 
   // must be set
   if (!agencyCode) {
-    return new ValidationError('Agency code must be set', { tab: 'cover', row: 1, col: 0 })
+    return new ValidationError('Agency code must be set', { tab: 'cover', row: 1, col: 'A' })
   }
 
   // must exist in the db
@@ -27,7 +27,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
-      { tab: 'cover', row: 2, col: 1 }
+      { tab: 'cover', row: 2, col: 'A' }
     )
   }
 
@@ -43,10 +43,10 @@ async function validateEcCode ({ upload, records, trns }) {
   const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
 
-  if (codeString === undefined) {
+  if (!codeString) {
     return new ValidationError(
-      'Record is missing EC code',
-      { tab: 'cover', row: 2, col: 4 }
+      'EC code must be set',
+      { tab: 'cover', row: 2, col: 'D' }
     )
   }
 
@@ -57,7 +57,7 @@ async function validateEcCode ({ upload, records, trns }) {
   if (ecCodes[code] !== desc) {
     return new ValidationError(
       `Record EC code ${code} (${desc}) does not match any known EC code`,
-      { tab: 'cover', row: 2, col: 4 }
+      { tab: 'cover', row: 2, col: 'D' }
     )
   }
 
@@ -79,7 +79,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
       `Upload reporting period starts ${periodStart.format('L')} while record specifies ${sheetStart.format('L')}`,
-      { tab: 'cover', row: 2, col: 5 }
+      { tab: 'cover', row: 2, col: 'E' }
     ))
   }
 
@@ -88,7 +88,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
       `Upload reporting period ends ${periodEnd.format('L')} while record specifies ${sheetEnd.format('L')}`,
-      { tab: 'cover', row: 2, col: 6 }
+      { tab: 'cover', row: 2, col: 'F' }
     ))
   }
 

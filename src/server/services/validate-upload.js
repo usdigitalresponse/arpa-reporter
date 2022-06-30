@@ -3,6 +3,7 @@ const moment = require('moment')
 
 const { getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
+const knex = require('../db/connection')
 const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
@@ -248,7 +249,7 @@ async function validateRules ({ upload, records, rules, trns }) {
   return errors
 }
 
-async function validateUpload (upload, user, trns) {
+async function validateUpload (upload, user, trns = null) {
   // holder for our validation errors
   const errors = []
 
@@ -268,6 +269,10 @@ async function validateUpload (upload, user, trns) {
     validateRules
   ]
 
+  // we should do this in a transaction, unless someone is doing it for us
+  const ourTransaction = !trns
+  if (ourTransaction) trns = await knex.transaction()
+
   // run validations, one by one
   for (const validation of validations) {
     try {
@@ -286,10 +291,16 @@ async function validateUpload (upload, user, trns) {
   // if we successfully validated for the first time, let's mark it!
   if (fatal.length === 0 && !upload.validated_at) {
     await markValidated(upload.id, user.id, trns)
+    if (ourTransaction) trns.commit()
 
   // if it was valid before but is no longer valid, clear it
   } else if (fatal.length > 0 && upload.validated_at) {
-    await markNotValidated(upload.id, trns)
+    if (ourTransaction) {
+      trns.rollback()
+      await markNotValidated(upload.id)
+    } else {
+      await markNotValidated(upload.id, trns)
+    }
   }
 
   return flatErrors

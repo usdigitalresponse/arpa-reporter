@@ -28,7 +28,7 @@ function getUploadLink (domain, id, filename) {
 async function generate (tenantId, requestHost) {
   requiredArgument(tenantId, 'must specify tenantId in auditReport.generate')
 
-  const periodId = await getCurrentReportingPeriodID()
+  const periodId = await getCurrentReportingPeriodID(tenantId)
   log(`generate(${periodId})`)
 
   const domain = WEBSITE_DOMAIN ?? requestHost
@@ -148,7 +148,7 @@ async function createObligationSheet (tenantId, periodId, domain) {
 }
 
 async function createProjectSummaries (tenantId, periodId, domain) {
-  const records = await recordsForReportingPeriod(periodId)
+  const records = await recordsForReportingPeriod(tenantId, periodId)
 
   const rows = []
 

@@ -23,7 +23,7 @@ const DATA_SHEET_TYPES = {
   'Aggregate Awards < 50000': 'awards'
 }
 
-async function readVersionRecord (workbook) {
+function readVersionRecord (workbook) {
   const range = {
     s: { r: 0, c: 1 },
     e: { r: 0, c: 1 }
@@ -113,5 +113,6 @@ async function recordsForReportingPeriod (tenantId, periodId) {
 module.exports = {
   recordsForReportingPeriod,
   recordsForUpload,
-  DATA_SHEET_TYPES
+  DATA_SHEET_TYPES,
+  readVersionRecord
 }

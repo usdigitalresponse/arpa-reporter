@@ -1,4 +1,18 @@
 {
+  "logic": {
+    "version": {
+      "version": "v:20220620",
+      "key": "version",
+      "index": 0,
+      "required": false,
+      "dataType": "String",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "B",
+      "humanColName": "Input template version",
+      "ecCodes": false
+    }
+  },
   "ec1": {
     "Name": {
       "key": "Name",

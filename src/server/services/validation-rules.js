@@ -19,6 +19,10 @@ function generateRules () {
   // awards50k state dropdown should contain all states
   rules.awards50k.State_Abbreviated__c.listVals = states
 
+  // awards50k sector dropdowns come from dropdowns list
+  const sectors = srcDropdowns['Sectors Designated as Essential Critical Infrastructure']
+  rules.awards50k.Primary_Sector__c.listVals = sectors
+
   return rules
 }
 

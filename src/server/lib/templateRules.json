@@ -2,6 +2,7 @@
   "ec1": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 80,
@@ -27,6 +28,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -52,6 +54,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -82,6 +85,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -107,6 +111,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -132,6 +137,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -157,6 +163,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -182,6 +189,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -207,6 +215,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -232,6 +241,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 11,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -257,6 +267,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 12,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -282,6 +293,7 @@
     },
     "Primary_Project_Demographics__c": {
       "key": "Primary_Project_Demographics__c",
+      "index": 13,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -336,6 +348,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
+      "index": 14,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -361,6 +374,7 @@
     },
     "Secondary_Project_Demographics__c": {
       "key": "Secondary_Project_Demographics__c",
+      "index": 15,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -415,6 +429,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
+      "index": 16,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -440,6 +455,7 @@
     },
     "Tertiary_Project_Demographics__c": {
       "key": "Tertiary_Project_Demographics__c",
+      "index": 17,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -494,6 +510,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "index": 18,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -519,6 +536,7 @@
     },
     "Structure_Objectives_of_Asst_Programs__c": {
       "key": "Structure_Objectives_of_Asst_Programs__c",
+      "index": 19,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -544,6 +562,7 @@
     },
     "Recipient_Approach_Description__c": {
       "key": "Recipient_Approach_Description__c",
+      "index": 20,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -569,6 +588,7 @@
     },
     "Spending_Allocated_Toward_Evidence_Based_Interventions": {
       "key": "Spending_Allocated_Toward_Evidence_Based_Interventions",
+      "index": 21,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -584,6 +604,7 @@
     },
     "Whether_program_evaluation_is_being_conducted": {
       "key": "Whether_program_evaluation_is_being_conducted",
+      "index": 22,
       "required": true,
       "dataType": "Picklist",
       "maxLength": null,
@@ -602,6 +623,7 @@
     },
     "Small_Businesses_Served__c": {
       "key": "Small_Businesses_Served__c",
+      "index": 23,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -614,6 +636,7 @@
     },
     "Number_Non_Profits_Served__c": {
       "key": "Number_Non_Profits_Served__c",
+      "index": 24,
       "required": true,
       "dataType": "String",
       "maxLength": 10,
@@ -626,6 +649,7 @@
     },
     "Does_Project_Include_Capital_Expenditure__c": {
       "key": "Does_Project_Include_Capital_Expenditure__c",
+      "index": 25,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -654,6 +678,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
+      "index": 26,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -679,6 +704,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
+      "index": 27,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -731,6 +757,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
+      "index": 28,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
@@ -756,6 +783,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
+      "index": 29,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
@@ -781,6 +809,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
+      "index": 43,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
@@ -808,6 +837,7 @@
     },
     "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
       "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+      "index": 44,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -820,6 +850,7 @@
     },
     "Workers_Completing_Sectoral_Job_Training_Programs_c": {
       "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+      "index": 45,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -832,6 +863,7 @@
     },
     "People_Participating_in_Summer_Youth_Employment_Programs_c": {
       "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+      "index": 46,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -846,6 +878,7 @@
   "ec2": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 150,
@@ -894,6 +927,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -942,6 +976,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -995,6 +1030,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1043,6 +1079,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1091,6 +1128,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1139,6 +1177,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1187,6 +1226,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1235,6 +1275,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -1283,6 +1324,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 11,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -1331,6 +1373,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 12,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -1379,6 +1422,7 @@
     },
     "Primary_Project_Demographics__c": {
       "key": "Primary_Project_Demographics__c",
+      "index": 13,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -1456,6 +1500,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
+      "index": 14,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -1504,6 +1549,7 @@
     },
     "Secondary_Project_Demographics__c": {
       "key": "Secondary_Project_Demographics__c",
+      "index": 15,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -1581,6 +1627,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
+      "index": 16,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -1629,6 +1676,7 @@
     },
     "Tertiary_Project_Demographics__c": {
       "key": "Tertiary_Project_Demographics__c",
+      "index": 17,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -1706,6 +1754,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "index": 18,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -1754,6 +1803,7 @@
     },
     "Structure_Objectives_of_Asst_Programs__c": {
       "key": "Structure_Objectives_of_Asst_Programs__c",
+      "index": 19,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -1802,6 +1852,7 @@
     },
     "Recipient_Approach_Description__c": {
       "key": "Recipient_Approach_Description__c",
+      "index": 20,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -1850,6 +1901,7 @@
     },
     "Individuals_Served__c": {
       "key": "Individuals_Served__c",
+      "index": 21,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -1869,6 +1921,7 @@
     },
     "Spending_Allocated_Toward_Evidence_Based_Interventions": {
       "key": "Spending_Allocated_Toward_Evidence_Based_Interventions",
+      "index": 22,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -1904,6 +1957,7 @@
     },
     "Whether_program_evaluation_is_being_conducted": {
       "key": "Whether_program_evaluation_is_being_conducted",
+      "index": 23,
       "required": true,
       "dataType": "Picklist",
       "maxLength": null,
@@ -1942,6 +1996,7 @@
     },
     "Small_Businesses_Served__c": {
       "key": "Small_Businesses_Served__c",
+      "index": 24,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -1958,6 +2013,7 @@
     },
     "Number_Non_Profits_Served__c": {
       "key": "Number_Non_Profits_Served__c",
+      "index": 25,
       "required": true,
       "dataType": "String",
       "maxLength": 10,
@@ -1970,6 +2026,7 @@
     },
     "School_ID_or_District_ID__c": {
       "key": "School_ID_or_District_ID__c",
+      "index": 26,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 750,
@@ -1986,6 +2043,7 @@
     },
     "Industry_Experienced_8_Percent_Loss__c": {
       "key": "Industry_Experienced_8_Percent_Loss__c",
+      "index": 27,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -1998,6 +2056,7 @@
     },
     "Does_Project_Include_Capital_Expenditure__c": {
       "key": "Does_Project_Include_Capital_Expenditure__c",
+      "index": 28,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -2049,6 +2108,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
+      "index": 29,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -2097,6 +2157,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
+      "index": 30,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -2172,6 +2233,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
+      "index": 31,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
@@ -2220,6 +2282,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
+      "index": 32,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
@@ -2268,6 +2331,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
+      "index": 46,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
@@ -2318,6 +2382,7 @@
     },
     "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
       "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+      "index": 47,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2330,6 +2395,7 @@
     },
     "Workers_Completing_Sectoral_Job_Training_Programs_c": {
       "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+      "index": 48,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2342,6 +2408,7 @@
     },
     "People_Participating_in_Summer_Youth_Employment_Programs_c": {
       "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+      "index": 49,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2354,6 +2421,7 @@
     },
     "Households_Receiving_Eviction_Prevention_Services_c": {
       "key": "Households_Receiving_Eviction_Prevention_Services_c",
+      "index": 50,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2370,6 +2438,7 @@
     },
     "Affordable_Housing_Units_Preserved_or_Developed_c": {
       "key": "Affordable_Housing_Units_Preserved_or_Developed_c",
+      "index": 51,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2386,6 +2455,7 @@
     },
     "Students_Participating_in_Evidence_Based_Tutoring_Programs_c": {
       "key": "Students_Participating_in_Evidence_Based_Tutoring_Programs_c",
+      "index": 52,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2401,6 +2471,7 @@
     },
     "Children_Served_by_Childcare_and_Early_Learning_Services_c": {
       "key": "Children_Served_by_Childcare_and_Early_Learning_Services_c",
+      "index": 53,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2416,6 +2487,7 @@
     },
     "Families_Served_by_Home_Visiting_c": {
       "key": "Families_Served_by_Home_Visiting_c",
+      "index": 54,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -2433,6 +2505,7 @@
   "ec3": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 150,
@@ -2449,6 +2522,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -2465,6 +2539,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -2486,6 +2561,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2502,6 +2578,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2518,6 +2595,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2534,6 +2612,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2550,6 +2629,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2566,6 +2646,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -2582,6 +2663,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 11,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -2598,6 +2680,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 12,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -2614,6 +2697,7 @@
     },
     "Structure_Objectives_of_Asst_Programs__c": {
       "key": "Structure_Objectives_of_Asst_Programs__c",
+      "index": 13,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -2630,6 +2714,7 @@
     },
     "Recipient_Approach_Description__c": {
       "key": "Recipient_Approach_Description__c",
+      "index": 14,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -2646,6 +2731,7 @@
     },
     "Payroll_Public_Health_Safety__c": {
       "key": "Payroll_Public_Health_Safety__c",
+      "index": 15,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 6,
@@ -2662,6 +2748,7 @@
     },
     "Number_of_FTEs_Rehired__c": {
       "key": "Number_of_FTEs_Rehired__c",
+      "index": 16,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 6,
@@ -2678,6 +2765,7 @@
     },
     "Does_Project_Include_Capital_Expenditure__c": {
       "key": "Does_Project_Include_Capital_Expenditure__c",
+      "index": 17,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -2697,6 +2785,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
+      "index": 18,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -2713,6 +2802,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
+      "index": 19,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -2756,6 +2846,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
+      "index": 20,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
@@ -2772,6 +2863,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
+      "index": 21,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
@@ -2788,6 +2880,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
+      "index": 35,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
@@ -2808,6 +2901,7 @@
   "ec4": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 80,
@@ -2821,6 +2915,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -2834,6 +2929,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -2852,6 +2948,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2865,6 +2962,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2878,6 +2976,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2891,6 +2990,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2904,6 +3004,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -2917,6 +3018,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -2930,6 +3032,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 11,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -2943,6 +3046,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 12,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -2956,6 +3060,7 @@
     },
     "Sectors_Critical_to_Health_Well_Being__c": {
       "key": "Sectors_Critical_to_Health_Well_Being__c",
+      "index": 13,
       "required": true,
       "dataType": "Multi-Select",
       "maxLength": 1500,
@@ -2996,6 +3101,7 @@
     },
     "Workers_Served__c": {
       "key": "Workers_Served__c",
+      "index": 14,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 7,
@@ -3009,6 +3115,7 @@
     },
     "Premium_Pay_Narrative__c": {
       "key": "Premium_Pay_Narrative__c",
+      "index": 15,
       "required": true,
       "dataType": "String",
       "maxLength": 3000,
@@ -3022,6 +3129,7 @@
     },
     "Number_of_Workers_K_12__c": {
       "key": "Number_of_Workers_K_12__c",
+      "index": 16,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3037,6 +3145,7 @@
   "ec5": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 80,
@@ -3069,6 +3178,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -3101,6 +3211,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -3138,6 +3249,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3170,6 +3282,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3202,6 +3315,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3234,6 +3348,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3266,6 +3381,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3298,6 +3414,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -3330,6 +3447,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 11,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -3362,6 +3480,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 12,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -3394,6 +3513,7 @@
     },
     "Proj_Actual_Construction_Start_Date__c": {
       "key": "Proj_Actual_Construction_Start_Date__c",
+      "index": 13,
       "required": "Conditional",
       "dataType": "Date",
       "maxLength": null,
@@ -3426,6 +3546,7 @@
     },
     "Initiation_of_Operations_Date__c": {
       "key": "Initiation_of_Operations_Date__c",
+      "index": 14,
       "required": "Conditional",
       "dataType": "Date",
       "maxLength": null,
@@ -3458,6 +3579,7 @@
     },
     "Location__c": {
       "key": "Location__c",
+      "index": 15,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -3492,6 +3614,7 @@
     },
     "Location_Detail__c": {
       "key": "Location_Detail__c",
+      "index": 16,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
@@ -3521,6 +3644,7 @@
     },
     "(manual entry)": {
       "key": "(manual entry)",
+      "index": 30,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
@@ -3555,6 +3679,7 @@
     },
     "National_Pollutant_Discharge_Number__c": {
       "key": "National_Pollutant_Discharge_Number__c",
+      "index": 31,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 50,
@@ -3584,6 +3709,7 @@
     },
     "Public_Water_System_PWS_ID_number__c": {
       "key": "Public_Water_System_PWS_ID_number__c",
+      "index": 32,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 50,
@@ -3613,6 +3739,7 @@
     },
     "Is_project_designed_to_meet_100_mbps__c": {
       "key": "Is_project_designed_to_meet_100_mbps__c",
+      "index": 33,
       "required": "Conditional",
       "dataType": "TBD",
       "maxLength": null,
@@ -3629,6 +3756,7 @@
     },
     "Project_not_met_100_mbps_explanation__c": {
       "key": "Project_not_met_100_mbps_explanation__c",
+      "index": 34,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
@@ -3643,6 +3771,7 @@
     },
     "Is_project_designed_to_exceed_100_mbps__c": {
       "key": "Is_project_designed_to_exceed_100_mbps__c",
+      "index": 35,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -3660,6 +3789,7 @@
     },
     "Median_Household_Income_Service_Area__c": {
       "key": "Median_Household_Income_Service_Area__c",
+      "index": 36,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -3689,6 +3819,7 @@
     },
     "Lowest_Quintile_Income__c": {
       "key": "Lowest_Quintile_Income__c",
+      "index": 37,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -3721,6 +3852,7 @@
     },
     "Project_Technology_Type_c": {
       "key": "Project_Technology_Type_c",
+      "index": 39,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -3740,6 +3872,7 @@
     },
     "Project_Technology_Type_Other_c": {
       "key": "Project_Technology_Type_Other_c",
+      "index": 40,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -3754,6 +3887,7 @@
     },
     "Total_Miles_of_Fiber_Deployed_c": {
       "key": "Total_Miles_of_Fiber_Deployed_c",
+      "index": 41,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3768,6 +3902,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_c": {
       "key": "Total_Number_of_Funded_Locations_Served_c",
+      "index": 42,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3782,6 +3917,7 @@
     },
     "Total_Number_of_Funded_Locations_25/3_c": {
       "key": "Total_Number_of_Funded_Locations_25/3_c",
+      "index": 43,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3796,6 +3932,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_25/3_100/20_c": {
       "key": "Total_Number_of_Funded_Locations_Served_25/3_100/20_c",
+      "index": 44,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3810,6 +3947,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_100/100_c": {
       "key": "Total_Number_of_Funded_Locations_Served_100/100_c",
+      "index": 45,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3824,6 +3962,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_100/20_100/100_c": {
       "key": "Total_Number_of_Funded_Locations_Served_100/20_100/100_c",
+      "index": 46,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3838,6 +3977,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_Residential_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Residential_c",
+      "index": 47,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3852,6 +3992,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_Business_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Business_c",
+      "index": 48,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3866,6 +4007,7 @@
     },
     "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c",
+      "index": 49,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3880,6 +4022,7 @@
     },
     "Speed_Tiers_Offered_c": {
       "key": "Speed_Tiers_Offered_c",
+      "index": 50,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 10,
@@ -3896,6 +4039,7 @@
   "ec7": {
     "Name": {
       "key": "Name",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 80,
@@ -3909,6 +4053,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 3,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -3922,6 +4067,7 @@
     },
     "Completion_Status__c": {
       "key": "Completion_Status__c",
+      "index": 4,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -3940,6 +4086,7 @@
     },
     "Adopted_Budget__c": {
       "key": "Adopted_Budget__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3953,6 +4100,7 @@
     },
     "Total_Obligations__c": {
       "key": "Total_Obligations__c",
+      "index": 6,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3966,6 +4114,7 @@
     },
     "Total_Expenditures__c": {
       "key": "Total_Expenditures__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3979,6 +4128,7 @@
     },
     "Current_Period_Obligations__c": {
       "key": "Current_Period_Obligations__c",
+      "index": 8,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -3992,6 +4142,7 @@
     },
     "Current_Period_Expenditures__c": {
       "key": "Current_Period_Expenditures__c",
+      "index": 9,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -4005,6 +4156,7 @@
     },
     "Does_Project_Include_Capital_Expenditure__c": {
       "key": "Does_Project_Include_Capital_Expenditure__c",
+      "index": 10,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4021,6 +4173,7 @@
     },
     "Total_Cost_Capital_Expenditure__c": {
       "key": "Total_Cost_Capital_Expenditure__c",
+      "index": 11,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4034,6 +4187,7 @@
     },
     "Type_of_Capital_Expenditure__c": {
       "key": "Type_of_Capital_Expenditure__c",
+      "index": 12,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -4074,6 +4228,7 @@
     },
     "Type_of_Capital_Expenditure_Other__c": {
       "key": "Type_of_Capital_Expenditure_Other__c",
+      "index": 13,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 255,
@@ -4087,6 +4242,7 @@
     },
     "Capital_Expenditure_Justification__c": {
       "key": "Capital_Expenditure_Justification__c",
+      "index": 14,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 1500,
@@ -4100,6 +4256,7 @@
     },
     "Project_Description__c": {
       "key": "Project_Description__c",
+      "index": 15,
       "required": true,
       "dataType": "String",
       "maxLength": 1500,
@@ -4113,6 +4270,7 @@
     },
     "Program_Income_Earned__c": {
       "key": "Program_Income_Earned__c",
+      "index": 16,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -4126,6 +4284,7 @@
     },
     "Program_Income_Expended__c": {
       "key": "Program_Income_Expended__c",
+      "index": 17,
       "required": false,
       "dataType": "Currency",
       "maxLength": null,
@@ -4139,6 +4298,7 @@
     },
     "Primary_Project_Demographics__c": {
       "key": "Primary_Project_Demographics__c",
+      "index": 18,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4171,6 +4331,7 @@
     },
     "Primary_Project_Demographics_Explanation__c": {
       "key": "Primary_Project_Demographics_Explanation__c",
+      "index": 19,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -4184,6 +4345,7 @@
     },
     "Secondary_Project_Demographics__c": {
       "key": "Secondary_Project_Demographics__c",
+      "index": 20,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4216,6 +4378,7 @@
     },
     "Secondary_Proj_Demographics_Explanation__c": {
       "key": "Secondary_Proj_Demographics_Explanation__c",
+      "index": 21,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -4229,6 +4392,7 @@
     },
     "Tertiary_Project_Demographics__c": {
       "key": "Tertiary_Project_Demographics__c",
+      "index": 22,
       "required": false,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4261,6 +4425,7 @@
     },
     "Tertiary_Proj_Demographics_Explanation__c": {
       "key": "Tertiary_Proj_Demographics_Explanation__c",
+      "index": 23,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
@@ -4274,6 +4439,7 @@
     },
     "Structure_Objectives_of_Asst_Programs__c": {
       "key": "Structure_Objectives_of_Asst_Programs__c",
+      "index": 24,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -4287,6 +4453,7 @@
     },
     "Recipient_Approach_Description__c": {
       "key": "Recipient_Approach_Description__c",
+      "index": 25,
       "required": true,
       "dataType": "String",
       "maxLength": 250,
@@ -4302,6 +4469,7 @@
   "subrecipient": {
     "Unique_Entity_Identifier__c": {
       "key": "Unique_Entity_Identifier__c",
+      "index": 2,
       "required": false,
       "dataType": "String",
       "maxLength": 12,
@@ -4312,6 +4480,7 @@
     },
     "EIN__c": {
       "key": "EIN__c",
+      "index": 3,
       "required": false,
       "dataType": "Numeric",
       "maxLength": 9,
@@ -4322,6 +4491,7 @@
     },
     "Name": {
       "key": "Name",
+      "index": 4,
       "required": true,
       "dataType": "String",
       "maxLength": 80,
@@ -4332,6 +4502,7 @@
     },
     "Entity_Type__c": {
       "key": "Entity_Type__c",
+      "index": 5,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4346,6 +4517,7 @@
     },
     "POC_Email_Address__c": {
       "key": "POC_Email_Address__c",
+      "index": 6,
       "required": false,
       "dataType": "String",
       "maxLength": 40,
@@ -4356,6 +4528,7 @@
     },
     "Address__c": {
       "key": "Address__c",
+      "index": 7,
       "required": true,
       "dataType": "String",
       "maxLength": 255,
@@ -4366,6 +4539,7 @@
     },
     "Address_2__c": {
       "key": "Address_2__c",
+      "index": 8,
       "required": false,
       "dataType": "String",
       "maxLength": 255,
@@ -4376,6 +4550,7 @@
     },
     "Address_3__c": {
       "key": "Address_3__c",
+      "index": 9,
       "required": false,
       "dataType": "String",
       "maxLength": 255,
@@ -4386,6 +4561,7 @@
     },
     "City__c": {
       "key": "City__c",
+      "index": 10,
       "required": true,
       "dataType": "String",
       "maxLength": 100,
@@ -4396,6 +4572,7 @@
     },
     "State_Abbreviated__c": {
       "key": "State_Abbreviated__c",
+      "index": 11,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4408,6 +4585,7 @@
     },
     "Zip__c": {
       "key": "Zip__c",
+      "index": 12,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 5,
@@ -4418,6 +4596,7 @@
     },
     "Zip_4__c": {
       "key": "Zip_4__c",
+      "index": 13,
       "required": false,
       "dataType": "Numeric",
       "maxLength": 4,
@@ -4428,6 +4607,7 @@
     },
     "Registered_in_Sam_gov__c": {
       "key": "Registered_in_Sam_gov__c",
+      "index": 14,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4441,6 +4621,7 @@
     },
     "Federal_Funds_80_or_More_of_Revenue__c": {
       "key": "Federal_Funds_80_or_More_of_Revenue__c",
+      "index": 15,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -4454,6 +4635,7 @@
     },
     "Derives_25_Million_or_More_from_Federal__c": {
       "key": "Derives_25_Million_or_More_from_Federal__c",
+      "index": 16,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -4467,6 +4649,7 @@
     },
     "Total_Compensation_for_Officers_Public__c": {
       "key": "Total_Compensation_for_Officers_Public__c",
+      "index": 17,
       "required": "Conditional",
       "dataType": "Pick List",
       "maxLength": null,
@@ -4480,6 +4663,7 @@
     },
     "Officer_Name__c": {
       "key": "Officer_Name__c",
+      "index": 18,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
@@ -4490,6 +4674,7 @@
     },
     "Officer_Total_Comp__c": {
       "key": "Officer_Total_Comp__c",
+      "index": 19,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4500,6 +4685,7 @@
     },
     "Officer_2_Name__c": {
       "key": "Officer_2_Name__c",
+      "index": 20,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
@@ -4510,6 +4696,7 @@
     },
     "Officer_2_Total_Comp__c": {
       "key": "Officer_2_Total_Comp__c",
+      "index": 21,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4520,6 +4707,7 @@
     },
     "Officer_3_Name__c": {
       "key": "Officer_3_Name__c",
+      "index": 22,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
@@ -4530,6 +4718,7 @@
     },
     "Officer_3_Total_Comp__c": {
       "key": "Officer_3_Total_Comp__c",
+      "index": 23,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4540,6 +4729,7 @@
     },
     "Officer_4_Name__c": {
       "key": "Officer_4_Name__c",
+      "index": 24,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
@@ -4550,6 +4740,7 @@
     },
     "Officer_4_Total_Comp__c": {
       "key": "Officer_4_Total_Comp__c",
+      "index": 25,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4560,6 +4751,7 @@
     },
     "Officer_5_Name__c": {
       "key": "Officer_5_Name__c",
+      "index": 26,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 80,
@@ -4570,6 +4762,7 @@
     },
     "Officer_5_Total_Comp__c": {
       "key": "Officer_5_Total_Comp__c",
+      "index": 27,
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
@@ -4582,6 +4775,7 @@
   "awards50k": {
     "Recipient_UEI__c": {
       "key": "Recipient_UEI__c",
+      "index": 2,
       "required": false,
       "dataType": "String",
       "maxLength": 12,
@@ -4592,6 +4786,7 @@
     },
     "Recipient_EIN__c": {
       "key": "Recipient_EIN__c",
+      "index": 3,
       "required": false,
       "dataType": "Numeric",
       "maxLength": 9,
@@ -4602,6 +4797,7 @@
     },
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 4,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 20,
@@ -4612,6 +4808,7 @@
     },
     "Award_No__c": {
       "key": "Award_No__c",
+      "index": 5,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -4622,6 +4819,7 @@
     },
     "Award_Type__c": {
       "key": "Award_Type__c",
+      "index": 6,
       "required": true,
       "dataType": "Pick List",
       "maxLength": 30,
@@ -4646,6 +4844,7 @@
     },
     "Award_Amount__c": {
       "key": "Award_Amount__c",
+      "index": 7,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -4656,6 +4855,7 @@
     },
     "Award_Date__c": {
       "key": "Award_Date__c",
+      "index": 8,
       "required": true,
       "dataType": "Date",
       "maxLength": null,
@@ -4666,6 +4866,7 @@
     },
     "Primary_Sector__c": {
       "key": "Primary_Sector__c",
+      "index": 9,
       "required": true,
       "dataType": "Pick List",
       "maxLength": 30,
@@ -4703,6 +4904,7 @@
     },
     "If_Other__c": {
       "key": "If_Other__c",
+      "index": 10,
       "required": "**only required if Primary Sector is Other",
       "dataType": "String",
       "maxLength": 100,
@@ -4713,6 +4915,7 @@
     },
     "Purpose_of_Funds__c": {
       "key": "Purpose_of_Funds__c",
+      "index": 11,
       "required": "TBD",
       "dataType": "String",
       "maxLength": 3000,
@@ -4723,6 +4926,7 @@
     },
     "Period_of_Performance_Start__c": {
       "key": "Period_of_Performance_Start__c",
+      "index": 12,
       "required": true,
       "dataType": "Date",
       "maxLength": null,
@@ -4733,6 +4937,7 @@
     },
     "Period_of_Performance_End__c": {
       "key": "Period_of_Performance_End__c",
+      "index": 13,
       "required": true,
       "dataType": "Date",
       "maxLength": null,
@@ -4743,6 +4948,7 @@
     },
     "Place_of_Performance_Address_1__c": {
       "key": "Place_of_Performance_Address_1__c",
+      "index": 14,
       "required": true,
       "dataType": "String",
       "maxLength": 120,
@@ -4753,6 +4959,7 @@
     },
     "Place_of_Performance_Address_2__c": {
       "key": "Place_of_Performance_Address_2__c",
+      "index": 15,
       "required": false,
       "dataType": "String",
       "maxLength": 120,
@@ -4763,6 +4970,7 @@
     },
     "Place_of_Performance_Address_3__c": {
       "key": "Place_of_Performance_Address_3__c",
+      "index": 16,
       "required": false,
       "dataType": "String",
       "maxLength": 120,
@@ -4773,6 +4981,7 @@
     },
     "Place_of_Performance_City__c": {
       "key": "Place_of_Performance_City__c",
+      "index": 17,
       "required": true,
       "dataType": "String",
       "maxLength": 40,
@@ -4783,6 +4992,7 @@
     },
     "State_Abbreviated__c": {
       "key": "State_Abbreviated__c",
+      "index": 18,
       "required": true,
       "dataType": "Pick List",
       "maxLength": 2,
@@ -4795,6 +5005,7 @@
     },
     "Place_of_Performance_Zip__c": {
       "key": "Place_of_Performance_Zip__c",
+      "index": 19,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 5,
@@ -4805,6 +5016,7 @@
     },
     "Place_of_Performance_Zip_4__c": {
       "key": "Place_of_Performance_Zip_4__c",
+      "index": 20,
       "required": false,
       "dataType": "Numeric",
       "maxLength": 4,
@@ -4815,6 +5027,7 @@
     },
     "Description__c": {
       "key": "Description__c",
+      "index": 21,
       "required": true,
       "dataType": "String",
       "maxLength": 750,
@@ -4827,6 +5040,7 @@
   "expenditures50k": {
     "Sub_Award_Lookup__c": {
       "key": "Sub_Award_Lookup__c",
+      "index": 2,
       "required": true,
       "dataType": "String",
       "maxLength": 20,
@@ -4837,6 +5051,7 @@
     },
     "Expenditure_Start__c": {
       "key": "Expenditure_Start__c",
+      "index": 3,
       "required": true,
       "dataType": "Date",
       "maxLength": null,
@@ -4847,6 +5062,7 @@
     },
     "Expenditure_End__c": {
       "key": "Expenditure_End__c",
+      "index": 4,
       "required": true,
       "dataType": "Date",
       "maxLength": null,
@@ -4857,6 +5073,7 @@
     },
     "Expenditure_Amount__c": {
       "key": "Expenditure_Amount__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -4869,6 +5086,7 @@
   "awards": {
     "Project_Identification_Number__c": {
       "key": "Project_Identification_Number__c",
+      "index": 2,
       "required": true,
       "dataType": "Numeric",
       "maxLength": 20,
@@ -4879,6 +5097,7 @@
     },
     "Sub_Award_Type_Aggregates_SLFRF__c": {
       "key": "Sub_Award_Type_Aggregates_SLFRF__c",
+      "index": 3,
       "required": true,
       "dataType": "Pick List",
       "maxLength": null,
@@ -4896,6 +5115,7 @@
     },
     "Quarterly_Obligation_Amt_Aggregates__c": {
       "key": "Quarterly_Obligation_Amt_Aggregates__c",
+      "index": 4,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,
@@ -4906,6 +5126,7 @@
     },
     "Quarterly_Expenditure_Amt_Aggregates__c": {
       "key": "Quarterly_Expenditure_Amt_Aggregates__c",
+      "index": 5,
       "required": true,
       "dataType": "Currency",
       "maxLength": null,

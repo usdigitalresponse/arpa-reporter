@@ -101,6 +101,7 @@ async function extractRules (workbook, logic) {
       // construct rule
       const rule = {
         key,
+        index: colIdx,
         required: required[colIdx],
         dataType: dataTypes[colIdx],
         maxLength: maxLengths[colIdx],

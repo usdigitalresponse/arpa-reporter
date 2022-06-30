@@ -99,42 +99,77 @@ async function validateReportingPeriod ({ upload, records, trns }) {
 async function validateSubrecipientRecord ({ upload, record: recipient, typeRules: rules, recordErrors, trns }) {
   const errors = []
 
-  // does the row already exist?
-  let existing = null
-  if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
-    existing = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
-  } else {
+  // we should include at a primary identifier for all recipients
+  if (!recipient.EIN__c && !recipient.Unique_Entity_Identifier__c) {
     errors.push(new ValidationError(
-      'At least one of UEI or TIN must be set, but both are missing',
+      'At least one of UEI or TIN/EIN must be set, but both are missing',
       { col: 'C, D', severity: 'err' }
     ))
   }
+
+  // does the row already exist?
+  let byUei = null
+  if (recipient.Unique_Entity_Identifier__c) {
+    byUei = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, null, trns)
+  }
+
+  let byTin = null
+  if (recipient.EIN__c) {
+    byTin = await findRecipient(upload.tenant_id, null, recipient.EIN__c, trns)
+  }
+
+  // did we find two different subrecipients?
+  if (byUei && byTin && byUei.id !== byTin.id) {
+    errors.push(new ValidationError(
+      'We already have a sub-recipient with given UEI, and a different one with given TIN/EIN',
+      { col: 'C, D', severity: 'warn' }
+    ))
+  }
+
+  const existing = byUei || byTin
+
+  // if the current upload owns the recipient, we can actually update it
+  let ownedByThisUpload
+  if (!existing) ownedByThisUpload = false
+  else if (existing.upload_id !== upload.id) ownedByThisUpload = false
+  else if (existing.updated_at) ownedByThisUpload = false
+  else ownedByThisUpload = true
+
+  // the record has already been validated before this method was invoked. how
+  // did the validation go?
+  const isRecordValid = recordErrors.length === 0
 
   // validate that existing record and given recipient match
   //
   // TODO: what if the same upload specifies the same recipient multiple times,
   // but different?
-  //
-  if (existing && (existing.upload_id !== upload.id || existing.updated_at)) {
-    const recipientId = existing.uei || existing.tin
-    const record = JSON.parse(existing.record)
+  if (existing) {
+    // if we own it, we can just update it
+    if (ownedByThisUpload) {
+      if (isRecordValid) {
+        await updateRecipient(existing.id, { record: recipient }, trns)
+      }
 
-    // make sure that each key in the record matches the recipient
-    for (const [key, rule] of Object.entries(rules)) {
-      if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
-        errors.push(new ValidationError(
-          `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
-          but upload specifies '${recipient[key]}'`,
-          { col: rule.columnName, severity: 'warn' }
-        ))
+    // otherwise, generate warnings about diffs
+    } else {
+      const recipientId = existing.uei || existing.tin
+      const record = JSON.parse(existing.record)
+
+      // make sure that each key in the record matches the recipient
+      for (const [key, rule] of Object.entries(rules)) {
+        if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
+          errors.push(new ValidationError(
+            `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
+            but upload specifies '${recipient[key]}'`,
+            { col: rule.columnName, severity: 'warn' }
+          ))
+        }
       }
     }
 
-  // if it's now, and it's passed validation, then insert it
-  } else if (recordErrors.length === 0) {
-    if (existing?.upload_id === upload.id) {
-      await updateRecipient(existing.id, { record: recipient }, trns)
-    } else {
+  // if it's new, and it's passed validation, then insert it
+  } else {
+    if (isRecordValid) {
       const dbRow = {
         uei: recipient.Unique_Entity_Identifier__c,
         tin: recipient.EIN__c,

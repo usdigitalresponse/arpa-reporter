@@ -18,6 +18,7 @@ export function get (url) {
 // the JSON sent by the server. in case of any errors, the `error` property
 // contains a description of the error.
 export async function getJson (url) {
+  // did we get an error even making the request?
   let resp
   try {
     resp = await fetch(url)
@@ -25,23 +26,26 @@ export async function getJson (url) {
     return { error: e, status: null }
   }
 
-  if (resp.ok) {
-    const text = await resp.text()
-    let json
-    try {
-      json = JSON.parse(text)
-    } catch (e) {
-      json = { error: 'Server sent invalid JSON response', text }
-    }
+  const text = await resp.text()
 
-    json.status = resp.status
+  // the response *should* be JSON -- is it?
+  let json
+  try {
+    json = JSON.parse(text)
+  } catch (e) {
+    json = null
+  }
+
+  if (resp.ok) {
+    return json || { error: 'Server sent invalid JSON response', text }
+  } else if (json?.error) {
     return json
   } else {
-    return { error: `Server error ${resp.status} (${resp.statusText})`, status: resp.status }
+    return { error: `Server error ${resp.status} (${resp.statusText}): ${text}`, status: resp.status }
   }
 }
 
-export function post (url, body) {
+export async function post (url, body) {
   const options = {
     method: 'POST',
     credentials: 'include',
@@ -50,14 +54,19 @@ export function post (url, body) {
     },
     body: JSON.stringify(body)
   }
-  return fetch(url, options).then(r => {
-    if (r.ok) {
-      return r.json()
-    }
-    return r
-      .text()
-      .then(text => Promise.reject(new Error(text || r.statusText)))
-  })
+  const resp = await fetch(url, options)
+  if (resp.ok) return resp.json()
+
+  const text = await resp.text()
+  let errorMsg
+  try {
+    const json = JSON.parse(text)
+    errorMsg = json.error ?? text
+  } catch (e) {
+    errorMsg = text || resp.statusText
+  }
+
+  throw new Error(errorMsg)
 }
 
 export function postForm (url, formData) {

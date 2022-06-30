@@ -3732,7 +3732,11 @@
       ],
       "columnName": "AN",
       "humanColName": "Project Technology Type(s) (Planned/Actual)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Project_Technology_Type_Other_c": {
       "key": "Project_Technology_Type_Other_c",
@@ -3742,7 +3746,11 @@
       "listVals": [],
       "columnName": "AO",
       "humanColName": "Project Technology Type - Explanation",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Miles_of_Fiber_Deployed_c": {
       "key": "Total_Miles_of_Fiber_Deployed_c",
@@ -3752,7 +3760,11 @@
       "listVals": [],
       "columnName": "AP",
       "humanColName": "Total Miles of Fiber Deployed (Planned/Actual)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_c": {
       "key": "Total_Number_of_Funded_Locations_Served_c",
@@ -3762,7 +3774,11 @@
       "listVals": [],
       "columnName": "AQ",
       "humanColName": "Total Number of Funded Locations Served (Planned/Actual)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_25/3_c": {
       "key": "Total_Number_of_Funded_Locations_25/3_c",
@@ -3772,7 +3788,11 @@
       "listVals": [],
       "columnName": "AR",
       "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving 25/3 Mbps or below)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_25/3_100/20_c": {
       "key": "Total_Number_of_Funded_Locations_Served_25/3_100/20_c",
@@ -3782,7 +3802,11 @@
       "listVals": [],
       "columnName": "AS",
       "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving between 25/3 Mbps and 100/20 Mbps)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_100/100_c": {
       "key": "Total_Number_of_Funded_Locations_Served_100/100_c",
@@ -3792,7 +3816,11 @@
       "listVals": [],
       "columnName": "AT",
       "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/100 Mbps)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_100/20_100/100_c": {
       "key": "Total_Number_of_Funded_Locations_Served_100/20_100/100_c",
@@ -3802,7 +3830,11 @@
       "listVals": [],
       "columnName": "AU",
       "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/20 Mbps and scalable to minimum 100/100 Mbps)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_Residential_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Residential_c",
@@ -3812,7 +3844,11 @@
       "listVals": [],
       "columnName": "AV",
       "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Residential - Total Housing Units)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_Business_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Business_c",
@@ -3822,7 +3858,11 @@
       "listVals": [],
       "columnName": "AW",
       "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Business)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c": {
       "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c",
@@ -3832,7 +3872,11 @@
       "listVals": [],
       "columnName": "AX",
       "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Community Anchor Institution)",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     },
     "Speed_Tiers_Offered_c": {
       "key": "Speed_Tiers_Offered_c",
@@ -3842,7 +3886,11 @@
       "listVals": [],
       "columnName": "AY",
       "humanColName": "Speed Tiers Offered, corresponding non-promotional prices, including associated fees, and data allowance for each speed tier of broadband service",
-      "ecCodes": []
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
     }
   },
   "ec7": {

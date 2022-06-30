@@ -8,6 +8,7 @@ const { requiredArgument } = require('../lib/preconditions')
 
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
+const LOGIC_SHEET = 'Logic'
 
 const DATA_SHEET_TYPES = {
   'EC 1 - Public Health': 'ec1',
@@ -22,6 +23,22 @@ const DATA_SHEET_TYPES = {
   'Aggregate Awards < 50000': 'awards'
 }
 
+async function readVersionRecord (workbook) {
+  const range = {
+    s: { r: 0, c: 1 },
+    e: { r: 0, c: 1 }
+  }
+
+  const [row] = XLSX.utils.sheet_to_json(
+    workbook.Sheets[LOGIC_SHEET],
+    { header: 1, range }
+  )
+
+  return {
+    version: row[0]
+  }
+}
+
 async function recordsForUpload (upload) {
   log('recordsForUpload()')
 
@@ -29,7 +46,7 @@ async function recordsForUpload (upload) {
   const workbook = XLSX.read(buffer, {
     cellDates: true,
     type: 'buffer',
-    sheets: [CERTIFICATION_SHEET, COVER_SHEET, ...Object.keys(DATA_SHEET_TYPES)]
+    sheets: [CERTIFICATION_SHEET, COVER_SHEET, LOGIC_SHEET, ...Object.keys(DATA_SHEET_TYPES)]
   })
 
   // parse certification and cover as special cases
@@ -39,7 +56,8 @@ async function recordsForUpload (upload) {
 
   const records = [
     { type: 'certification', upload, content: certification },
-    { type: 'cover', upload, content: cover }
+    { type: 'cover', upload, content: cover },
+    { type: 'version', upload, content: readVersionRecord(workbook) }
   ]
 
   // parse data sheets

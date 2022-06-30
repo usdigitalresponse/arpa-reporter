@@ -62,6 +62,32 @@ async function validateEcCode ({ upload, records, trns }) {
   }
 }
 
+async function validateVersion ({ upload, records, rules }) {
+  const logicSheet = records.find(doc => doc.type === 'logic').content
+  const version = logicSheet.version
+
+  const versionRule = rules.logic.version
+
+  let error = null
+  if (version < versionRule.version) {
+    error = 'older'
+  } else if (version > versionRule.version) {
+    error = 'newer'
+  }
+
+  if (error) {
+    return new ValidationError(
+      `Upload template version (${version}) is ${error} than the latest input template (${versionRule.version})`,
+      {
+        tab: 'logic',
+        row: 1,
+        col: versionRule.columnName,
+        severity: 'warn'
+      }
+    )
+  }
+}
+
 async function validateReportingPeriod ({ upload, records, trns }) {
   const uploadPeriod = await getReportingPeriod(upload.tenant_id, upload.reporting_period_id, trns)
   const coverSheet = records.find(record => record.type === 'cover').content
@@ -255,6 +281,7 @@ async function validateUpload (upload, user, trns) {
 
   // list of all of our validations
   const validations = [
+    validateVersion,
     validateAgencyId,
     validateEcCode,
     validateReportingPeriod,

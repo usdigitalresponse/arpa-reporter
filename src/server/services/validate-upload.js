@@ -350,7 +350,9 @@ async function validateUpload (upload, user, trns = null) {
 
   // we should do this in a transaction, unless someone is doing it for us
   const ourTransaction = !trns
-  if (ourTransaction) trns = await knex.transaction()
+  if (ourTransaction) {
+    trns = await knex.transaction()
+  }
 
   // run validations, one by one
   for (const validation of validations) {
@@ -366,22 +368,32 @@ async function validateUpload (upload, user, trns = null) {
 
   // fatal errors determine if the upload fails validation
   const fatal = flatErrors.filter(x => x.severity === 'err')
+  const validated = fatal.length === 0
 
   // if we successfully validated for the first time, let's mark it!
-  if (fatal.length === 0 && !upload.validated_at) {
-    await markValidated(upload.id, user.id, trns)
-    if (ourTransaction) trns.commit()
-
-  // if it was valid before but is no longer valid, clear it
-  } else if (fatal.length > 0 && upload.validated_at) {
-    if (ourTransaction) {
-      trns.rollback()
-      await markNotValidated(upload.id)
-    } else {
-      await markNotValidated(upload.id, trns)
+  if (validated && !upload.validated_at) {
+    try {
+      await markValidated(upload.id, user.id, trns)
+    } catch (e) {
+      errors.push(new ValidationError(`failed to mark upload: ${e.message}`))
     }
   }
 
+  // depending on whether we validated or not, lets commit/rollback. we MUST do
+  // this or bad things happen. this is why there are try/catch blocks around
+  // every other function call above here
+  if (ourTransaction) {
+    const finishTrns = validated ? trns.commit : trns.rollback
+    await finishTrns()
+    trns = knex
+  }
+
+  // if it was valid before but is no longer valid, clear it; this happens outside the transaction
+  if (!validated && upload.validated_at) {
+    await markNotValidated(upload.id, trns)
+  }
+
+  // finally, return our errors
   return flatErrors
 }
 

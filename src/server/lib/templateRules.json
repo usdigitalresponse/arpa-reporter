@@ -1,7 +1,7 @@
 {
   "logic": {
     "version": {
-      "version": "v:20220620",
+      "version": "v:20220630",
       "key": "version",
       "index": 0,
       "required": false,
@@ -620,7 +620,7 @@
       "key": "Whether_program_evaluation_is_being_conducted",
       "index": 22,
       "required": true,
-      "dataType": "Picklist",
+      "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
         "Yes",
@@ -821,8 +821,376 @@
         "1.14"
       ]
     },
-    "(manual entry)": {
-      "key": "(manual entry)",
+    "(manual entry)1": {
+      "key": "(manual entry)1",
+      "index": 30,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AE",
+      "humanColName": "If budget is over $10M, was a Davis Bacon Act Certification completed?",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)2": {
+      "key": "(manual entry)2",
+      "index": 31,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AF",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)3": {
+      "key": "(manual entry)3",
+      "index": 32,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AG",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)4": {
+      "key": "(manual entry)4",
+      "index": 33,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AH",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)5": {
+      "key": "(manual entry)5",
+      "index": 34,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AI",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)6": {
+      "key": "(manual entry)6",
+      "index": 35,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AJ",
+      "humanColName": "If budget is over $10M, was a Labor Agreement Certification completed?",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)7": {
+      "key": "(manual entry)7",
+      "index": 36,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AK",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)8": {
+      "key": "(manual entry)8",
+      "index": 37,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AL",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)9": {
+      "key": "(manual entry)9",
+      "index": 38,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AM",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)10": {
+      "key": "(manual entry)10",
+      "index": 39,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AN",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)11": {
+      "key": "(manual entry)11",
+      "index": 40,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AO",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)12": {
+      "key": "(manual entry)12",
+      "index": 41,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AP",
+      "humanColName": "If budget is over $10M, does the project prioritize local hires? ",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)13": {
+      "key": "(manual entry)13",
+      "index": 42,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AQ",
+      "humanColName": "If budget is over $10M, does the project have a Community Benefit Agreement?",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
+      ]
+    },
+    "(manual entry)14": {
+      "key": "(manual entry)14",
       "index": 43,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
@@ -849,8 +1217,8 @@
         "1.14"
       ]
     },
-    "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
-      "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+    "Number_Workers_Enrolled_Sectoral__c": {
+      "key": "Number_Workers_Enrolled_Sectoral__c",
       "index": 44,
       "required": true,
       "dataType": "Numeric",
@@ -862,8 +1230,8 @@
         "1.11"
       ]
     },
-    "Workers_Completing_Sectoral_Job_Training_Programs_c": {
-      "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+    "Number_Workers_Completing_Sectoral__c": {
+      "key": "Number_Workers_Completing_Sectoral__c",
       "index": 45,
       "required": true,
       "dataType": "Numeric",
@@ -875,8 +1243,8 @@
         "1.11"
       ]
     },
-    "People_Participating_in_Summer_Youth_Employment_Programs_c": {
-      "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+    "Number_People_Summer_Youth__c": {
+      "key": "Number_People_Summer_Youth__c",
       "index": 46,
       "required": true,
       "dataType": "Numeric",
@@ -1973,7 +2341,7 @@
       "key": "Whether_program_evaluation_is_being_conducted",
       "index": 23,
       "required": true,
-      "dataType": "Picklist",
+      "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
         "Yes",
@@ -2042,7 +2410,7 @@
       "key": "School_ID_or_District_ID__c",
       "index": 26,
       "required": true,
-      "dataType": "Numeric",
+      "dataType": "String",
       "maxLength": 750,
       "listVals": [],
       "columnName": "AA",
@@ -2343,8 +2711,675 @@
         "2.37"
       ]
     },
-    "(manual entry)": {
-      "key": "(manual entry)",
+    "(manual entry)1": {
+      "key": "(manual entry)1",
+      "index": 33,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AH",
+      "humanColName": "If budget is over $10M, was a Davis Bacon Act Certification completed?",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)2": {
+      "key": "(manual entry)2",
+      "index": 34,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AI",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)3": {
+      "key": "(manual entry)3",
+      "index": 35,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AJ",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)4": {
+      "key": "(manual entry)4",
+      "index": 36,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AK",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)5": {
+      "key": "(manual entry)5",
+      "index": 37,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AL",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)6": {
+      "key": "(manual entry)6",
+      "index": 38,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AM",
+      "humanColName": "If budget is over $10M, was a Labor Agreement Certification completed?",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)7": {
+      "key": "(manual entry)7",
+      "index": 39,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AN",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)8": {
+      "key": "(manual entry)8",
+      "index": 40,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AO",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)9": {
+      "key": "(manual entry)9",
+      "index": 41,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AP",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)10": {
+      "key": "(manual entry)10",
+      "index": 42,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AQ",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)11": {
+      "key": "(manual entry)11",
+      "index": 43,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AR",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)12": {
+      "key": "(manual entry)12",
+      "index": 44,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AS",
+      "humanColName": "If budget is over $10M, does the project prioritize local hires? ",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)13": {
+      "key": "(manual entry)13",
+      "index": 45,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AT",
+      "humanColName": "If budget is over $10M, does the project have a Community Benefit Agreement?",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
+      ]
+    },
+    "(manual entry)14": {
+      "key": "(manual entry)14",
       "index": 46,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
@@ -2394,8 +3429,8 @@
         "2.37"
       ]
     },
-    "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c": {
-      "key": "Workers_Enrolled_in_Sectoral_Job_Training_Programs_c",
+    "Number_Workers_Enrolled_Sectoral__c": {
+      "key": "Number_Workers_Enrolled_Sectoral__c",
       "index": 47,
       "required": true,
       "dataType": "Numeric",
@@ -2407,8 +3442,8 @@
         "2.1"
       ]
     },
-    "Workers_Completing_Sectoral_Job_Training_Programs_c": {
-      "key": "Workers_Completing_Sectoral_Job_Training_Programs_c",
+    "Number_Workers_Completing_Sectoral__c": {
+      "key": "Number_Workers_Completing_Sectoral__c",
       "index": 48,
       "required": true,
       "dataType": "Numeric",
@@ -2420,8 +3455,8 @@
         "2.1"
       ]
     },
-    "People_Participating_in_Summer_Youth_Employment_Programs_c": {
-      "key": "People_Participating_in_Summer_Youth_Employment_Programs_c",
+    "Number_People_Summer_Youth__c": {
+      "key": "Number_People_Summer_Youth__c",
       "index": 49,
       "required": true,
       "dataType": "Numeric",
@@ -2433,8 +3468,8 @@
         "2.1"
       ]
     },
-    "Households_Receiving_Eviction_Prevention_Services_c": {
-      "key": "Households_Receiving_Eviction_Prevention_Services_c",
+    "Number_Households_Eviction_Prevention__c": {
+      "key": "Number_Households_Eviction_Prevention__c",
       "index": 50,
       "required": true,
       "dataType": "Numeric",
@@ -2450,8 +3485,8 @@
         "2.18"
       ]
     },
-    "Affordable_Housing_Units_Preserved_or_Developed_c": {
-      "key": "Affordable_Housing_Units_Preserved_or_Developed_c",
+    "Number_Affordable_Housing_Units__c": {
+      "key": "Number_Affordable_Housing_Units__c",
       "index": 51,
       "required": true,
       "dataType": "Numeric",
@@ -2467,8 +3502,8 @@
         "2.18"
       ]
     },
-    "Students_Participating_in_Evidence_Based_Tutoring_Programs_c": {
-      "key": "Students_Participating_in_Evidence_Based_Tutoring_Programs_c",
+    "Students_Participating_in_Evidence_Based_Tutoring_Programs__c": {
+      "key": "Students_Participating_in_Evidence_Based_Tutoring_Programs__c",
       "index": 52,
       "required": true,
       "dataType": "Numeric",
@@ -2483,8 +3518,8 @@
         "2.27"
       ]
     },
-    "Children_Served_by_Childcare_and_Early_Learning_Services_c": {
-      "key": "Children_Served_by_Childcare_and_Early_Learning_Services_c",
+    "Number_Children_Served_Childcare__c": {
+      "key": "Number_Children_Served_Childcare__c",
       "index": 53,
       "required": true,
       "dataType": "Numeric",
@@ -2499,8 +3534,8 @@
         "2.14"
       ]
     },
-    "Families_Served_by_Home_Visiting_c": {
-      "key": "Families_Served_by_Home_Visiting_c",
+    "Number_Families_Served_Home_Visiting__c": {
+      "key": "Number_Families_Served_Home_Visiting__c",
       "index": 54,
       "required": true,
       "dataType": "Numeric",
@@ -2892,8 +3927,259 @@
         "3.5"
       ]
     },
-    "(manual entry)": {
-      "key": "(manual entry)",
+    "(manual entry)1": {
+      "key": "(manual entry)1",
+      "index": 22,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "W",
+      "humanColName": "If budget is over $10M, was a Davis Bacon Act Certification completed?",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)2": {
+      "key": "(manual entry)2",
+      "index": 23,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "X",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)3": {
+      "key": "(manual entry)3",
+      "index": 24,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "Y",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)4": {
+      "key": "(manual entry)4",
+      "index": 25,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "Z",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)5": {
+      "key": "(manual entry)5",
+      "index": 26,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AA",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)6": {
+      "key": "(manual entry)6",
+      "index": 27,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AB",
+      "humanColName": "If budget is over $10M, was a Labor Agreement Certification completed?",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)7": {
+      "key": "(manual entry)7",
+      "index": 28,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AC",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)8": {
+      "key": "(manual entry)8",
+      "index": 29,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AD",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)9": {
+      "key": "(manual entry)9",
+      "index": 30,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AE",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)10": {
+      "key": "(manual entry)10",
+      "index": 31,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AF",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)11": {
+      "key": "(manual entry)11",
+      "index": 32,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "AG",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)12": {
+      "key": "(manual entry)12",
+      "index": 33,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AH",
+      "humanColName": "If budget is over $10M, does the project prioritize local hires? ",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)13": {
+      "key": "(manual entry)13",
+      "index": 34,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AI",
+      "humanColName": "If budget is over $10M, does the project have a Community Benefit Agreement?",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
+    },
+    "(manual entry)14": {
+      "key": "(manual entry)14",
       "index": 35,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
@@ -3656,8 +4942,470 @@
         "5.18"
       ]
     },
-    "(manual entry)": {
-      "key": "(manual entry)",
+    "(manual entry)1": {
+      "key": "(manual entry)1",
+      "index": 17,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "R",
+      "humanColName": "If budget is over $10M, was a Davis Bacon Act Certification completed?",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)2": {
+      "key": "(manual entry)2",
+      "index": 18,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "S",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)3": {
+      "key": "(manual entry)3",
+      "index": 19,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "T",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)4": {
+      "key": "(manual entry)4",
+      "index": 20,
+      "required": "Required if DB is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "U",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)5": {
+      "key": "(manual entry)5",
+      "index": 21,
+      "required": "Required if DB is No",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "V",
+      "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)6": {
+      "key": "(manual entry)6",
+      "index": 22,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "W",
+      "humanColName": "If budget is over $10M, was a Labor Agreement Certification completed?",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)7": {
+      "key": "(manual entry)7",
+      "index": 23,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "X",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)8": {
+      "key": "(manual entry)8",
+      "index": 24,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "Y",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)9": {
+      "key": "(manual entry)9",
+      "index": 25,
+      "required": "Required if PLA is No",
+      "dataType": "TBD",
+      "maxLength": null,
+      "listVals": [
+        "TBD"
+      ],
+      "columnName": "Z",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)10": {
+      "key": "(manual entry)10",
+      "index": 26,
+      "required": "Required if PLA is No",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AA",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)11": {
+      "key": "(manual entry)11",
+      "index": 27,
+      "required": "Required if PLA is No",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AB",
+      "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)12": {
+      "key": "(manual entry)12",
+      "index": 28,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AC",
+      "humanColName": "If budget is over $10M, does the project prioritize local hires? ",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)13": {
+      "key": "(manual entry)13",
+      "index": 29,
+      "required": "Required if Budget > $10M",
+      "dataType": "Pick List",
+      "maxLength": null,
+      "listVals": [
+        "Yes",
+        "No"
+      ],
+      "columnName": "AD",
+      "humanColName": "If budget is over $10M, does the project have a Community Benefit Agreement?",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "(manual entry)14": {
+      "key": "(manual entry)14",
       "index": 30,
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
@@ -3929,8 +5677,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_25/3_c": {
-      "key": "Total_Number_of_Funded_Locations_25/3_c",
+    "Total_Number_of_Funded_Locations_25_3__c": {
+      "key": "Total_Number_of_Funded_Locations_25_3__c",
       "index": 43,
       "required": true,
       "dataType": "Numeric",
@@ -3944,8 +5692,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_25/3_100/20_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_25/3_100/20_c",
+    "Total_Number_of_Funded_Locations_Served_25_3_100_20__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_25_3_100_20__c",
       "index": 44,
       "required": true,
       "dataType": "Numeric",
@@ -3959,8 +5707,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_100/100_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_100/100_c",
+    "Total_Number_of_Funded_Locations_Served_100_100__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_100_100__c",
       "index": 45,
       "required": true,
       "dataType": "Numeric",
@@ -3974,8 +5722,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_100/20_100/100_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_100/20_100/100_c",
+    "Total_Number_of_Funded_Locations_Served_100_20_100_100__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_100_20_100_100__c",
       "index": 46,
       "required": true,
       "dataType": "Numeric",
@@ -3989,8 +5737,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Residential_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Residential_c",
+    "Total_Number_of_Funded_Locations_Served_Residential__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Residential__c",
       "index": 47,
       "required": true,
       "dataType": "Numeric",
@@ -4004,8 +5752,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Business_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Business_c",
+    "Total_Number_of_Funded_Locations_Served_Business__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Business__c",
       "index": 48,
       "required": true,
       "dataType": "Numeric",
@@ -4019,8 +5767,8 @@
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution_c",
+    "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution__c": {
+      "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution__c",
       "index": 49,
       "required": true,
       "dataType": "Numeric",
@@ -4034,8 +5782,8 @@
         "5.21"
       ]
     },
-    "Speed_Tiers_Offered_c": {
-      "key": "Speed_Tiers_Offered_c",
+    "Speed_Tiers_Offered__c": {
+      "key": "Speed_Tiers_Offered__c",
       "index": 50,
       "required": true,
       "dataType": "Numeric",

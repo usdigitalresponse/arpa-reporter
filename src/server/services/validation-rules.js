@@ -22,6 +22,7 @@ function generateRules () {
   // awards50k sector dropdowns come from dropdowns list
   const sectors = srcDropdowns['Sectors Designated as Essential Critical Infrastructure']
   rules.awards50k.Primary_Sector__c.listVals = sectors
+  rules.ec4.Sectors_Critical_to_Health_Well_Being__c.listVals = sectors
 
   return rules
 }

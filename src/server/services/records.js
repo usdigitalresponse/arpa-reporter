@@ -5,6 +5,7 @@ const { bufferForUpload } = require('./persist-upload')
 const { usedForTreasuryExport } = require('../db/uploads')
 const { log } = require('../lib/log')
 const { requiredArgument } = require('../lib/preconditions')
+const { getRules } = require('./validation-rules')
 
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
@@ -42,6 +43,8 @@ function readVersionRecord (workbook) {
 async function recordsForUpload (upload) {
   log('recordsForUpload()')
 
+  const rules = getRules()
+
   const buffer = await bufferForUpload(upload)
   const workbook = XLSX.read(buffer, {
     cellDates: true,
@@ -57,7 +60,7 @@ async function recordsForUpload (upload) {
   const records = [
     { type: 'certification', upload, content: certification },
     { type: 'cover', upload, content: cover },
-    { type: 'version', upload, content: readVersionRecord(workbook) }
+    { type: 'logic', upload, content: readVersionRecord(workbook) }
   ]
 
   // parse data sheets
@@ -65,27 +68,22 @@ async function recordsForUpload (upload) {
     const type = DATA_SHEET_TYPES[sheetName]
     const sheet = workbook.Sheets[sheetName]
 
+    // header is based on the columns we have in the rules
+    const header = Object.values(rules[type])
+      .sort((a, b) => a.index - b.index)
+      .map(rule => rule.key)
+
     // entire sheet
     const sheetRange = XLSX.utils.decode_range(sheet['!ref'])
-
-    // range B3:3
-    const headerRange = merge({}, sheetRange, {
-      s: { c: 1, r: 2 },
-      e: { r: 2 }
-    })
 
     // TODO: How can we safely get the row number in which data starts
     // across template versions?
     // range B13:
-    const contentRange = merge({}, sheetRange, { s: { c: 1, r: 12 } })
+    const contentRange = merge({}, sheetRange, { s: { c: 2, r: 12 } })
 
-    const [header] = XLSX.utils.sheet_to_json(sheet, {
-      header: 1, // ask for array-of-arrays
-      range: XLSX.utils.encode_range(headerRange)
-    })
-
+    // actually read the rows
     const rows = XLSX.utils.sheet_to_json(sheet, {
-      header, // use values read from row 3
+      header,
       range: XLSX.utils.encode_range(contentRange),
       blankrows: false
     })

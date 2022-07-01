@@ -17,7 +17,7 @@ const PERIOD_TEMPLATES_DIR = join(UPLOAD_DIR, 'period_templates')
 const SRC_DIR = resolve(join(__dirname, '..'))
 const SERVER_DATA_DIR = join(SRC_DIR, 'server', 'data')
 
-const EMPTY_TEMPLATE_NAME = 'ARPA SFRF Reporting Workbook v20220620.xlsm'
+const EMPTY_TEMPLATE_NAME = 'ARPA SFRF Reporting Workbook v20220630.xlsm'
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET
 

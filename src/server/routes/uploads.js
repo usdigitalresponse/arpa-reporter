@@ -9,7 +9,6 @@ const { requireUser } = require('../access-helpers')
 const multer = require('multer')
 const multerUpload = multer({ storage: multer.memoryStorage() })
 
-const knex = require('../db/connection')
 const { getReportingPeriodID } = require('../db/reporting-periods')
 const { usedForTreasuryExport, getUpload, uploadsInSeries, uploadsInPeriod } = require('../db/uploads')
 
@@ -45,7 +44,7 @@ router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, re
 })
 
 router.get('/:id', requireUser, async (req, res) => {
-  const id = Number(req.params.id)
+  const id = req.params.id
 
   const upload = await getUpload(id)
   if (!upload || upload.tenant_id !== req.session.user.tenant_id) {
@@ -132,18 +131,18 @@ router.post('/:id/validate', requireUser, async (req, res) => {
     return
   }
 
-  const trns = await knex.transaction()
   try {
-    const errors = await validateUpload(upload, user, trns)
-    trns.commit()
+    const errors = await validateUpload(upload, user)
 
     res.json({
       errors: errors.map(e => e.toObject()),
       upload
     })
   } catch (e) {
-    trns.rollback()
-    res.status(500).json({ error: e.message })
+    let msg = e.message
+    if (e.code === 'ENOENT') msg = 'Cannot find upload data; please re-submit this upload'
+
+    res.status(500).json({ error: msg })
   }
 })
 

@@ -3,6 +3,7 @@ const moment = require('moment')
 
 const { getReportingPeriod } = require('../db/reporting-periods')
 const { setAgencyId, setEcCode, markValidated, markNotValidated } = require('../db/uploads')
+const knex = require('../db/connection')
 const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
@@ -19,7 +20,7 @@ async function validateAgencyId ({ upload, records, trns }) {
 
   // must be set
   if (!agencyCode) {
-    return new ValidationError('Agency code must be set', { tab: 'cover', row: 1, col: 0 })
+    return new ValidationError('Agency code must be set', { tab: 'cover', row: 1, col: 'A' })
   }
 
   // must exist in the db
@@ -27,7 +28,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
-      { tab: 'cover', row: 2, col: 1 }
+      { tab: 'cover', row: 2, col: 'A' }
     )
   }
 
@@ -43,6 +44,13 @@ async function validateEcCode ({ upload, records, trns }) {
   const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
 
+  if (!codeString) {
+    return new ValidationError(
+      'EC code must be set',
+      { tab: 'cover', row: 2, col: 'D' }
+    )
+  }
+
   const codeParts = codeString.split('-')
   const code = codeParts[0]
   const desc = codeParts.slice(1, codeParts.length).join('-')
@@ -50,7 +58,7 @@ async function validateEcCode ({ upload, records, trns }) {
   if (ecCodes[code] !== desc) {
     return new ValidationError(
       `Record EC code ${code} (${desc}) does not match any known EC code`,
-      { tab: 'cover', row: 2, col: 4 }
+      { tab: 'cover', row: 2, col: 'D' }
     )
   }
 
@@ -59,6 +67,32 @@ async function validateEcCode ({ upload, records, trns }) {
   if (code !== upload.ec_code) {
     await setEcCode(upload.id, code)
     upload.ec_code = code
+  }
+}
+
+async function validateVersion ({ upload, records, rules }) {
+  const logicSheet = records.find(record => record.type === 'logic').content
+  const version = logicSheet.version
+
+  const versionRule = rules.logic.version
+
+  let error = null
+  if (version < versionRule.version) {
+    error = 'older'
+  } else if (version > versionRule.version) {
+    error = 'newer'
+  }
+
+  if (error) {
+    return new ValidationError(
+      `Upload template version (${version}) is ${error} than the latest input template (${versionRule.version})`,
+      {
+        tab: 'logic',
+        row: 1,
+        col: versionRule.columnName,
+        severity: 'warn'
+      }
+    )
   }
 }
 
@@ -72,7 +106,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   if (!periodStart.isSame(sheetStart)) {
     errors.push(new ValidationError(
       `Upload reporting period starts ${periodStart.format('L')} while record specifies ${sheetStart.format('L')}`,
-      { tab: 'cover', row: 2, col: 5 }
+      { tab: 'cover', row: 2, col: 'E' }
     ))
   }
 
@@ -81,7 +115,7 @@ async function validateReportingPeriod ({ upload, records, trns }) {
   if (!periodEnd.isSame(sheetEnd)) {
     errors.push(new ValidationError(
       `Upload reporting period ends ${periodEnd.format('L')} while record specifies ${sheetEnd.format('L')}`,
-      { tab: 'cover', row: 2, col: 6 }
+      { tab: 'cover', row: 2, col: 'F' }
     ))
   }
 
@@ -91,42 +125,78 @@ async function validateReportingPeriod ({ upload, records, trns }) {
 async function validateSubrecipientRecord ({ upload, record: recipient, typeRules: rules, recordErrors, trns }) {
   const errors = []
 
-  // does the row already exist?
-  let existing = null
-  if (recipient.EIN__c || recipient.Unique_Entity_Identifier__c) {
-    existing = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, recipient.EIN__c, trns)
-  } else {
+  // we should include at a primary identifier for all recipients
+  if (!recipient.EIN__c && !recipient.Unique_Entity_Identifier__c) {
     errors.push(new ValidationError(
-      'At least one of UEI or TIN must be set, but both are missing',
+      'At least one of UEI or TIN/EIN must be set, but both are missing',
       { col: 'C, D', severity: 'err' }
     ))
   }
+
+  // does the row already exist?
+  let byUei = null
+  if (recipient.Unique_Entity_Identifier__c) {
+    byUei = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, null, trns)
+  }
+
+  let byTin = null
+  if (recipient.EIN__c) {
+    byTin = await findRecipient(upload.tenant_id, null, recipient.EIN__c, trns)
+  }
+
+  // did we find two different subrecipients?
+  if (byUei && byTin && byUei.id !== byTin.id) {
+    errors.push(new ValidationError(
+      'We already have a sub-recipient with given UEI, and a different one with given TIN/EIN',
+      { col: 'C, D', severity: 'warn' }
+    ))
+  }
+
+  const existing = byUei || byTin
+
+  // if the current upload owns the recipient, we can actually update it
+  let isOwnedByThisUpload = true
+  if (
+    !existing ||
+    existing.upload_id !== upload.id ||
+    existing.updated_at
+  ) isOwnedByThisUpload = false
+
+  // the record has already been validated before this method was invoked. how
+  // did the validation go?
+  const isRecordValid = recordErrors.length === 0
 
   // validate that existing record and given recipient match
   //
   // TODO: what if the same upload specifies the same recipient multiple times,
   // but different?
-  //
-  if (existing && (existing.upload_id !== upload.id || existing.updated_at)) {
-    const recipientId = existing.uei || existing.tin
-    const record = JSON.parse(existing.record)
+  if (existing) {
+    // if we own it, we can just update it
+    if (isOwnedByThisUpload) {
+      if (isRecordValid) {
+        await updateRecipient(existing.id, { record: recipient }, trns)
+      }
 
-    // make sure that each key in the record matches the recipient
-    for (const [key, rule] of Object.entries(rules)) {
-      if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
-        errors.push(new ValidationError(
-          `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
-          but upload specifies '${recipient[key]}'`,
-          { col: rule.columnName, severity: 'warn' }
-        ))
+    // otherwise, generate warnings about diffs
+    } else {
+      const recipientId = existing.uei || existing.tin
+      const record = JSON.parse(existing.record)
+
+      // make sure that each key in the record matches the recipient
+      for (const [key, rule] of Object.entries(rules)) {
+        if ((record[key] || recipient[key]) && record[key] !== recipient[key]) {
+          errors.push(new ValidationError(
+            `Subrecipient ${recipientId} exists with '${rule.humanColName}' as '${record[key]}', \
+            but upload specifies '${recipient[key]}'`,
+            { col: rule.columnName, severity: 'warn' }
+          ))
+        }
       }
     }
 
-  // if it's now, and it's passed validation, then insert it
-  } else if (recordErrors.length === 0) {
-    if (existing?.upload_id === upload.id) {
-      await updateRecipient(existing.id, { record: recipient }, trns)
-    } else {
+  // if it's new, and it's passed validation, then insert it
+  } else {
+    if (isRecordValid) {
       const dbRow = {
         uei: recipient.Unique_Entity_Identifier__c,
         tin: recipient.EIN__c,
@@ -162,11 +232,27 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
     // if there's something in the field, make sure it meets requirements
     if (record[key]) {
       // make sure pick value is one of pick list values
-      if (rule.listVals.length > 0 && rule.listVals.indexOf(record[key]) < 0) {
-        errors.push(new ValidationError(
-          `Value for ${key} must be one of ${rule.listVals.length} options in the input template`,
-          { col: rule.columnName, severity: 'err' }
-        ))
+      if (rule.listVals.length > 0) {
+        // for pick lists, the value must be one of possible values
+        if (rule.dataType === 'Pick List' && rule.listVals.indexOf(record[key]) < 0) {
+          errors.push(new ValidationError(
+            `Value for ${key} must be one of ${rule.listVals.length} options in the input template`,
+            { col: rule.columnName, severity: 'err' }
+          ))
+        }
+
+        // for multi select, all the values must be in the list of possible values
+        if (rule.dataType === 'Multi-Select') {
+          const entries = record[key].split(';').map(val => val.trim())
+          for (const entry of entries) {
+            if (rule.listVals.indexOf(entry) < 0) {
+              errors.push(new ValidationError(
+                `Entry '${entry}' of ${key} is not one of ${rule.listVals.length} valid options`,
+                { col: rule.columnName, severity: 'err' }
+              ))
+            }
+          }
+        }
       }
 
       // make sure max length is not too long
@@ -241,7 +327,7 @@ async function validateRules ({ upload, records, rules, trns }) {
   return errors
 }
 
-async function validateUpload (upload, user, trns) {
+async function validateUpload (upload, user, trns = null) {
   // holder for our validation errors
   const errors = []
 
@@ -255,11 +341,18 @@ async function validateUpload (upload, user, trns) {
 
   // list of all of our validations
   const validations = [
+    validateVersion,
     validateAgencyId,
     validateEcCode,
     validateReportingPeriod,
     validateRules
   ]
+
+  // we should do this in a transaction, unless someone is doing it for us
+  const ourTransaction = !trns
+  if (ourTransaction) {
+    trns = await knex.transaction()
+  }
 
   // run validations, one by one
   for (const validation of validations) {
@@ -275,16 +368,32 @@ async function validateUpload (upload, user, trns) {
 
   // fatal errors determine if the upload fails validation
   const fatal = flatErrors.filter(x => x.severity === 'err')
+  const validated = fatal.length === 0
 
   // if we successfully validated for the first time, let's mark it!
-  if (fatal.length === 0 && !upload.validated_at) {
-    await markValidated(upload.id, user.id, trns)
+  if (validated && !upload.validated_at) {
+    try {
+      await markValidated(upload.id, user.id, trns)
+    } catch (e) {
+      errors.push(new ValidationError(`failed to mark upload: ${e.message}`))
+    }
+  }
 
-  // if it was valid before but is no longer valid, clear it
-  } else if (fatal.length > 0 && upload.validated_at) {
+  // depending on whether we validated or not, lets commit/rollback. we MUST do
+  // this or bad things happen. this is why there are try/catch blocks around
+  // every other function call above here
+  if (ourTransaction) {
+    const finishTrns = validated ? trns.commit : trns.rollback
+    await finishTrns()
+    trns = knex
+  }
+
+  // if it was valid before but is no longer valid, clear it; this happens outside the transaction
+  if (!validated && upload.validated_at) {
     await markNotValidated(upload.id, trns)
   }
 
+  // finally, return our errors
   return flatErrors
 }
 

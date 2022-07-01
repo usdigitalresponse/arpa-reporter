@@ -4,12 +4,17 @@
 
 ARPA Reporter is a web app designed to ease the ARPA grants reporting workflow for government agencies and grants offices. It aggregates reports from individual agencies or groups, and provides quick, up-front validation of all errors before submitting to federal portals, which can be a painful and iterative process otherwise.
 
-## Developer documentation
-This readme.md page explains how to set up your development environment. Documentation for sysadmins is at https://github.com/usdigitalresponse/arpa-reporter/wiki/Home.
+## Render Administration
+
+See [RENDER.md](RENDER.md) for documentation relating to deploying this project on https://render.com/.
 
 ## Project setup
 
-You will need a Postgres database running on the same machine.
+You'll need a nodejs dev environment.
+The repo includes a `.node-version` file which specifies the correct version.
+You an use [nvm](https://github.com/nvm-sh/nvm) or (recommended) [asdf](https://asdf-vm.com/) with the [nodejs plugin](https://github.com/asdf-vm/asdf-nodejs) to manage that version locally.
+
+You will also need a Postgres database running on the same machine.
 You can run one using the `docker-compose.yml` file in this repo:
 
 ```

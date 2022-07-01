@@ -49,3 +49,5 @@ exports.down = function (knex) {
     knex.schema
   )
 }
+
+exports.TABLES = TABLES

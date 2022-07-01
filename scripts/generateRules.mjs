@@ -65,7 +65,7 @@ function filterEcCodes (logic, type, columnName) {
 async function extractRules (workbook, logic) {
   const rules = {}
 
-  // add logic rule; this also illustrates what rules look likej
+  // add logic rule; this also illustrates what rules look like
   const version = readVersionRecord(workbook).version
   rules.logic = {
     version: {

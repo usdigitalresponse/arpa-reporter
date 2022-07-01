@@ -63,7 +63,7 @@ async function validateEcCode ({ upload, records, trns }) {
 }
 
 async function validateVersion ({ upload, records, rules }) {
-  const logicSheet = records.find(doc => doc.type === 'logic').content
+  const logicSheet = records.find(record => record.type === 'logic').content
   const version = logicSheet.version
 
   const versionRule = rules.logic.version

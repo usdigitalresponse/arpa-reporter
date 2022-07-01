@@ -1,9 +1,9 @@
 const setupAgencies = knex => {
   return knex('agencies').insert([
-    { name: 'Generic Government', code: 'GOV' },
-    { name: 'Office of Management and Budget', code: 'OMB' },
-    { name: 'Department of Health', code: 'DOH' },
-    { name: 'Executive Office of Health and Human Services', code: 'EOHHS' }
+    { name: 'Generic Government', code: 'GOV', tenant_id: 0 },
+    { name: 'Office of Management and Budget', code: 'OMB', tenant_id: 0 },
+    { name: 'Department of Health', code: 'DOH', tenant_id: 0 },
+    { name: 'Executive Office of Health and Human Services', code: 'EOHHS', tenant_id: 0 }
   ]).then(() => {
     return 'Agency data added OK'
   })

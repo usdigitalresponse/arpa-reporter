@@ -8,7 +8,7 @@ import chalk from 'chalk'
 import XLSX from 'xlsx'
 import lodash from 'lodash'
 
-import { DATA_SHEET_TYPES } from '../src/server/services/records.js'
+import { DATA_SHEET_TYPES, readVersionRecord } from '../src/server/services/records.js'
 import { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, SRC_DIR } from '../src/server/environment.js'
 
 const { merge } = lodash
@@ -65,6 +65,24 @@ function filterEcCodes (logic, type, columnName) {
 async function extractRules (workbook, logic) {
   const rules = {}
 
+  // add logic rule; this also illustrates what rules look like
+  const version = readVersionRecord(workbook).version
+  rules.logic = {
+    version: {
+      version, // special field; other rules don't have this
+      key: 'version',
+      index: 0,
+      required: false,
+      dataType: 'String',
+      maxLength: 10,
+      listVals: [],
+      columnName: 'B',
+      humanColName: 'Input template version',
+      ecCodes: false
+    }
+  }
+
+  // read rules for ordinary sheet types
   for (const sheetName of Object.keys(DATA_SHEET_TYPES)) {
     const type = DATA_SHEET_TYPES[sheetName]
     const sheet = workbook.Sheets[sheetName]
@@ -101,6 +119,7 @@ async function extractRules (workbook, logic) {
       // construct rule
       const rule = {
         key,
+        index: colIdx,
         required: required[colIdx],
         dataType: dataTypes[colIdx],
         maxLength: maxLengths[colIdx],

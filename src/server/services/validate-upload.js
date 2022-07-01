@@ -129,11 +129,12 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   const existing = byUei || byTin
 
   // if the current upload owns the recipient, we can actually update it
-  let ownedByThisUpload
-  if (!existing) ownedByThisUpload = false
-  else if (existing.upload_id !== upload.id) ownedByThisUpload = false
-  else if (existing.updated_at) ownedByThisUpload = false
-  else ownedByThisUpload = true
+  let isOwnedByThisUpload = true
+  if (
+    !existing ||
+    existing.upload_id !== upload.id ||
+    existing.updated_at
+  ) isOwnedByThisUpload = false
 
   // the record has already been validated before this method was invoked. how
   // did the validation go?
@@ -145,7 +146,7 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   // but different?
   if (existing) {
     // if we own it, we can just update it
-    if (ownedByThisUpload) {
+    if (isOwnedByThisUpload) {
       if (isRecordValid) {
         await updateRecipient(existing.id, { record: recipient }, trns)
       }

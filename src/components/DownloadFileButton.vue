@@ -1,18 +1,14 @@
 <template>
   <a :href="`/api/uploads/${upload.id}/download`">
-    <img
-      class="mr-4"
-      src="/assets/img/cloud-download.svg"
-      alt=""
-      width="20"
-      height="20"
-    />
+    <button class="btn btn-primary ml-2">
+      <span>Download file</span>
+    </button>
   </a>
 </template>
 
 <script>
 export default {
-  name: 'DownloadIcon',
+  name: 'DownloadFileButton',
   props: {
     upload: Object
   }

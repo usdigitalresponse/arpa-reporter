@@ -47,7 +47,7 @@
 
         <span v-else-if="props.column.field === 'filename'">
           {{ props.row.filename }}
-          <DownloadIcon :upload="props.row" />
+          <DownloadFileButton :upload="props.row" />
         </span>
 
         <span v-else>
@@ -64,7 +64,7 @@ import moment from 'moment'
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table'
 
-import DownloadIcon from '../components/DownloadIcon'
+import DownloadFileButton from '../components/DownloadFileButton'
 import DownloadTemplateBtn from '../components/DownloadTemplateBtn'
 
 import { getJson } from '../store'
@@ -221,7 +221,7 @@ export default {
   },
   components: {
     VueGoodTable,
-    DownloadIcon,
+    DownloadFileButton,
     DownloadTemplateBtn
   }
 }

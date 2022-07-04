@@ -719,17 +719,20 @@ async function generateReport (tenantId, periodId) {
 
   // generate every csv file for the report
   const csvObjects = [
-    { name: 'project18_229233BulkUploads', func: generateProject18 },
-    { name: 'project19_234BulkUploads', func: generateProject19 },
-    { name: 'project2128BulkUploads', func: generateProject2128 },
-    { name: 'project214_224227BulkUploads', func: generateProject214 },
-    { name: 'project236BulkUploads', func: generateProject236 },
+    { name: 'project111210BulkUpload', func: generateProject111210 },
+    { name: 'project18_229233BulkUpload', func: generateProject18 },
+    { name: 'project19_234BulkUpload', func: generateProject19 },
+    { name: 'project211214NulkUpload', func: generateProject211214 },
+    { name: 'project2128BulkUpload', func: generateProject2128 },
+    { name: 'project215218BulkUpload', func: generateProject215218 },
+    { name: 'project224227BulkUpload', func: generateProject224227 },
+    { name: 'project236BulkUpload', func: generateProject236 },
     { name: 'project31BulkUpload', func: generateProject31 },
     { name: 'project32BulkUpload', func: generateProject32 },
     { name: 'project4142BulkUpload', func: generateProject4142 },
     { name: 'project51518BulkUpload', func: generateProject51518 },
     { name: 'project519521BulkUpload', func: generateProject519521 },
-    { name: 'projectBaselineBulkUpload', func: generateProjectBaseline },
+    { name: 'projectBaselineBulkUploadTemplate', func: generateProjectBaseline },
     {
       name: 'expendituresGT50000BulkUpload',
       func: generateExpendituresGT50000

@@ -47,7 +47,7 @@
           <li class="list-group-item">
             <span class="font-weight-bold">Filename: </span>
             {{ upload.filename }}
-            <DownloadIcon :upload="upload" />
+            <DownloadFileButton :upload="upload" />
           </li>
 
           <li class="list-group-item">
@@ -159,7 +159,7 @@
 import moment from 'moment'
 import { titleize } from '../helpers/form-helpers'
 import AlertBox from '../components/AlertBox'
-import DownloadIcon from '../components/DownloadIcon'
+import DownloadFileButton from '../components/DownloadFileButton'
 import { getJson, post } from '../store'
 import { shortUuid } from '../helpers/short-uuid'
 
@@ -167,7 +167,7 @@ export default {
   name: 'Upload',
   components: {
     AlertBox,
-    DownloadIcon
+    DownloadFileButton
   },
   data: function () {
     return {

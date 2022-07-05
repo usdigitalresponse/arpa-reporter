@@ -243,21 +243,25 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
     } else {
       // make sure pick value is one of pick list values
       if (rule.listVals.length > 0) {
+        // enforce validation in lower case
+        const lcItems = rule.listVals.map(val => val.toLowerCase())
+        const lcVal = String(record[key]).toLowerCase()
+
         // for pick lists, the value must be one of possible values
-        if (rule.dataType === 'Pick List' && rule.listVals.indexOf(record[key]) < 0) {
+        if (rule.dataType === 'Pick List' && lcItems.indexOf(lcVal) < 0) {
           errors.push(new ValidationError(
-            `Value for ${key} must be one of ${rule.listVals.length} options in the input template`,
+            `Value for ${key} must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
           ))
         }
 
         // for multi select, all the values must be in the list of possible values
         if (rule.dataType === 'Multi-Select') {
-          const entries = record[key].split(';').map(val => val.trim())
+          const entries = lcVal.split(';').map(val => val.trim())
           for (const entry of entries) {
-            if (rule.listVals.indexOf(entry) < 0) {
+            if (lcItems.indexOf(entry) < 0) {
               errors.push(new ValidationError(
-                `Entry '${entry}' of ${key} is not one of ${rule.listVals.length} valid options`,
+                `Entry '${entry}' of ${key} is not one of ${lcItems.length} valid options`,
                 { col: rule.columnName, severity: 'err' }
               ))
             }

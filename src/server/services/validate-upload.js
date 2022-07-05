@@ -7,7 +7,7 @@ const knex = require('../db/connection')
 const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
-const { recordsForUpload } = require('./records')
+const { recordsForUpload, TYPE_TO_SHEET_NAME } = require('./records')
 const { getRules } = require('./validation-rules')
 const { ecCodes } = require('../lib/arpa-ec-codes')
 
@@ -225,29 +225,44 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
   // check all the rules
   for (const [key, rule] of Object.entries(rules)) {
     // if the rule only applies on different EC codes, skip it
-    if (rule.ecCodes && (!upload.ec_code || rule.ecCodes.indexOf(upload.ec_code) < 0)) {
+    if (rule.ecCodes && (!upload.ec_code || !rule.ecCodes.includes(upload.ec_code))) {
       continue
     }
 
+    // if the field is unset/missing/blank, is that okay?
+    // we don't treat numeric `0` as unset
+    if ([undefined, null, ''].includes(record[key])) {
+      // make sure required keys are present
+      if (rule.required === true) {
+        errors.push(new ValidationError(
+          `Value is required for ${key}`,
+          { col: rule.columnName, severity: 'err' }
+        ))
+      }
+
     // if there's something in the field, make sure it meets requirements
-    if (record[key]) {
+    } else {
       // make sure pick value is one of pick list values
       if (rule.listVals.length > 0) {
+        // enforce validation in lower case
+        const lcItems = rule.listVals.map(val => val.toLowerCase())
+        const lcVal = String(record[key]).toLowerCase()
+
         // for pick lists, the value must be one of possible values
-        if (rule.dataType === 'Pick List' && rule.listVals.indexOf(record[key]) < 0) {
+        if (rule.dataType === 'Pick List' && !lcItems.includes(lcVal)) {
           errors.push(new ValidationError(
-            `Value for ${key} must be one of ${rule.listVals.length} options in the input template`,
+            `Value for ${key} must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
           ))
         }
 
         // for multi select, all the values must be in the list of possible values
         if (rule.dataType === 'Multi-Select') {
-          const entries = record[key].split(';').map(val => val.trim())
+          const entries = lcVal.split(';').map(val => val.trim())
           for (const entry of entries) {
-            if (rule.listVals.indexOf(entry) < 0) {
+            if (!lcItems.includes(entry)) {
               errors.push(new ValidationError(
-                `Entry '${entry}' of ${key} is not one of ${rule.listVals.length} valid options`,
+                `Entry '${entry}' of ${key} is not one of ${lcItems.length} valid options`,
                 { col: rule.columnName, severity: 'err' }
               ))
             }
@@ -256,21 +271,15 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
       }
 
       // make sure max length is not too long
-      if (rule.maxLength && String(record[key]).length > rule.maxLength) {
-        errors.push(new ValidationError(
-          `Value for ${key} cannot be longer than ${rule.maxLength} (currently, ${String(record[key]).length})`,
-          { col: rule.columnName, severity: 'err' }
-        ))
-      }
+      if (rule.maxLength) {
+        if (rule.dataType === 'String' && String(record[key]).length > rule.maxLength) {
+          errors.push(new ValidationError(
+            `Value for ${key} cannot be longer than ${rule.maxLength} (currently, ${String(record[key]).length})`,
+            { col: rule.columnName, severity: 'err' }
+          ))
+        }
 
-    // if the field is unset, is that okay?
-    } else {
-      // make sure required keys are present
-      if (rule.required === true) {
-        errors.push(new ValidationError(
-          `Value is required for ${key}`,
-          { col: rule.columnName, severity: 'err' }
-        ))
+        // TODO: should we validate max length on currency? or numeric fields?
       }
     }
   }
@@ -365,6 +374,11 @@ async function validateUpload (upload, user, trns = null) {
 
   // flat list without any nulls, including errors and warnings
   const flatErrors = errors.flat().filter(x => x)
+
+  // tab should be sheet name, not sheet type
+  for (const error of flatErrors) {
+    error.tab = TYPE_TO_SHEET_NAME[error.tab] || error.tab
+  }
 
   // fatal errors determine if the upload fails validation
   const fatal = flatErrors.filter(x => x.severity === 'err')

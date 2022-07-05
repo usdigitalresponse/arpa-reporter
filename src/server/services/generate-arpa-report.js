@@ -357,6 +357,56 @@ async function generateProject215218 (records) {
     .filter(isNotNull)
 }
 
+async function generateProject224227 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.24':
+        case '2.25':
+        case '2.26':
+        case '2.27': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.School_ID_or_District_ID__c,
+            record.content.Number_Students_Tutoring_Programs__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
 async function generateProject236 (records) {
   return records
     .filter(isProjectRecord)

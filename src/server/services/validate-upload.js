@@ -229,8 +229,18 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
       continue
     }
 
+    // if the field is unset/missing/blank, is that okay?
+    if ([undefined, null, ''].includes(record[key])) {
+      // make sure required keys are present
+      if (rule.required === true) {
+        errors.push(new ValidationError(
+          `Value is required for ${key}`,
+          { col: rule.columnName, severity: 'err' }
+        ))
+      }
+
     // if there's something in the field, make sure it meets requirements
-    if (record[key]) {
+    } else {
       // make sure pick value is one of pick list values
       if (rule.listVals.length > 0) {
         // for pick lists, the value must be one of possible values
@@ -265,16 +275,6 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
         }
 
         // TODO: should we validate max length on currency? or numeric fields?
-      }
-
-    // if the field is unset, is that okay?
-    } else {
-      // make sure required keys are present
-      if (rule.required === true) {
-        errors.push(new ValidationError(
-          `Value is required for ${key}`,
-          { col: rule.columnName, severity: 'err' }
-        ))
       }
     }
   }

@@ -352,6 +352,7 @@ async function generateProject32 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),

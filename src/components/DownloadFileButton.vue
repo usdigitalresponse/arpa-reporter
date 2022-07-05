@@ -1,5 +1,5 @@
 <template>
-  <a :href="`/api/uploads/${upload.id}/download`" class="btn btn-primary ml-2">
+  <a :href="`/api/uploads/${upload.id}/download`" class="btn-sm btn-primary ml-2">
       Download file
   </a>
 </template>

@@ -173,6 +173,7 @@ async function generateProject2128 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
@@ -194,7 +195,9 @@ async function generateProject2128 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.Individuals_Served__c
+            record.content.Individuals_Served__c,
+            record.content.Number_Households_Eviction_Prevention__c,
+            record.content.Number_Affordable_Housing_Units__c
           ]
         }
         default:

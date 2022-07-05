@@ -7,7 +7,7 @@ const knex = require('../db/connection')
 const { agencyByCode } = require('../db/agencies')
 const { createRecipient, findRecipient, updateRecipient } = require('../db/arpa-subrecipients')
 
-const { recordsForUpload } = require('./records')
+const { recordsForUpload, TYPE_TO_SHEET_NAME } = require('./records')
 const { getRules } = require('./validation-rules')
 const { ecCodes } = require('../lib/arpa-ec-codes')
 
@@ -225,7 +225,7 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
   // check all the rules
   for (const [key, rule] of Object.entries(rules)) {
     // if the rule only applies on different EC codes, skip it
-    if (rule.ecCodes && (!upload.ec_code || rule.ecCodes.indexOf(upload.ec_code) < 0)) {
+    if (rule.ecCodes && (!upload.ec_code || !rule.ecCodes.includes(upload.ec_code))) {
       continue
     }
 
@@ -248,7 +248,7 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
         const lcVal = String(record[key]).toLowerCase()
 
         // for pick lists, the value must be one of possible values
-        if (rule.dataType === 'Pick List' && lcItems.indexOf(lcVal) < 0) {
+        if (rule.dataType === 'Pick List' && !lcItems.includes(lcVal)) {
           errors.push(new ValidationError(
             `Value for ${key} must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
@@ -259,7 +259,7 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
         if (rule.dataType === 'Multi-Select') {
           const entries = lcVal.split(';').map(val => val.trim())
           for (const entry of entries) {
-            if (lcItems.indexOf(entry) < 0) {
+            if (!lcItems.includes(entry)) {
               errors.push(new ValidationError(
                 `Entry '${entry}' of ${key} is not one of ${lcItems.length} valid options`,
                 { col: rule.columnName, severity: 'err' }
@@ -373,6 +373,11 @@ async function validateUpload (upload, user, trns = null) {
 
   // flat list without any nulls, including errors and warnings
   const flatErrors = errors.flat().filter(x => x)
+
+  // tab should be sheet name, not sheet type
+  for (const error of flatErrors) {
+    error.tab = TYPE_TO_SHEET_NAME[error.tab] || error.tab
+  }
 
   // fatal errors determine if the upload fails validation
   const fatal = flatErrors.filter(x => x.severity === 'err')

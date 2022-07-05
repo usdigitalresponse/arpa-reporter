@@ -24,6 +24,9 @@ const DATA_SHEET_TYPES = {
   'Aggregate Awards < 50000': 'awards'
 }
 
+const TYPE_TO_SHEET_NAME = Object.fromEntries(
+  Object.entries(DATA_SHEET_TYPES).map(([sheetName, type]) => [type, sheetName]))
+
 function readVersionRecord (workbook) {
   const range = {
     s: { r: 0, c: 1 },
@@ -112,5 +115,6 @@ module.exports = {
   recordsForReportingPeriod,
   recordsForUpload,
   DATA_SHEET_TYPES,
+  TYPE_TO_SHEET_NAME,
   readVersionRecord
 }

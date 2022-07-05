@@ -256,11 +256,15 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
       }
 
       // make sure max length is not too long
-      if (rule.maxLength && String(record[key]).length > rule.maxLength) {
-        errors.push(new ValidationError(
-          `Value for ${key} cannot be longer than ${rule.maxLength} (currently, ${String(record[key]).length})`,
-          { col: rule.columnName, severity: 'err' }
-        ))
+      if (rule.maxLength) {
+        if (rule.dataType === 'String' && String(record[key]).length > rule.maxLength) {
+          errors.push(new ValidationError(
+            `Value for ${key} cannot be longer than ${rule.maxLength} (currently, ${String(record[key]).length})`,
+            { col: rule.columnName, severity: 'err' }
+          ))
+        }
+
+        // TODO: should we validate max length on currency? or numeric fields?
       }
 
     // if the field is unset, is that okay?

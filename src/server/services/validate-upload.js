@@ -230,6 +230,7 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
     }
 
     // if the field is unset/missing/blank, is that okay?
+    // we don't treat numeric `0` as unset
     if ([undefined, null, ''].includes(record[key])) {
       // make sure required keys are present
       if (rule.required === true) {

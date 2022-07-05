@@ -55,6 +55,55 @@ async function generateReportName (tenantId, periodId) {
   return filename
 }
 
+async function generateProject111210 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '1.11':
+        case '2.10': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_Workers_Enrolled_Sectoral__c,
+            record.content.Number_Workers_Competing_Sectoral__c,
+            record.content.Number_People_Summer_Youth__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
 async function generateProject18 (records) {
   return records
     .filter(isProjectRecord)
@@ -74,11 +123,12 @@ async function generateProject18 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -95,7 +145,7 @@ async function generateProject18 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.Small_Businesses_Served__c
+            record.content.Number_Non_Profits_Served__c
           ]
         }
         default:
@@ -123,8 +173,8 @@ async function generateProject19 (records) {
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -142,6 +192,57 @@ async function generateProject19 (records) {
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
             record.content.Number_Non_Profits_Served__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
+async function generateProject211214 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.11':
+        case '2.12':
+        case '2.13':
+        case '2.14': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.School_ID_or_District_ID__c,
+            record.content.Number_Children_Served_Childcare__c,
+            record.content.Number_Families_Served_Home_Visiting__c
           ]
         }
         default:
@@ -172,11 +273,12 @@ async function generateProject2128 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -193,7 +295,9 @@ async function generateProject2128 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.Individuals_Served__c
+            record.content.Individuals_Served__c,
+            record.content.Number_Households_Eviction_Prevention__c,
+            record.content.Number_Affordable_Housing_Units__c
           ]
         }
         default:
@@ -203,13 +307,62 @@ async function generateProject2128 (records) {
     .filter(isNotNull)
 }
 
-async function generateProject214 (records) {
+async function generateProject215218 (records) {
   return records
     .filter(isProjectRecord)
     .map(record => {
       const detailedEcCode = getDetailedEcCode(record)
       switch (detailedEcCode) {
-        case '2.14':
+        case '2.15':
+        case '2.16':
+        case '2.17':
+        case '2.18': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_Households_Eviction_Prevention__c,
+            record.content.Number_Affordable_Housing_Units__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
+async function generateProject224227 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
         case '2.24':
         case '2.25':
         case '2.26':
@@ -221,11 +374,12 @@ async function generateProject214 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -242,7 +396,8 @@ async function generateProject214 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.School_ID_or_District_ID__c
+            record.content.School_ID_or_District_ID__c,
+            record.content.Number_Students_Tutoring_Programs__c
           ]
         }
         default:
@@ -266,11 +421,12 @@ async function generateProject236 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
-            record.content.Adopted_Budget__c,
-            currency(record.content.Total_Obligations__c, true),
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -311,11 +467,12 @@ async function generateProject31 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -350,11 +507,12 @@ async function generateProject32 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -390,11 +548,12 @@ async function generateProject4142 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
             currency(record.content.Program_Income_Earned__c, true),
             currency(record.content.Program_Income_Expended__c, true),
@@ -442,11 +601,12 @@ async function generateProject51518 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
             currency(record.content.Program_Income_Earned__c, true),
             currency(record.content.Program_Income_Expended__c, true),
@@ -483,11 +643,12 @@ async function generateProject519521 (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Project_Description__c,
             currency(record.content.Program_Income_Earned__c, true),
             currency(record.content.Program_Income_Expended__c, true),
@@ -495,7 +656,36 @@ async function generateProject519521 (records) {
             record.content.Initiation_of_Operations_Date__c,
             record.content.Is_project_designed_to_meet_100_mbps__c,
             record.content.Project_not_met_100_mbps_explanation__c,
-            record.content.Is_project_designed_to_exceed_100_mbps__c
+            record.content.Is_project_designed_to_exceed_100_mbps__c,
+            record.content.Technology_Type_Planned__c,
+            record.content.Technology_Type_Planned_Other__c,
+            record.content.Technology_Type_Actual__c,
+            record.content.Technology_Type_Actual_Other__c,
+            record.content.Total_Miles_of_Fiber_Deployed__c,
+            record.content.Total_Miles_of_Fiber_Deployed_Actual__c,
+            record.content.Planned_Funded_Locations_Served__c,
+            record.content.Actual_Funded_Locations_Served__c,
+            record.content.Planned_Funded_Locations_25_3_Below__c,
+            record.content.Planned_Funded_Locations_Between_25_100__c,
+            record.content.Planned_Funded_Locations_Minimum_1_Gbps__c,
+            record.content.Actual_Funded_Locations_Minimum_1_Gbps__c,
+            record.content.Planned_Funded_Locations_Minimum_100_100__c,
+            record.content.Actual_Funded_Locations_Minimum_100_100__c,
+            record.content.Planned_Funded_Locations_Minimum_100_20__c,
+            record.content.Actual_Funded_Locations_Minimum_100_20__c,
+            record.content.Planned_Funded_Locations_Residential__c,
+            record.content.Actual_Funded_Locations_Residential__c,
+            record.content.Planned_Funded_Locations_Total_Housing__c,
+            record.content.Actual_Funded_Locations_Total_Housing__c,
+            record.content.Planned_Funded_Locations_Business__c,
+            record.content.Actual_Funded_Locations_Business__c,
+            record.content.Planned_Funded_Locations_Community__c,
+            record.content.Actual_Funded_Locations_Community__c,
+            record.content.Technology_Type_Planned__c,
+            record.content.Technology_Type_Actual__c,
+            record.content.Planned_Funded_Locations_Explanation__c,
+            record.content.Actual_Funded_Locations_Explanation__c,
+            record.content.Confirm_Service_Provider__c
           ]
         }
         default:
@@ -519,19 +709,10 @@ async function generateProjectBaseline (records) {
         case '1.6':
         case '1.7':
         case '1.10':
-        case '1.11':
         case '1.12':
         case '1.13':
         case '1.14':
         case '2.9':
-        case '2.10':
-        case '2.11':
-        case '2.12':
-        case '2.13':
-        case '2.15':
-        case '2.16':
-        case '2.17':
-        case '2.18':
         case '2.19':
         case '2.20':
         case '2.21':
@@ -552,11 +733,12 @@ async function generateProjectBaseline (records) {
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
             currency(record.content.Adopted_Budget__c, true),
             currency(record.content.Total_Obligations__c),
             currency(record.content.Total_Expenditures__c),
-            currency(record.content.Current_Period_Obligations__c),
-            currency(record.content.Current_Period_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
             record.content.Does_Project_Include_Capital_Expenditure__c,
             currency(record.content.Total_Cost_Capital_Expenditure__c, true),
             record.content.Type_of_Capital_Expenditure__c,
@@ -564,7 +746,7 @@ async function generateProjectBaseline (records) {
             record.content.Capital_Expenditure_Justification__c,
             record.content.Project_Description__c,
             currency(record.content.Program_Income_Earned__c, true),
-            currency(record.content.Program_Income_Expended__cs, true),
+            currency(record.content.Program_Income_Expended__c, true),
             record.content.Primary_Project_Demographics__c,
             record.content.Primary_Project_Demographics_Explanation__c,
             record.content.Secondary_Project_Demographics__c,
@@ -719,17 +901,20 @@ async function generateReport (tenantId, periodId) {
 
   // generate every csv file for the report
   const csvObjects = [
-    { name: 'project18_229233BulkUploads', func: generateProject18 },
-    { name: 'project19_234BulkUploads', func: generateProject19 },
-    { name: 'project2128BulkUploads', func: generateProject2128 },
-    { name: 'project214_224227BulkUploads', func: generateProject214 },
-    { name: 'project236BulkUploads', func: generateProject236 },
+    { name: 'project111210BulkUpload', func: generateProject111210 },
+    { name: 'project18_229233BulkUpload', func: generateProject18 },
+    { name: 'project19_234BulkUpload', func: generateProject19 },
+    { name: 'project211214NulkUpload', func: generateProject211214 },
+    { name: 'project2128BulkUpload', func: generateProject2128 },
+    { name: 'project215218BulkUpload', func: generateProject215218 },
+    { name: 'project224227BulkUpload', func: generateProject224227 },
+    { name: 'project236BulkUpload', func: generateProject236 },
     { name: 'project31BulkUpload', func: generateProject31 },
     { name: 'project32BulkUpload', func: generateProject32 },
     { name: 'project4142BulkUpload', func: generateProject4142 },
     { name: 'project51518BulkUpload', func: generateProject51518 },
     { name: 'project519521BulkUpload', func: generateProject519521 },
-    { name: 'projectBaselineBulkUpload', func: generateProjectBaseline },
+    { name: 'projectBaselineBulkUploadTemplate', func: generateProjectBaseline },
     {
       name: 'expendituresGT50000BulkUpload',
       func: generateExpendituresGT50000

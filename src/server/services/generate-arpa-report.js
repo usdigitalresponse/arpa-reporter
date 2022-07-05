@@ -307,6 +307,56 @@ async function generateProject2128 (records) {
     .filter(isNotNull)
 }
 
+async function generateProject215218 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '2.15':
+        case '2.16':
+        case '2.17':
+        case '2.18': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_Households_Eviction_Prevention__c,
+            record.content.Number_Affordable_Housing_Units__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
 async function generateProject236 (records) {
   return records
     .filter(isProjectRecord)
@@ -583,10 +633,6 @@ async function generateProjectBaseline (records) {
         case '1.13':
         case '1.14':
         case '2.9':
-        case '2.15':
-        case '2.16':
-        case '2.17':
-        case '2.18':
         case '2.19':
         case '2.20':
         case '2.21':

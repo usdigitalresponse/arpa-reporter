@@ -55,6 +55,55 @@ async function generateReportName (tenantId, periodId) {
   return filename
 }
 
+async function generateProject111210 (records) {
+  return records
+    .filter(isProjectRecord)
+    .map(record => {
+      const detailedEcCode = getDetailedEcCode(record)
+      switch (detailedEcCode) {
+        case '1.11':
+        case '2.10': {
+          return [
+            null, // first col is blank
+            ec(record.type),
+            record.subcategory,
+            record.content.Name,
+            record.content.Project_Identification_Number__c,
+            record.content.Completion_Status__c,
+            record.content.Cancellation_Reason__c,
+            currency(record.content.Adopted_Budget__c, true),
+            currency(record.content.Total_Obligations__c),
+            currency(record.content.Total_Expenditures__c),
+            currency(record.content.Q2_2022_Obligations__c ?? record.content.Current_Period_Obligations__c),
+            currency(record.content.Q2_2022_Expenditures__c ?? record.content.Current_Period_Expenditures__c),
+            record.content.Does_Project_Include_Capital_Expenditure__c,
+            currency(record.content.Total_Cost_Capital_Expenditure__c, true),
+            record.content.Type_of_Capital_Expenditure__c,
+            record.content.Type_of_Capital_Expenditure_Other__c,
+            record.content.Capital_Expenditure_Justification__c,
+            record.content.Project_Description__c,
+            currency(record.content.Program_Income_Earned__c, true),
+            currency(record.content.Program_Income_Expended__c, true),
+            record.content.Primary_Project_Demographics__c,
+            record.content.Primary_Project_Demographics_Explanation__c,
+            record.content.Secondary_Project_Demographics__c,
+            record.content.Secondary_Proj_Demographics_Explanation__c,
+            record.content.Tertiary_Project_Demographics__c,
+            record.content.Tertiary_Proj_Demographics_Explanation__c,
+            record.content.Structure_Objectives_of_Asst_Programs__c,
+            record.content.Recipient_Approach_Description__c,
+            record.content.Number_Workers_Enrolled_Sectoral__c,
+            record.content.Number_Workers_Competing_Sectoral__c,
+            record.content.Number_People_Summer_Youth__c
+          ]
+        }
+        default:
+          return null
+      }
+    })
+    .filter(isNotNull)
+}
+
 async function generateProject18 (records) {
   return records
     .filter(isProjectRecord)
@@ -528,12 +577,10 @@ async function generateProjectBaseline (records) {
         case '1.6':
         case '1.7':
         case '1.10':
-        case '1.11':
         case '1.12':
         case '1.13':
         case '1.14':
         case '2.9':
-        case '2.10':
         case '2.11':
         case '2.12':
         case '2.13':

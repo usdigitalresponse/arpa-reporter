@@ -13,10 +13,8 @@ const EXPENDITURE_CATEGORIES = {
   ec7: '7-Administrative and Other'
 }
 
-function currency (value, optional = false) {
-  if (optional && value == null) {
-    return value
-  }
+function currency (value) {
+  if (value == null) return value
   return round(value, 2).toString()
 }
 
@@ -24,21 +22,18 @@ function ec (value) {
   return EXPENDITURE_CATEGORIES[value]
 }
 
-function zip (value, optional = false) {
-  if (optional && value == null) {
-    return value
-  }
+function zip (value) {
+  if (value == null) return value
   return value.toString().padStart(5, '0')
 }
 
-function zip4 (value, optional = false) {
-  if (optional && value == null) {
-    return value
-  }
+function zip4 (value) {
+  if (value == null) return value
   return value.toString().padStart(4, '0')
 }
 
 module.exports = {
+  boolean,
   currency,
   ec,
   zip,

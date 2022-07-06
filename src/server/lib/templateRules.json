@@ -1,7 +1,7 @@
 {
   "logic": {
     "version": {
-      "version": "v:20220630",
+      "version": "v:20220705",
       "key": "version",
       "index": 0,
       "required": false,
@@ -652,7 +652,7 @@
       "key": "Number_Non_Profits_Served__c",
       "index": 24,
       "required": true,
-      "dataType": "String",
+      "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "Y",
@@ -1230,8 +1230,8 @@
         "1.11"
       ]
     },
-    "Number_Workers_Completing_Sectoral__c": {
-      "key": "Number_Workers_Completing_Sectoral__c",
+    "Number_Workers_Competing_Sectoral__c": {
+      "key": "Number_Workers_Competing_Sectoral__c",
       "index": 45,
       "required": true,
       "dataType": "Numeric",
@@ -1254,6 +1254,32 @@
       "humanColName": "Number of people participating in summer youth employment programs",
       "ecCodes": [
         "1.11"
+      ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 47,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "AV",
+      "humanColName": "Cancelled Status of Completion Explanation",
+      "ecCodes": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+        "1.10",
+        "1.11",
+        "1.12",
+        "1.13",
+        "1.14"
       ]
     }
   },
@@ -2416,6 +2442,9 @@
       "columnName": "AA",
       "humanColName": "NCES School ID or NCES District ID",
       "ecCodes": [
+        "2.11",
+        "2.12",
+        "2.13",
         "2.14",
         "2.24",
         "2.25",
@@ -3442,8 +3471,8 @@
         "2.1"
       ]
     },
-    "Number_Workers_Completing_Sectoral__c": {
-      "key": "Number_Workers_Completing_Sectoral__c",
+    "Number_Workers_Competing_Sectoral__c": {
+      "key": "Number_Workers_Competing_Sectoral__c",
       "index": 48,
       "required": true,
       "dataType": "Numeric",
@@ -3502,8 +3531,8 @@
         "2.18"
       ]
     },
-    "Students_Participating_in_Evidence_Based_Tutoring_Programs__c": {
-      "key": "Students_Participating_in_Evidence_Based_Tutoring_Programs__c",
+    "Number_Students_Tutoring_Programs__c": {
+      "key": "Number_Students_Tutoring_Programs__c",
       "index": 52,
       "required": true,
       "dataType": "Numeric",
@@ -3548,6 +3577,55 @@
         "2.12",
         "2.13",
         "2.14"
+      ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 55,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "BD",
+      "humanColName": "Cancelled Status of Completion Explanation",
+      "ecCodes": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.11",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19",
+        "2.20",
+        "2.21",
+        "2.22",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.26",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.31",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.35",
+        "2.36",
+        "2.37"
       ]
     }
   },
@@ -3783,7 +3861,7 @@
       "index": 15,
       "required": true,
       "dataType": "Numeric",
-      "maxLength": 6,
+      "maxLength": 10,
       "listVals": [],
       "columnName": "P",
       "humanColName": "Number of government FTEs responding to COVID-19 supported under this authority",
@@ -3800,7 +3878,7 @@
       "index": 16,
       "required": true,
       "dataType": "Numeric",
-      "maxLength": 6,
+      "maxLength": 10,
       "listVals": [],
       "columnName": "Q",
       "humanColName": "Number of FTEs rehired by governments under this authority",
@@ -4196,6 +4274,23 @@
         "3.4",
         "3.5"
       ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 36,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "AK",
+      "humanColName": "Cancelled Status of Completion Explanation",
+      "ecCodes": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5"
+      ]
     }
   },
   "ec4": {
@@ -4436,6 +4531,20 @@
       "listVals": [],
       "columnName": "Q",
       "humanColName": "Number of workers to be served with premium pay in K-12 schools ",
+      "ecCodes": [
+        "4.1",
+        "4.2"
+      ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 17,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "R",
+      "humanColName": "Cancelled Status of Completion Explanation",
       "ecCodes": [
         "4.1",
         "4.2"
@@ -5503,7 +5612,7 @@
       "key": "Is_project_designed_to_meet_100_mbps__c",
       "index": 33,
       "required": "Conditional",
-      "dataType": "TBD",
+      "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
         "TBD"
@@ -5612,8 +5721,8 @@
         "5.18"
       ]
     },
-    "Project_Technology_Type_c": {
-      "key": "Project_Technology_Type_c",
+    "Technology_Type_Planned__c": {
+      "key": "Technology_Type_Planned__c",
       "index": 39,
       "required": true,
       "dataType": "Pick List",
@@ -5622,25 +5731,49 @@
         "Fiber",
         "Coaxial Cable",
         "Terrestrial Fixed Wireless",
-        "Other (specify)"
+        "Other"
       ],
       "columnName": "AN",
-      "humanColName": "Project Technology Type(s) (Planned/Actual)",
+      "humanColName": "Technology Type Planned",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Project_Technology_Type_Other_c": {
-      "key": "Project_Technology_Type_Other_c",
+    "Technology_Type_Planned_Other__c": {
+      "key": "Technology_Type_Planned_Other__c",
       "index": 40,
       "required": "Conditional",
       "dataType": "String",
       "maxLength": 250,
       "listVals": [],
       "columnName": "AO",
-      "humanColName": "Project Technology Type - Explanation",
+      "humanColName": "If Technology Type Planned is \"Other\" please specify",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Technology_Type_Actual__c": {
+      "key": "Technology_Type_Actual__c",
+      "index": 41,
+      "required": "Conditional",
+      "columnName": "AP",
+      "humanColName": "Technology Type Actual",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Technology_Type_Actual_Other__c": {
+      "key": "Technology_Type_Actual_Other__c",
+      "index": 42,
+      "required": "Conditional",
+      "columnName": "AQ",
+      "humanColName": "If Technology Type Actual is \"Other\" please specify",
       "ecCodes": [
         "5.19",
         "5.20",
@@ -5649,149 +5782,377 @@
     },
     "Total_Miles_of_Fiber_Deployed_c": {
       "key": "Total_Miles_of_Fiber_Deployed_c",
-      "index": 41,
-      "required": true,
-      "dataType": "Numeric",
-      "maxLength": 10,
-      "listVals": [],
-      "columnName": "AP",
-      "humanColName": "Total Miles of Fiber Deployed (Planned/Actual)",
-      "ecCodes": [
-        "5.19",
-        "5.20",
-        "5.21"
-      ]
-    },
-    "Total_Number_of_Funded_Locations_Served_c": {
-      "key": "Total_Number_of_Funded_Locations_Served_c",
-      "index": 42,
-      "required": true,
-      "dataType": "Numeric",
-      "maxLength": 10,
-      "listVals": [],
-      "columnName": "AQ",
-      "humanColName": "Total Number of Funded Locations Served (Planned/Actual)",
-      "ecCodes": [
-        "5.19",
-        "5.20",
-        "5.21"
-      ]
-    },
-    "Total_Number_of_Funded_Locations_25_3__c": {
-      "key": "Total_Number_of_Funded_Locations_25_3__c",
       "index": 43,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AR",
-      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving 25/3 Mbps or below)",
+      "humanColName": "Total Miles of Fiber Deployed Planned",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_25_3_100_20__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_25_3_100_20__c",
+    "Total_Miles_of_Fiber_Deployed_Actual__c": {
+      "key": "Total_Miles_of_Fiber_Deployed_Actual__c",
       "index": 44,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AS",
-      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving between 25/3 Mbps and 100/20 Mbps)",
+      "humanColName": "Total Miles of Fiber Deployed Actual",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_100_100__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_100_100__c",
+    "Planned_Funded_Locations_Served__c": {
+      "key": "Planned_Funded_Locations_Served__c",
       "index": 45,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AT",
-      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/100 Mbps)",
+      "humanColName": "Total Number of Funded Locations Served Planned",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_100_20_100_100__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_100_20_100_100__c",
+    "Actual_Funded_Locations_Served__c": {
+      "key": "Actual_Funded_Locations_Served__c",
       "index": 46,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AU",
-      "humanColName": "Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/20 Mbps and scalable to minimum 100/100 Mbps)",
+      "humanColName": "Total Number of Funded Locations Served Actual",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Residential__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Residential__c",
+    "Planned_Funded_Locations_25_3_Below__c": {
+      "key": "Planned_Funded_Locations_25_3_Below__c",
       "index": 47,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AV",
-      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Residential - Total Housing Units)",
+      "humanColName": "Planned Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving 25/3 Mbps or below)",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Business__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Business__c",
+    "Planned_Funded_Locations_Between_25_100__c": {
+      "key": "Planned_Funded_Locations_Between_25_100__c",
       "index": 48,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AW",
-      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Business)",
+      "humanColName": "Planned Total Number of Funded Locations Served, broken out by speeds (Pre-SLFRF investment, Number receiving between 25/3 Mbps and 100/20 Mbps)",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution__c": {
-      "key": "Total_Number_of_Funded_Locations_Served_Community_Anchor_Institution__c",
+    "Planned_Funded_Locations_Minimum_1_Gbps__c": {
+      "key": "Planned_Funded_Locations_Minimum_1_Gbps__c",
       "index": 49,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AX",
-      "humanColName": "Total Number of Funded Locations Served, broken out by type (Planned/Actual) (Community Anchor Institution)",
+      "humanColName": "Planned Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 1 Gbps)",
       "ecCodes": [
         "5.19",
         "5.20",
         "5.21"
       ]
     },
-    "Speed_Tiers_Offered__c": {
-      "key": "Speed_Tiers_Offered__c",
+    "Actual_Funded_Locations_Minimum_1_Gbps__c": {
+      "key": "Actual_Funded_Locations_Minimum_1_Gbps__c",
       "index": 50,
-      "required": true,
+      "required": "Conditional",
       "dataType": "Numeric",
       "maxLength": 10,
       "listVals": [],
       "columnName": "AY",
-      "humanColName": "Speed Tiers Offered, corresponding non-promotional prices, including associated fees, and data allowance for each speed tier of broadband service",
+      "humanColName": "Actual Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 1 Gbps)",
       "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Minimum_100_100__c": {
+      "key": "Planned_Funded_Locations_Minimum_100_100__c",
+      "index": 51,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "AZ",
+      "humanColName": "Planned Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/100 Mbps)",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Minimum_100_100__c": {
+      "key": "Actual_Funded_Locations_Minimum_100_100__c",
+      "index": 52,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BA",
+      "humanColName": "Actual Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/100 Mbps)",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Minimum_100_20__c": {
+      "key": "Planned_Funded_Locations_Minimum_100_20__c",
+      "index": 53,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BB",
+      "humanColName": "Planned Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/20 Mbps and scalable to minimum 100/100 Mbps)",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Minimum_100_20__c": {
+      "key": "Actual_Funded_Locations_Minimum_100_20__c",
+      "index": 54,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BC",
+      "humanColName": "Actual Total Number of Funded Locations Served, broken out by speeds (Post-SLFRF investment, Number receiving minimum 100/20 Mbps and scalable to minimum 100/100 Mbps)",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Residential__c": {
+      "key": "Planned_Funded_Locations_Residential__c",
+      "index": 55,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BD",
+      "humanColName": "Planned Total Number of Funded Locations Served, Residential",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Residential__c": {
+      "key": "Actual_Funded_Locations_Residential__c",
+      "index": 56,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BE",
+      "humanColName": "Actual Total Number of Funded Locations Served, Residential",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Total_Housing__c": {
+      "key": "Planned_Funded_Locations_Total_Housing__c",
+      "index": 57,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BF",
+      "humanColName": "Planned Total Number of Funded Locations Served, Total Housing",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Total_Housing__c": {
+      "key": "Actual_Funded_Locations_Total_Housing__c",
+      "index": 58,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BG",
+      "humanColName": "Actual Total Number of Funded Locations Served, Total Housing",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Business__c": {
+      "key": "Planned_Funded_Locations_Business__c",
+      "index": 59,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BH",
+      "humanColName": "Planned Total Number of Funded Locations Served, Business",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Business__c": {
+      "key": "Actual_Funded_Locations_Business__c",
+      "index": 60,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BI",
+      "humanColName": "Actual Total Number of Funded Locations Served, Business",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Community__c": {
+      "key": "Planned_Funded_Locations_Community__c",
+      "index": 61,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BJ",
+      "humanColName": "Planned Total Number of Funded Locations Served, Community Anchor Institution",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Community__c": {
+      "key": "Actual_Funded_Locations_Community__c",
+      "index": 62,
+      "required": "Conditional",
+      "dataType": "Numeric",
+      "maxLength": 10,
+      "listVals": [],
+      "columnName": "BK",
+      "humanColName": "Actual Total Number of Funded Locations Served, Community Anchor Institution",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Planned_Funded_Locations_Explanation__c": {
+      "key": "Planned_Funded_Locations_Explanation__c",
+      "index": 63,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "BL",
+      "humanColName": "Planned Funded Locations Explanation",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Actual_Funded_Locations_Explanation__c": {
+      "key": "Actual_Funded_Locations_Explanation__c",
+      "index": 64,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "BM",
+      "humanColName": "Actual Funded Locations Explanation",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Confirm_Service_Provider__c": {
+      "key": "Confirm_Service_Provider__c",
+      "index": 65,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 250,
+      "listVals": [],
+      "columnName": "BN",
+      "humanColName": "Confirm Service Provider",
+      "ecCodes": [
+        "5.19",
+        "5.20",
+        "5.21"
+      ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 66,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "BO",
+      "humanColName": "Cancelled Status of Completion Explanation",
+      "ecCodes": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
         "5.19",
         "5.20",
         "5.21"
@@ -6226,6 +6587,20 @@
         "7.1",
         "7.2"
       ]
+    },
+    "Cancellation_Reason__c": {
+      "key": "Cancellation_Reason__c",
+      "index": 26,
+      "required": "Conditional",
+      "dataType": "String",
+      "maxLength": 255,
+      "listVals": [],
+      "columnName": "AA",
+      "humanColName": "Cancelled Status of Completion Explanation",
+      "ecCodes": [
+        "7.1",
+        "7.2"
+      ]
     }
   },
   "subrecipient": {
@@ -6262,8 +6637,8 @@
       "humanColName": "Legal Name",
       "ecCodes": false
     },
-    "Entity_Type__c": {
-      "key": "Entity_Type__c",
+    "Entity_Type_2__c": {
+      "key": "Entity_Type_2__c",
       "index": 5,
       "required": true,
       "dataType": "Pick List",
@@ -6631,7 +7006,7 @@
       "index": 9,
       "required": true,
       "dataType": "Pick List",
-      "maxLength": 30,
+      "maxLength": null,
       "listVals": [
         "any work performed by an employee of a State local or Tribal government",
         "behavioral health work",

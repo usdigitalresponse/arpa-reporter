@@ -4460,15 +4460,15 @@
       "dataType": "Multi-Select",
       "maxLength": 1500,
       "listVals": [
-        "Any work performed by an employee of a State, local, or Tribal government;",
+        "Any work performed by an employee of a State local or Tribal government;",
         "Behavioral health work;",
         "Biomedical Research;",
         "Dental care work;",
-        "Educational work, school nutrition work, and other work required to operate a school facility;",
+        "Educational work school nutrition work and other work required to operate a school facility;",
         "Elections work;",
         "Emergency response;",
         "Family or childcare;",
-        "Grocery stores, restaurants, food production, and food delivery",
+        "Grocery stores restaurants food production and food delivery;",
         "Health care;",
         "Home- and community-based health care or assistance with activities of daily living;",
         "Laundry work;",
@@ -4476,16 +4476,16 @@
         "Medical testing and diagnostics;",
         "Pharmacy;",
         "Public health work;",
-        "Sanitation, disinfection, and cleaning work;",
+        "Sanitation disinfection and cleaning work;",
         "Social services work;",
-        "Solid waste or hazardous materials management, response, and cleanup work;",
+        "Solid waste or hazardous materials management response and cleanup work;",
         "Transportation and warehousing;",
         "Vital services to Tribes;",
         "Work at hotel and commercial lodging facilities that are used for COVID-19 mitigation and containment;",
         "Work in a mortuary;",
-        "Work in critical clinical research, development, and testing necessary for COVID-19 response.",
+        "Work in critical clinical research development and testing necessary for COVID-19 response;",
         "Work requiring physical interaction with patients;",
-        "Other (AND manual entry box)"
+        "Other"
       ],
       "columnName": "N",
       "humanColName": "Sectors Designated as Essential Critical Infrastructure",
@@ -5615,7 +5615,8 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AH",
       "humanColName": "Confirm that the project is designed to, upon completion, reliably meet or exceed symmetrical 100 Mbps download and upload speeds.",
@@ -5694,10 +5695,7 @@
       "required": "Conditional",
       "dataType": "Currency",
       "maxLength": null,
-      "listVals": [
-        "Yes",
-        "No"
-      ],
+      "listVals": [],
       "columnName": "AL",
       "humanColName": "Lowest Quintile Income of the service area ",
       "ecCodes": [
@@ -6641,7 +6639,7 @@
       "key": "Entity_Type_2__c",
       "index": 5,
       "required": true,
-      "dataType": "Pick List",
+      "dataType": "Multi-Select",
       "maxLength": null,
       "listVals": [
         "Subrecipient",

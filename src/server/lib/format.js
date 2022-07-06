@@ -23,7 +23,7 @@ const EXPENDITURE_CATEGORIES = {
  * @param {string} value
  * @returns {string}
  */
-function capitalize (value) {
+function capitalizeFirstLetter (value) {
   if (value == null) return value
   return `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`
 }
@@ -48,7 +48,7 @@ function zip4 (value) {
 }
 
 module.exports = {
-  capitalize,
+  capitalizeFirstLetter,
   currency,
   ec,
   zip,

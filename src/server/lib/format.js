@@ -1,6 +1,9 @@
 /**
  * @module
- * Formatting helpers for spreadsheet output .
+ *
+ * Formatting helpers for spreadsheet output.  Note that these helpers are
+ * designed to NOT apply any validation of their own.  Output generation should
+ * reliably succeed if uploads have all passed validation.
  */
 const round = require('lodash/round')
 
@@ -11,6 +14,18 @@ const EXPENDITURE_CATEGORIES = {
   ec4: '4-Premium Pay',
   ec5: '5-Infrastructure',
   ec7: '7-Administrative and Other'
+}
+
+/**
+ * Normalize casing of single word values.
+ * This is especially useful for "Yes"/"No" responses.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function capitalize (value) {
+  if (value == null) return value
+  return `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}`
 }
 
 function currency (value) {
@@ -33,7 +48,7 @@ function zip4 (value) {
 }
 
 module.exports = {
-  boolean,
+  capitalize,
   currency,
   ec,
   zip,

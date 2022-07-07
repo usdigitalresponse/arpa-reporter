@@ -91,6 +91,11 @@ describe('server/lib/format', () => {
       expect(multiselect('abc;def;')).to.equal('abc;def')
       expect(multiselect('abc;def;ghi; ')).to.equal('abc;def;ghi')
     })
+    it('removes all commas', () => {
+      expect(multiselect('a,b,c')).to.equal('abc')
+      expect(multiselect('a,b;c,d')).to.equal('ab;cd')
+      expect(multiselect(',a,b; -c,d')).to.equal('ab;cd')
+    })
   })
 
   describe('zip', () => {

@@ -47,9 +47,10 @@ function multiselect (value) {
   if (value == null) return value
   return value
     .trim()
-    .replace(/^-/, '')
-    .split(/;[- ]*/)
-    .filter(value => value !== '')
+    .replace(/^-/, '') // remove preceding hyphen
+    .replace(/,/g, '') // remove all commas
+    .split(/;[- ]*/) // match any delimiter format
+    .filter(value => value !== '') // remove empty values (e.g. trailing or double delimiter)
     .join(';')
 }
 

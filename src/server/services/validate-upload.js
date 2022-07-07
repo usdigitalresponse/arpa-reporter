@@ -39,7 +39,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   }
 }
 
-async function validateEcCode ({ upload, records, trns }) {
+async function validateEcCode ({ upload, records }) {
   // grab ec code string from cover sheet
   const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
@@ -70,7 +70,7 @@ async function validateEcCode ({ upload, records, trns }) {
   }
 }
 
-async function validateVersion ({ upload, records, rules }) {
+async function validateVersion ({ records, rules }) {
   const logicSheet = records.find(record => record.type === 'logic').content
   const version = logicSheet.version
 
@@ -211,7 +211,7 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   return errors
 }
 
-async function validateRecord ({ upload, record, typeRules: rules, trns }) {
+async function validateRecord ({ upload, record, typeRules: rules }) {
   // start by trimming any whitespace
   for (const key of Object.keys(rules)) {
     if (record[key] && (typeof record[key]) === 'string') {
@@ -258,7 +258,7 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
 
         // for multi select, all the values must be in the list of possible values
         if (rule.dataType === 'Multi-Select') {
-          const entries = lcVal.split(';').map(val => val.trim())
+          const entries = lcVal.split(';').map(val => val.trim().replace(/^-/, ''))
           for (const entry of entries) {
             if (!lcItems.includes(entry)) {
               errors.push(new ValidationError(
@@ -300,7 +300,7 @@ async function validateRules ({ upload, records, rules, trns }) {
     for (const [recordIdx, record] of tRecords.entries()) {
       let recordErrors
       try {
-        recordErrors = await validateRecord({ upload, record, typeRules, trns })
+        recordErrors = await validateRecord({ upload, record, typeRules })
       } catch (e) {
         recordErrors = [(
           new ValidationError(`unexpected error validating record: ${e.message}`)

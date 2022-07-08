@@ -28,7 +28,7 @@ function makeColNames () {
 }
 
 function parseListVal (lvStr) {
-  if (lvStr === 'N/A') return []
+  if (!lvStr || lvStr === 'N/A') return []
 
   let lines = lvStr.split('\n')
 
@@ -121,9 +121,9 @@ async function extractRules (workbook, logic) {
         key,
         index: colIdx,
         required: required[colIdx],
-        dataType: dataTypes[colIdx],
-        maxLength: maxLengths[colIdx],
-        listVals: listVals[colIdx],
+        dataType: dataTypes[colIdx] || 'Unknown',
+        maxLength: maxLengths[colIdx] || null,
+        listVals: listVals[colIdx] || [],
         columnName: COLNAMES[colIdx],
         humanColName: humanColNames[colIdx],
         ecCodes: filterEcCodes(logic, type, COLNAMES[colIdx])

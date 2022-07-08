@@ -5758,6 +5758,9 @@
       "key": "Technology_Type_Actual__c",
       "index": 41,
       "required": "Conditional",
+      "dataType": "Unknown",
+      "maxLength": null,
+      "listVals": [],
       "columnName": "AP",
       "humanColName": "Technology Type Actual",
       "ecCodes": [
@@ -5770,6 +5773,9 @@
       "key": "Technology_Type_Actual_Other__c",
       "index": 42,
       "required": "Conditional",
+      "dataType": "Unknown",
+      "maxLength": null,
+      "listVals": [],
       "columnName": "AQ",
       "humanColName": "If Technology Type Actual is \"Other\" please specify",
       "ecCodes": [

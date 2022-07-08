@@ -3,10 +3,12 @@ const srcRules = require('../lib/templateRules.json')
 const srcDropdowns = require('../lib/templateDropdowns.json')
 
 const recordValueFormatters = {
+  makeString: (val) => String(val),
   trimWhitespace: (val) => val.trim(),
   removeCommas: (val) => val.replace(/,/g, ''),
   removeSepDashes: (val) => val.replace(/^-/, '').replace(/;\s*-/g, ';'),
-  toLowerCase: (val) => val.toLowerCase()
+  toLowerCase: (val) => val.toLowerCase(),
+  childCareSpacing: (val) => (val === 'family or childcare' ? 'family or child care' : val)
 }
 
 function generateRules () {
@@ -39,6 +41,7 @@ function generateRules () {
       rule.valueFormatters = []
 
       if (rule.dataType === 'String') {
+        rule.valueFormatters.push(recordValueFormatters.makeString)
         rule.valueFormatters.push(recordValueFormatters.trimWhitespace)
       }
 
@@ -49,6 +52,10 @@ function generateRules () {
 
       if (rule.listVals.length > 0) {
         rule.valueFormatters.push(recordValueFormatters.toLowerCase)
+      }
+
+      if (rule.listVals.includes('Family or child care')) {
+        rule.valueFormatters.push(recordValueFormatters.childCareSpacing)
       }
     }
   }

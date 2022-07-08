@@ -237,8 +237,19 @@ async function validateRecord ({ upload, record, typeRules: rules }) {
     } else {
       // how do we format the value before checking it?
       let value = record[key]
+      let formatFailures = 0
       for (const formatter of rule.valueFormatters) {
-        value = formatter(value)
+        try {
+          value = formatter(value)
+        } catch (e) {
+          formatFailures += 1
+        }
+      }
+      if (formatFailures) {
+        errors.push(new ValidationError(
+          `Failed to apply ${formatFailures} formatters while validating value`,
+          { col: rule.columnName, severity: 'warn' }
+        ))
       }
 
       // make sure pick value is one of pick list values
@@ -249,7 +260,7 @@ async function validateRecord ({ upload, record, typeRules: rules }) {
         // for pick lists, the value must be one of possible values
         if (rule.dataType === 'Pick List' && !lcItems.includes(value)) {
           errors.push(new ValidationError(
-            `Value for ${key} must be one of ${lcItems.length} options in the input template`,
+            `Value for ${key} ('${value}') must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
           ))
         }

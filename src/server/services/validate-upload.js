@@ -39,7 +39,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   }
 }
 
-async function validateEcCode ({ upload, records, trns }) {
+async function validateEcCode ({ upload, records }) {
   // grab ec code string from cover sheet
   const coverSheet = records.find(doc => doc.type === 'cover').content
   const codeString = coverSheet['Detailed Expenditure Category']
@@ -70,7 +70,7 @@ async function validateEcCode ({ upload, records, trns }) {
   }
 }
 
-async function validateVersion ({ upload, records, rules }) {
+async function validateVersion ({ records, rules }) {
   const logicSheet = records.find(record => record.type === 'logic').content
   const version = logicSheet.version
 
@@ -211,14 +211,7 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   return errors
 }
 
-async function validateRecord ({ upload, record, typeRules: rules, trns }) {
-  // start by trimming any whitespace
-  for (const key of Object.keys(rules)) {
-    if (record[key] && (typeof record[key]) === 'string') {
-      record[key] = record[key].trim()
-    }
-  }
-
+async function validateRecord ({ upload, record, typeRules: rules }) {
   // placeholder for rule errors we're going to find
   const errors = []
 
@@ -242,23 +235,39 @@ async function validateRecord ({ upload, record, typeRules: rules, trns }) {
 
     // if there's something in the field, make sure it meets requirements
     } else {
+      // how do we format the value before checking it?
+      let value = record[key]
+      let formatFailures = 0
+      for (const formatter of rule.valueFormatters) {
+        try {
+          value = formatter(value)
+        } catch (e) {
+          formatFailures += 1
+        }
+      }
+      if (formatFailures) {
+        errors.push(new ValidationError(
+          `Failed to apply ${formatFailures} formatters while validating value`,
+          { col: rule.columnName, severity: 'warn' }
+        ))
+      }
+
       // make sure pick value is one of pick list values
       if (rule.listVals.length > 0) {
         // enforce validation in lower case
         const lcItems = rule.listVals.map(val => val.toLowerCase())
-        const lcVal = String(record[key]).toLowerCase()
 
         // for pick lists, the value must be one of possible values
-        if (rule.dataType === 'Pick List' && !lcItems.includes(lcVal)) {
+        if (rule.dataType === 'Pick List' && !lcItems.includes(value)) {
           errors.push(new ValidationError(
-            `Value for ${key} must be one of ${lcItems.length} options in the input template`,
+            `Value for ${key} ('${value}') must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
           ))
         }
 
         // for multi select, all the values must be in the list of possible values
         if (rule.dataType === 'Multi-Select') {
-          const entries = lcVal.split(';').map(val => val.trim())
+          const entries = value.split(';').map(val => val.trim())
           for (const entry of entries) {
             if (!lcItems.includes(entry)) {
               errors.push(new ValidationError(
@@ -300,7 +309,7 @@ async function validateRules ({ upload, records, rules, trns }) {
     for (const [recordIdx, record] of tRecords.entries()) {
       let recordErrors
       try {
-        recordErrors = await validateRecord({ upload, record, typeRules, trns })
+        recordErrors = await validateRecord({ upload, record, typeRules })
       } catch (e) {
         recordErrors = [(
           new ValidationError(`unexpected error validating record: ${e.message}`)

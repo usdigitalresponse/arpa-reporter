@@ -96,7 +96,8 @@
     "Not started",
     "Completed less than 50%",
     "Completed 50% or more",
-    "Completed"
+    "Completed",
+    "Cancelled"
   ],
   "Yes/No Questions": [
     "Yes",
@@ -128,12 +129,12 @@
   "Sectors Designated as Essential Critical Infrastructure": [
     "Any work performed by an employee of a State local or Tribal government",
     "Behavioral health work",
-    "Biomedical Research",
+    "Biomedical research",
     "Dental care work",
     "Educational work school nutrition work and other work required to operate a school facility",
     "Elections work",
     "Emergency response",
-    "Family or childcare",
+    "Family or child care",
     "Grocery stores restaurants food production and food delivery",
     "Health care",
     "Home- and community-based health care or assistance with activities of daily living",
@@ -226,6 +227,6 @@
     "Fiber",
     "Coaxial Cable",
     "Terrestrial Fixed Wireless",
-    "Other (specify)"
+    "Other"
   ]
 }

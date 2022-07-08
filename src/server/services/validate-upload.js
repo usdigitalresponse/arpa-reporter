@@ -212,13 +212,6 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
 }
 
 async function validateRecord ({ upload, record, typeRules: rules }) {
-  // start by trimming any whitespace
-  for (const key of Object.keys(rules)) {
-    if (record[key] && (typeof record[key]) === 'string') {
-      record[key] = record[key].trim()
-    }
-  }
-
   // placeholder for rule errors we're going to find
   const errors = []
 
@@ -242,14 +235,19 @@ async function validateRecord ({ upload, record, typeRules: rules }) {
 
     // if there's something in the field, make sure it meets requirements
     } else {
+      // how do we format the value before checking it?
+      let value = record[key]
+      for (const formatter of rule.valueFormatters) {
+        value = formatter(value)
+      }
+
       // make sure pick value is one of pick list values
       if (rule.listVals.length > 0) {
         // enforce validation in lower case
         const lcItems = rule.listVals.map(val => val.toLowerCase())
-        const lcVal = String(record[key]).toLowerCase()
 
         // for pick lists, the value must be one of possible values
-        if (rule.dataType === 'Pick List' && !lcItems.includes(lcVal)) {
+        if (rule.dataType === 'Pick List' && !lcItems.includes(value)) {
           errors.push(new ValidationError(
             `Value for ${key} must be one of ${lcItems.length} options in the input template`,
             { col: rule.columnName, severity: 'err' }
@@ -258,7 +256,7 @@ async function validateRecord ({ upload, record, typeRules: rules }) {
 
         // for multi select, all the values must be in the list of possible values
         if (rule.dataType === 'Multi-Select') {
-          const entries = lcVal.split(';').map(val => val.trim().replace(/^-/, ''))
+          const entries = value.split(';').map(val => val.trim())
           for (const entry of entries) {
             if (!lcItems.includes(entry)) {
               errors.push(new ValidationError(

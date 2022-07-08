@@ -2,6 +2,13 @@
 const srcRules = require('../lib/templateRules.json')
 const srcDropdowns = require('../lib/templateDropdowns.json')
 
+const recordValueFormatters = {
+  trimWhitespace: (val) => val.trim(),
+  removeCommas: (val) => val.replace(/,/g, ''),
+  removeSepDashes: (val) => val.replace(/^-/, '').replace(/;\s*-/g, ';'),
+  toLowerCase: (val) => val.toLowerCase()
+}
+
 function generateRules () {
   const rules = srcRules
 
@@ -23,6 +30,28 @@ function generateRules () {
   const sectors = srcDropdowns['Sectors Designated as Essential Critical Infrastructure']
   rules.awards50k.Primary_Sector__c.listVals = sectors
   rules.ec4.Sectors_Critical_to_Health_Well_Being__c.listVals = sectors
+
+  // value formatters modify the value in the record before it's validated
+  // we check any rule against the formatted value
+  // for any values we format, we should format them the same way when we export
+  for (const ruleType of Object.keys(rules)) {
+    for (const rule of Object.values(rules[ruleType])) {
+      rule.valueFormatters = []
+
+      if (rule.dataType === 'String') {
+        rule.valueFormatters.push(recordValueFormatters.trimWhitespace)
+      }
+
+      if (rule.dataType === 'Multi-Select') {
+        rule.valueFormatters.push(recordValueFormatters.removeCommas)
+        rule.valueFormatters.push(recordValueFormatters.removeSepDashes)
+      }
+
+      if (rule.listVals.length > 0) {
+        rule.valueFormatters.push(recordValueFormatters.toLowerCase)
+      }
+    }
+  }
 
   return rules
 }

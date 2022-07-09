@@ -951,8 +951,8 @@ async function generateReport (tenantId, periodId) {
     const template = await getTemplate(name)
 
     // 2022-07-08 Treasury expects LF line endings _within_ cells and CRLF line
-    // endings _between+ rows.  Failure to adhere to either of these rquirements
-    // can result in an opqque error that looke like the following:
+    // endings _between_ rows.  Failure to adhere to either of these requirements
+    // can result in an opaque error that looks like the following:
     // "List index out of bounds: 1"
     const escapedContent = [...template, ...csvData].map(row =>
       row.map(value => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value)

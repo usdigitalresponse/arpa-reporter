@@ -957,9 +957,17 @@ async function generateReport (tenantId, periodId) {
 
     const template = await getTemplate(name)
 
-    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
-    const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
+    // 2022-07-08 Treasury expects LF line endings _within_ cells and CRLF line
+    // endings _between_ rows.  Failure to adhere to either of these requirements
+    // can result in an opaque error that looks like the following:
+    // "List index out of bounds: 1"
+    const escapedContent = [...template, ...csvData].map(row =>
+      row.map(value => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value)
+    )
+    const sheet = XLSX.utils.aoa_to_sheet(escapedContent, { dateNF: 'MM/DD/YYYY' })
+    const csvString = XLSX.utils.sheet_to_csv(sheet, { RS: '\r\n' })
     const buffer = Buffer.from(BOM + csvString, 'utf8')
+
     zip.addFile(name + '.csv', buffer)
   })
 

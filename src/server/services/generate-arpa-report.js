@@ -955,8 +955,7 @@ async function generateReport (tenantId, periodId) {
     // can result in an opqque error that looke like the following:
     // "List index out of bounds: 1"
     const escapedContent = [...template, ...csvData].map(row =>
-      // treasury expects all values as strings
-      row.map(value => value?.toString().replace(/\r\n/g, '\n'))
+      row.map(value => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value)
     )
     const sheet = XLSX.utils.aoa_to_sheet(escapedContent, { dateNF: 'MM/DD/YYYY' })
     const csvString = XLSX.utils.sheet_to_csv(sheet, { RS: '\r\n' })

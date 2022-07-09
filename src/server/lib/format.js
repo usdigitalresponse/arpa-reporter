@@ -37,6 +37,23 @@ function ec (value) {
   return EXPENDITURE_CATEGORIES[value]
 }
 
+/**
+ * Normalize delimeters in a multiselect value.
+ *
+ * @param {string} value
+ * @returns {string} normalized value
+ */
+function multiselect (value) {
+  if (value == null) return value
+  return value
+    .trim()
+    .replace(/^-/, '') // remove preceding hyphen
+    .replace(/,/g, '') // remove all commas
+    .split(/;[- ]*/) // match any delimiter format
+    .filter(value => value !== '') // remove empty values (e.g. trailing or double delimiter)
+    .join(';')
+}
+
 function zip (value) {
   if (value == null) return value
   return value.toString().padStart(5, '0')
@@ -51,6 +68,7 @@ module.exports = {
   capitalizeFirstLetter,
   currency,
   ec,
+  multiselect,
   zip,
   zip4
 }

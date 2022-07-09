@@ -6,7 +6,14 @@ const { applicationSettings } = require('../db/settings')
 const { listRecipientsForReportingPeriod } = require('../db/arpa-subrecipients')
 const { getTemplate } = require('./get-template')
 const { recordsForReportingPeriod } = require('./records')
-const { capitalizeFirstLetter, currency, ec, zip, zip4 } = require('../lib/format')
+const {
+  capitalizeFirstLetter,
+  currency,
+  multiselect,
+  ec,
+  zip,
+  zip4
+} = require('../lib/format')
 const { requiredArgument } = require('../lib/preconditions')
 
 const BOM = '\ufeff' // UTF-8 byte order mark
@@ -557,7 +564,7 @@ async function generateProject4142 (records) {
             record.content.Project_Description__c,
             currency(record.content.Program_Income_Earned__c),
             currency(record.content.Program_Income_Expended__c),
-            record.content.Sectors_Critical_to_Health_Well_Being__c,
+            multiselect(record.content.Sectors_Critical_to_Health_Well_Being__c),
             record.content.Workers_Served__c,
             record.content.Premium_Pay_Narrative__c,
             record.content.Number_of_Workers_K_12__c
@@ -867,7 +874,7 @@ async function generateSubRecipient (records, periodId) {
       record.Unique_Entity_Identifier__c,
       record.EIN__c,
       record.Name,
-      record.Entity_Type_2__c,
+      multiselect(record.Entity_Type_2__c),
       record.POC_Email_Address__c,
       record.Address__c,
       record.Address_2__c,
@@ -950,9 +957,17 @@ async function generateReport (tenantId, periodId) {
 
     const template = await getTemplate(name)
 
-    const sheet = XLSX.utils.aoa_to_sheet([...template, ...csvData], { dateNF: 'MM/DD/YYYY' })
-    const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true })
+    // 2022-07-08 Treasury expects LF line endings _within_ cells and CRLF line
+    // endings _between_ rows.  Failure to adhere to either of these requirements
+    // can result in an opaque error that looks like the following:
+    // "List index out of bounds: 1"
+    const escapedContent = [...template, ...csvData].map(row =>
+      row.map(value => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value)
+    )
+    const sheet = XLSX.utils.aoa_to_sheet(escapedContent, { dateNF: 'MM/DD/YYYY' })
+    const csvString = XLSX.utils.sheet_to_csv(sheet, { RS: '\r\n' })
     const buffer = Buffer.from(BOM + csvString, 'utf8')
+
     zip.addFile(name + '.csv', buffer)
   })
 

@@ -27,6 +27,10 @@ module.exports = {
       ],
       env: {
         mocha: true
+      },
+      rules: {
+        // some valid chai assertions are expressions
+        'no-unused-expressions': 'off'
       }
     },
     {

@@ -20,7 +20,7 @@ const BOM = '\ufeff' // UTF-8 byte order mark
 const EC_CODE_REGEX = /^(\d.\d\d?)/
 
 // dropdown value used to differentiate payments under 50k
-const PAYMENTS_TO_INDIVIDUALS = 'Payments to Individuuals'
+const PAYMENTS_TO_INDIVIDUALS = 'Payments to Individuals'
 
 /**
  * Extract the Detailed Expenditure Category code from a record.

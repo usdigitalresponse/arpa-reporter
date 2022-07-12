@@ -965,7 +965,7 @@ async function generateReport (tenantId, periodId) {
       row.map(value => typeof value === 'string' ? value.replace(/\r\n/g, '\n') : value)
     )
     const sheet = XLSX.utils.aoa_to_sheet(escapedContent, { dateNF: 'MM/DD/YYYY' })
-    const csvString = XLSX.utils.sheet_to_csv(sheet, { RS: '\r\n' })
+    const csvString = XLSX.utils.sheet_to_csv(sheet, { forceQuotes: true, RS: '\r\n' })
     const buffer = Buffer.from(BOM + csvString, 'utf8')
 
     zip.addFile(name + '.csv', buffer)

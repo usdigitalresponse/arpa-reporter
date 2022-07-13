@@ -6,6 +6,7 @@
  * reliably succeed if uploads have all passed validation.
  */
 const round = require('lodash/round')
+const { ecCodes } = require('./arpa-ec-codes')
 
 const EXPENDITURE_CATEGORIES = {
   ec1: '1-Public Health',
@@ -54,6 +55,18 @@ function multiselect (value) {
     .join(';')
 }
 
+/**
+ * Transform a subcategory code to its canonical name.
+ *
+ * @param {string} value
+ * The expecditure subcategory code as supplied in the input sheet
+ */
+function subcategory (value) {
+  if (value == null) return value
+  if (!ecCodes[value]) return undefined
+  return `${value}-${ecCodes[value]}`
+}
+
 function zip (value) {
   if (value == null) return value
   return value.toString().padStart(5, '0')
@@ -68,6 +81,7 @@ module.exports = {
   capitalizeFirstLetter,
   currency,
   ec,
+  subcategory,
   multiselect,
   zip,
   zip4

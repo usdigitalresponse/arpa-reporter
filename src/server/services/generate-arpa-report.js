@@ -9,8 +9,9 @@ const { recordsForReportingPeriod } = require('./records')
 const {
   capitalizeFirstLetter,
   currency,
-  multiselect,
   ec,
+  multiselect,
+  subcategory,
   zip,
   zip4
 } = require('../lib/format')
@@ -73,7 +74,7 @@ async function generateProject111210 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -126,7 +127,7 @@ async function generateProject18 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -173,7 +174,7 @@ async function generateProject19 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -221,7 +222,7 @@ async function generateProject211214 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -276,7 +277,7 @@ async function generateProject2128 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -327,7 +328,7 @@ async function generateProject215218 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -377,7 +378,7 @@ async function generateProject224227 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -424,7 +425,7 @@ async function generateProject236 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -470,7 +471,7 @@ async function generateProject31 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -510,7 +511,7 @@ async function generateProject32 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -551,7 +552,7 @@ async function generateProject4142 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -604,7 +605,7 @@ async function generateProject51518 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -646,7 +647,7 @@ async function generateProject519521 (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,
@@ -736,7 +737,7 @@ async function generateProjectBaseline (records) {
           return [
             null, // first col is blank
             ec(record.type),
-            record.subcategory,
+            subcategory(detailedEcCode),
             record.content.Name,
             record.content.Project_Identification_Number__c,
             record.content.Completion_Status__c,

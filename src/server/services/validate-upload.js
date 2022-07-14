@@ -53,7 +53,6 @@ async function validateEcCode ({ upload, records }) {
 
   const codeParts = codeString.split('-')
   const code = codeParts[0]
-  const desc = codeParts.slice(1, codeParts.length).join('-')
 
   if (!ecCodes[code]) {
     return new ValidationError(

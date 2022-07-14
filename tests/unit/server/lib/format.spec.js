@@ -1,10 +1,12 @@
 import { expect } from 'chai'
 
+import { ecCodes } from '@/server/lib/arpa-ec-codes'
 import {
   capitalizeFirstLetter,
   currency,
-  multiselect,
   ec,
+  multiselect,
+  subcategory,
   zip,
   zip4
 } from '@/server/lib/format'
@@ -95,6 +97,25 @@ describe('server/lib/format', () => {
       expect(multiselect('a,b,c')).to.equal('abc')
       expect(multiselect('a,b;c,d')).to.equal('ab;cd')
       expect(multiselect(',a,b; -c,d')).to.equal('ab;cd')
+    })
+  })
+
+  describe('subcategory', () => {
+    it('handles the null case', () => {
+      expect(subcategory(null)).to.be.null
+      expect(subcategory(undefined)).to.be.undefined
+    })
+    it('handles unknown strings', () => {
+      expect(subcategory('abcdef')).to.be.undefined
+      expect(subcategory('1.0')).to.be.undefined
+    })
+    it('accepts a known subcategory codes', () => {
+      expect(subcategory('1.1')).to.equal('1.1-COVID-19 Vaccination')
+    })
+    it('accepts all known subcategory codes', () => {
+      Object.keys(ecCodes).forEach((code) => {
+        expect(subcategory(code)).not.to.be.undefined
+      })
     })
   })
 

@@ -803,7 +803,7 @@ async function generateExpendituresLT50000 (records) {
           record.content.Project_Identification_Number__c,
           record.content.Sub_Award_Type_Aggregates_SLFRF__c,
           currency(record.content.Quarterly_Obligation_Amt_Aggregates__c),
-          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c)
+          currency(record.content.Quarterly_Expenditure_Amt_Aggregates__c)
         ]
       default:
         return null
@@ -823,7 +823,7 @@ async function generatePaymentsIndividualsLT50000 (records) {
           null, // first col is blank
           record.content.Project_Identification_Number__c,
           currency(record.content.Quarterly_Obligation_Amt_Aggregates__c),
-          currency(record.content.Quarterly_Obligation_Amt_Aggregates__c)
+          currency(record.content.Quarterly_Expenditure_Amt_Aggregates__c)
         ]
       default:
         return null

@@ -53,17 +53,11 @@ async function validateEcCode ({ upload, records }) {
 
   const codeParts = codeString.split('-')
   const code = codeParts[0]
-  const desc = codeParts.slice(1, codeParts.length).join('-')
 
   if (!ecCodes[code]) {
     return new ValidationError(
       `Record EC code ${code} from entry ${codeString} does not match any known EC code`,
       { tab: 'cover', row: 2, col: 'D', severity: 'err' }
-    )
-  } else if (ecCodes[code] !== desc) {
-    return new ValidationError(
-      `Record EC code description "${desc}" for EC code ${code} does not match the expected value "${ecCodes[code]}". This code may need to be updated before submission.`,
-      { tab: 'cover', row: 2, col: 'D', severity: 'warn' }
     )
   }
 

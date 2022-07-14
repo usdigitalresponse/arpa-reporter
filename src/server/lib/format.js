@@ -14,7 +14,7 @@ const EXPENDITURE_CATEGORIES = {
   ec3: '3-Public Health-Negative Economic Impact: Public Sector Capacity',
   ec4: '4-Premium Pay',
   ec5: '5-Infrastructure',
-  ec7: '7-Administrative and Other'
+  ec7: '7-Administrative'
 }
 
 /**

@@ -1,11 +1,11 @@
 const { types } = require('pg')
+const { builtins } = require('pg-types')
 const { POSTGRES_URL } = require('../environment')
 
 console.log('\nConnecting to database:', POSTGRES_URL)
 
 // override parser for date fields — just return the raw string content
-const DATE_OID = 1082
-types.setTypeParser(DATE_OID, value => value)
+types.setTypeParser(builtins.DATE, value => value)
 
 const knex = require('knex')({
   client: 'pg',

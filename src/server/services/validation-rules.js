@@ -37,15 +37,15 @@ function generateRules () {
   // Secondary_Project_Demographics__c come from dropdowns list
   // Tertiary_Project_Demographics__c come from dropdowns list
   const projectDemographics = srcDropdowns['Project Demographics']
-  rules.ec1.Primary_Project_Demographics__c = projectDemographics
-  rules.ec1.Secondary_Project_Demographics__c = projectDemographics
-  rules.ec1.Tertiary_Project_Demographics__c = projectDemographics
-  rules.ec2.Primary_Project_Demographics__c = projectDemographics
-  rules.ec2.Secondary_Project_Demographics__c = projectDemographics
-  rules.ec2.Tertiary_Project_Demographics__c = projectDemographics
-  rules.ec7.Primary_Project_Demographics__c = projectDemographics
-  rules.ec7.Secondary_Project_Demographics__c = projectDemographics
-  rules.ec7.Tertiary_Project_Demographics__c = projectDemographics
+  rules.ec1.Primary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec1.Secondary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec1.Tertiary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec2.Primary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec2.Secondary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec2.Tertiary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec7.Primary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec7.Secondary_Project_Demographics__c.listVals = projectDemographics
+  rules.ec7.Tertiary_Project_Demographics__c.listVals = projectDemographics
 
   // value formatters modify the value in the record before it's validated
   // we check any rule against the formatted value

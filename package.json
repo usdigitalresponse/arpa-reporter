@@ -30,6 +30,7 @@
     "generateRules": "./scripts/generateRules.mjs"
   },
   "dependencies": {
+    "@sentry/node": "7.7.0",
     "@sentry/tracing": "7.7.0",
     "@sentry/vue": "7.7.0",
     "adm-zip": "0.5.9",

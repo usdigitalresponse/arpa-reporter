@@ -912,7 +912,7 @@ async function generateReport (tenantId, periodId) {
     { name: 'project111210BulkUpload', func: generateProject111210 },
     { name: 'project18_229233BulkUpload', func: generateProject18 },
     { name: 'project19_234BulkUpload', func: generateProject19 },
-    { name: 'project211214NulkUpload', func: generateProject211214 },
+    { name: 'project211214BulkUpload', func: generateProject211214 },
     { name: 'project2128BulkUpload', func: generateProject2128 },
     { name: 'project215218BulkUpload', func: generateProject215218 },
     { name: 'project224227BulkUpload', func: generateProject224227 },

@@ -153,7 +153,7 @@ async function generateProject18 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.Number_Non_Profits_Served__c
+            record.content.Small_Businesses_Served__c ?? record.content.Number_Non_Profits_Served__c
           ]
         }
         default:
@@ -199,7 +199,7 @@ async function generateProject19 (records) {
             record.content.Tertiary_Proj_Demographics_Explanation__c,
             record.content.Structure_Objectives_of_Asst_Programs__c,
             record.content.Recipient_Approach_Description__c,
-            record.content.Number_Non_Profits_Served__c
+            record.content.Small_Businesses_Served__c ?? record.content.Number_Non_Profits_Served__c
           ]
         }
         default:

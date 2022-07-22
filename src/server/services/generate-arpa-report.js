@@ -12,6 +12,7 @@ const {
   ec,
   multiselect,
   subcategory,
+  tin,
   zip,
   zip4
 } = require('../lib/format')
@@ -838,7 +839,7 @@ async function generateSubaward (records) {
         return [
           null, // first col is blank
           record.content.Recipient_UEI__c,
-          record.content.Recipient_EIN__c,
+          tin(record.content.Recipient_EIN__c),
           record.content.Project_Identification_Number__c,
           record.content.Award_No__c,
           record.content.Award_Type__c,
@@ -873,7 +874,7 @@ async function generateSubRecipient (records, periodId) {
     return [
       null, // first col is blank
       record.Unique_Entity_Identifier__c,
-      record.EIN__c,
+      tin(record.EIN__c),
       record.Name,
       multiselect(record.Entity_Type_2__c),
       record.POC_Email_Address__c,

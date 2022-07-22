@@ -7,6 +7,7 @@ import {
   ec,
   multiselect,
   subcategory,
+  tin,
   zip,
   zip4
 } from '@/server/lib/format'
@@ -116,6 +117,22 @@ describe('server/lib/format', () => {
       Object.keys(ecCodes).forEach((code) => {
         expect(subcategory(code)).not.to.be.undefined
       })
+    })
+  })
+
+  describe('tin', () => {
+    it('handles the null case', () => {
+      expect(tin(null)).to.be.null
+      expect(tin(undefined)).to.be.undefined
+    })
+    it('accepts a string', () => {
+      expect(tin('123456789')).to.equal('123456789')
+    })
+    it('accepts a number', () => {
+      expect(tin(123456789)).to.equal('123456789')
+    })
+    it('removes hyphens if present', () => {
+      expect(tin('12-3456789')).to.equal('123456789')
     })
   })
 

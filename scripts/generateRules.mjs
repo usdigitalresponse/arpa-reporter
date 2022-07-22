@@ -14,6 +14,61 @@ import { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, SRC_DIR } from '../src/server/env
 const { merge } = lodash
 const log = (msg) => { console.log(chalk.green(msg)) }
 
+// For every dropdown extracted into templateDropdowns.json, record what fields
+// should be validated according to that list
+const dropdownNamesToFieldIds = {
+  "Agency Code": [/* Not automatically applied to any fields */],
+  "Expenditure Category Group": [/* Not automatically applied to any fields */],
+  "Detailed Expenditure Category": [/* Not automatically applied to any fields */],
+  "State Code": ["State_Abbreviated__c"],
+  "Country": [/* Not automatically applied to any fields */],
+  "Project Status": ["Completion_Status__c"],
+  "Yes/No Questions": [
+    "(manual entry)1",
+    "(manual entry)5",
+    "(manual entry)6",
+    "(manual entry)10",
+    "(manual entry)11",
+    "(manual entry)12",
+    "(manual entry)13",
+    "Derives_25_Million_or_More_from_Federal__c",
+    "Does_Project_Include_Capital_Expenditure__c",
+    "Federal_Funds_80_or_More_of_Revenue__c",
+    "Is_project_designed_to_exceed_100_mbps__c",
+    "Is_project_designed_to_meet_100_mbps__c",
+    "Registered_in_Sam_gov__c",
+    "Total_Compensation_for_Officers_Public__c",
+    "Whether_program_evaluation_is_being_conducted"
+  ],
+  "Types": ["Award_Type__c"],
+  "Funding Type": ["Sub_Award_Type_Aggregates_SLFRF__c"],
+  "Sectors Designated as Essential Critical Infrastructure": [
+    "Primary_Sector__c", "Sectors_Critical_to_Health_Well_Being__c"
+  ],
+  "Location (for broadband, geospatial location data)": ["Location__c"],
+  "Project Demographics": [
+    "Primary_Project_Demographics__c",
+    "Secondary_Project_Demographics__c",
+    "Tertiary_Project_Demographics__c"
+  ],
+  "Capital Expenditure Type": ["Type_of_Capital_Expenditure__c"],
+  "Subrecipient": ["Entity_Type_2__c"],
+  "Broadband Type": ["Technology_Type_Actual__c", "Technology_Type_Planned__c"],
+}
+
+// Allow lookup from field id
+const fieldIdToDropdownName = invertDropdownToFieldMap()
+
+function invertDropdownToFieldMap() {
+  let inverted = []
+  Object.keys(dropdownNamesToFieldIds).forEach(dropDownName => {
+    dropdownNamesToFieldIds[dropDownName].forEach(fieldId => {
+      inverted[fieldId] = dropDownName
+    })
+  })
+  return inverted
+}
+
 const COLNAMES = makeColNames()
 
 function makeColNames () {
@@ -62,7 +117,7 @@ function filterEcCodes (logic, type, columnName) {
   return ecCodes
 }
 
-async function extractRules (workbook, logic) {
+async function extractRules (workbook, logic, dropdowns) {
   const rules = {}
 
   // add logic rule; this also illustrates what rules look like
@@ -103,7 +158,7 @@ async function extractRules (workbook, logic) {
 
     const colKeys = rows[2]
     const required = rows[3].map(str => parseRequired(str))
-    const listVals = rows[5].map(str => parseListVal(str))
+    // Don't use the listVals recorded in rows[5]. Use the values from the dropdowns tab instead
     const dataTypes = rows[6]
     const maxLengths = rows[7].map(ml => Number(ml))
     const humanColNames = rows[11]
@@ -123,7 +178,7 @@ async function extractRules (workbook, logic) {
         required: required[colIdx],
         dataType: dataTypes[colIdx] || 'Unknown',
         maxLength: maxLengths[colIdx] || null,
-        listVals: listVals[colIdx] || [],
+        listVals: dropdowns[fieldIdToDropdownName[key]] || [],
         columnName: COLNAMES[colIdx],
         humanColName: humanColNames[colIdx],
         ecCodes: filterEcCodes(logic, type, COLNAMES[colIdx])
@@ -219,6 +274,20 @@ async function saveTo (destFilename, data) {
   return writeFile(destPath, strData)
 }
 
+function validateExtractedDropdowns(extractedDropdowns) {
+  let extractedNames = Object.keys(extractedDropdowns)
+  let mappedNames = Object.keys(dropdownNamesToFieldIds)
+
+  let missingMappings = extractedNames.filter(x => !mappedNames.includes(x))
+  let extraMappings = mappedNames.filter(x => !extractedNames.includes(x))
+
+  if (missingMappings.length || extraMappings.length) {
+    console.log(chalk.red(`Error: The configured dropdown mappings don't match the dropdowns extracted from the worksheet. \n\
+      Missing mappings: ${missingMappings}\n\
+      Extra mappings: ${extraMappings}`))
+    throw new Error('Correct the dropdownNamesToFieldIds mappings to continue')
+  }
+}
 const run = async () => {
   log(`extracting rules from ${EMPTY_TEMPLATE_NAME}...`)
 
@@ -227,12 +296,13 @@ const run = async () => {
   const workbook = XLSX.read(buffer, { type: 'buffer' })
 
   const logic = await extractLogic(workbook)
+  const dropdowns = await extractDropdowns(workbook)
+  validateExtractedDropdowns(dropdowns)
+  await saveTo('templateDropdowns.json', dropdowns)
 
-  const rules = await extractRules(workbook, logic)
+  const rules = await extractRules(workbook, logic, dropdowns)
   await saveTo('templateRules.json', rules)
 
-  const dropdowns = await extractDropdowns(workbook)
-  await saveTo('templateDropdowns.json', dropdowns)
 }
 
 run()

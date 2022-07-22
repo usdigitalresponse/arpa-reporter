@@ -70,6 +70,15 @@ async function recordsForUpload (upload) {
   for (const sheetName of Object.keys(DATA_SHEET_TYPES)) {
     const type = DATA_SHEET_TYPES[sheetName]
     const sheet = workbook.Sheets[sheetName]
+    const sheetAttributes = workbook.Workbook.Sheets.find(
+      sheet => sheet.name === sheetName
+    )
+
+    // ignore hidden sheets
+    console.log(type, sheetAttributes.Hidden)
+    if (sheetAttributes.Hidden !== 0) {
+      continue
+    }
 
     // header is based on the columns we have in the rules
     const header = Object.values(rules[type])

@@ -67,6 +67,11 @@ function subcategory (value) {
   return `${value}-${ecCodes[value]}`
 }
 
+function tin (value) {
+  if (value == null) return value
+  return value.toString().replace('-', '')
+}
+
 function zip (value) {
   if (value == null) return value
   return value.toString().padStart(5, '0')
@@ -81,8 +86,9 @@ module.exports = {
   capitalizeFirstLetter,
   currency,
   ec,
-  subcategory,
   multiselect,
+  subcategory,
+  tin,
   zip,
   zip4
 }

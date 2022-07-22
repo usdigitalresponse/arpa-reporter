@@ -76,7 +76,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -725,10 +726,10 @@
       "listVals": [
         "Acquisition of equipment for COVID-19 prevention and treatment",
         "Adaptations to congregate living facilities",
-        "Affordable housing, supportive housing, or recovery housing",
+        "Affordable housing supportive housing or recovery housing",
         "Behavioral health facilities and equipment",
         "Childcare, daycare and early learning facilities",
-        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 testing sites and laboratories and acquisition of related equipment",
         "COVID-19 vaccination sites",
         "Devices and equipment that assist households in accessing the internet",
         "Emergency operations centers and acquisition of emergency response equipment",
@@ -856,9 +857,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AF",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
       "ecCodes": [
@@ -884,9 +883,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AG",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
       "ecCodes": [
@@ -912,9 +909,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AH",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
       "ecCodes": [
@@ -941,7 +936,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AI",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
@@ -997,9 +993,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AK",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
       "ecCodes": [
@@ -1025,9 +1019,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AL",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
       "ecCodes": [
@@ -1053,9 +1045,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AM",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
       "ecCodes": [
@@ -1082,7 +1072,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AN",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
@@ -1110,7 +1101,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AO",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
@@ -1195,9 +1187,7 @@
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AR",
       "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. ",
       "ecCodes": [
@@ -1392,7 +1382,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -2575,10 +2566,10 @@
       "listVals": [
         "Acquisition of equipment for COVID-19 prevention and treatment",
         "Adaptations to congregate living facilities",
-        "Affordable housing, supportive housing, or recovery housing",
+        "Affordable housing supportive housing or recovery housing",
         "Behavioral health facilities and equipment",
         "Childcare, daycare and early learning facilities",
-        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 testing sites and laboratories and acquisition of related equipment",
         "COVID-19 vaccination sites",
         "Devices and equipment that assist households in accessing the internet",
         "Emergency operations centers and acquisition of emergency response equipment",
@@ -2798,9 +2789,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AI",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
       "ecCodes": [
@@ -2849,9 +2838,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AJ",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
       "ecCodes": [
@@ -2900,9 +2887,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AK",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
       "ecCodes": [
@@ -2952,7 +2937,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AL",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
@@ -3054,9 +3040,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AN",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
       "ecCodes": [
@@ -3105,9 +3089,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AO",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
       "ecCodes": [
@@ -3156,9 +3138,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AP",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
       "ecCodes": [
@@ -3208,7 +3188,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AQ",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
@@ -3259,7 +3240,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AR",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
@@ -3413,9 +3395,7 @@
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AU",
       "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. ",
       "ecCodes": [
@@ -3674,7 +3654,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -3936,10 +3917,10 @@
       "listVals": [
         "Acquisition of equipment for COVID-19 prevention and treatment",
         "Adaptations to congregate living facilities",
-        "Affordable housing, supportive housing, or recovery housing",
+        "Affordable housing supportive housing or recovery housing",
         "Behavioral health facilities and equipment",
         "Childcare, daycare and early learning facilities",
-        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 testing sites and laboratories and acquisition of related equipment",
         "COVID-19 vaccination sites",
         "Devices and equipment that assist households in accessing the internet",
         "Emergency operations centers and acquisition of emergency response equipment",
@@ -4031,9 +4012,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "X",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
       "ecCodes": [
@@ -4050,9 +4029,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "Y",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
       "ecCodes": [
@@ -4069,9 +4046,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "Z",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
       "ecCodes": [
@@ -4089,7 +4064,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AA",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - are those wages are at rates less than those prevailing?",
@@ -4127,9 +4103,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AC",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
       "ecCodes": [
@@ -4146,9 +4120,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AD",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
       "ecCodes": [
@@ -4165,9 +4137,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AE",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
       "ecCodes": [
@@ -4185,7 +4155,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AF",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether workers on the project will receive wages and benefits that will secure an appropriately skilled workforce in the context of the local or regional labor market.",
@@ -4204,7 +4175,8 @@
       "dataType": "TBD",
       "maxLength": null,
       "listVals": [
-        "TBD"
+        "Yes",
+        "No"
       ],
       "columnName": "AG",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter whether the project has completed a project labor agreement. ",
@@ -4262,9 +4234,7 @@
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AJ",
       "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. ",
       "ecCodes": [
@@ -4332,7 +4302,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -4628,7 +4599,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -5093,9 +5065,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "S",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees of contractors and sub-contractors working on the project.",
       "ecCodes": [
@@ -5128,9 +5098,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "T",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the number of employees on the project hired directly and hired through a third party. ",
       "ecCodes": [
@@ -5163,9 +5131,7 @@
       "required": "Required if DB is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "U",
       "humanColName": "If budget is over $10M and Davis Bacon Act Certification NOT completed - enter the wages and benefits of workers on the project by classification",
       "ecCodes": [
@@ -5270,9 +5236,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "X",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will ensure the project has ready access to a sufficient supply of appropriately skilled and unskilled labor to ensure high-quality construction throughout the life of the project, including a description of any required professional certifications and/or in-house training. ",
       "ecCodes": [
@@ -5305,9 +5269,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "Y",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will minimize risks of labor disputes and disruptions that would jeopardize timeliness and cost-effectiveness of the project.",
       "ecCodes": [
@@ -5340,9 +5302,7 @@
       "required": "Required if PLA is No",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "Z",
       "humanColName": "If budget is over $10M and Labor Agreement Certification NOT completed - enter how the recipient will provide a safe and healthy workplace that avoids delays and costs associated with workplace illnesses, injuries, and fatalities, including descriptions of safety training, certification, and/or licensure requirements for all relevant workers (e.g., OSHA 10, OSHA 30).",
       "ecCodes": [
@@ -5519,9 +5479,7 @@
       "required": "Required if Budget > $10M",
       "dataType": "TBD",
       "maxLength": null,
-      "listVals": [
-        "TBD"
-      ],
+      "listVals": [],
       "columnName": "AE",
       "humanColName": "If budget is over $10M and has a Community Benefit Agreement, provide a description. ",
       "ecCodes": [
@@ -6207,7 +6165,8 @@
         "Not started",
         "Completed less than 50%",
         "Completed 50% or more",
-        "Completed"
+        "Completed",
+        "Cancelled"
       ],
       "columnName": "E",
       "humanColName": "Status of Completion",
@@ -6326,10 +6285,10 @@
       "listVals": [
         "Acquisition of equipment for COVID-19 prevention and treatment",
         "Adaptations to congregate living facilities",
-        "Affordable housing, supportive housing, or recovery housing",
+        "Affordable housing supportive housing or recovery housing",
         "Behavioral health facilities and equipment",
         "Childcare, daycare and early learning facilities",
-        "COVID-19 testing sites and laboratories, and acquisition of related equipment",
+        "COVID-19 testing sites and laboratories and acquisition of related equipment",
         "COVID-19 vaccination sites",
         "Devices and equipment that assist households in accessing the internet",
         "Emergency operations centers and acquisition of emergency response equipment",
@@ -6435,6 +6394,16 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
         "11 Imp Classes of NPs designated as negatively economically impacted",
         "12 Imp Travel tourism or hospitality sectors",
         "13 Imp Industry outside the travel tourism or hospitality sectors specify",
@@ -6482,6 +6451,16 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
         "11 Imp Classes of NPs designated as negatively economically impacted",
         "12 Imp Travel tourism or hospitality sectors",
         "13 Imp Industry outside the travel tourism or hospitality sectors specify",
@@ -6529,6 +6508,16 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
+        "1 Imp General Public",
+        "2 Imp Low or moderate income HHs or populations",
+        "3 Imp HHs that experienced unemployment",
+        "4 Imp HHs that experienced increased food or housing insecurity",
+        "5 Imp HHs that qualify for certain federal programs",
+        "6 Imp For services to address lost instructional time in K-12 schools",
+        "7 Imp Other HHs or populations that experienced a negative economic",
+        "8 Imp SBs that experienced a negative economic impact",
+        "9 Imp Classes of SBs designated as negatively economically impacted",
+        "10 Imp NPs that experienced a negative economic impact specify",
         "11 Imp Classes of NPs designated as negatively economically impacted",
         "12 Imp Travel tourism or hospitality sectors",
         "13 Imp Industry outside the travel tourism or hospitality sectors specify",
@@ -6723,7 +6712,65 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
-        "2 Letter State abbr."
+        "AL",
+        "AK",
+        "AS",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FM",
+        "FL",
+        "GA",
+        "GU",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MH",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "MP",
+        "OH",
+        "OK",
+        "OR",
+        "PW",
+        "PA",
+        "PR",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "VI",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
       ],
       "columnName": "L",
       "humanColName": "State Code",
@@ -7017,31 +7064,31 @@
       "dataType": "Pick List",
       "maxLength": null,
       "listVals": [
-        "any work performed by an employee of a State local or Tribal government",
-        "behavioral health work",
-        "biomedical research",
-        "dental care work",
-        "educational work school nutrition work and other work required to operate a school facility",
-        "elections work",
-        "emergency response",
-        "family or child care",
-        "grocery stores restaurants food production and food delivery",
-        "health care",
-        "home- and community-based health care or assistance with activities of daily living",
-        "laundry work",
-        "maintenance work",
-        "medical testing and diagnostics",
-        "pharmacy",
-        "public health work",
-        "sanitation disinfection and cleaning work",
-        "social services work",
-        "solid waste or hazardous materials management response and cleanup work",
-        "transportation and warehousing",
-        "vital services to Tribes",
-        "work at hotel and commercial lodging facilities that are used for COVID-19 mitigation and containment",
-        "work in a mortuary",
-        "work in critical clinical research development and testing necessary for COVID-19 response",
-        "work requiring physical interaction with patients ",
+        "Any work performed by an employee of a State local or Tribal government",
+        "Behavioral health work",
+        "Biomedical research",
+        "Dental care work",
+        "Educational work school nutrition work and other work required to operate a school facility",
+        "Elections work",
+        "Emergency response",
+        "Family or child care",
+        "Grocery stores restaurants food production and food delivery",
+        "Health care",
+        "Home- and community-based health care or assistance with activities of daily living",
+        "Laundry work",
+        "Maintenance work",
+        "Medical testing and diagnostics",
+        "Pharmacy",
+        "Public health work",
+        "Sanitation disinfection and cleaning work",
+        "Social services work",
+        "Solid waste or hazardous materials management response and cleanup work",
+        "Transportation and warehousing",
+        "Vital services to Tribes",
+        "Work at hotel and commercial lodging facilities that are used for COVID-19 mitigation and containment",
+        "Work in a mortuary",
+        "Work in critical clinical research development and testing necessary for COVID-19 response",
+        "Work requiring physical interaction with patients",
         "Other"
       ],
       "columnName": "J",
@@ -7143,7 +7190,65 @@
       "dataType": "Pick List",
       "maxLength": 2,
       "listVals": [
-        "AL, AK, AS, AZ, AR, CA, CO, CT, DE, DC, FM, FL, GA, GU, HI, ID, IL, IN, IA, KS, KY, LA, ME, MH, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, MP, OH, OK, OR, PW, PA, PR, RI, SC, SD, TN, TX, UT, VT, VI, VA, WA, WV, WI, WY"
+        "AL",
+        "AK",
+        "AS",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FM",
+        "FL",
+        "GA",
+        "GU",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MH",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "MP",
+        "OH",
+        "OK",
+        "OR",
+        "PW",
+        "PA",
+        "PR",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "VI",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
       ],
       "columnName": "S",
       "humanColName": "Primary Place of Performance State Code ",

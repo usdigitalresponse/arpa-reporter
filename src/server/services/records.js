@@ -126,12 +126,11 @@ async function recordsForUpload (upload) {
   return records
 }
 
-async function recordsForReportingPeriod (tenantId, periodId) {
+async function recordsForReportingPeriod (periodId) {
   log('recordsForReportingPeriod()')
-  requiredArgument(tenantId, 'must specify tenantId in recordsForReportingPeriod')
   requiredArgument(periodId, 'must specify periodId in recordsForReportingPeriod')
 
-  const uploads = await usedForTreasuryExport(tenantId, periodId)
+  const uploads = await usedForTreasuryExport(periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))
   )
@@ -142,16 +141,15 @@ async function recordsForReportingPeriod (tenantId, periodId) {
  * Get the most recent, validated record for each unique project, as of the
  * specified reporting period.
 */
-async function mostRecentProjectRecords (tenantId, periodId) {
+async function mostRecentProjectRecords (periodId) {
   log('mostRecentProjectRecords()')
-  requiredArgument(tenantId, 'must specify tenantId in mostRecentProjectRecords')
   requiredArgument(periodId, 'must specify periodId in mostRecentProjectRecords')
 
-  const reportingPeriods = await getPreviousReportingPeriods(tenantId, periodId)
+  const reportingPeriods = await getPreviousReportingPeriods(periodId)
 
   const allRecords = await Promise.all(
     reportingPeriods.map(reportingPeriod =>
-      recordsForReportingPeriod(tenantId, reportingPeriod.id)
+      recordsForReportingPeriod(reportingPeriod.id)
     )
   )
 

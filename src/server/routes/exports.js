@@ -7,14 +7,13 @@ const arpa = require('../services/generate-arpa-report')
 const { getReportingPeriodID, getReportingPeriod } = require('../db/reporting-periods')
 
 router.get('/', requireUser, async function (req, res) {
-  const tenantId = req.session.user.tenant_id
-  const periodId = await getReportingPeriodID(tenantId, req.query.period_id)
-  const period = await getReportingPeriod(tenantId, periodId)
+  const periodId = await getReportingPeriodID(req.query.period_id)
+  const period = await getReportingPeriod(periodId)
   if (!period) {
     return res.status(404).json({ error: 'invalid reporting period' })
   }
 
-  const report = await arpa.generateReport(tenantId, periodId)
+  const report = await arpa.generateReport(periodId)
 
   if (_.isError(report)) {
     return res.status(500).send(report.message)

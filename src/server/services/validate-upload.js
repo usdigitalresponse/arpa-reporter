@@ -24,7 +24,7 @@ async function validateAgencyId ({ upload, records, trns }) {
   }
 
   // must exist in the db
-  const matchingAgency = (await agencyByCode(upload.tenant_id, agencyCode, trns))[0]
+  const matchingAgency = (await agencyByCode(agencyCode, trns))[0]
   if (!matchingAgency) {
     return new ValidationError(
       `Agency code ${agencyCode} does not match any known agency`,
@@ -96,7 +96,7 @@ async function validateVersion ({ records, rules }) {
 }
 
 async function validateReportingPeriod ({ upload, records, trns }) {
-  const uploadPeriod = await getReportingPeriod(upload.tenant_id, upload.reporting_period_id, trns)
+  const uploadPeriod = await getReportingPeriod(upload.reporting_period_id, trns)
   const coverSheet = records.find(record => record.type === 'cover').content
   const errors = []
 
@@ -135,12 +135,12 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
   // does the row already exist?
   let byUei = null
   if (recipient.Unique_Entity_Identifier__c) {
-    byUei = await findRecipient(upload.tenant_id, recipient.Unique_Entity_Identifier__c, null, trns)
+    byUei = await findRecipient(recipient.Unique_Entity_Identifier__c, null, trns)
   }
 
   let byTin = null
   if (recipient.EIN__c) {
-    byTin = await findRecipient(upload.tenant_id, null, recipient.EIN__c, trns)
+    byTin = await findRecipient(null, recipient.EIN__c, trns)
   }
 
   // did we find two different subrecipients?
@@ -200,8 +200,7 @@ async function validateSubrecipientRecord ({ upload, record: recipient, typeRule
         uei: recipient.Unique_Entity_Identifier__c,
         tin: recipient.EIN__c,
         record: recipient,
-        upload_id: upload.id,
-        tenant_id: upload.tenant_id
+        upload_id: upload.id
       }
       await createRecipient(dbRow, trns)
     }

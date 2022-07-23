@@ -8,7 +8,7 @@ const { listRecipients, getRecipient, updateRecipient } = require('../db/arpa-su
 const { getRules } = require('../services/validation-rules')
 
 router.get('/', requireUser, async function (req, res) {
-  const recipients = await listRecipients(req.session.user.tenant_id)
+  const recipients = await listRecipients()
   return res.json({ recipients })
 })
 

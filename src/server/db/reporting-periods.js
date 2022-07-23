@@ -74,9 +74,8 @@ async function getReportingPeriod (period_id = undefined, trns = knex) {
   case it returns the current reporting period ID.
   */
 async function getReportingPeriodID (periodID) {
-  const tenantId = useTenantId()
 
-  return Number(periodID) || getCurrentReportingPeriodID(tenantId)
+  return Number(periodID) || getCurrentReportingPeriodID()
 }
 
 async function closeReportingPeriod (period, trns = knex) {
@@ -86,7 +85,7 @@ async function closeReportingPeriod (period, trns = knex) {
     throw new Error('user cannot close reporting period of a different tenant')
   }
 
-  const currentPeriodID = await getCurrentReportingPeriodID(tenantId, trns)
+  const currentPeriodID = await getCurrentReportingPeriodID(trns)
 
   if (period.id !== currentPeriodID) {
     throw new Error(
@@ -136,7 +135,7 @@ async function closeReportingPeriod (period, trns = knex) {
     .limit(1)
     .then(rows => rows[0])
 
-  await setCurrentReportingPeriod(tenantId, next.id, trns)
+  await setCurrentReportingPeriod(next.id, trns)
 }
 
 async function createReportingPeriod (reportingPeriod, trns = knex) {

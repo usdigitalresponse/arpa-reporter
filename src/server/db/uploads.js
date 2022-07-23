@@ -17,7 +17,7 @@ function baseQuery (trns) {
 async function uploadsInPeriod (periodId, trns = knex) {
   const tenantId = useTenantId()
   if (periodId === undefined) {
-    periodId = await getCurrentReportingPeriodID(tenantId, trns)
+    periodId = await getCurrentReportingPeriodID(trns)
   }
 
   return baseQuery(trns)
@@ -113,7 +113,7 @@ async function getPeriodUploadIDs (period_id, trns = knex) {
   const tenantId = useTenantId()
 
   if (!period_id) {
-    period_id = await getCurrentReportingPeriodID(tenantId, trns)
+    period_id = await getCurrentReportingPeriodID(trns)
   }
   let rv
   try {

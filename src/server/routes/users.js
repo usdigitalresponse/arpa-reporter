@@ -64,10 +64,7 @@ router.post('/', requireAdminUser, async function (req, res, next) {
       const updatedUser = await updateUser(user)
       res.json({ user: updatedUser })
     } else {
-      const updatedUser = await createUser({
-        ...user,
-        tenant_id: creator.tenant_id
-      })
+      const updatedUser = await createUser(user)
       res.json({ user: updatedUser })
 
       void sendWelcomeEmail(updatedUser.email, req.headers.origin)

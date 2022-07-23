@@ -72,7 +72,7 @@ router.get('/:id/series', requireUser, async (req, res) => {
     series = [upload]
   }
 
-  const allExported = await usedForTreasuryExport(upload.tenant_id, upload.reporting_period_id)
+  const allExported = await usedForTreasuryExport(upload.reporting_period_id)
   const seriesExported = allExported.find(upl => (upl.agency_id === upload.agency_id && upl.ec_code === upload.ec_code))
 
   res.json({

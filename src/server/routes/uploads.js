@@ -18,9 +18,8 @@ const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
 router.get('/', requireUser, async function (req, res) {
-  const tenantId = req.session.user.tenant_id
-  const periodId = await getReportingPeriodID(tenantId, req.query.period_id)
-  const uploads = await uploadsInPeriod(tenantId, periodId)
+  const periodId = await getReportingPeriodID(req.query.period_id)
+  const uploads = await uploadsInPeriod(periodId)
   return res.json({ uploads })
 })
 

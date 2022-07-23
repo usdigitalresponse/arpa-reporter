@@ -19,12 +19,12 @@
 */
 const knex = require('./connection')
 const { cleanString } = require('../lib/spreadsheet')
-const { requiredArgument } = require('../lib/preconditions')
 
 const {
   getCurrentReportingPeriodID,
   setCurrentReportingPeriod
 } = require('./settings')
+const { useTenantId, useRequest } = require('../use-request')
 
 module.exports = {
   getReportingPeriod,
@@ -44,16 +44,15 @@ function baseQuery (trns) {
     .leftJoin('users', 'reporting_periods.certified_by', 'users.id')
 }
 
-async function getAllReportingPeriods (tenantId, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in getAllReportingPeriods')
-
+async function getAllReportingPeriods (trns = knex) {
+  const tenantId = useTenantId()
   return baseQuery(trns).where('reporting_periods.tenant_id', tenantId).orderBy('end_date', 'desc')
 }
 
 /* getReportingPeriod() returns a record from the reporting_periods table.
   */
-async function getReportingPeriod (tenantId, period_id = undefined, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriod')
+async function getReportingPeriod (period_id = undefined, trns = knex) {
+  const tenantId = useTenantId()
 
   if (period_id && Number(period_id)) {
     return baseQuery(trns)
@@ -74,18 +73,19 @@ async function getReportingPeriod (tenantId, period_id = undefined, trns = knex)
 /*  getPeriodID() returns the argument unchanged unless it is falsy, in which
   case it returns the current reporting period ID.
   */
-async function getReportingPeriodID (tenantId, periodID) {
-  requiredArgument(tenantId, 'must specify tenantId in getReportingPeriodID')
+async function getReportingPeriodID (periodID) {
+  const tenantId = useTenantId()
 
   return Number(periodID) || getCurrentReportingPeriodID(tenantId)
 }
 
-async function closeReportingPeriod (user, period, trns = knex) {
+async function closeReportingPeriod (period, trns = knex) {
+  const user = useRequest().session.user
+  const tenantId = useTenantId()
   if (user.tenant_id !== period.tenant_id) {
     throw new Error('user cannot close reporting period of a different tenant')
   }
 
-  const tenantId = user.tenant_id
   const currentPeriodID = await getCurrentReportingPeriodID(tenantId, trns)
 
   if (period.id !== currentPeriodID) {
@@ -140,10 +140,10 @@ async function closeReportingPeriod (user, period, trns = knex) {
 }
 
 async function createReportingPeriod (reportingPeriod, trns = knex) {
-  requiredArgument(reportingPeriod.tenant_id, 'createReportingPeriod caller must specify tenantId')
+  const tenantId = useTenantId()
 
   return trns
-    .insert(reportingPeriod)
+    .insert({ ...reportingPeriod, tenant_id: tenantId })
     .into('reporting_periods')
     .returning(['id'])
     .then(response => {

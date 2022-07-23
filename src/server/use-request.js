@@ -18,7 +18,13 @@ function useRequest () {
   return requestStorage.getStore()
 }
 
+/** A shortcut helper to get at tenant_id directly */
+function useTenantId () {
+  return useRequest().session.user.tenant_id
+}
+
 module.exports = {
   requestProviderMiddleware,
-  useRequest
+  useRequest,
+  useTenantId
 }

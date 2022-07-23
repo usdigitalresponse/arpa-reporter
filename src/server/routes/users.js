@@ -33,7 +33,7 @@ async function validateUser (user, creator) {
 }
 
 router.get('/', requireUser, async function (req, res, next) {
-  const allUsers = await listUsers(req.session.user.tenant_id)
+  const allUsers = await listUsers()
   const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
 
   const users = (curUser.role === 'admin') ? allUsers : [curUser]

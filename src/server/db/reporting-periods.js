@@ -30,6 +30,7 @@ module.exports = {
   getReportingPeriod,
   closeReportingPeriod,
   getReportingPeriodID,
+  getPreviousReportingPeriods,
   getAllReportingPeriods,
   createReportingPeriod,
   updateReportingPeriod
@@ -78,6 +79,23 @@ async function getReportingPeriodID (tenantId, periodID) {
   requiredArgument(tenantId, 'must specify tenantId in getReportingPeriodID')
 
   return Number(periodID) || getCurrentReportingPeriodID(tenantId)
+}
+
+/**
+ * Get all reporting periods that either match supplied poriod ID or are older
+ * than supplied period ID.
+ *
+ * @returns The matching reporting periods, sorted from oldest to newest by date
+ */
+async function getPreviousReportingPeriods (tenantId, period_id, trns = knex) {
+  const currentReportingPeriod = await getReportingPeriod(tenantId, period_id)
+  const allReportingPeriods = await getAllReportingPeriods(tenantId)
+  const reportingPeriods = allReportingPeriods.filter(
+    period =>
+      new Date(period.end_date) <= new Date(currentReportingPeriod.end_date)
+  )
+  reportingPeriods.sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
+  return reportingPeriods
 }
 
 async function closeReportingPeriod (user, period, trns = knex) {

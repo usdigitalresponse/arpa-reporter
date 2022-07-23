@@ -237,7 +237,7 @@ async function validateRecord ({ upload, record, typeRules: rules }) {
       // how do we format the value before checking it?
       let value = record[key]
       let formatFailures = 0
-      for (const formatter of rule.valueFormatters) {
+      for (const formatter of rule.validationFormatters) {
         try {
           value = formatter(value)
         } catch (e) {

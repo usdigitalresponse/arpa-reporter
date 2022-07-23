@@ -1,9 +1,9 @@
 const moment = require('moment')
 const XLSX = require('xlsx')
 
-const { getReportingPeriod, getAllReportingPeriods } = require('../db/reporting-periods')
+const { getPreviousReportingPeriods, getReportingPeriod } = require('../db/reporting-periods')
 const { getCurrentReportingPeriodID } = require('../db/settings')
-const { recordsForReportingPeriod } = require('../services/records')
+const { recordsForReportingPeriod, mostRecentProjectRecords } = require('../services/records')
 const { log } = require('../lib/log')
 const { usedForTreasuryExport } = require('../db/uploads')
 const { WEBSITE_DOMAIN } = require('../environment')
@@ -57,13 +57,7 @@ async function generate (tenantId, requestHost) {
 
 async function createObligationSheet (tenantId, periodId, domain) {
   // select active reporting periods and sort by date
-  const currentReportingPeriod = await getReportingPeriod(tenantId, periodId)
-  const allReportingPeriods = await getAllReportingPeriods(tenantId)
-  const reportingPeriods = allReportingPeriods.filter(
-    period =>
-      new Date(period.end_date) <= new Date(currentReportingPeriod.end_date)
-  )
-  reportingPeriods.sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
+  const reportingPeriods = await getPreviousReportingPeriods(tenantId, periodId)
 
   // collect aggregate obligations and expenditures by upload
   const rows = await Promise.all(
@@ -148,35 +142,25 @@ async function createObligationSheet (tenantId, periodId, domain) {
 }
 
 async function createProjectSummaries (tenantId, periodId, domain) {
-  const records = await recordsForReportingPeriod(tenantId, periodId)
+  const records = await mostRecentProjectRecords(tenantId, periodId)
 
-  const rows = []
+  const rows = records.map(async record => {
+    const reportingPeriod = await getReportingPeriod(tenantId, record.upload.reporting_period_id)
 
-  records.forEach(record => {
-    switch (record.type) {
-      case 'ec1':
-      case 'ec2':
-      case 'ec3':
-      case 'ec4':
-      case 'ec5':
-      case 'ec7':
-        rows.push({
-          'Project ID': record.content.Project_Identification_Number__c,
-          'Upload': getUploadLink(domain, record.upload.id, record.upload.filename),
-          // TODO: consider also mapping project IDs to export templates?
-          'Adopted Budget': record.content.Adopted_Budget__c,
-          'Total Cumulative Obligations': record.content.Total_Obligations__c,
-          'Total Cumulative Expenditures': record.content.Total_Expenditures__c,
-          'Current Period Obligations': record.content.Current_Period_Obligations__c,
-          'Current Period Expenditures': record.content.Current_Period_Expenditures__c
-        })
-        break
-      default:
-        break
+    return {
+      'Project ID': record.content.Project_Identification_Number__c,
+      'Upload': getUploadLink(domain, record.upload.id, record.upload.filename),
+      'Last Reported': reportingPeriod.name,
+      // TODO: consider also mapping project IDs to export templates?
+      'Adopted Budget': record.content.Adopted_Budget__c,
+      'Total Cumulative Obligations': record.content.Total_Obligations__c,
+      'Total Cumulative Expenditures': record.content.Total_Expenditures__c,
+      'Current Period Obligations': record.content.Current_Period_Obligations__c,
+      'Current Period Expenditures': record.content.Current_Period_Expenditures__c
     }
   })
 
-  return rows
+  return await Promise.all(rows)
 }
 
 module.exports = {

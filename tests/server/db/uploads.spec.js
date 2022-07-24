@@ -1,16 +1,16 @@
 
 const uploads = requireSrc(__filename)
 const assert = require('assert')
+const { withTenantId } = require('../helpers/with-tenant-id')
 const { knex } = require('../mocha_init')
+
+const TENANT_ID = 0
 
 describe('db/uploads.js', function () {
   let upload
 
   beforeEach('init an upload row', async function () {
-    upload = {
-      filename: 'filename',
-      tenant_id: 0
-    }
+    upload = { filename: 'filename' }
   })
 
   describe('createUpload', function () {
@@ -19,27 +19,27 @@ describe('db/uploads.js', function () {
     })
 
     it('Returns the resulting row', async function () {
-      const inserted = await uploads.createUpload(upload)
+      const inserted = await withTenantId(TENANT_ID, () => uploads.createUpload(upload))
       assert.ok(inserted)
       assert.equal(inserted.filename, 'filename')
     })
 
     it('Requires a filename', async function () {
       upload.filename = null
-      assert.rejects(async () => await uploads.createUpload(upload))
+      assert.rejects(async () => await withTenantId(TENANT_ID, () => uploads.createUpload(upload)))
     })
 
     describe('when there is invalid user id', function () {
       it('throws an error', async function () {
         upload.user_id = 12345
-        assert.rejects(async () => await uploads.createUpload(upload))
+        assert.rejects(async () => await withTenantId(TENANT_ID, uploads.createUpload(upload)))
       })
     })
 
     describe('when there is invalid reporting period', function () {
       it('throws an error', async function () {
         upload.reporting_period_id = 12345
-        assert.rejects(async () => await uploads.createUpload(upload))
+        assert.rejects(async () => await withTenantId(TENANT_ID, uploads.createUpload(upload)))
       })
     })
   })

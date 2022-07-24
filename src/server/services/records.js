@@ -109,11 +109,10 @@ async function recordsForUpload (upload) {
   return records
 }
 
-async function recordsForReportingPeriod (tenantId, periodId) {
-  requiredArgument(tenantId, 'must specify tenantId in recordsForReportingPeriod')
+async function recordsForReportingPeriod (periodId) {
   requiredArgument(periodId, 'must specify periodId in recordsForReportingPeriod')
 
-  const uploads = await usedForTreasuryExport(tenantId, periodId)
+  const uploads = await usedForTreasuryExport(periodId)
   const groupedRecords = await Promise.all(
     uploads.map(upload => recordsForUpload(upload))
   )

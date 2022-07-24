@@ -1,5 +1,5 @@
 const knex = require('./connection')
-const { requiredArgument } = require('../lib/preconditions')
+const { useTenantId } = require('../use-request')
 
 function baseQuery (trns) {
   return trns('arpa_subrecipients')
@@ -15,13 +15,13 @@ function baseQuery (trns) {
 }
 
 async function createRecipient (recipient, trns = knex) {
+  const tenantId = useTenantId()
   if (!(recipient.uei || recipient.tin)) {
     throw new Error('recipient row must include a `uei` or a `tin` field')
   }
-  requiredArgument(recipient.tenant_id, 'must specify tenantId when creating subrecipient')
 
   return trns('arpa_subrecipients')
-    .insert(recipient)
+    .insert({ ...recipient, tenant_id: tenantId })
     .returning('*')
     .then(rows => rows[0])
 }
@@ -49,9 +49,8 @@ async function getRecipient (id, trns = knex) {
     .then(rows => rows[0])
 }
 
-async function findRecipient (tenantId, uei = null, tin = null, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in findRecipient')
-
+async function findRecipient (uei = null, tin = null, trns = knex) {
+  const tenantId = useTenantId()
   const query = baseQuery(trns).where('arpa_subrecipients.tenant_id', tenantId)
 
   if (uei) {
@@ -65,8 +64,8 @@ async function findRecipient (tenantId, uei = null, tin = null, trns = knex) {
   return query.then(rows => rows[0])
 }
 
-async function listRecipients (tenantId, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in listRecipients')
+async function listRecipients (trns = knex) {
+  const tenantId = useTenantId()
   return baseQuery(trns).where('arpa_subrecipients.tenant_id', tenantId)
 }
 

@@ -7,7 +7,7 @@ const { applicationSettings } = require('../db/settings')
 const { requireUser } = require('../access-helpers')
 
 router.get('/', requireUser, async function (req, res) {
-  const application_settings = await applicationSettings(req.session.user.tenant_id)
+  const application_settings = await applicationSettings()
   res.json({ application_settings })
 })
 

@@ -4,12 +4,16 @@ const express = require('express')
 // handled. It just calls next(err) with them.
 require('express-async-errors')
 
+const { requestProviderMiddleware } = require('./use-request')
 const configureAPI = require('./configure')
 const environment = require('./environment')
 
 console.log(`Database is ${environment.POSTGRES_URL}`)
 
 const app = express()
+
+app.use(requestProviderMiddleware)
+
 configureAPI(app)
 
 app.listen(

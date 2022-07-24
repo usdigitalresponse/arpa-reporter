@@ -5,6 +5,7 @@ const {
   getCurrentReportingPeriodID
 } = require('./settings')
 const { requiredArgument } = require('../lib/preconditions')
+const { useTenantId } = require('../use-request')
 
 function baseQuery (trns) {
   return trns('uploads')
@@ -13,10 +14,10 @@ function baseQuery (trns) {
     .select('uploads.*', 'users.email AS created_by', 'agencies.code AS agency_code')
 }
 
-async function uploadsInPeriod (tenantId, periodId, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in uploadsInPeriod')
+async function uploadsInPeriod (periodId, trns = knex) {
+  const tenantId = useTenantId()
   if (periodId === undefined) {
-    periodId = await getCurrentReportingPeriodID(tenantId, trns)
+    periodId = await getCurrentReportingPeriodID(trns)
   }
 
   return baseQuery(trns)
@@ -44,8 +45,8 @@ function getUpload (id, trns = knex) {
     .then(r => r[0])
 }
 
-function usedForTreasuryExport (tenantId, periodId, trns = knex) {
-  requiredArgument(tenantId, 'tenant must be specified in validForReportingPeriod')
+function usedForTreasuryExport (periodId, trns = knex) {
+  const tenantId = useTenantId()
   requiredArgument(periodId, 'periodId must be specified in validForReportingPeriod')
 
   return baseQuery(trns)
@@ -77,7 +78,8 @@ function usedForTreasuryExport (tenantId, periodId, trns = knex) {
       agency_id: 3,
     }
     */
-function getUploadSummaries (tenantId, period_id, trns = knex) {
+function getUploadSummaries (period_id, trns = knex) {
+  const tenantId = useTenantId()
   // console.log(`period_id is ${period_id}`)
   return trns('uploads')
     .select('*')
@@ -85,10 +87,10 @@ function getUploadSummaries (tenantId, period_id, trns = knex) {
 }
 
 async function createUpload (upload, trns = knex) {
-  requiredArgument(upload.tenant_id, 'must specify tenant when creating upload')
+  const tenantId = useTenantId()
 
   const inserted = await trns('uploads')
-    .insert(upload)
+    .insert({ ...upload, tenant_id: tenantId })
     .returning('*')
     .then(rows => rows[0])
 
@@ -107,11 +109,11 @@ async function setEcCode (uploadId, ecCode, trns = knex) {
     .update({ ec_code: ecCode })
 }
 
-async function getPeriodUploadIDs (tenantId, period_id, trns = knex) {
-  requiredArgument(tenantId, 'must specify tenantId in getPeriodUploadIDs')
+async function getPeriodUploadIDs (period_id, trns = knex) {
+  const tenantId = useTenantId()
 
   if (!period_id) {
-    period_id = await getCurrentReportingPeriodID(tenantId, trns)
+    period_id = await getCurrentReportingPeriodID(trns)
   }
   let rv
   try {

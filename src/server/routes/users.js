@@ -33,7 +33,7 @@ async function validateUser (user, creator) {
 }
 
 router.get('/', requireUser, async function (req, res, next) {
-  const allUsers = await listUsers(req.session.user.tenant_id)
+  const allUsers = await listUsers()
   const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
 
   const users = (curUser.role === 'admin') ? allUsers : [curUser]
@@ -64,10 +64,7 @@ router.post('/', requireAdminUser, async function (req, res, next) {
       const updatedUser = await updateUser(user)
       res.json({ user: updatedUser })
     } else {
-      const updatedUser = await createUser({
-        ...user,
-        tenant_id: creator.tenant_id
-      })
+      const updatedUser = await createUser(user)
       res.json({ user: updatedUser })
 
       void sendWelcomeEmail(updatedUser.email, req.headers.origin)

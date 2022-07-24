@@ -74,7 +74,6 @@ async function getReportingPeriod (period_id = undefined, trns = knex) {
   case it returns the current reporting period ID.
   */
 async function getReportingPeriodID (periodID) {
-
   return Number(periodID) || getCurrentReportingPeriodID()
 }
 

@@ -36,11 +36,10 @@ router.get('/', requireUser, async function (req, res) {
 
 router.post('/close/', requireAdminUser, async (req, res) => {
   const period = await getReportingPeriod()
-  const user = req.session.user
 
   const trns = await knex.transaction()
   try {
-    await closeReportingPeriod(user, period, trns)
+    await closeReportingPeriod(period, trns)
     trns.commit()
   } catch (err) {
     if (!trns.isCompleted()) trns.rollback()

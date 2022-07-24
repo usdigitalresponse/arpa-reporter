@@ -1,5 +1,6 @@
 // uploads.js handles uploading an agency report spreadsheet to the database.
 /* eslint camelcase: 0 */
+const { AsyncResource } = require('node:async_hooks')
 
 const express = require('express')
 
@@ -17,30 +18,39 @@ const { persistUpload, bufferForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
 const ValidationError = require('../lib/validation-error')
 
+function preserveAsyncContext (middleware) {
+  return (req, res, next) => middleware(req, res, AsyncResource.bind(next))
+}
+
 router.get('/', requireUser, async function (req, res) {
   const periodId = await getReportingPeriodID(req.query.period_id)
   const uploads = await uploadsInPeriod(periodId)
   return res.json({ uploads })
 })
 
-router.post('/', requireUser, multerUpload.single('spreadsheet'), async (req, res, next) => {
-  console.log('POST /api/uploads')
-  if (req.file) {
-    console.log('Filename:', req.file.originalname, 'size:', req.file.size)
-  }
+router.post(
+  '/',
+  requireUser,
+  preserveAsyncContext(multerUpload.single('spreadsheet')),
+  async (req, res, next) => {
+    console.log('POST /api/uploads')
+    if (req.file) {
+      console.log('Filename:', req.file.originalname, 'size:', req.file.size)
+    }
 
-  try {
-    const upload = await persistUpload({
-      user: req.session.user,
-      filename: req.file.originalname,
-      buffer: req.file.buffer
-    })
+    try {
+      const upload = await persistUpload({
+        user: req.session.user,
+        filename: req.file.originalname,
+        buffer: req.file.buffer
+      })
 
-    res.status(200).json({ upload, error: null })
-  } catch (e) {
-    res.status(e instanceof ValidationError ? 400 : 500).json({ error: e.message, upload: null })
+      res.status(200).json({ upload, error: null })
+    } catch (e) {
+      res.status(e instanceof ValidationError ? 400 : 500).json({ error: e.message, upload: null })
+    }
   }
-})
+)
 
 router.get('/:id', requireUser, async (req, res) => {
   const id = req.params.id

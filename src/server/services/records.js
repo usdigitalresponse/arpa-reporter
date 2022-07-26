@@ -80,8 +80,9 @@ async function recordsForUpload (upload) {
       continue
     }
 
+    const rulesForCurrentType = rules[type]
     // header is based on the columns we have in the rules
-    const header = Object.values(rules[type])
+    const header = Object.values(rulesForCurrentType)
       .sort((a, b) => a.index - b.index)
       .map(rule => rule.key)
 
@@ -102,7 +103,19 @@ async function recordsForUpload (upload) {
 
     // each row in the input sheet becomes a unique record
     for (const row of rows) {
-      records.push({ type, subcategory, upload, content: row })
+      const formattedRow = {}
+      Object.keys(row).forEach(fieldId => {
+        let value = row[fieldId]
+        for (const formatter of rulesForCurrentType[fieldId].persistentFormatters) {
+          try {
+            value = formatter(value)
+          } catch (e) {
+            console.log(`Persistent formatter failed to format value ${value} with error:`, e)
+          }
+        }
+        formattedRow[fieldId] = value
+      })
+      records.push({ type, subcategory, upload, content: formattedRow })
     }
   }
 

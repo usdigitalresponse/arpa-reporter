@@ -80,9 +80,9 @@ async function recordsForUpload (upload) {
       continue
     }
 
-    const typeRules = rules[type]
+    const rulesForCurrentType = rules[type]
     // header is based on the columns we have in the rules
-    const header = Object.values(typeRules)
+    const header = Object.values(rulesForCurrentType)
       .sort((a, b) => a.index - b.index)
       .map(rule => rule.key)
 
@@ -106,7 +106,7 @@ async function recordsForUpload (upload) {
       const formattedRow = {}
       Object.keys(row).forEach(fieldId => {
         let value = row[fieldId]
-        for (const formatter of typeRules[fieldId].persistentFormatters) {
+        for (const formatter of rulesForCurrentType[fieldId].persistentFormatters) {
           try {
             value = formatter(value)
           } catch (e) {

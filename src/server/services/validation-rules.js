@@ -3,7 +3,7 @@ const srcRules = require('../lib/templateRules.json')
 
 const recordValueFormatters = {
   makeString: (val) => String(val),
-  trimWhitespace: (val) => val.trim(),
+  trimWhitespace: (val) => val ? val.trim() : val,
   removeCommas: (val) => val.replace(/,/g, ''),
   removeSepDashes: (val) => val.replace(/^-/, '').replace(/;\s*-/g, ';'),
   toLowerCase: (val) => val.toLowerCase()
@@ -12,7 +12,7 @@ const recordValueFormatters = {
 /*
 Structured data recording all the immediate corrections we want to apply to dropdowns.
 There are 2 types of corrections we can apply:
-1) The value in the current worksheet is incorrect.
+1) The value in the currently committed input template is incorrect.
 2) A value in the dropdown list changed in the past, and we want to continue to allow legacy vals as valid inputs.
 In the first case, we will alter the validation rule to check against the new correct value, and
 then treat the value currently seen in the worksheet as an allowable legacy value.
@@ -61,7 +61,7 @@ function generateRules () {
 
       if (rule.dataType === 'String') {
         rule.validationFormatters.push(recordValueFormatters.makeString)
-        rule.validationFormatters.push(recordValueFormatters.trimWhitespace)
+        rule.persistentFormatters.push(recordValueFormatters.trimWhitespace)
       }
 
       if (rule.dataType === 'Multi-Select') {

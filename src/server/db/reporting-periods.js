@@ -82,7 +82,7 @@ async function getReportingPeriodID (tenantId, periodID) {
 }
 
 /**
- * Get all reporting periods that either match supplied poriod ID or are older
+ * Get all reporting periods that either match supplied period ID or are older
  * than supplied period ID.
  *
  * @returns The matching reporting periods, sorted from oldest to newest by date

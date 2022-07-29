@@ -2,6 +2,7 @@ const XLSX = require('xlsx')
 const { merge } = require('lodash')
 
 const { bufferForUpload } = require('./persist-upload')
+const { getPreviousReportingPeriods } = require('../db/reporting-periods')
 const { usedForTreasuryExport } = require('../db/uploads')
 const { log } = require('../lib/log')
 const { requiredArgument } = require('../lib/preconditions')
@@ -11,13 +12,17 @@ const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
 const LOGIC_SHEET = 'Logic'
 
-const DATA_SHEET_TYPES = {
+const EC_SHEET_TYPES = {
   'EC 1 - Public Health': 'ec1',
   'EC 2 - Negative Economic Impact': 'ec2',
   'EC 3 - Public Sector Capacity': 'ec3',
   'EC 4 - Premium Pay': 'ec4',
   'EC 5 - Infrastructure': 'ec5',
-  'EC 7 - Admin': 'ec7',
+  'EC 7 - Admin': 'ec7'
+}
+
+const DATA_SHEET_TYPES = {
+  ...EC_SHEET_TYPES,
   'Subrecipient': 'subrecipient',
   'Awards > 50000': 'awards50k',
   'Expenditures > 50000': 'expenditures50k',
@@ -75,7 +80,6 @@ async function recordsForUpload (upload) {
     )
 
     // ignore hidden sheets
-    console.log(type, sheetAttributes.Hidden)
     if (sheetAttributes.Hidden !== 0) {
       continue
     }
@@ -123,6 +127,7 @@ async function recordsForUpload (upload) {
 }
 
 async function recordsForReportingPeriod (tenantId, periodId) {
+  log('recordsForReportingPeriod()')
   requiredArgument(tenantId, 'must specify tenantId in recordsForReportingPeriod')
   requiredArgument(periodId, 'must specify periodId in recordsForReportingPeriod')
 
@@ -133,9 +138,43 @@ async function recordsForReportingPeriod (tenantId, periodId) {
   return groupedRecords.flat()
 }
 
+/**
+ * Get the most recent, validated record for each unique project, as of the
+ * specified reporting period.
+*/
+async function mostRecentProjectRecords (tenantId, periodId) {
+  log('mostRecentProjectRecords()')
+  requiredArgument(tenantId, 'must specify tenantId in mostRecentProjectRecords')
+  requiredArgument(periodId, 'must specify periodId in mostRecentProjectRecords')
+
+  const reportingPeriods = await getPreviousReportingPeriods(tenantId, periodId)
+
+  const allRecords = await Promise.all(
+    reportingPeriods.map(reportingPeriod =>
+      recordsForReportingPeriod(tenantId, reportingPeriod.id)
+    )
+  )
+
+  const latestProjectRecords = allRecords
+    .flat()
+    // exclude non-project records
+    .filter(record => Object.values(EC_SHEET_TYPES).includes(record.type))
+    // collect the latest record for each project ID
+    .reduce(
+      (accumulator, record) => ({
+        ...accumulator,
+        [record.content.Project_Identification_Number__c]: record
+      }),
+      {}
+    )
+
+  return Object.values(latestProjectRecords)
+}
+
 module.exports = {
   recordsForReportingPeriod,
   recordsForUpload,
+  mostRecentProjectRecords,
   DATA_SHEET_TYPES,
   TYPE_TO_SHEET_NAME,
   readVersionRecord

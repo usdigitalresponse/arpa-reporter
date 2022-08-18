@@ -2,7 +2,7 @@ const { requestProviderMiddleware } = require('../../../src/server/use-request')
 
 /**
  * Runs a callback function in the context of an AsyncLocalStorage store
- * containing the supplied teant_id.
+ * containing the supplied tenant_id.
  * @param {string} tenantId
  * @param {Function} callback
  * @returns {Promise}

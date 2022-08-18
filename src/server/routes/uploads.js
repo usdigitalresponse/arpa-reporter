@@ -1,7 +1,5 @@
 // uploads.js handles uploading an agency report spreadsheet to the database.
 /* eslint camelcase: 0 */
-const { AsyncResource } = require('node:async_hooks')
-
 const express = require('express')
 
 const router = express.Router()
@@ -16,11 +14,8 @@ const { usedForTreasuryExport, getUpload, uploadsInSeries, uploadsInPeriod } = r
 const { recordsForUpload } = require('../services/records')
 const { persistUpload, bufferForUpload } = require('../services/persist-upload')
 const { validateUpload } = require('../services/validate-upload')
+const { ensureAsyncContext } = require('../lib/ensure-async-context')
 const ValidationError = require('../lib/validation-error')
-
-function preserveAsyncContext (middleware) {
-  return (req, res, next) => middleware(req, res, AsyncResource.bind(next))
-}
 
 router.get('/', requireUser, async function (req, res) {
   const periodId = await getReportingPeriodID(req.query.period_id)
@@ -31,7 +26,9 @@ router.get('/', requireUser, async function (req, res) {
 router.post(
   '/',
   requireUser,
-  preserveAsyncContext(multerUpload.single('spreadsheet')),
+  // use preserveAsyncContext to work around issue:
+  // https://github.com/expressjs/multer/issues/814
+  ensureAsyncContext(multerUpload.single('spreadsheet')),
   async (req, res, next) => {
     console.log('POST /api/uploads')
     if (req.file) {

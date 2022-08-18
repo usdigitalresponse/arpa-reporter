@@ -1,5 +1,7 @@
 const { AsyncLocalStorage } = require('node:async_hooks')
 
+const { invariant } = require('ts-invariant')
+
 const requestStorage = new AsyncLocalStorage()
 
 /**
@@ -18,9 +20,23 @@ function useRequest () {
   return requestStorage.getStore()
 }
 
+function useSession () {
+  const session = useRequest().session
+  invariant(session != null, 'You called useSession, but a session was not available. Consider specifying requireUser on the affected route.')
+  return session
+}
+
+function useUser () {
+  const user = useSession().user
+  invariant(user != null, 'You called useUser, but a user was not found. Consider specifying requireUser on the affected route.')
+  return user
+}
+
 /** A shortcut helper to get at tenant_id directly */
 function useTenantId () {
-  return useRequest().session.user.tenant_id
+  const tenantId = useUser().tenant_id
+  invariant(tenantId != null, 'You called useTenantId, but a tenantId was not found.')
+  return tenantId
 }
 
 module.exports = {

@@ -47,9 +47,9 @@ function isProjectRecord (record) {
   ].includes(record.type)
 }
 
-async function generateReportName (tenantId, periodId) {
+async function generateReportName (periodId) {
   const now = moment().utc()
-  const { title: state } = await applicationSettings(tenantId)
+  const { title: state } = await applicationSettings()
 
   const filename = [
     state.replace(/ /g, '-'),
@@ -904,10 +904,9 @@ async function generateSubRecipient (records, periodId) {
   })
 }
 
-async function generateReport (tenantId, periodId) {
-  requiredArgument(tenantId, 'must specify tenantId')
+async function generateReport (periodId) {
   requiredArgument(periodId, 'must specify periodId')
-  const records = await recordsForReportingPeriod(tenantId, periodId)
+  const records = await recordsForReportingPeriod(periodId)
 
   // generate every csv file for the report
   const csvObjects = [
@@ -974,7 +973,7 @@ async function generateReport (tenantId, periodId) {
     zip.addFile(name + '.csv', buffer)
   })
 
-  const reportNamePromise = generateReportName(tenantId, periodId)
+  const reportNamePromise = generateReportName(periodId)
 
   const [reportName] = await Promise.all([
     reportNamePromise,

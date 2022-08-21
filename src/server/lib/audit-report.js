@@ -7,7 +7,6 @@ const { recordsForReportingPeriod, mostRecentProjectRecords } = require('../serv
 const { log } = require('../lib/log')
 const { usedForTreasuryExport } = require('../db/uploads')
 const { WEBSITE_DOMAIN } = require('../environment')
-const { requiredArgument } = require('../lib/preconditions')
 
 const COLUMN = {
   EC_BUDGET: 'Adopted Budget (EC tabs)',
@@ -25,10 +24,8 @@ function getUploadLink (domain, id, filename) {
   return { f: `=HYPERLINK("${domain}/uploads/${id}","${filename}")` }
 }
 
-async function generate (tenantId, requestHost) {
-  requiredArgument(tenantId, 'must specify tenantId in auditReport.generate')
-
-  const periodId = await getCurrentReportingPeriodID(tenantId)
+async function generate (requestHost) {
+  const periodId = await getCurrentReportingPeriodID()
   log(`generate(${periodId})`)
 
   const domain = WEBSITE_DOMAIN ?? requestHost
@@ -38,8 +35,8 @@ async function generate (tenantId, requestHost) {
     obligations,
     projectSummaries
   ] = await Promise.all([
-    createObligationSheet(tenantId, periodId, domain),
-    createProjectSummaries(tenantId, periodId, domain)
+    createObligationSheet(periodId, domain),
+    createProjectSummaries(periodId, domain)
   ])
 
   // compose workbook
@@ -55,15 +52,15 @@ async function generate (tenantId, requestHost) {
   }
 }
 
-async function createObligationSheet (tenantId, periodId, domain) {
+async function createObligationSheet (periodId, domain) {
   // select active reporting periods and sort by date
-  const reportingPeriods = await getPreviousReportingPeriods(tenantId, periodId)
+  const reportingPeriods = await getPreviousReportingPeriods(periodId)
 
   // collect aggregate obligations and expenditures by upload
   const rows = await Promise.all(
     reportingPeriods.map(async period => {
-      const uploads = await usedForTreasuryExport(tenantId, period.id)
-      const records = await recordsForReportingPeriod(tenantId, period.id)
+      const uploads = await usedForTreasuryExport(period.id)
+      const records = await recordsForReportingPeriod(period.id)
 
       return await Promise.all(uploads.map(async upload => {
         const emptyRow = {
@@ -141,11 +138,11 @@ async function createObligationSheet (tenantId, periodId, domain) {
   return rows.flat()
 }
 
-async function createProjectSummaries (tenantId, periodId, domain) {
-  const records = await mostRecentProjectRecords(tenantId, periodId)
+async function createProjectSummaries (periodId, domain) {
+  const records = await mostRecentProjectRecords(periodId)
 
   const rows = records.map(async record => {
-    const reportingPeriod = await getReportingPeriod(tenantId, record.upload.reporting_period_id)
+    const reportingPeriod = await getReportingPeriod(record.upload.reporting_period_id)
 
     return {
       'Project ID': record.content.Project_Identification_Number__c,

@@ -10,7 +10,7 @@ const {
 } = require('../db/agencies')
 
 router.get('/', requireUser, function (req, res) {
-  agencies(req.session.user.tenant_id).then(agencies => res.json({ agencies }))
+  agencies().then(agencies => res.json({ agencies }))
 })
 
 async function validateAgency (agency) {
@@ -43,10 +43,7 @@ router.post('/', requireAdminUser, async function (req, res, next) {
       const agency = await updateAgency(agencyInfo)
       res.json({ agency })
     } else {
-      const agency = await createAgency({
-        ...agencyInfo,
-        tenant_id: req.session.user.tenant_id
-      })
+      const agency = await createAgency(agencyInfo)
       res.json({ agency })
     }
   } catch (e) {

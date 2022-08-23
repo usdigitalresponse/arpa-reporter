@@ -150,10 +150,10 @@ async function recordsForUpload (upload) {
     req.recordsForUpload = {}
   }
   if (req.recordsForUpload[upload.id]) {
-    log(`recordsForUpload(${upload.id}): waiting for read`)
+    log(`recordsForUpload(${upload.id}): reading from cache`)
     return req.recordsForUpload[upload.id]
   }
-  log(`recordsForUpload(${upload.id}): fetching`)
+  log(`recordsForUpload(${upload.id}): reading from disk`)
   const recordPromise = loadRecordsForUpload(upload)
 
   // By caching the promise, we ensure that parallel fetches won't start a new

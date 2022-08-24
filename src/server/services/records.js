@@ -7,6 +7,7 @@ const { usedForTreasuryExport } = require('../db/uploads')
 const { log } = require('../lib/log')
 const { requiredArgument } = require('../lib/preconditions')
 const { getRules } = require('./validation-rules')
+const { useRequest } = require('../use-request')
 
 const CERTIFICATION_SHEET = 'Certification'
 const COVER_SHEET = 'Cover'
@@ -48,8 +49,15 @@ function readVersionRecord (workbook) {
   }
 }
 
-async function recordsForUpload (upload) {
-  log('recordsForUpload()')
+/**
+ * Load an uploaded spreadsheet from disk and parse it into "records". Each
+ * record corresponds to one row in the upload.
+ *
+ * @param {object} upload The upload to read
+ * @returns {Promise<object[]>}
+ */
+async function loadRecordsForUpload (upload) {
+  log(`loadRecordsForUpload(${upload.id})`)
 
   const rules = getRules()
 
@@ -126,8 +134,37 @@ async function recordsForUpload (upload) {
   return records
 }
 
+/**
+ * Wraps loadRecordsForUpload with per-request memoization. This ensures that
+ * the same upload is not read from the filesystem more than once during a
+ * single request.
+ *
+ * @param {object} upload The upload to fetch records for.
+ * @returns {Promise<object[]>} A list of records corresponding to the requested upload
+ */
+async function recordsForUpload (upload) {
+  log(`recordsForUpload(${upload.id})`)
+
+  const req = useRequest()
+  if (!req.recordsForUpload) {
+    req.recordsForUpload = {}
+  }
+  if (req.recordsForUpload[upload.id]) {
+    log(`recordsForUpload(${upload.id}): reading from cache`)
+    return req.recordsForUpload[upload.id]
+  }
+  log(`recordsForUpload(${upload.id}): reading from disk`)
+  const recordPromise = loadRecordsForUpload(upload)
+
+  // By caching the promise, we ensure that parallel fetches won't start a new
+  // filesystem read, even if the first read hasn't resolved yet.
+  req.recordsForUpload[upload.id] = recordPromise
+
+  return recordPromise
+}
+
 async function recordsForReportingPeriod (periodId) {
-  log('recordsForReportingPeriod()')
+  log(`recordsForReportingPeriod(${periodId})`)
   requiredArgument(periodId, 'must specify periodId in recordsForReportingPeriod')
 
   const uploads = await usedForTreasuryExport(periodId)
@@ -142,7 +179,7 @@ async function recordsForReportingPeriod (periodId) {
  * specified reporting period.
 */
 async function mostRecentProjectRecords (periodId) {
-  log('mostRecentProjectRecords()')
+  log(`mostRecentProjectRecords(${periodId})`)
   requiredArgument(periodId, 'must specify periodId in mostRecentProjectRecords')
 
   const reportingPeriods = await getPreviousReportingPeriods(periodId)

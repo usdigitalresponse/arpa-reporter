@@ -88,46 +88,24 @@ async function createObligationSheet (periodId, domain) {
               case 'ec4':
               case 'ec5':
               case 'ec7':
-                return {
-                  ...row,
-                  [COLUMN.EC_BUDGET]:
-                    row[COLUMN.EC_BUDGET] + record.content.Adopted_Budget__c,
-                  [COLUMN.EC_TCO]:
-                    row[COLUMN.EC_TCO] + record.content.Total_Obligations__c,
-                  [COLUMN.EC_TCE]:
-                    row[COLUMN.EC_TCE] + record.content.Total_Expenditures__c,
-                  [COLUMN.EC_CPO]:
-                    row[COLUMN.EC_CPO] +
-                    record.content.Current_Period_Obligations__c,
-                  [COLUMN.EC_CPE]:
-                    row[COLUMN.EC_CPE] +
-                    record.content.Current_Period_Expenditures__c
-                }
+                row[COLUMN.EC_BUDGET] += record.content.Adopted_Budget__c
+                row[COLUMN.EC_TCO] += record.content.Total_Obligations__c
+                row[COLUMN.EC_TCE] += record.content.Total_Expenditures__c
+                row[COLUMN.EC_CPO] += record.content.Current_Period_Obligations__c
+                row[COLUMN.EC_CPE] += record.content.Current_Period_Expenditures__c
+                break
               case 'awards50k':
-                return {
-                  ...row,
-                  [COLUMN.E50K_OBLIGATION]:
-                    row[COLUMN.E50K_OBLIGATION] + record.content.Award_Amount__c
-                }
+                row[COLUMN.E50K_OBLIGATION] += record.content.Award_Amount__c
+                break
               case 'expenditures50k':
-                return {
-                  ...row,
-                  [COLUMN.E50K_TEA]:
-                    row[COLUMN.E50K_TEA] + record.content.Expenditure_Amount__c
-                }
+                row[COLUMN.E50K_TEA] += record.content.Expenditure_Amount__c
+                break
               case 'awards':
-                return {
-                  ...row,
-                  [COLUMN.E_CPO]:
-                    row[COLUMN.E_CPO] +
-                    record.content.Quarterly_Obligation_Amt_Aggregates__c,
-                  [COLUMN.E_CPE]:
-                    row[COLUMN.E_CPE] +
-                    record.content.Quarterly_Expenditure_Amt_Aggregates__c
-                }
-              default:
-                return row
+                row[COLUMN.E_CPO] += record.content.Quarterly_Obligation_Amt_Aggregates__c
+                row[COLUMN.E_CPE] += record.content.Quarterly_Expenditure_Amt_Aggregates__c
+                break
             }
+            return row
           }, emptyRow)
 
         return row

@@ -196,10 +196,10 @@ async function mostRecentProjectRecords (periodId) {
     .filter(record => Object.values(EC_SHEET_TYPES).includes(record.type))
     // collect the latest record for each project ID
     .reduce(
-      (accumulator, record) => ({
-        ...accumulator,
-        [record.content.Project_Identification_Number__c]: record
-      }),
+      (accumulator, record) => {
+        accumulator[record.content.Project_Identification_Number__c] = record
+        return accumulator
+      },
       {}
     )
 

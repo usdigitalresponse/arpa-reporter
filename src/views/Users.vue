@@ -9,7 +9,7 @@
 
     <vue-good-table
       :columns="columns"
-      :rows="users"
+      :rows="usersWithAgency"
       :search-options="{
         enabled: true,
         placeholder: 'Filter users...'
@@ -17,7 +17,7 @@
       styleClass="vgt-table table table-striped table-bordered"
       >
       <div slot="emptystate">
-        No Recipients
+        No Users
       </div>
 
       <template slot="table-row" slot-scope="props">
@@ -27,6 +27,10 @@
 
         <span v-else-if="props.column.field === 'agency_id' && props.row.agency_id">
           {{ props.row.agency_name }} ({{ props.row.agency_code }})
+        </span>
+
+        <span v-else-if="props.column.field === 'role'">
+          {{ props.row.role.name }}
         </span>
 
         <span v-else>
@@ -83,6 +87,15 @@ export default {
           field: 'edit'
         }
       ]
+    },
+    // This is just a shim to populate the agency_name/agency_code fields which ARPA Reporter previously
+    // included on user objects, but GOST does not.
+    usersWithAgency: function () {
+      return this.users.map(user => {
+        const agencyId = user.agency_id
+        const agency = this.$store.state.agencies.find(a => a.id === agencyId) || { name: 'Loading...', code: '???' }
+        return { ...user, agency_name: agency.name, agency_code: agency.code }
+      })
     }
   },
   methods: {

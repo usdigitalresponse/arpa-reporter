@@ -16,7 +16,7 @@ function requireAdminUser (req, res, next) {
     res.sendStatus(403)
   } else {
     userAndRole(req.signedCookies.userId).then(user => {
-      if (user.role !== 'admin') {
+      if (user.role.name !== 'admin') {
         res.sendStatus(403)
       } else {
         req.session = { ...req.session, user }

@@ -70,13 +70,19 @@ export default {
 
       this.user = null
       await this.$store.dispatch('updateUsersRoles')
-      this.user = this.$store.state.users.find(u => u.id === Number(this.userId))
+
+      const storeUser = this.$store.state.users.find(u => u.id === Number(this.userId))
+      // StandardForm deals in ARPA Reporter's former user object representation where "role" is a simple string field, but the API and store now deal in the GOST format where role is an object.
+      this.user = {...storeUser, role: storeUser.role.name};
     },
     onSave: async function (user) {
       this.user = null
 
       try {
-        const result = await post('/api/users', { user })
+        // StandardForm deals in ARPA Reporter's former user object representation where "role" is a simple string field, but the API now deals in the GOST format where role is an object.
+        const gostUser = {...user, role: this.roles.find(r => r.name == user.role)};
+
+        const result = await post('/api/users', { user: gostUser })
         if (result.error) throw new Error(result.error)
 
         const text = this.isNew

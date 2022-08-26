@@ -53,7 +53,7 @@ export default {
       return this.role === 'admin'
     },
     role: function () {
-      return this.$store.getters.user.role
+      return this.$store.getters.user.role.name
     },
     viewingOpenPeriod () {
       return this.$store.getters.viewPeriodIsCurrent

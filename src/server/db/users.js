@@ -4,14 +4,43 @@ const knex = require('./connection')
 const environment = require('../environment')
 const { useTenantId } = require('../use-request')
 
-function users (trns = knex) {
+// Takes the result of a users query joined on roles and formats the role object as a member, matching
+// the format present in GOST.
+function formatUserRole(row) {
+  const role = {
+    id: row.role_id,
+    name: row.role_name,
+    rules: row.role_rules,
+  };
+
+  delete row.role;
+  delete row.role_id;
+  delete row.role_name;
+  delete row.role_rules;
+  row.role = role;
+
+  return row;
+}
+
+async function users (trns = knex) {
   const tenantId = useTenantId()
 
-  return trns('users')
+  const rows = await trns('users')
     .leftJoin('agencies', 'users.agency_id', 'agencies.id')
-    .select('users.*', 'agencies.name AS agency_name', 'agencies.code AS agency_code')
+    .join('roles', 'roles.name', 'users.role')
+    .select(
+      'users.*',
+      // TODO(mbroussard): deal with these agency join cols
+      'agencies.name AS agency_name',
+      'agencies.code AS agency_code',
+      'roles.name as role_name',
+      'roles.rules as role_rules',
+      'roles.id as role_id',
+    )
     .where('users.tenant_id', tenantId)
-    .orderBy('email')
+    .orderBy('email');
+
+  return rows.map(formatUserRole);
 }
 
 function createUser (user, trns = knex) {
@@ -29,7 +58,7 @@ function updateUser (user, trns = knex) {
     .update({
       email: user.email,
       name: user.name,
-      role: user.role,
+      role: user.role.name,
       agency_id: user.agency_id
       // tenant_id is immutable
     })
@@ -38,26 +67,22 @@ function updateUser (user, trns = knex) {
 }
 
 function user (id, trns = knex) {
-  return trns('users')
-    .select('*')
-    .where('id', id)
-    .then(r => r[0])
+  return userAndRole(id, trns);
 }
 
-function userAndRole (id, trns = knex) {
-  return trns('users')
+async function userAndRole (id, trns = knex) {
+  const row = await trns('users')
     .join('roles', 'roles.name', 'users.role')
     .select(
-      'users.id',
-      'users.email',
-      'users.role',
-      'users.agency_id',
-      'users.tags',
-      'users.tenant_id',
-      'roles.rules'
+      'users.*',
+      'roles.rules as role_rules',
+      'roles.name as role_name',
+      'roles.id as role_id'
     )
     .where('users.id', id)
-    .then(r => r[0])
+    .then(r => r[0]);
+
+  return formatUserRole(row);
 }
 
 // NOTE(mbroussard): roles are currently global and shared across all tenants.

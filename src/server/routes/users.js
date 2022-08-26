@@ -36,7 +36,7 @@ router.get('/', requireUser, async function (req, res, next) {
   const allUsers = await listUsers()
   const curUser = allUsers.find(u => u.id === Number(req.session.user.id))
 
-  const users = (curUser.role === 'admin') ? allUsers : [curUser]
+  const users = (curUser.role.name === 'admin') ? allUsers : [curUser]
   const roles = await listRoles()
   res.json({ users, roles })
 })

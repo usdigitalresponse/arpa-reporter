@@ -7,15 +7,6 @@
     </div>
 
     <div v-else>
-      <div class="form-group row" v-if="!isNew">
-        <div class="col-sm-2">
-          Created:
-        </div>
-        <div class="col-sm-10">
-          {{ agency.created_at }} by {{ agency.created_by }}
-        </div>
-      </div>
-
       <StandardForm :initialRecord="agency" :cols="cols" @save="onSave" @reset="onReset" :key="formKey" />
     </div>
   </div>

@@ -21,7 +21,7 @@ async function validateUser (user, creator) {
   }
 
   if (!agency_id) {
-    throw new Error('Cannot create user without agency_id');
+    throw new Error('Cannot create user without agency_id')
   }
 
   const agency = await agencyById(agency_id)

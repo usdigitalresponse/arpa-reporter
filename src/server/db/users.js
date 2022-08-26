@@ -6,41 +6,37 @@ const { useTenantId } = require('../use-request')
 
 // Takes the result of a users query joined on roles and formats the role object as a member, matching
 // the format present in GOST.
-function formatUserRole(row) {
+function formatUserRole (row) {
   const role = {
     id: row.role_id,
     name: row.role_name,
-    rules: row.role_rules,
-  };
+    rules: row.role_rules
+  }
 
-  delete row.role;
-  delete row.role_id;
-  delete row.role_name;
-  delete row.role_rules;
-  row.role = role;
+  delete row.role
+  delete row.role_id
+  delete row.role_name
+  delete row.role_rules
+  row.role = role
 
-  return row;
+  return row
 }
 
 async function users (trns = knex) {
   const tenantId = useTenantId()
 
   const rows = await trns('users')
-    .leftJoin('agencies', 'users.agency_id', 'agencies.id')
     .join('roles', 'roles.name', 'users.role')
     .select(
       'users.*',
-      // TODO(mbroussard): deal with these agency join cols
-      'agencies.name AS agency_name',
-      'agencies.code AS agency_code',
       'roles.name as role_name',
       'roles.rules as role_rules',
-      'roles.id as role_id',
+      'roles.id as role_id'
     )
     .where('users.tenant_id', tenantId)
-    .orderBy('email');
+    .orderBy('email')
 
-  return rows.map(formatUserRole);
+  return rows.map(formatUserRole)
 }
 
 function createUser (user, trns = knex) {
@@ -67,7 +63,7 @@ function updateUser (user, trns = knex) {
 }
 
 function user (id, trns = knex) {
-  return userAndRole(id, trns);
+  return userAndRole(id, trns)
 }
 
 async function userAndRole (id, trns = knex) {
@@ -80,9 +76,9 @@ async function userAndRole (id, trns = knex) {
       'roles.id as role_id'
     )
     .where('users.id', id)
-    .then(r => r[0]);
+    .then(r => r[0])
 
-  return formatUserRole(row);
+  return formatUserRole(row)
 }
 
 // NOTE(mbroussard): roles are currently global and shared across all tenants.

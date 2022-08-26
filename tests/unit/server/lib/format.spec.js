@@ -64,7 +64,7 @@ describe('server/lib/format', () => {
       expect(ec('ec3')).to.equal(
         '3-Public Health-Negative Economic Impact: Public Sector Capacity'
       )
-      expect(ec('ec7')).to.equal('7-Administrative and Other')
+      expect(ec('ec7')).to.equal('7-Administrative')
     })
     it("doesn't throw with unknown values", () => {
       expect(ec('ec6')).to.be.undefined

@@ -15,7 +15,7 @@ function isExpired (expires) {
   return now > expires
 }
 
-router.get('/', function (req, res) {
+router.get('/', function (req, res, next) {
   const { passcode } = req.query
   if (passcode) {
     accessToken(passcode).then(token => {
@@ -35,7 +35,7 @@ router.get('/', function (req, res) {
       }
     })
   } else if (req.signedCookies.userId) {
-    userAndRole(req.signedCookies.userId).then(user => res.json({ user }))
+    userAndRole(req.signedCookies.userId).then(user => res.json({ user })).catch(e => next(e))
   } else {
     res.json({ message: 'No session' })
   }

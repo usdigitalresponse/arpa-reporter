@@ -30,6 +30,8 @@ echo Using database $dbname
 mkdir -p $DATA_DIR
 rm -rf $DATA_DIR/*
 
+# In CI, POSTGRES_URL and POSTGRES_TEST_URL are the same: there is only a single database. In that
+# environment, we avoid dropping the DB itself and instead drop the "public" schema within it.
 set -x
 if [ $DEVDBNAME == $dbname ]
 then
@@ -37,7 +39,7 @@ then
   PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "CREATE SCHEMA public"
 else
   PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "DROP DATABASE IF EXISTS $dbname"
-  PGPASSWORD=$password psql -h $hostname -p $hostport -U postgres -w ${DEVDBNAME} -c "CREATE DATABASE $dbname"
+  PGPASSWORD=$password psql -h $hostname -p $hostport -U $username -w ${DEVDBNAME} -c "CREATE DATABASE $dbname"
 fi
 
 yarn knex migrate:latest

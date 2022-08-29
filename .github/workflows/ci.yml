@@ -97,7 +97,9 @@ jobs:
           yarn knex migrate:latest
           yarn test:server
         env:
+          # note: intentional for these URLs to be the same in CI
           POSTGRES_URL: 'postgres://postgres:password@localhost/server_test'
+          POSTGRES_TEST_URL: 'postgres://postgres:password@localhost/server_test'
 
   build:
     runs-on: ubuntu-latest

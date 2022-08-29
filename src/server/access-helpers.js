@@ -7,7 +7,7 @@ function requireUser (req, res, next) {
     userAndRole(req.signedCookies.userId).then(user => {
       req.session = { ...req.session, user }
       next()
-    })
+    }).catch(e => next(e))
   }
 }
 
@@ -16,13 +16,13 @@ function requireAdminUser (req, res, next) {
     res.sendStatus(403)
   } else {
     userAndRole(req.signedCookies.userId).then(user => {
-      if (user.role !== 'admin') {
+      if (user.role.name !== 'admin') {
         res.sendStatus(403)
       } else {
         req.session = { ...req.session, user }
         next()
       }
-    })
+    }).catch(e => next(e))
   }
 }
 

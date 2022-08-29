@@ -20,13 +20,13 @@ async function validateUser (user, creator) {
     throw new Error('Role required')
   }
 
-  if (agency_id) {
-    const agency = await agencyById(agency_id)
-    if (!agency || agency.tenant_id !== creator.tenant_id) {
-      throw new Error('Invalid agency')
-    }
-  } else if (role !== 'admin') {
-    throw new Error('Reporter role requires agency')
+  if (!agency_id) {
+    throw new Error('Cannot create user without agency_id')
+  }
+
+  const agency = await agencyById(agency_id)
+  if (!agency || agency.tenant_id !== creator.tenant_id) {
+    throw new Error('Invalid agency')
   }
 
   return null
@@ -34,9 +34,9 @@ async function validateUser (user, creator) {
 
 router.get('/', requireUser, async function (req, res, next) {
   const allUsers = await listUsers()
-  const curUser = allUsers.find(u => u.id === Number(req.signedCookies.userId))
+  const curUser = allUsers.find(u => u.id === Number(req.session.user.id))
 
-  const users = (curUser.role === 'admin') ? allUsers : [curUser]
+  const users = (curUser.role.name === 'admin') ? allUsers : [curUser]
   const roles = await listRoles()
   res.json({ users, roles })
 })

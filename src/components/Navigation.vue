@@ -109,7 +109,7 @@ export default {
       return this.$store.getters.agencyName(this.user.agency_id)
     },
     role: function () {
-      return this.$store.getters.user.role
+      return this.$store.getters.user.role.name
     },
     loggedIn: function () {
       return this.$store.state.user !== null

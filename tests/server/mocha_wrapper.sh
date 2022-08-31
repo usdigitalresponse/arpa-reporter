@@ -10,13 +10,18 @@ source /dev/stdin <<DONE
 $(grep -v '^#' $DOTENV | sed -E 's|^(.+)=(.*)|: ${\1=\2}; export \1|g')
 DONE
 
+# note: this is the DB name of the non-test db, used in reset-db.sh to check if
+# dev and test DBs are the same
 export DEVDBNAME="${POSTGRES_URL##*/}"
 
-# add `_test` to POSTGRES_URL if it's not already there
-if [ ${POSTGRES_URL: -5} != "_test" ]
+# Legacy for devs w/o POSTGRES_TEST_URL set explicitly in .env
+if [[ -z $POSTGRES_TEST_URL ]]
 then
-  export POSTGRES_URL="${POSTGRES_URL}_test"
+  export POSTGRES_TEST_URL="${POSTGRES_URL}_test"
 fi
+
+# reset-db.sh and knex within mocha only aware of a single DB URL
+export POSTGRES_URL=$POSTGRES_TEST_URL
 
 export DATA_DIR=`dirname $0`/mocha_uploads
 

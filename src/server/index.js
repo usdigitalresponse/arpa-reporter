@@ -5,7 +5,7 @@ const express = require('express')
 require('express-async-errors')
 
 const { requestProviderMiddleware } = require('./use-request')
-const configureAPI = require('./configure')
+const { configureApp } = require('./configure')
 const environment = require('./environment')
 
 console.log(`Database is ${environment.POSTGRES_URL}`)
@@ -14,7 +14,7 @@ const app = express()
 
 app.use(requestProviderMiddleware)
 
-configureAPI(app)
+configureApp(app)
 
 app.listen(
   environment.PORT,

@@ -10,13 +10,7 @@ const environment = require('./environment')
 const publicPath = resolve(__dirname, '../../dist')
 const staticConf = { maxAge: '1y', etag: false }
 
-module.exports = (app, options = {}) => {
-  if (!options.disableRequestLogging) {
-    app.use(morgan('common'))
-  }
-  app.use(bodyParser.json())
-  app.use(cookieParser(environment.COOKIE_SECRET))
-
+function configureApiRoutes (app) {
   app.use('/api/agencies', require('./routes/agencies'))
   app.use(
     '/api/application_settings',
@@ -30,6 +24,16 @@ module.exports = (app, options = {}) => {
   app.use('/api/uploads', require('./routes/uploads'))
   app.use('/api/users', require('./routes/users'))
   app.use('/api/health', require('./routes/health'))
+}
+
+function configureApp (app, options = {}) {
+  if (!options.disableRequestLogging) {
+    app.use(morgan('common'))
+  }
+  app.use(bodyParser.json())
+  app.use(cookieParser(environment.COOKIE_SECRET))
+
+  configureApiRoutes(app)
 
   if (!environment.IS_DEV) {
     const staticMiddleware = express.static(publicPath, staticConf)
@@ -43,3 +47,5 @@ module.exports = (app, options = {}) => {
     app.use(staticMiddleware)
   }
 }
+
+module.exports = { configureApp, configureApiRoutes }

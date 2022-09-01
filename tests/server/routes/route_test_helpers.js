@@ -5,7 +5,7 @@ const express = require('express')
 const supertest = require('supertest')
 const { sign: signCookie } = require('cookie-signature')
 
-const configureAPI = requireSrc(path.resolve(__dirname, '../configure'))
+const { configureApp } = requireSrc(path.resolve(__dirname, '../configure'))
 const { requestProviderMiddleware } = require('../../../src/server/use-request')
 const { knex } = require('../mocha_init')
 
@@ -32,7 +32,7 @@ async function getSessionCookie (userIdOrEmail) {
 function makeTestServer () {
   const app = express()
   app.use(requestProviderMiddleware)
-  configureAPI(app, {
+  configureApp(app, {
     // The normal request logging from Morgan just clutters Mocha's test runner output
     disableRequestLogging: true
   })

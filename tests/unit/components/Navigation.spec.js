@@ -8,6 +8,7 @@ localVue.use(Vuex)
 
 describe('Navigation.vue', () => {
   let store
+  let $route
   beforeEach(() => {
     store = new Vuex.Store({
       getters: {
@@ -18,13 +19,15 @@ describe('Navigation.vue', () => {
         agencyName: () => id => `Agency ${id}`
       }
     })
+    $route = { path: '/' }
   })
 
   it('renders the nav element', () => {
     const wrapper = shallowMount(Navigation, {
       store,
       localVue,
-      stubs: ['router-link', 'router-view']
+      stubs: ['router-link', 'router-view'],
+      mocks: { $route }
     })
     const navbars = wrapper.findAll('nav.navbar')
     expect(navbars.length).to.equal(1) // has one navbar element
@@ -37,7 +40,8 @@ describe('Navigation.vue', () => {
     const wrapper = shallowMount(Navigation, {
       store,
       localVue,
-      stubs: ['router-link', 'router-view']
+      stubs: ['router-link', 'router-view'],
+      mocks: { $route }
     })
     const r = wrapper.find('a.navbar-brand')
     expect(r.text()).to.include('ARPA Reporter')

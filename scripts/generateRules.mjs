@@ -290,27 +290,6 @@ function validateExtractedDropdowns(extractedDropdowns) {
   }
 }
 
-function validateDropdownCorrections(extractedDropdowns) {
-  // Make sure that every correction configured refers to a real value in a dropdown somewhere
-  Object.keys(dropdownCorrections).forEach(valToCorrect => {
-    for (const dropdownName in extractedDropdowns) {
-      for (const dropdownValue of extractedDropdowns[dropdownName]) {
-        if (valToCorrect == dropdownValue) {
-          return
-        }
-      }
-    }
-    // Didn't find the value anywhere? Throw an error to force us to correct it
-    
-    // Getting this error?
-    // Did you recently add a new correction or update the worksheet?
-    // Check to make sure the key in dropdownCorrections exactly matches the key *currently* in
-    // the worksheet.
-    console.log(chalk.red(
-      `Error: correction for dropdown value ${valToCorrect} doesn't reference a real value.`))
-      throw new Error('Fix the dropdownCorrections configuration to continue.')
-  })
-}
 const run = async () => {
   log(`extracting rules from ${EMPTY_TEMPLATE_NAME}...`)
 
@@ -322,7 +301,6 @@ const run = async () => {
   const dropdowns = await extractDropdowns(workbook)
   validateExtractedDropdowns(dropdowns)
   await saveTo('templateDropdowns.json', dropdowns)
-  validateDropdownCorrections(dropdowns)
 
   const rules = await extractRules(workbook, logic, dropdowns)
   await saveTo('templateRules.json', rules)

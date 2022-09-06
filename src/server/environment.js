@@ -14,8 +14,10 @@ const DATA_DIR = resolve(process.env.DATA_DIR)
 const UPLOAD_DIR = join(DATA_DIR, 'uploads')
 const PERIOD_TEMPLATES_DIR = join(UPLOAD_DIR, 'period_templates')
 
-const SRC_DIR = resolve(join(__dirname, '..'))
-const SERVER_DATA_DIR = join(SRC_DIR, 'server', 'data')
+// Note: in legacy standalone ARPA Report repo, this points to src/server; in GOST
+// it points to packages/server/src/arpa_reporter
+const SERVER_CODE_DIR = __dirname
+const SERVER_DATA_DIR = join(SERVER_CODE_DIR, 'data')
 
 const EMPTY_TEMPLATE_NAME = 'ARPA SFRF Reporting Workbook v20220705.xlsm'
 
@@ -42,7 +44,7 @@ module.exports = {
   DATA_DIR,
   UPLOAD_DIR,
   PERIOD_TEMPLATES_DIR,
-  SRC_DIR,
+  SERVER_CODE_DIR,
   SERVER_DATA_DIR,
   EMPTY_TEMPLATE_NAME,
   POSTGRES_URL,

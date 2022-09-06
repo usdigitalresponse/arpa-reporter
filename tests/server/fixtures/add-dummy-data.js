@@ -17,7 +17,7 @@ module.exports = {
 if (require.main === module) {
   require('dotenv').config()
   const knex = require('../../../src/server/db/connection')
-  return setupAgencies(knex).then(() => {
+  setupAgencies(knex).then(() => {
     knex.destroy()
   })
 }

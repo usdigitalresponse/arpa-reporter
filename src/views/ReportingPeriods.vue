@@ -27,7 +27,7 @@
           <td>{{ formatDate(p.end_date) }}</td>
           <td>{{ p.template_filename }}</td>
           <td>
-            <a v-if="!p.certified_at" :href="`/new_template/${p.id}`">Upload Template</a>
+            <router-link v-if="!p.certified_at" :to="`/new_template/${p.id}`">Upload Template</router-link>
           </td>
           <td>
             <span v-if="isCurrentReportingPeriod(p)">
@@ -43,7 +43,7 @@
             </span>
           </td>
           <td>
-            <a v-if="!p.certified_at" :href="`/reporting_periods/${p.id}`" class="btn btn-sm btn-secondary">Edit</a>
+            <router-link v-if="!p.certified_at" :to="`/reporting_periods/${p.id}`" class="btn btn-sm btn-secondary">Edit</router-link>
           </td>
         </tr>
       </tbody>

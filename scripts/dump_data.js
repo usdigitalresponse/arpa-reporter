@@ -63,8 +63,8 @@ async function addFilesToZip(dbContents, zipFile) {
 
   // Sanity check: all filenames should be unique since they will all be together
   // in the zip
-  const fnames = pathsToCopy.map((filePath) => path.basename(filePath));
-  const dupeFilenames = _.chain(fnames)
+  const dupeFilenames = _.chain(pathsToCopy)
+    .map(filePath => path.basename(filePath))
     .groupBy(_.identity)
     .pickBy((v) => v.length > 1)
     .keys()
@@ -77,9 +77,8 @@ async function addFilesToZip(dbContents, zipFile) {
   }
 
   for (const filePath of pathsToCopy) {
-    const pathInZip = path.join("files", path.basename(filePath));
-    console.log("Adding", filePath, "to zip at", pathInZip);
-    zipFile.addLocalFile(filePath, pathInZip);
+    const basename = path.basename(filePath);
+    zipFile.addLocalFile(filePath, 'files', basename);
   }
 
   // Sanity check: look for files in upload directory not captured by the above

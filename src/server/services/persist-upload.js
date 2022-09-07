@@ -56,5 +56,6 @@ async function bufferForUpload (upload) {
 
 module.exports = {
   persistUpload,
-  bufferForUpload
+  bufferForUpload,
+  uploadFSName
 }

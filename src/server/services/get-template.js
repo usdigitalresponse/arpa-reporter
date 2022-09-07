@@ -13,6 +13,7 @@ const treasuryTemplates = new Map()
 module.exports = {
   getTemplate,
   templateForPeriod,
+  periodTemplatePath,
   savePeriodTemplate
 }
 

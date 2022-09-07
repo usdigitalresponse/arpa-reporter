@@ -26,6 +26,7 @@ const {
   templateForPeriod
 } = require('../services/get-template')
 const { usedForTreasuryExport } = require('../db/uploads')
+const { ensureAsyncContext } = require('../lib/ensure-async-context')
 
 const { revalidateUploads } = require('../services/revalidate-uploads')
 
@@ -80,7 +81,7 @@ router.post('/', requireAdminUser, async function (req, res, next) {
 router.post(
   '/:id/template',
   requireAdminUser,
-  multerUpload.single('template'),
+  ensureAsyncContext(multerUpload.single('template')),
   async (req, res, next) => {
     if (!req.file) {
       res.status(400).json({ error: 'File missing' })

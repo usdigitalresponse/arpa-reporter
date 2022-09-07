@@ -70,12 +70,15 @@ async function addFilesToZip(dbContents, zipFile) {
     .keys()
     .value();
   if (dupeFilenames.length > 0) {
-    console.error("ERROR: duplicate filenames, will be overwritten in zip:", dupeFilenames);
+    console.error(
+      "ERROR: duplicate filenames, will be overwritten in zip:",
+      dupeFilenames
+    );
   }
 
   for (const filePath of pathsToCopy) {
     const pathInZip = path.join("files", path.basename(filePath));
-    console.log('Adding', filePath, 'to zip at', pathInZip);
+    console.log("Adding", filePath, "to zip at", pathInZip);
     zipFile.addLocalFile(filePath, pathInZip);
   }
 
@@ -100,6 +103,17 @@ function writeZip(zipFile, outputFilename) {
 
   const end = Date.now();
   console.log("Took", end - start, "ms to write zip file");
+}
+
+function getAllTenantIds(dbContents) {
+  return _.chain(dbContents)
+    .values()
+    .flatten()
+    .map("tenant_id")
+    .uniq()
+    .filter((x) => x !== undefined)
+    .sort()
+    .value();
 }
 
 async function main() {
@@ -134,6 +148,7 @@ async function main() {
     runDate,
     outputPath: outputFilename,
     numRows: _.mapValues(dbContents, (v) => v.length),
+    tenantIds: getAllTenantIds(dbContents),
     ...addFilesDebugInfo,
   };
   zipFile.addFile(

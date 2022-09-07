@@ -70,15 +70,16 @@ async function addFilesToZip(dbContents, zipFile) {
     .keys()
     .value();
   if (dupeFilenames.length > 0) {
-    console.error("ERROR: duplicate filenames:", dupeFilenames);
+    console.error("ERROR: duplicate filenames, will be overwritten in zip:", dupeFilenames);
   }
 
   for (const filePath of pathsToCopy) {
-    zipFile.addLocalFile(filePath, path.join("files", path.basename(filePath)));
+    const pathInZip = path.join("files", path.basename(filePath));
+    console.log('Adding', filePath, 'to zip at', pathInZip);
+    zipFile.addLocalFile(filePath, pathInZip);
   }
 
   // Sanity check: look for files in upload directory not captured by the above
-  // TODO
   const allUploadPaths = await getAllFilesInUploadDir();
   const missedFiles = _.difference(allUploadPaths, pathsToCopy);
   if (missedFiles.length) {

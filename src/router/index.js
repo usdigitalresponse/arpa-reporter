@@ -124,8 +124,12 @@ function loggedIn () {
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresLogin)) {
     if (!loggedIn()) {
+      // This will include any router base URL, if configured
+      const redirectTo = router.resolve(to.fullPath).href
+
       next({
-        path: '/login'
+        path: '/login',
+        query: { redirect_to: redirectTo }
       })
     } else {
       next()

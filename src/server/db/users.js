@@ -43,7 +43,11 @@ function createUser (user, trns = knex) {
   const tenantId = useTenantId()
 
   return trns('users')
-    .insert({ ...user, tenant_id: tenantId })
+    .insert({
+      ...user,
+      role: user.role.name,
+      tenant_id: tenantId
+    })
     .returning('*')
     .then(rows => rows[0])
 }

@@ -1,4 +1,8 @@
-exports.seed = function (knex) {
+const { isRunningInGOST } = require('../helpers/is_gost')
+
+exports.seed = async function (knex) {
+  const isGost = await isRunningInGOST(knex)
+
   // Deletes ALL existing entries
   return knex('roles')
     .del()
@@ -6,7 +10,7 @@ exports.seed = function (knex) {
       // Inserts seed entries
       return knex('roles').insert([
         { name: 'admin', rules: {} },
-        { name: 'reporter', rules: {} }
+        { name: isGost ? 'staff' : 'reporter', rules: {} }
       ])
     })
 }

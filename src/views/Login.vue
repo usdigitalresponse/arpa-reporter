@@ -48,8 +48,17 @@ export default {
         this.messageClass = 'alert alert-danger'
         return
       }
+
+      const redirectTo =
+        // If we got to the login page via a redirect, a post-login redirect URL will already be specified
+        this.$route.query.redirect_to ||
+        // If we went to the login page directly, we default to redirecting to the homepage.
+        // This gets a full relative URL including any VueRouter base prefix, if configured (such as in GOST)
+        this.$router.resolve('/').href
+
       const body = JSON.stringify({
-        email: this.email
+        email: this.email,
+        redirect_to: redirectTo
       })
       const headers = {
         'Content-Type': 'application/json'

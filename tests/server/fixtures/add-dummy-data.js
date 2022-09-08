@@ -1,10 +1,8 @@
+
+const { isRunningInGOST } = require('../helpers/is_gost')
+
 const setupAgencies = async knex => {
-  // We check if a "tenants" table exists to tell if we're running under GOST or in the legacy arpa-reporter
-  // repo.
-  const tenantsTable = await knex('pg_tables')
-    .where({ schemaname: 'public', tablename: 'tenants' })
-    .select('tablename')
-  const isGost = tenantsTable.length !== 0
+  const isGost = await isRunningInGOST(knex)
 
   return knex('agencies').insert([
     { id: 1, name: 'Generic Government', code: 'GOV', tenant_id: 0 },

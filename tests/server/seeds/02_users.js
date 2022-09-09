@@ -1,9 +1,12 @@
 require('dotenv').config()
 
-const adminList = (process.env.INITIAL_ADMIN_EMAILS || '').split(/\s*,\s*/)
+const { isRunningInGOST } = require('../helpers/is_gost')
+const _ = require('lodash')
+
+const adminList = (process.env.INITIAL_ADMIN_EMAILS || '').split(/\s*,\s*/).filter(_.identity)
 const agencyUserList = (process.env.INITIAL_AGENCY_EMAILS || '').split(
   /\s*,\s*/
-)
+).filter(_.identity)
 
 const unitTestUsers = [
   {
@@ -20,29 +23,38 @@ const unitTestUsers = [
   }
 ]
 
+// To allow this seed to run in both legacy ARPA Reporter repo and GOST, we must account for slightly
+// different format and names of role field on users
+function reformatUserRoleForGost (user, roles) {
+  const adminRole = roles.find(role => role.name === 'admin')
+  const staffRole = roles.find(role => role.name === 'staff')
+  if (!adminRole || !staffRole) {
+    throw new Error('expected admin and staff role to exist in GOST')
+  }
+
+  return {
+    ..._.omit(user, 'role'),
+    role_id: user.role === 'admin' ? adminRole.id : staffRole.id
+  }
+}
+
 exports.seed = async function (knex) {
-  // Deletes ALL existing admins and reporters
+  const isGost = await isRunningInGOST(knex)
+
+  // Deletes ALL existing users
   // TODO(mbroussard): moot since mocha_wrapper.sh deletes and recreates the DB?
   await knex('users')
-    .where({ role: 'admin' })
-    .del()
-  await knex('users')
-    .where({ role: 'reporter' })
     .del()
 
-  // Fixed test users specified in this file
-  await knex('users').insert(unitTestUsers)
+  const roles = await knex('roles').select('*')
+  const users = [
+    // Fixed test users specified in this file
+    ...unitTestUsers,
+    // Test users specified by environment variable
+    // TODO(mbroussard): why does this exist if this seed is only used for tests?
+    ...adminList.map(email => ({ email, name: email, role: 'admin', tenant_id: 0 })),
+    ...agencyUserList.map(email => ({ email, name: email, role: 'reporter', tenant_id: 0 }))
+  ].map(user => isGost ? reformatUserRoleForGost(user, roles) : user)
 
-  // Test users specified by environment variable
-  // TODO(mbroussard): why does this exist if this seed is only used for tests?
-  await knex('users').insert(
-    adminList.map(email => {
-      return { email, name: email, role: 'admin', tenant_id: 0 }
-    })
-  )
-  await knex('users').insert(
-    agencyUserList.map(email => {
-      return { email, name: email, role: 'reporter', tenant_id: 0 }
-    })
-  )
+  await knex('users').insert(users)
 }

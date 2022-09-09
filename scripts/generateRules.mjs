@@ -9,7 +9,7 @@ import XLSX from 'xlsx'
 import lodash from 'lodash'
 
 import { DATA_SHEET_TYPES, readVersionRecord } from '../src/server/services/records.js'
-import { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, SRC_DIR } from '../src/server/environment.js'
+import { SERVER_DATA_DIR, EMPTY_TEMPLATE_NAME, SERVER_CODE_DIR } from '../src/server/environment.js'
 import { dropdownCorrections } from '../src/server/services/validation-rules.js'
 
 const { merge } = lodash
@@ -268,7 +268,7 @@ async function extractLogic (workbook) {
 }
 
 async function saveTo (destFilename, data) {
-  const destPath = path.join(SRC_DIR, 'server', 'lib', destFilename)
+  const destPath = path.join(SERVER_CODE_DIR, 'lib', destFilename)
   const strData = JSON.stringify(data, null, 2)
 
   log(`writing to ${destFilename}`)

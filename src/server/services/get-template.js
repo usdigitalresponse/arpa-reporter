@@ -17,6 +17,10 @@ module.exports = {
   savePeriodTemplate
 }
 
+// WARNING: changes to this function must be made with care, because:
+//  1. there may be existing data on disk with filenames set according to this function,
+//     which could become inaccessible
+//  2. this function is duplicated in GOST's import_arpa_reporter_dump.js script
 function periodTemplatePath (reportingPeriod) {
   return path.join(
     PERIOD_TEMPLATES_DIR,

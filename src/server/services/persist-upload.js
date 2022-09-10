@@ -10,6 +10,10 @@ const { createUpload } = require('../db/uploads')
 const { UPLOAD_DIR } = require('../environment')
 const ValidationError = require('../lib/validation-error')
 
+// WARNING: changes to this function must be made with care, because:
+//  1. there may be existing data on disk with filenames set according to this function,
+//     which could become inaccessible
+//  2. this function is duplicated in GOST's import_arpa_reporter_dump.js script
 const uploadFSName = (upload) => {
   const filename = `${upload.id}${path.extname(upload.filename)}`
   return path.join(UPLOAD_DIR, filename)

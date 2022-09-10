@@ -5,9 +5,18 @@ set -o errexit
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Import .env variables if not already defined.
-DOTENV="$DIR/../../.env"
+if [[ $DIR =~ "__tests__/arpa_reporter" ]]
+then
+  # in GOST, mocha_wrapper.sh will be located in packages/server/__tests__/arpa_reporter/server
+  # and .env inside packages/server
+  DOTENV="$DIR/../../../.env"
+else
+  # in legacy ARPA Reporter repo, mocha_wrapper.sh is located in tests/server and .env at repo root
+  DOTENV="$DIR/../../.env"
+fi
+
 source /dev/stdin <<DONE
-$(grep -v '^#' $DOTENV | sed -E 's|^(.+)=(.*)|: ${\1=\2}; export \1|g')
+$(grep -v '^#' $DOTENV | sed -E 's|^([^=]+)=(.*)|: ${\1=\2}; export \1|g')
 DONE
 
 # note: this is the DB name of the non-test db, used in reset-db.sh to check if
@@ -30,6 +39,6 @@ $DIR/reset-db.sh
 if [ $# -gt 0 ]; then
   mocha --require=`dirname $0`/mocha_init.js $*
 else
-  mocha --require=`dirname $0`/mocha_init.js 'tests/server/**/*.spec.js'
+  mocha --require=`dirname $0`/mocha_init.js "$DIR"'/**/*.spec.js'
 fi
 

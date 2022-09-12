@@ -10240,6 +10240,11 @@ rechoir@^0.8.0:
   dependencies:
     resolve "^1.20.0"
 
+recursive-readdir-async@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/recursive-readdir-async/-/recursive-readdir-async-1.2.1.tgz#994beaa07a985e806a5946b4b795fe9b5f1a6b9b"
+  integrity sha512-fU8aySmHIhrycTlXn+hI7dS/p7GnrMHzr2xDdBSd8HZ16mbLkmfIEccIE80gLHftrkTt9oDJiGEJNIPY6n0v6A==
+
 redeyed@~2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/redeyed/-/redeyed-2.1.1.tgz#8984b5815d99cb220469c99eeeffe38913e6cc0b"

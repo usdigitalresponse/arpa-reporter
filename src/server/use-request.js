@@ -42,5 +42,6 @@ function useTenantId () {
 module.exports = {
   requestProviderMiddleware,
   useRequest,
-  useTenantId
+  useUser,
+  useTenantId,
 }

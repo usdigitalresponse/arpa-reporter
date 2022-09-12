@@ -23,15 +23,16 @@ const TABLES = [
 
 async function getDatabaseContents() {
   console.log("Fetching all DB rows...");
-  const start = Date.now();
+  const start = performance.now();
 
   const data = await Promise.all(
     TABLES.map((tableName) => knex(tableName).select("*"))
   );
   const ret = _.fromPairs(_.zip(TABLES, data));
 
-  const end = Date.now();
-  console.log("Fetching DB rows took", end - start, "ms");
+  const end = performance.now();
+  console.log("Fetching DB rows took", Math.round(end - start), "ms");
+  console.log("Row counts:", _.mapValues(ret, (v) => v.length));
 
   return ret;
 }
@@ -56,10 +57,17 @@ async function getAllFilesInUploadDir() {
   return files.map((f) => f.fullname);
 }
 
+function fileExists(fpath) {
+  return fs.access(fpath).then(
+    () => true,
+    () => false
+  );
+}
+
 async function addFilesToZip(dbContents, zipFile) {
   const pathsToCopy = getAllFilesToCopy(dbContents);
   console.log("Adding", pathsToCopy.length, "uploaded files to zip output...");
-  const start = Date.now();
+  const start = performance.now();
 
   // Sanity check: all filenames should be unique since they will all be together
   // in the zip
@@ -76,6 +84,18 @@ async function addFilesToZip(dbContents, zipFile) {
     );
   }
 
+  // Sanity check: all files to be copied into the zip (based on db rows) actually
+  // exist on disk
+  const pathsExist = await Promise.all(pathsToCopy.map(fileExists));
+  const filesMissingFromDisk = _.chain(pathsToCopy)
+    .zip(pathsExist)
+    .filter(([, exists]) => !exists)
+    .map(([path]) => path)
+    .value();
+  if (filesMissingFromDisk.length) {
+    console.warn('WARN: some expected files missing from disk', filesMissingFromDisk);
+  }
+
   for (const filePath of pathsToCopy) {
     const basename = path.basename(filePath);
     zipFile.addLocalFile(filePath, 'files', basename);
@@ -88,20 +108,20 @@ async function addFilesToZip(dbContents, zipFile) {
     console.warn("WARN: some files in upload dir not captured:", missedFiles);
   }
 
-  const end = Date.now();
-  console.log("Took", end - start, "ms to add uploads to zip");
+  const end = performance.now();
+  console.log("Took", Math.round(end - start), "ms to add uploads to zip");
 
-  return { pathsToCopy, dupeFilenames, missedFiles };
+  return { pathsToCopy, dupeFilenames, missedFiles, filesMissingFromDisk };
 }
 
 function writeZip(zipFile, outputFilename) {
   console.log("Writing zip file...");
-  const start = Date.now();
+  const start = performance.now();
 
   zipFile.writeZip(outputFilename);
 
-  const end = Date.now();
-  console.log("Took", end - start, "ms to write zip file");
+  const end = performance.now();
+  console.log("Took", Math.round(end - start), "ms to write zip file");
 }
 
 function getAllTenantIds(dbContents) {
@@ -116,6 +136,13 @@ function getAllTenantIds(dbContents) {
 }
 
 async function main() {
+  const {POSTGRES_URL} = process.env;
+  if (!POSTGRES_URL) {
+    console.log('must specify POSTGRES_URL');
+    return;
+  }
+  console.log('Using database', POSTGRES_URL);
+
   const runDate = new Date();
   const dateStr = runDate
     .toISOString()

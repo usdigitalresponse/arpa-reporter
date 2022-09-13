@@ -43,5 +43,5 @@ module.exports = {
   requestProviderMiddleware,
   useRequest,
   useUser,
-  useTenantId,
+  useTenantId
 }

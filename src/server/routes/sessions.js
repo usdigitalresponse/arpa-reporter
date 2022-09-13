@@ -8,6 +8,7 @@ const {
   createAccessToken,
   markAccessTokenUsed
 } = require('../db/users')
+const { LOGIN_DISABLED_MESSAGE, LOGIN_WARNING_MESSAGE } = require('../environment')
 const { sendPasscode } = require('../lib/email')
 
 function isExpired (expires) {
@@ -47,6 +48,12 @@ router.get('/logout', function (req, res) {
 })
 
 router.post('/', async function (req, res, next) {
+  if (LOGIN_DISABLED_MESSAGE) {
+    res.json({
+      success: false,
+      message: `Login disabled: ${LOGIN_DISABLED_MESSAGE}`
+    })
+  }
   if (!req.body.email) {
     res.statusMessage = 'No Email Address provided'
     return res.sendStatus(400)
@@ -61,7 +68,7 @@ router.post('/', async function (req, res, next) {
     await sendPasscode(email, passcode, req.headers.origin)
     res.json({
       success: true,
-      message: `Email sent to ${email}. Check your inbox`
+      message: LOGIN_WARNING_MESSAGE || `Email sent to ${email}. Check your inbox`
     })
   } catch (e) {
     if (e.message.match(/User .* not found/)) {

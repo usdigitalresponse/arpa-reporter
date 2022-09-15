@@ -49,7 +49,7 @@ router.get('/logout', function (req, res) {
 
 router.post('/', async function (req, res, next) {
   if (LOGIN_DISABLED_MESSAGE) {
-    res.json({
+    return res.json({
       success: false,
       message: `Login disabled: ${LOGIN_DISABLED_MESSAGE}`
     })

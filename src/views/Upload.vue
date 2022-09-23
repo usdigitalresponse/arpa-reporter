@@ -52,7 +52,7 @@
 
           <li class="list-group-item">
             <span class="font-weight-bold">Reporting Period: </span>
-            {{ upload.reporting_period_id }}
+            {{ reportingPeriodName }}
           </li>
 
           <li class="list-group-item" :class="{ 'list-group-item-warning': !upload.agency_id }">
@@ -95,7 +95,7 @@
           <span class="text-primary bg-light">{{ upload.agency_code }}</span>
           EC Code
           <span class="text-primary bg-light">{{ upload.ec_code }}</span>
-          in period {{ upload.reporting_period_id }}
+          in period {{ reportingPeriodName }}
         </h4>
 
         <template v-if="seriesExported">
@@ -196,6 +196,10 @@ export default {
         'list-group-item-success': this.upload.validated_at,
         'list-group-item-warning': !this.upload.validated_at
       }
+    },
+    reportingPeriodName: function () {
+      const reportingPeriod = this.$store.state.reportingPeriods.find(per => per.id === this.upload.reporting_period_id)
+      return reportingPeriod ? reportingPeriod.name : `ID: ${this.upload.reporting_period_id}`
     }
   },
   methods: {
